@@ -1,0 +1,5 @@
+# Ignore graphify outputs from GitHub language statistics
+graphify-out/** linguist-generated=true
+
+# Mark as vendored just in case
+graphify-out/** linguist-vendored=true

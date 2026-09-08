@@ -1,0 +1,157 @@
+{
+  "app/layout.tsx": {
+    "mtime": 1788772516.567185,
+    "ast_hash": "5591e79149ae01db5781b7f68a56ca62",
+    "semantic_hash": ""
+  },
+  "app/page.tsx": {
+    "mtime": 1788772516.567185,
+    "ast_hash": "66061eb439413d37bc8af024e304534e",
+    "semantic_hash": ""
+  },
+  "docs/schema.sql": {
+    "mtime": 1788831919.0833106,
+    "ast_hash": "9a2ffb20c41a854a21fbaaf7b39face7",
+    "semantic_hash": ""
+  },
+  "eslint.config.mjs": {
+    "mtime": 1788772516.567185,
+    "ast_hash": "6c4307ffa009658f5c97f5629094c0c2",
+    "semantic_hash": ""
+  },
+  "next.config.ts": {
+    "mtime": 1788832743.199019,
+    "ast_hash": "2089abd2751f7228938205b47972fd9b",
+    "semantic_hash": ""
+  },
+  "package.json": {
+    "mtime": 1788772516.567185,
+    "ast_hash": "41a1d3db3b3554e370f9df86b3dd1b70",
+    "semantic_hash": ""
+  },
+  "postcss.config.mjs": {
+    "mtime": 1788772516.583554,
+    "ast_hash": "481fac0fdecd70e1821cc30b86030c1a",
+    "semantic_hash": ""
+  },
+  "tsconfig.json": {
+    "mtime": 1788772516.5851963,
+    "ast_hash": "ab575e944f15d39a5486cf9fca385c5e",
+    "semantic_hash": ""
+  },
+  ".agents/rules/graphify.md": {
+    "mtime": 1788832181.2186227,
+    "ast_hash": "7ec589f0ca93841a99b09fb43b097425",
+    "semantic_hash": ""
+  },
+  ".agents/rules/supabase.md": {
+    "mtime": 1788832180.5687308,
+    "ast_hash": "7c4e6f14432f4b78a31de490ba064f6a",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1788772516.567185,
+    "ast_hash": "3ad29ed1c7e1970f724e872fcffc4909",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1788772516.567185,
+    "ast_hash": "771faa62feb60b7de901a397aebb29b0",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1788772516.567185,
+    "ast_hash": "9162add00befbcdb432430f405c4ad8d",
+    "semantic_hash": ""
+  },
+  "docs/AI_AGENT_GUIDELINES.md": {
+    "mtime": 1788832173.8569376,
+    "ast_hash": "458816cd1cb283f28e0970ea7c574c21",
+    "semantic_hash": ""
+  },
+  "docs/DATABASE_SCHEMA.md": {
+    "mtime": 1788832178.380195,
+    "ast_hash": "f5e3d8fc109378fa3bea995bb191168a",
+    "semantic_hash": ""
+  },
+  "docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md": {
+    "mtime": 1788833394.5938325,
+    "ast_hash": "d3837526c564e08e441f8810c9f729d6",
+    "semantic_hash": ""
+  },
+  "docs/GITFLOW_AND_CONVENTIONS.md": {
+    "mtime": 1788832176.3438623,
+    "ast_hash": "0c18621422367bc13c7b93a26bf517b3",
+    "semantic_hash": ""
+  },
+  "docs/INFRASTRUCTURE_AND_CICD.md": {
+    "mtime": 1788832177.2206209,
+    "ast_hash": "08629c91aa1fd56867f60e5d50e66e3f",
+    "semantic_hash": ""
+  },
+  "docs/README.md": {
+    "mtime": 1788834627.0306392,
+    "ast_hash": "e0de4a48382e58462a515be2c5f264be",
+    "semantic_hash": ""
+  },
+  "docs/diagram.md": {
+    "mtime": 1788831932.0355747,
+    "ast_hash": "e45c94da56148059a9a0344d482a8676",
+    "semantic_hash": ""
+  },
+  "docs/prd.md": {
+    "mtime": 1788834264.1138208,
+    "ast_hash": "bb0b356b87e7c5e91c47bfa264c63b2f",
+    "semantic_hash": ""
+  },
+  "pnpm-workspace.yaml": {
+    "mtime": 1788772516.5821645,
+    "ast_hash": "8da04eb565427354036cd216afd527c0",
+    "semantic_hash": ""
+  },
+  "public/file.svg": {
+    "mtime": 1788772516.5851963,
+    "ast_hash": "d09f95206c3fa0bb9bd9fefabfd0ea71",
+    "semantic_hash": ""
+  },
+  "public/globe.svg": {
+    "mtime": 1788772516.5851963,
+    "ast_hash": "2aaafa6a49b6563925fe440891e32717",
+    "semantic_hash": ""
+  },
+  "public/next.svg": {
+    "mtime": 1788772516.5851963,
+    "ast_hash": "8e061864f388b47f33a1c3780831193e",
+    "semantic_hash": ""
+  },
+  "public/vercel.svg": {
+    "mtime": 1788772516.5851963,
+    "ast_hash": "c0af2f507b369b085b35ef4bbe3bcf1e",
+    "semantic_hash": ""
+  },
+  "public/window.svg": {
+    "mtime": 1788772516.5851963,
+    "ast_hash": "a2760511c65806022ad20adf74370ff3",
+    "semantic_hash": ""
+  },
+  ".github/workflows/ci.yml": {
+    "mtime": 1788832727.8019512,
+    "ast_hash": "9f11425df11d8af65e8685adf47604fd",
+    "semantic_hash": ""
+  },
+  ".github/workflows/test.yml": {
+    "mtime": 1788832728.944867,
+    "ast_hash": "406b93e8bf94d07343ffebf84909a43e",
+    "semantic_hash": ""
+  },
+  "docker-compose.yml": {
+    "mtime": 1788832731.2447176,
+    "ast_hash": "d1faae4fe516223757437877504dbe3a",
+    "semantic_hash": ""
+  },
+  "docs/PROJECT_SETUP_CHECKLIST.md": {
+    "mtime": 1788834618.4606633,
+    "ast_hash": "e4ae28a9c8959f0b46322dde8f5d91aa",
+    "semantic_hash": ""
+  }
+}
