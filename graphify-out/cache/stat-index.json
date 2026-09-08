@@ -48,11 +48,11 @@
     }
   },
   "docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md": {
-    "size": 3570,
-    "mtime_ns": 1788833394593832400,
-    "word_count": 443,
+    "size": 10698,
+    "mtime_ns": 1788879113087096600,
+    "word_count": 1183,
     "hashes": {
-      "docs/folder_structure_and_architecture.md": "afc4bbb54d9abd58bb6e83832441ae85c92bf97760c7345463b130aa9f13e4b3"
+      "docs/folder_structure_and_architecture.md": "b5f0afdeefd31048555f7e3981e1cbe5b4582b57cd9b747dcc7085197f64835f"
     }
   },
   "docs/GITFLOW_AND_CONVENTIONS.md": {
@@ -64,11 +64,11 @@
     }
   },
   "docs/INFRASTRUCTURE_AND_CICD.md": {
-    "size": 804,
-    "mtime_ns": 1788876506181133500,
+    "size": 826,
+    "mtime_ns": 1788879095052739500,
     "word_count": 108,
     "hashes": {
-      "docs/infrastructure_and_cicd.md": "e2e0c9045f63e113f634e950a7c193ec048cfbcfd2cb8e1ecf678edea95c679b"
+      "docs/infrastructure_and_cicd.md": "594f004787bf3040b6e2ed346dc7f26dd2fa56e74f13fff126185e04a3ca9ffb"
     }
   },
   "docs/README.md": {
@@ -114,11 +114,11 @@
     "word_count": 23
   },
   "package.json": {
-    "size": 1208,
-    "mtime_ns": 1788874161073234500,
-    "word_count": 104,
+    "size": 1311,
+    "mtime_ns": 1788879113204560100,
+    "word_count": 108,
     "hashes": {
-      "package.json": "f9905b343808138e3cf9a702b0ec5d591bb48f329fc1c56d2d39350b344a1806"
+      "package.json": "fc1d48a6df1bb80216362c0fb4fbee24b52955d95c97e909152431470982d723"
     }
   },
   "pnpm-workspace.yaml": {
@@ -180,11 +180,11 @@
     "word_count": 38
   },
   "docs/PROJECT_SETUP_CHECKLIST.md": {
-    "size": 2508,
-    "mtime_ns": 1788876490472438600,
+    "size": 2552,
+    "mtime_ns": 1788879095052739500,
     "word_count": 333,
     "hashes": {
-      "docs/project_setup_checklist.md": "7388dbf903d5d15e5476eb3db3b5f1c1dd363a64224490ead08a63f109e5e8ac"
+      "docs/project_setup_checklist.md": "883b8cd86e5c1541c19f2f371d6c8dd8c39480b22142aae6415f8e88939ef294"
     }
   },
   "components.json": {
@@ -199,11 +199,6 @@
     "size": 806,
     "mtime_ns": 1788857655239364400,
     "word_count": 84
-  },
-  "src/app/page.tsx": {
-    "size": 335,
-    "mtime_ns": 1788857655249082000,
-    "word_count": 33
   },
   "src/components/ui/button.tsx": {
     "size": 3287,
@@ -226,18 +221,18 @@
     "word_count": 79
   },
   "src/lib/supabase/client.ts": {
-    "size": 341,
-    "mtime_ns": 1788876982614834000,
+    "size": 350,
+    "mtime_ns": 1788879095098803500,
     "word_count": 25
   },
   "src/lib/supabase/middleware.ts": {
-    "size": 1086,
-    "mtime_ns": 1788877017046509200,
+    "size": 1124,
+    "mtime_ns": 1788879095099345900,
     "word_count": 89
   },
   "src/lib/supabase/server.ts": {
-    "size": 907,
-    "mtime_ns": 1788877002340380300,
+    "size": 937,
+    "mtime_ns": 1788879095101248700,
     "word_count": 88
   },
   "src/lib/utils.ts": {
@@ -246,16 +241,271 @@
     "word_count": 6
   },
   "src/types/database.types.ts": {
-    "size": 29951,
-    "mtime_ns": 1788876879380140800,
-    "word_count": 2175
+    "size": 30640,
+    "mtime_ns": 1788879095102818500,
+    "word_count": 2174
   },
   "supabase/migrations/20260908080811_initial_schema.sql": {
     "size": 13385,
-    "mtime_ns": 1788876489396942300,
+    "mtime_ns": 1788879095110114600,
     "word_count": 1455,
     "hashes": {
       "supabase/migrations/20260908080811_initial_schema.sql": "46a1693d98e2abc6d160153e4354d26dda152a5b457c900abdec34e7ed2e184b"
     }
+  },
+  "src/app/(auth)/auth/callback/route.ts": {
+    "size": 666,
+    "mtime_ns": 1788879114428497600,
+    "word_count": 81
+  },
+  "src/app/(auth)/layout.tsx": {
+    "size": 278,
+    "mtime_ns": 1788879114442612400,
+    "word_count": 27
+  },
+  "src/app/(auth)/login/page.tsx": {
+    "size": 314,
+    "mtime_ns": 1788879114457112500,
+    "word_count": 34
+  },
+  "src/app/(auth)/register/page.tsx": {
+    "size": 319,
+    "mtime_ns": 1788879114474170100,
+    "word_count": 32
+  },
+  "src/app/(dashboard)/layout.tsx": {
+    "size": 511,
+    "mtime_ns": 1788879114487508500,
+    "word_count": 54
+  },
+  "src/app/(dashboard)/page.tsx": {
+    "size": 440,
+    "mtime_ns": 1788879114501171200,
+    "word_count": 52
+  },
+  "src/app/error.tsx": {
+    "size": 576,
+    "mtime_ns": 1788879114512495700,
+    "word_count": 54
+  },
+  "src/app/not-found.tsx": {
+    "size": 451,
+    "mtime_ns": 1788879114527154800,
+    "word_count": 38
+  },
+  "src/components/forms/submit-button.tsx": {
+    "size": 536,
+    "mtime_ns": 1788879114539228700,
+    "word_count": 62
+  },
+  "src/components/layout/header.tsx": {
+    "size": 266,
+    "mtime_ns": 1788879114555046900,
+    "word_count": 24
+  },
+  "src/components/layout/mobile-nav.tsx": {
+    "size": 65,
+    "mtime_ns": 1788879114580977200,
+    "word_count": 9
+  },
+  "src/components/layout/sidebar.tsx": {
+    "size": 729,
+    "mtime_ns": 1788879114596023800,
+    "word_count": 61
+  },
+  "src/config/feature-flags.ts": {
+    "size": 658,
+    "mtime_ns": 1788879114609925300,
+    "word_count": 94
+  },
+  "src/config/routes.ts": {
+    "size": 596,
+    "mtime_ns": 1788879114622318800,
+    "word_count": 69
+  },
+  "src/config/site.ts": {
+    "size": 735,
+    "mtime_ns": 1788879114635805900,
+    "word_count": 97
+  },
+  "src/features/ai/actions/ai.actions.ts": {
+    "size": 81,
+    "mtime_ns": 1788879114649286000,
+    "word_count": 10
+  },
+  "src/features/ai/lib/llm-client.ts": {
+    "size": 79,
+    "mtime_ns": 1788879114665800500,
+    "word_count": 10
+  },
+  "src/features/ai/lib/prompt-templates.ts": {
+    "size": 100,
+    "mtime_ns": 1788879114685238400,
+    "word_count": 15
+  },
+  "src/features/ai/queries/ai-cache.queries.ts": {
+    "size": 124,
+    "mtime_ns": 1788879114699557500,
+    "word_count": 13
+  },
+  "src/features/auth/actions/auth.actions.ts": {
+    "size": 296,
+    "mtime_ns": 1788879114723327200,
+    "word_count": 34
+  },
+  "src/features/auth/lib/auth.utils.ts": {
+    "size": 287,
+    "mtime_ns": 1788879114737848500,
+    "word_count": 36
+  },
+  "src/features/auth/queries/auth.queries.ts": {
+    "size": 560,
+    "mtime_ns": 1788879114752222100,
+    "word_count": 70
+  },
+  "src/features/dashboard/queries/dashboard.queries.ts": {
+    "size": 90,
+    "mtime_ns": 1788879114764666700,
+    "word_count": 10
+  },
+  "src/features/dashboard/types/dashboard.types.ts": {
+    "size": 95,
+    "mtime_ns": 1788879114780305600,
+    "word_count": 18
+  },
+  "src/features/github/actions/github.actions.ts": {
+    "size": 85,
+    "mtime_ns": 1788879114793652400,
+    "word_count": 10
+  },
+  "src/features/github/lib/github-api.ts": {
+    "size": 91,
+    "mtime_ns": 1788879114804794900,
+    "word_count": 10
+  },
+  "src/features/github/queries/github.queries.ts": {
+    "size": 84,
+    "mtime_ns": 1788879114815597600,
+    "word_count": 10
+  },
+  "src/features/kanban/actions/kanban.actions.ts": {
+    "size": 85,
+    "mtime_ns": 1788879114828456800,
+    "word_count": 10
+  },
+  "src/features/kanban/types/kanban.types.ts": {
+    "size": 227,
+    "mtime_ns": 1788879114843437900,
+    "word_count": 17
+  },
+  "src/features/milestones/actions/milestone.actions.ts": {
+    "size": 88,
+    "mtime_ns": 1788879114857294000,
+    "word_count": 10
+  },
+  "src/features/milestones/queries/milestone.queries.ts": {
+    "size": 386,
+    "mtime_ns": 1788879114874864600,
+    "word_count": 43
+  },
+  "src/features/milestones/types/milestone.types.ts": {
+    "size": 301,
+    "mtime_ns": 1788879114891643800,
+    "word_count": 22
+  },
+  "src/features/notifications/actions/notification.actions.ts": {
+    "size": 91,
+    "mtime_ns": 1788879114906139500,
+    "word_count": 10
+  },
+  "src/features/notifications/queries/notification.queries.ts": {
+    "size": 387,
+    "mtime_ns": 1788879114918931500,
+    "word_count": 43
+  },
+  "src/features/projects/actions/project.actions.ts": {
+    "size": 86,
+    "mtime_ns": 1788879114931664900,
+    "word_count": 10
+  },
+  "src/features/projects/queries/project.queries.ts": {
+    "size": 317,
+    "mtime_ns": 1788879114943770400,
+    "word_count": 37
+  },
+  "src/features/projects/types/project.types.ts": {
+    "size": 289,
+    "mtime_ns": 1788879114958139700,
+    "word_count": 22
+  },
+  "src/features/tasks/actions/task.actions.ts": {
+    "size": 83,
+    "mtime_ns": 1788879114970526400,
+    "word_count": 10
+  },
+  "src/features/tasks/queries/task.queries.ts": {
+    "size": 341,
+    "mtime_ns": 1788879114984370200,
+    "word_count": 38
+  },
+  "src/features/tasks/types/task.types.ts": {
+    "size": 351,
+    "mtime_ns": 1788879114997879400,
+    "word_count": 27
+  },
+  "src/features/team/actions/team.actions.ts": {
+    "size": 83,
+    "mtime_ns": 1788879115009262700,
+    "word_count": 10
+  },
+  "src/features/team/queries/team.queries.ts": {
+    "size": 267,
+    "mtime_ns": 1788879115025261500,
+    "word_count": 33
+  },
+  "src/features/workload/lib/capacity.utils.ts": {
+    "size": 372,
+    "mtime_ns": 1788879115037934800,
+    "word_count": 40
+  },
+  "src/features/workload/queries/workload.queries.ts": {
+    "size": 85,
+    "mtime_ns": 1788879115053100800,
+    "word_count": 10
+  },
+  "src/hooks/use-debounce.ts": {
+    "size": 379,
+    "mtime_ns": 1788879115063912800,
+    "word_count": 44
+  },
+  "src/hooks/use-media-query.ts": {
+    "size": 429,
+    "mtime_ns": 1788879115077772700,
+    "word_count": 39
+  },
+  "src/hooks/use-user.ts": {
+    "size": 747,
+    "mtime_ns": 1788879115091292500,
+    "word_count": 85
+  },
+  "src/lib/constants.ts": {
+    "size": 833,
+    "mtime_ns": 1788879115103711300,
+    "word_count": 92
+  },
+  "src/lib/validations/common.ts": {
+    "size": 638,
+    "mtime_ns": 1788879115112501600,
+    "word_count": 68
+  },
+  "src/middleware.ts": {
+    "size": 591,
+    "mtime_ns": 1788879115122220100,
+    "word_count": 68
+  },
+  "src/types/global.d.ts": {
+    "size": 453,
+    "mtime_ns": 1788879115135831200,
+    "word_count": 69
   }
 }
