@@ -1,0 +1,111 @@
+{
+  "nodes": [
+    {
+      "id": "d_project_workhub_docs_project_setup_checklist_md",
+      "label": "PROJECT_SETUP_CHECKLIST.md",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "d_project_workhub_docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "label": "Project Setup & Engineering Checklist (4-Month Roadmap)",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "d_project_workhub_docs_project_setup_checklist_1_database_migrations_seeding_supabase_cloud",
+      "label": "1. \ud83c\udfd7\ufe0f Database Migrations & Seeding (Supabase Cloud)",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L5"
+    },
+    {
+      "id": "d_project_workhub_docs_project_setup_checklist_2_ui_component_design_system",
+      "label": "2. \ud83e\udde9 UI Component & Design System",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L10"
+    },
+    {
+      "id": "d_project_workhub_docs_project_setup_checklist_3_penjaga_kualitas_kode_code_guardrails",
+      "label": "3. \ud83d\udee1\ufe0f Penjaga Kualitas Kode (Code Guardrails)",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L14"
+    },
+    {
+      "id": "d_project_workhub_docs_project_setup_checklist_4_environment_deployment_strategy",
+      "label": "4. \ud83c\udf0d Environment & Deployment Strategy",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L19"
+    },
+    {
+      "id": "d_project_workhub_docs_project_setup_checklist_5_error_handling_observability",
+      "label": "5. \ud83d\udee0\ufe0f Error Handling & Observability",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L24"
+    }
+  ],
+  "edges": [
+    {
+      "source": "d_project_workhub_docs_project_setup_checklist_md",
+      "target": "d_project_workhub_docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "d_project_workhub_docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "d_project_workhub_docs_project_setup_checklist_1_database_migrations_seeding_supabase_cloud",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "d_project_workhub_docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "d_project_workhub_docs_project_setup_checklist_2_ui_component_design_system",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "d_project_workhub_docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "d_project_workhub_docs_project_setup_checklist_3_penjaga_kualitas_kode_code_guardrails",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L14",
+      "weight": 1.0
+    },
+    {
+      "source": "d_project_workhub_docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "d_project_workhub_docs_project_setup_checklist_4_environment_deployment_strategy",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "d_project_workhub_docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "d_project_workhub_docs_project_setup_checklist_5_error_handling_observability",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L24",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

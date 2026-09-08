@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   "docs/README.md": {
-    "mtime": 1788832521.9102116,
-    "ast_hash": "1c38d367156ee14858264de884b659e1",
+    "mtime": 1788834627.0306392,
+    "ast_hash": "e0de4a48382e58462a515be2c5f264be",
     "semantic_hash": ""
   },
   "docs/diagram.md": {
@@ -147,6 +147,11 @@
   "docker-compose.yml": {
     "mtime": 1788832731.2447176,
     "ast_hash": "d1faae4fe516223757437877504dbe3a",
+    "semantic_hash": ""
+  },
+  "docs/PROJECT_SETUP_CHECKLIST.md": {
+    "mtime": 1788834618.4606633,
+    "ast_hash": "e4ae28a9c8959f0b46322dde8f5d91aa",
     "semantic_hash": ""
   }
 }
