@@ -1,1 +1,261 @@
-{".agents/rules/graphify.md":{"size":239,"mtime_ns":1788832181218622800,"word_count":38,"hashes":{".agents/rules/graphify.md":"6e8bbad8a10ecb3fa7e28911cc2c9f374b9864fb0829978553da8c98cbe8fb14"}},".agents/rules/supabase.md":{"size":248,"mtime_ns":1788832180568730900,"word_count":38,"hashes":{".agents/rules/supabase.md":"a68882969d5af117f2c0451a2cd59735a7496685586feb7c4c2434834fbd1aab"}},"AGENTS.md":{"size":687,"mtime_ns":1788772516567185000,"word_count":95,"hashes":{"agents.md":"2db562a404fa75c329dfc8551df6f34f9961d3056564658b0b9b6ef5ff77edf3"}},"CLAUDE.md":{"size":12,"mtime_ns":1788772516567185000,"word_count":1,"hashes":{"claude.md":"72de41f65b9893c2899b2a4ad29528036b0943bfef8d6c034859d9ea8160345d"}},"README.md":{"size":1486,"mtime_ns":1788772516567185000,"word_count":155,"hashes":{"readme.md":"386f7e999b4431d7c4affb98eed96ec5b6b9be80619efd415526e400c75472d6"}},"app/layout.tsx":{"size":719,"mtime_ns":1788772516567185000,"word_count":75},"app/page.tsx":{"size":3145,"mtime_ns":1788772516567185000,"word_count":190},"docs/AI_AGENT_GUIDELINES.md":{"size":582,"mtime_ns":1788832173856937700,"word_count":94,"hashes":{"docs/ai_agent_guidelines.md":"2e3af016aca202fdcfcf9f49ab6920f04b3d2dde0100a05dae984c21b15e28a8"}},"docs/DATABASE_SCHEMA.md":{"size":381,"mtime_ns":1788832178380195000,"word_count":54,"hashes":{"docs/database_schema.md":"24816f1b0d3214f4726d086886cd7e11744a7b64a1bd9cb3ac63e9feaaf20903"}},"docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md":{"size":3570,"mtime_ns":1788833394593832400,"word_count":443,"hashes":{"docs/folder_structure_and_architecture.md":"afc4bbb54d9abd58bb6e83832441ae85c92bf97760c7345463b130aa9f13e4b3"}},"docs/GITFLOW_AND_CONVENTIONS.md":{"size":656,"mtime_ns":1788832176343862300,"word_count":91,"hashes":{"docs/gitflow_and_conventions.md":"16e02d11d5a3b4d00b0daba1b701beae4569bde4226f842e4f782a1cba423ba7"}},"docs/INFRASTRUCTURE_AND_CICD.md":{"size":360,"mtime_ns":1788832177220620900,"word_count":48,"hashes":{"docs/infrastructure_and_cicd.md":"a5647621754b9a6462e7cfd9db66e417a9f451d82403bc80bacf78dc0305f2ef"}},"docs/README.md":{"size":580,"mtime_ns":1788834627030639100,"word_count":52,"hashes":{"docs/readme.md":"903730878e79eb2503c74ec2c2d520c78833c40a030f0f2325c4dcd745f05510"}},"docs/diagram.md":{"size":8906,"mtime_ns":1788831932035574600,"word_count":1067,"hashes":{"docs/diagram.md":"0d450861b3f8e57608e33c7356b659a7ae64d5a5dc5d8d931c380b4a8fff78ce"}},"docs/prd.md":{"size":24931,"mtime_ns":1788834264113820900,"word_count":3557,"hashes":{"docs/prd.md":"66c2eadcc6261fea4e9ff7a9d1c26121e0ed7396753e178c5960be3ff51b9383"}},"docs/schema.sql":{"size":13385,"mtime_ns":1788831919083310600,"word_count":1455,"hashes":{"docs/schema.sql":"18d38dd89454cd46ed0c12c85e8141d6a4494295f2590eedabf5e1b31e78dcf5"}},"eslint.config.mjs":{"size":483,"mtime_ns":1788772516567185000,"word_count":42},"next.config.ts":{"size":165,"mtime_ns":1788832743199019000,"word_count":23},"package.json":{"size":590,"mtime_ns":1788772516567185000,"word_count":52,"hashes":{"package.json":"bd65ce66e77f8cc674d038aec595c96cb1f68adec0e27ba2dbc9ba44f3d6da91"}},"pnpm-workspace.yaml":{"size":54,"mtime_ns":1788772516582164600,"word_count":5},"postcss.config.mjs":{"size":101,"mtime_ns":1788772516583554000,"word_count":13},"public/file.svg":{"size":391,"mtime_ns":1788772516585196300,"word_count":50},"public/globe.svg":{"size":1035,"mtime_ns":1788772516585196300,"word_count":154},"public/next.svg":{"size":1375,"mtime_ns":1788772516585196300,"word_count":183},"public/vercel.svg":{"size":128,"mtime_ns":1788772516585196300,"word_count":12},"public/window.svg":{"size":385,"mtime_ns":1788772516585196300,"word_count":63},"tsconfig.json":{"size":700,"mtime_ns":1788772516585196300,"word_count":56,"hashes":{"tsconfig.json":"2c57c1ab5608e2c6313c1d7d34e129f6351a756151e6d6abc669616ee6cd94b8"}},".github/workflows/ci.yml":{"size":816,"mtime_ns":1788832727801951200,"word_count":80},".github/workflows/test.yml":{"size":347,"mtime_ns":1788832728944866900,"word_count":43},"docker-compose.yml":{"size":566,"mtime_ns":1788832731244717700,"word_count":38},"docs/PROJECT_SETUP_CHECKLIST.md":{"size":3080,"mtime_ns":1788834618460663200,"word_count":420,"hashes":{"docs/project_setup_checklist.md":"0926ebb460c0d526b17992c5b3d65b5d152dcc72dd2ec92be76f478d8de276dc"}}}
+{
+  ".agents/rules/graphify.md": {
+    "size": 239,
+    "mtime_ns": 1788832181218622800,
+    "word_count": 38,
+    "hashes": {
+      ".agents/rules/graphify.md": "6e8bbad8a10ecb3fa7e28911cc2c9f374b9864fb0829978553da8c98cbe8fb14"
+    }
+  },
+  ".agents/rules/supabase.md": {
+    "size": 248,
+    "mtime_ns": 1788832180568730900,
+    "word_count": 38,
+    "hashes": {
+      ".agents/rules/supabase.md": "a68882969d5af117f2c0451a2cd59735a7496685586feb7c4c2434834fbd1aab"
+    }
+  },
+  "AGENTS.md": {
+    "size": 687,
+    "mtime_ns": 1788772516567185000,
+    "word_count": 95,
+    "hashes": {
+      "agents.md": "2db562a404fa75c329dfc8551df6f34f9961d3056564658b0b9b6ef5ff77edf3"
+    }
+  },
+  "README.md": {
+    "size": 1486,
+    "mtime_ns": 1788772516567185000,
+    "word_count": 155,
+    "hashes": {
+      "readme.md": "386f7e999b4431d7c4affb98eed96ec5b6b9be80619efd415526e400c75472d6"
+    }
+  },
+  "docs/AI_AGENT_GUIDELINES.md": {
+    "size": 582,
+    "mtime_ns": 1788832173856937700,
+    "word_count": 94,
+    "hashes": {
+      "docs/ai_agent_guidelines.md": "2e3af016aca202fdcfcf9f49ab6920f04b3d2dde0100a05dae984c21b15e28a8"
+    }
+  },
+  "docs/DATABASE_SCHEMA.md": {
+    "size": 381,
+    "mtime_ns": 1788832178380195000,
+    "word_count": 54,
+    "hashes": {
+      "docs/database_schema.md": "24816f1b0d3214f4726d086886cd7e11744a7b64a1bd9cb3ac63e9feaaf20903"
+    }
+  },
+  "docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md": {
+    "size": 3570,
+    "mtime_ns": 1788833394593832400,
+    "word_count": 443,
+    "hashes": {
+      "docs/folder_structure_and_architecture.md": "afc4bbb54d9abd58bb6e83832441ae85c92bf97760c7345463b130aa9f13e4b3"
+    }
+  },
+  "docs/GITFLOW_AND_CONVENTIONS.md": {
+    "size": 656,
+    "mtime_ns": 1788832176343862300,
+    "word_count": 91,
+    "hashes": {
+      "docs/gitflow_and_conventions.md": "16e02d11d5a3b4d00b0daba1b701beae4569bde4226f842e4f782a1cba423ba7"
+    }
+  },
+  "docs/INFRASTRUCTURE_AND_CICD.md": {
+    "size": 804,
+    "mtime_ns": 1788876506181133500,
+    "word_count": 108,
+    "hashes": {
+      "docs/infrastructure_and_cicd.md": "e2e0c9045f63e113f634e950a7c193ec048cfbcfd2cb8e1ecf678edea95c679b"
+    }
+  },
+  "docs/README.md": {
+    "size": 580,
+    "mtime_ns": 1788834627030639100,
+    "word_count": 52,
+    "hashes": {
+      "docs/readme.md": "903730878e79eb2503c74ec2c2d520c78833c40a030f0f2325c4dcd745f05510"
+    }
+  },
+  "docs/diagram.md": {
+    "size": 8906,
+    "mtime_ns": 1788831932035574600,
+    "word_count": 1067,
+    "hashes": {
+      "docs/diagram.md": "0d450861b3f8e57608e33c7356b659a7ae64d5a5dc5d8d931c380b4a8fff78ce"
+    }
+  },
+  "docs/prd.md": {
+    "size": 24931,
+    "mtime_ns": 1788834264113820900,
+    "word_count": 3557,
+    "hashes": {
+      "docs/prd.md": "66c2eadcc6261fea4e9ff7a9d1c26121e0ed7396753e178c5960be3ff51b9383"
+    }
+  },
+  "docs/schema.sql": {
+    "size": 13385,
+    "mtime_ns": 1788858198438536800,
+    "word_count": 1455,
+    "hashes": {
+      "docs/schema.sql": "18d38dd89454cd46ed0c12c85e8141d6a4494295f2590eedabf5e1b31e78dcf5"
+    }
+  },
+  "eslint.config.mjs": {
+    "size": 568,
+    "mtime_ns": 1788857655196452200,
+    "word_count": 47
+  },
+  "next.config.ts": {
+    "size": 165,
+    "mtime_ns": 1788832743199019000,
+    "word_count": 23
+  },
+  "package.json": {
+    "size": 1208,
+    "mtime_ns": 1788874161073234500,
+    "word_count": 104,
+    "hashes": {
+      "package.json": "f9905b343808138e3cf9a702b0ec5d591bb48f329fc1c56d2d39350b344a1806"
+    }
+  },
+  "pnpm-workspace.yaml": {
+    "size": 75,
+    "mtime_ns": 1788838528597096100,
+    "word_count": 8
+  },
+  "postcss.config.mjs": {
+    "size": 101,
+    "mtime_ns": 1788772516583554000,
+    "word_count": 13
+  },
+  "public/file.svg": {
+    "size": 391,
+    "mtime_ns": 1788772516585196300,
+    "word_count": 50
+  },
+  "public/globe.svg": {
+    "size": 1035,
+    "mtime_ns": 1788772516585196300,
+    "word_count": 154
+  },
+  "public/next.svg": {
+    "size": 1375,
+    "mtime_ns": 1788772516585196300,
+    "word_count": 183
+  },
+  "public/vercel.svg": {
+    "size": 128,
+    "mtime_ns": 1788772516585196300,
+    "word_count": 12
+  },
+  "public/window.svg": {
+    "size": 385,
+    "mtime_ns": 1788772516585196300,
+    "word_count": 63
+  },
+  "tsconfig.json": {
+    "size": 704,
+    "mtime_ns": 1788857655301392600,
+    "word_count": 56,
+    "hashes": {
+      "tsconfig.json": "b4890539e256b8396116d4223cb512c2348c47492a402a56be45b488b961c44f"
+    }
+  },
+  ".github/workflows/ci.yml": {
+    "size": 921,
+    "mtime_ns": 1788838539841132700,
+    "word_count": 89
+  },
+  ".github/workflows/test.yml": {
+    "size": 442,
+    "mtime_ns": 1788838540718358900,
+    "word_count": 52
+  },
+  "docker-compose.yml": {
+    "size": 566,
+    "mtime_ns": 1788832731244717700,
+    "word_count": 38
+  },
+  "docs/PROJECT_SETUP_CHECKLIST.md": {
+    "size": 2508,
+    "mtime_ns": 1788876490472438600,
+    "word_count": 333,
+    "hashes": {
+      "docs/project_setup_checklist.md": "7388dbf903d5d15e5476eb3db3b5f1c1dd363a64224490ead08a63f109e5e8ac"
+    }
+  },
+  "components.json": {
+    "size": 545,
+    "mtime_ns": 1788857655188196700,
+    "word_count": 46,
+    "hashes": {
+      "components.json": "bb719e8b2116f6c93c75eaf84fb376fd3e32cc84f1e795b481b851967ad6ff64"
+    }
+  },
+  "src/app/layout.tsx": {
+    "size": 806,
+    "mtime_ns": 1788857655239364400,
+    "word_count": 84
+  },
+  "src/app/page.tsx": {
+    "size": 335,
+    "mtime_ns": 1788857655249082000,
+    "word_count": 33
+  },
+  "src/components/ui/button.tsx": {
+    "size": 3287,
+    "mtime_ns": 1788857655257448700,
+    "word_count": 192
+  },
+  "src/components/ui/card.tsx": {
+    "size": 2722,
+    "mtime_ns": 1788857655266095400,
+    "word_count": 204
+  },
+  "src/components/ui/dialog.tsx": {
+    "size": 4226,
+    "mtime_ns": 1788857655268791300,
+    "word_count": 318
+  },
+  "src/components/ui/input.tsx": {
+    "size": 1049,
+    "mtime_ns": 1788857655277329900,
+    "word_count": 79
+  },
+  "src/lib/supabase/client.ts": {
+    "size": 341,
+    "mtime_ns": 1788876982614834000,
+    "word_count": 25
+  },
+  "src/lib/supabase/middleware.ts": {
+    "size": 1086,
+    "mtime_ns": 1788877017046509200,
+    "word_count": 89
+  },
+  "src/lib/supabase/server.ts": {
+    "size": 907,
+    "mtime_ns": 1788877002340380300,
+    "word_count": 88
+  },
+  "src/lib/utils.ts": {
+    "size": 25,
+    "mtime_ns": 1788857655286881800,
+    "word_count": 6
+  },
+  "src/types/database.types.ts": {
+    "size": 29951,
+    "mtime_ns": 1788876879380140800,
+    "word_count": 2175
+  },
+  "supabase/migrations/20260908080811_initial_schema.sql": {
+    "size": 13385,
+    "mtime_ns": 1788876489396942300,
+    "word_count": 1455,
+    "hashes": {
+      "supabase/migrations/20260908080811_initial_schema.sql": "46a1693d98e2abc6d160153e4354d26dda152a5b457c900abdec34e7ed2e184b"
+    }
+  }
+}

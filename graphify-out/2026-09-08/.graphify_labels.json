@@ -17,5 +17,6 @@
   "15": "next.config.ts",
   "16": "postcss.config.mjs",
   "17": "CLAUDE.md",
-  "18": "Folder Structure & Architecture"
+  "18": "Database Schema",
+  "19": "Infrastructure & CI/CD"
 }

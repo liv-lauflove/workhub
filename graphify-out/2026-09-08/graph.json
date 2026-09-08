@@ -1011,8 +1011,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_database_schema",
-      "community": 1,
-      "community_name": "docs/README.md",
+      "community": 18,
+      "community_name": "Database Schema",
       "norm_label": "database_schema.md"
     },
     {
@@ -1022,8 +1022,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_database_schema_database_schema",
-      "community": 1,
-      "community_name": "docs/README.md",
+      "community": 18,
+      "community_name": "Database Schema",
       "norm_label": "database schema"
     },
     {
@@ -1033,8 +1033,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "docs_database_schema_entity_relationship_diagram_erd",
-      "community": 1,
-      "community_name": "docs/README.md",
+      "community": 18,
+      "community_name": "Database Schema",
       "norm_label": "entity relationship diagram (erd)"
     },
     {
@@ -1044,8 +1044,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "docs_database_schema_row_level_security_rls",
-      "community": 1,
-      "community_name": "docs/README.md",
+      "community": 18,
+      "community_name": "Database Schema",
       "norm_label": "row level security (rls)"
     },
     {
@@ -1055,8 +1055,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture",
-      "community": 18,
-      "community_name": "Folder Structure & Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "folder_structure_and_architecture.md"
     },
     {
@@ -1066,8 +1066,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_folder_structure_architecture",
-      "community": 18,
-      "community_name": "Folder Structure & Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "folder structure & architecture"
     },
     {
@@ -1077,8 +1077,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_1_struktur_folder_next_js_app_router",
-      "community": 18,
-      "community_name": "Folder Structure & Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "1. struktur folder next.js app router"
     },
     {
@@ -1088,8 +1088,8 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_2_batas_server_vs_client_component",
-      "community": 18,
-      "community_name": "Folder Structure & Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "2. batas server vs client component"
     },
     {
@@ -1099,8 +1099,8 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_3_arsitektur_state_sinkronisasi",
-      "community": 18,
-      "community_name": "Folder Structure & Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "3. arsitektur state & sinkronisasi"
     },
     {
@@ -1110,8 +1110,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_4_aset_pipeline_file_storage",
-      "community": 18,
-      "community_name": "Folder Structure & Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "4. aset pipeline & file storage"
     },
     {
@@ -1165,8 +1165,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_infrastructure_and_cicd",
-      "community": 1,
-      "community_name": "docs/README.md",
+      "community": 19,
+      "community_name": "Infrastructure & CI/CD",
       "norm_label": "infrastructure_and_cicd.md"
     },
     {
@@ -1176,8 +1176,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_infrastructure_and_cicd_infrastructure_ci_cd",
-      "community": 1,
-      "community_name": "docs/README.md",
+      "community": 19,
+      "community_name": "Infrastructure & CI/CD",
       "norm_label": "infrastructure & ci/cd"
     },
     {
@@ -1187,8 +1187,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "docs_infrastructure_and_cicd_supabase_setup",
-      "community": 1,
-      "community_name": "docs/README.md",
+      "community": 19,
+      "community_name": "Infrastructure & CI/CD",
       "norm_label": "supabase setup"
     },
     {
@@ -1198,9 +1198,86 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "docs_infrastructure_and_cicd_ci_cd_pipeline",
+      "community": 19,
+      "community_name": "Infrastructure & CI/CD",
+      "norm_label": "ci/cd pipeline"
+    },
+    {
+      "label": "PROJECT_SETUP_CHECKLIST.md",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_project_setup_checklist",
       "community": 1,
       "community_name": "docs/README.md",
-      "norm_label": "ci/cd pipeline"
+      "norm_label": "project_setup_checklist.md"
+    },
+    {
+      "label": "Project Setup & Engineering Checklist (4-Month Roadmap)",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "community": 1,
+      "community_name": "docs/README.md",
+      "norm_label": "project setup & engineering checklist (4-month roadmap)"
+    },
+    {
+      "label": "1. \ud83c\udfd7\ufe0f Database Migrations & Seeding (Fokus Demo)",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "docs_project_setup_checklist_1_database_migrations_seeding_fokus_demo",
+      "community": 1,
+      "community_name": "docs/README.md",
+      "norm_label": "1. \ud83c\udfd7\ufe0f database migrations & seeding (fokus demo)"
+    },
+    {
+      "label": "2. \ud83e\udde9 UI Component & Design System",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "docs_project_setup_checklist_2_ui_component_design_system",
+      "community": 1,
+      "community_name": "docs/README.md",
+      "norm_label": "2. \ud83e\udde9 ui component & design system"
+    },
+    {
+      "label": "3. \ud83d\udee1\ufe0f Penjaga Kualitas Kode (Code Guardrails)",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "docs_project_setup_checklist_3_penjaga_kualitas_kode_code_guardrails",
+      "community": 1,
+      "community_name": "docs/README.md",
+      "norm_label": "3. \ud83d\udee1\ufe0f penjaga kualitas kode (code guardrails)"
+    },
+    {
+      "label": "4. \ud83c\udf0d Environment & Deployment Strategy",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "docs_project_setup_checklist_4_environment_deployment_strategy",
+      "community": 1,
+      "community_name": "docs/README.md",
+      "norm_label": "4. \ud83c\udf0d environment & deployment strategy"
+    },
+    {
+      "label": "5. \ud83d\udee0\ufe0f Error Handling & Observability",
+      "file_type": "document",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "docs_project_setup_checklist_5_error_handling_observability",
+      "community": 1,
+      "community_name": "docs/README.md",
+      "norm_label": "5. \ud83d\udee0\ufe0f error handling & observability"
     },
     {
       "label": "docs/README.md",
@@ -2832,10 +2909,87 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_project_setup_checklist",
+      "target": "docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "docs/README.md",
       "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_readme",
+      "target": "docs_project_setup_checklist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "docs_project_setup_checklist_1_database_migrations_seeding_fokus_demo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "docs_project_setup_checklist_2_ui_component_design_system",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "docs_project_setup_checklist_3_penjaga_kualitas_kode_code_guardrails",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "docs_project_setup_checklist_4_environment_deployment_strategy",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/PROJECT_SETUP_CHECKLIST.md",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "docs_project_setup_checklist_project_setup_engineering_checklist_4_month_roadmap",
+      "target": "docs_project_setup_checklist_5_error_handling_observability",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "source_file": "docs/README.md",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
       "source": "docs_readme",
