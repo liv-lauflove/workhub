@@ -1198,19 +1198,30 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_auth_login_page",
-      "community": 30,
-      "community_name": "login/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "login/page.tsx"
+    },
+    {
+      "label": "metadata",
+      "file_type": "code",
+      "source_file": "src/app/(auth)/login/page.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "src_app_auth_login_page_metadata",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "metadata"
     },
     {
       "label": "LoginPage()",
       "file_type": "code",
       "source_file": "src/app/(auth)/login/page.tsx",
-      "source_location": "L1",
+      "source_location": "L8",
       "_origin": "ast",
       "id": "src_app_auth_login_page_loginpage",
-      "community": 30,
-      "community_name": "login/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "loginpage()"
     },
     {
@@ -1220,19 +1231,30 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_auth_register_page",
-      "community": 31,
-      "community_name": "register/page.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "register/page.tsx"
+    },
+    {
+      "label": "metadata",
+      "file_type": "code",
+      "source_file": "src/app/(auth)/register/page.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "src_app_auth_register_page_metadata",
+      "community": 19,
+      "community_name": "login-form.tsx",
+      "norm_label": "metadata"
     },
     {
       "label": "RegisterPage()",
       "file_type": "code",
       "source_file": "src/app/(auth)/register/page.tsx",
-      "source_location": "L1",
+      "source_location": "L8",
       "_origin": "ast",
       "id": "src_app_auth_register_page_registerpage",
-      "community": 31,
-      "community_name": "register/page.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "registerpage()"
     },
     {
@@ -1385,8 +1407,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_forms_submit_button",
-      "community": 18,
-      "community_name": "dialog.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "submit-button.tsx"
     },
     {
@@ -1396,8 +1418,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_forms_submit_button_submitbuttonprops",
-      "community": 18,
-      "community_name": "dialog.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "submitbuttonprops"
     },
     {
@@ -1407,8 +1429,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_forms_submit_button_submitbutton",
-      "community": 18,
-      "community_name": "dialog.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "submitbutton()"
     },
     {
@@ -1484,8 +1506,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_button",
-      "community": 18,
-      "community_name": "dialog.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "button.tsx"
     },
     {
@@ -1495,8 +1517,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_components_ui_button_buttonvariants",
-      "community": 18,
-      "community_name": "dialog.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "buttonvariants"
     },
     {
@@ -1506,8 +1528,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_components_ui_button_button",
-      "community": 18,
-      "community_name": "dialog.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "button()"
     },
     {
@@ -1518,7 +1540,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card",
       "community": 19,
-      "community_name": "card.tsx",
+      "community_name": "login-form.tsx",
       "norm_label": "card.tsx"
     },
     {
@@ -1529,7 +1551,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_card",
       "community": 19,
-      "community_name": "card.tsx",
+      "community_name": "login-form.tsx",
       "norm_label": "card()"
     },
     {
@@ -1540,7 +1562,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardheader",
       "community": 19,
-      "community_name": "card.tsx",
+      "community_name": "login-form.tsx",
       "norm_label": "cardheader()"
     },
     {
@@ -1551,7 +1573,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardtitle",
       "community": 19,
-      "community_name": "card.tsx",
+      "community_name": "login-form.tsx",
       "norm_label": "cardtitle()"
     },
     {
@@ -1562,7 +1584,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_carddescription",
       "community": 19,
-      "community_name": "card.tsx",
+      "community_name": "login-form.tsx",
       "norm_label": "carddescription()"
     },
     {
@@ -1573,7 +1595,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardaction",
       "community": 19,
-      "community_name": "card.tsx",
+      "community_name": "login-form.tsx",
       "norm_label": "cardaction()"
     },
     {
@@ -1584,7 +1606,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardcontent",
       "community": 19,
-      "community_name": "card.tsx",
+      "community_name": "login-form.tsx",
       "norm_label": "cardcontent()"
     },
     {
@@ -1595,7 +1617,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardfooter",
       "community": 19,
-      "community_name": "card.tsx",
+      "community_name": "login-form.tsx",
       "norm_label": "cardfooter()"
     },
     {
@@ -1726,8 +1748,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_input",
-      "community": 22,
-      "community_name": "input.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "input.tsx"
     },
     {
@@ -1737,9 +1759,31 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_components_ui_input_input",
-      "community": 22,
-      "community_name": "input.tsx",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "input()"
+    },
+    {
+      "label": "label.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ui/label.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_ui_label",
+      "community": 19,
+      "community_name": "login-form.tsx",
+      "norm_label": "label.tsx"
+    },
+    {
+      "label": "Label()",
+      "file_type": "code",
+      "source_file": "src/components/ui/label.tsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_ui_label_label",
+      "community": 19,
+      "community_name": "login-form.tsx",
+      "norm_label": "label()"
     },
     {
       "label": "feature-flags.ts",
@@ -1957,8 +2001,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_register",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "register()"
     },
     {
@@ -1971,6 +2015,72 @@
       "community": 6,
       "community_name": "createClient",
       "norm_label": "signout()"
+    },
+    {
+      "label": "login-form.tsx",
+      "file_type": "code",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_auth_components_login_form",
+      "community": 19,
+      "community_name": "login-form.tsx",
+      "norm_label": "login-form.tsx"
+    },
+    {
+      "label": "LoginForm()",
+      "file_type": "code",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "src_features_auth_components_login_form_loginform",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "loginform()"
+    },
+    {
+      "label": "oauth-buttons.tsx",
+      "file_type": "code",
+      "source_file": "src/features/auth/components/oauth-buttons.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_auth_components_oauth_buttons",
+      "community": 19,
+      "community_name": "login-form.tsx",
+      "norm_label": "oauth-buttons.tsx"
+    },
+    {
+      "label": "OAuthButtons()",
+      "file_type": "code",
+      "source_file": "src/features/auth/components/oauth-buttons.tsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_features_auth_components_oauth_buttons_oauthbuttons",
+      "community": 19,
+      "community_name": "login-form.tsx",
+      "norm_label": "oauthbuttons()"
+    },
+    {
+      "label": "register-form.tsx",
+      "file_type": "code",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_auth_components_register_form",
+      "community": 19,
+      "community_name": "login-form.tsx",
+      "norm_label": "register-form.tsx"
+    },
+    {
+      "label": "RegisterForm()",
+      "file_type": "code",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "src_features_auth_components_register_form_registerform",
+      "community": 19,
+      "community_name": "login-form.tsx",
+      "norm_label": "registerform()"
     },
     {
       "label": "auth.utils.ts",
@@ -2716,8 +2826,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_use_user",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "use-user.ts"
     },
     {
@@ -2727,8 +2837,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_hooks_use_user_useuser",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "useuser()"
     },
     {
@@ -2771,8 +2881,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_supabase_client",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "client.ts"
     },
     {
@@ -2782,8 +2892,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_lib_supabase_client_createclient",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 19,
+      "community_name": "login-form.tsx",
       "norm_label": "createclient()"
     },
     {
@@ -3915,8 +4025,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_diagram",
-      "community": 7,
-      "community_name": "2. Activity Diagram",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "diagram.md"
     },
     {
@@ -3926,8 +4036,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_diagram_diagram_task_performance_dashboard",
-      "community": 7,
-      "community_name": "2. Activity Diagram",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "diagram \u2014 task & performance dashboard"
     },
     {
@@ -3937,8 +4047,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "docs_diagram_1_entity_relationship_diagram_erd",
-      "community": 7,
-      "community_name": "2. Activity Diagram",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "1. entity relationship diagram (erd)"
     },
     {
@@ -3948,8 +4058,8 @@
       "source_location": "L206",
       "_origin": "ast",
       "id": "docs_diagram_2_activity_diagram",
-      "community": 7,
-      "community_name": "2. Activity Diagram",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "2. activity diagram"
     },
     {
@@ -3959,8 +4069,8 @@
       "source_location": "L208",
       "_origin": "ast",
       "id": "docs_diagram_2_1_alur_task_normal_dibuat_selesai",
-      "community": 7,
-      "community_name": "2. Activity Diagram",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "2.1 alur task normal (dibuat \u2192 selesai)"
     },
     {
@@ -3970,8 +4080,8 @@
       "source_location": "L235",
       "_origin": "ast",
       "id": "docs_diagram_2_2_alur_task_dari_komplain_customer_service",
-      "community": 7,
-      "community_name": "2. Activity Diagram",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "2.2 alur task dari komplain customer service"
     },
     {
@@ -3981,8 +4091,8 @@
       "source_location": "L250",
       "_origin": "ast",
       "id": "docs_diagram_2_3_alur_leader_menyiapkan_laporan_town_hall",
-      "community": 7,
-      "community_name": "2. Activity Diagram",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "2.3 alur leader menyiapkan laporan town hall"
     },
     {
@@ -3992,8 +4102,8 @@
       "source_location": "L273",
       "_origin": "ast",
       "id": "docs_diagram_3_use_case_diagram",
-      "community": 7,
-      "community_name": "2. Activity Diagram",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "3. use case diagram"
     },
     {
@@ -5607,7 +5717,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(auth)/login/page.tsx",
-      "source_location": "L1",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_auth_login_page",
@@ -5617,12 +5727,82 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/app/(auth)/login/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_auth_login_page",
+      "target": "src_app_auth_login_page_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(auth)/login/page.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_auth_login_page",
+      "target": "src_features_auth_components_login_form",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(auth)/login/page.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_auth_login_page",
+      "target": "src_features_auth_components_login_form_loginform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(auth)/register/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_auth_register_page",
+      "target": "src_app_auth_register_page_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(auth)/register/page.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_auth_register_page",
+      "target": "src_app_auth_register_page_registerpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/app/(auth)/register/page.tsx",
       "source_location": "L1",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_auth_register_page",
-      "target": "src_app_auth_register_page_registerpage",
+      "target": "src_features_auth_components_register_form",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(auth)/register/page.tsx",
+      "source_location": "L1",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_auth_register_page",
+      "target": "src_features_auth_components_register_form_registerform",
       "confidence_score": 1.0
     },
     {
@@ -5808,6 +5988,54 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_forms_submit_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_forms_submit_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_forms_submit_button_submitbutton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_forms_submit_button_submitbutton",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/layout/header.tsx",
@@ -5899,6 +6127,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/oauth-buttons.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_oauth_buttons",
+      "target": "src_components_ui_button",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -5919,6 +6159,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_components_ui_dialog",
+      "target": "src_components_ui_button_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/oauth-buttons.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_oauth_buttons",
       "target": "src_components_ui_button_button",
       "confidence_score": 1.0
     },
@@ -5997,6 +6249,174 @@
       "_origin": "ast",
       "source": "src_components_ui_card",
       "target": "src_components_ui_card_cardtitle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_card_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_card_card",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_card_cardheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_card_cardheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_card_cardtitle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_card_cardtitle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_card_carddescription",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_card_carddescription",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_card_cardcontent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_card_cardcontent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_card_cardfooter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_card_cardfooter",
       "confidence_score": 1.0
     },
     {
@@ -6118,6 +6538,113 @@
       "_origin": "ast",
       "source": "src_components_ui_input",
       "target": "src_components_ui_input_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_input_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_input_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/label.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_ui_label",
+      "target": "src_components_ui_label_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_components_ui_label_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_label_label",
       "confidence_score": 1.0
     },
     {
@@ -6372,6 +6899,30 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_features_auth_actions_auth_actions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_features_auth_actions_auth_actions",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -6382,6 +6933,30 @@
       "_origin": "ast",
       "source": "src_features_auth_actions_auth_actions_login",
       "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_features_auth_actions_auth_actions_login",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form_loginform",
+      "target": "src_features_auth_actions_auth_actions_login"
     },
     {
       "relation": "calls",
@@ -6396,6 +6971,30 @@
       "target": "src_lib_supabase_server_createclient"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_features_auth_actions_auth_actions_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form_registerform",
+      "target": "src_features_auth_actions_auth_actions_register"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -6406,6 +7005,123 @@
       "_origin": "ast",
       "source": "src_features_auth_actions_auth_actions_signout",
       "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_features_auth_components_login_form_loginform",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_features_auth_components_oauth_buttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/login-form.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_login_form",
+      "target": "src_features_auth_components_oauth_buttons_oauthbuttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/oauth-buttons.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_oauth_buttons",
+      "target": "src_features_auth_components_oauth_buttons_oauthbuttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/oauth-buttons.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_oauth_buttons",
+      "target": "src_lib_supabase_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/oauth-buttons.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_oauth_buttons",
+      "target": "src_lib_supabase_client_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_features_auth_components_oauth_buttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/auth/components/oauth-buttons.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_oauth_buttons_oauthbuttons",
+      "target": "src_lib_supabase_client_createclient"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_features_auth_components_oauth_buttons_oauthbuttons",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/components/register-form.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_components_register_form",
+      "target": "src_features_auth_components_register_form_registerform",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8927,5 +9643,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "f93aa1283d5c3f04841e1c29152e64cb2e742213"
+  "built_at_commit": "fb418cad93a62b137ceb136574d7e73d087d309c"
 }
