@@ -226,8 +226,8 @@
     "word_count": 25
   },
   "src/lib/supabase/middleware.ts": {
-    "size": 2598,
-    "mtime_ns": 1788922351985837100,
+    "size": 2708,
+    "mtime_ns": 1788923096842120300,
     "word_count": 240
   },
   "src/lib/supabase/server.ts": {
@@ -254,8 +254,8 @@
     }
   },
   "src/app/(auth)/auth/callback/route.ts": {
-    "size": 855,
-    "mtime_ns": 1788922361227733800,
+    "size": 891,
+    "mtime_ns": 1788923096838853300,
     "word_count": 102
   },
   "src/app/(auth)/layout.tsx": {
@@ -264,14 +264,14 @@
     "word_count": 27
   },
   "src/app/(auth)/login/page.tsx": {
-    "size": 315,
-    "mtime_ns": 1788918393315313700,
-    "word_count": 34
+    "size": 251,
+    "mtime_ns": 1788924939146870300,
+    "word_count": 33
   },
   "src/app/(auth)/register/page.tsx": {
-    "size": 320,
-    "mtime_ns": 1788918393315850700,
-    "word_count": 32
+    "size": 275,
+    "mtime_ns": 1788924951021572300,
+    "word_count": 35
   },
   "src/app/(dashboard)/layout.tsx": {
     "size": 515,
@@ -349,8 +349,8 @@
     "word_count": 13
   },
   "src/features/auth/actions/auth.actions.ts": {
-    "size": 2205,
-    "mtime_ns": 1788922343939073700,
+    "size": 2330,
+    "mtime_ns": 1788923096839970600,
     "word_count": 244
   },
   "src/features/auth/lib/auth.utils.ts": {
@@ -522,8 +522,28 @@
     }
   },
   "src/features/auth/types/auth.types.ts": {
-    "size": 637,
-    "mtime_ns": 1788922310453428400,
+    "size": 663,
+    "mtime_ns": 1788923096839970600,
     "word_count": 74
+  },
+  "src/components/ui/label.tsx": {
+    "size": 389,
+    "mtime_ns": 1788924849863735400,
+    "word_count": 40
+  },
+  "src/features/auth/components/login-form.tsx": {
+    "size": 3626,
+    "mtime_ns": 1788924898816241700,
+    "word_count": 271
+  },
+  "src/features/auth/components/oauth-buttons.tsx": {
+    "size": 2360,
+    "mtime_ns": 1788924870660993600,
+    "word_count": 217
+  },
+  "src/features/auth/components/register-form.tsx": {
+    "size": 4093,
+    "mtime_ns": 1788924932623421800,
+    "word_count": 299
   }
 }

@@ -175,8 +175,8 @@
     "semantic_hash": ""
   },
   "src/lib/supabase/middleware.ts": {
-    "mtime": 1788922351.985837,
-    "ast_hash": "344b13b5ac6adf3a30b4398fb2675a8e",
+    "mtime": 1788923096.8421204,
+    "ast_hash": "d62d725b06dbcead263a256f3c369156",
     "semantic_hash": ""
   },
   "src/lib/supabase/server.ts": {
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "src/app/(auth)/auth/callback/route.ts": {
-    "mtime": 1788922361.2277339,
-    "ast_hash": "d70d9ddb63f18a49f0deaa67bccc6754",
+    "mtime": 1788923096.8388534,
+    "ast_hash": "b7e16abed09c861225170c4dcffdf2e8",
     "semantic_hash": ""
   },
   "src/app/(auth)/layout.tsx": {
@@ -210,13 +210,13 @@
     "semantic_hash": ""
   },
   "src/app/(auth)/login/page.tsx": {
-    "mtime": 1788918393.3153138,
-    "ast_hash": "739cae796bbc698bad0e23c8cce463a1",
+    "mtime": 1788924939.1468704,
+    "ast_hash": "24fbb90f1c88ba4f29882a64512bdbd8",
     "semantic_hash": ""
   },
   "src/app/(auth)/register/page.tsx": {
-    "mtime": 1788918393.3158507,
-    "ast_hash": "8e45ec5a2d96563161c464c6872a4c1b",
+    "mtime": 1788924951.0215724,
+    "ast_hash": "7439cb3794a5689c151674212e0e6786",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/layout.tsx": {
@@ -295,8 +295,8 @@
     "semantic_hash": ""
   },
   "src/features/auth/actions/auth.actions.ts": {
-    "mtime": 1788922343.9390738,
-    "ast_hash": "41838f03a0be2093c28a4b764bbc556f",
+    "mtime": 1788923096.8399706,
+    "ast_hash": "49fb4f5a92d87c481d525da518f7ea34",
     "semantic_hash": ""
   },
   "src/features/auth/lib/auth.utils.ts": {
@@ -465,8 +465,28 @@
     "semantic_hash": ""
   },
   "src/features/auth/types/auth.types.ts": {
-    "mtime": 1788922310.4534285,
-    "ast_hash": "77e99e306ad93529b194bb308139a97c",
+    "mtime": 1788923096.8399706,
+    "ast_hash": "d3be73a642d54fd0e41fb714244493dc",
+    "semantic_hash": ""
+  },
+  "src/components/ui/label.tsx": {
+    "mtime": 1788924849.8637354,
+    "ast_hash": "6167f98accac19a7facff8ce46981c38",
+    "semantic_hash": ""
+  },
+  "src/features/auth/components/login-form.tsx": {
+    "mtime": 1788924898.8162417,
+    "ast_hash": "3efa8cbd418ec49bb6f7ec44fe4c06ab",
+    "semantic_hash": ""
+  },
+  "src/features/auth/components/oauth-buttons.tsx": {
+    "mtime": 1788924870.6609936,
+    "ast_hash": "c984d4322829c78f13bcf7630a7699c2",
+    "semantic_hash": ""
+  },
+  "src/features/auth/components/register-form.tsx": {
+    "mtime": 1788924932.623422,
+    "ast_hash": "f90542be40d2c3fe1d5422d56d74c718",
     "semantic_hash": ""
   }
 }

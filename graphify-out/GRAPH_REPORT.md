@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 85 files · ~17,539 words
+- 89 files · ~18,368 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 402 nodes · 399 edges · 55 communities (45 shown, 10 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
+- 412 nodes · 450 edges · 51 communities (41 shown, 10 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `f93aa128`
+- Built from commit: `fb418cad`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -26,7 +26,6 @@
 - package.json
 - 9. Functional Requirements
 - createClient
-- 2. Activity Diagram
 - dependencies
 - README.md
 - AGENTS.md
@@ -37,7 +36,7 @@
 - next.config.ts
 - postcss.config.mjs
 - database.types.ts
-- dialog.tsx
+- login-form.tsx
 - Folder Structure & Clean Architecture
 - layout.tsx
 - (dashboard)/layout.tsx
@@ -66,20 +65,20 @@
 
 - `GET()` --calls--> `createClient()` [EXTRACTED]
   src/app/(auth)/auth/callback/route.ts → src/lib/supabase/server.ts
-- `login()` --calls--> `createClient()` [EXTRACTED]
-  src/features/auth/actions/auth.actions.ts → src/lib/supabase/server.ts
+- `LoginForm()` --indirect_call--> `login()` [INFERRED]
+  src/features/auth/components/login-form.tsx → src/features/auth/actions/auth.actions.ts
 - `register()` --calls--> `createClient()` [EXTRACTED]
   src/features/auth/actions/auth.actions.ts → src/lib/supabase/server.ts
+- `RegisterForm()` --indirect_call--> `register()` [INFERRED]
+  src/features/auth/components/register-form.tsx → src/features/auth/actions/auth.actions.ts
 - `signOut()` --calls--> `createClient()` [EXTRACTED]
   src/features/auth/actions/auth.actions.ts → src/lib/supabase/server.ts
-- `requireAuth()` --calls--> `getUser()` [EXTRACTED]
-  src/features/auth/lib/auth.utils.ts → src/features/auth/queries/auth.queries.ts
 
 ## Import Cycles
 
 - None detected.
 
-## Communities (55 total, 10 thin omitted)
+## Communities (51 total, 10 thin omitted)
 
 ### Community 0 - "Product Requirements Document (PRD)"
 
@@ -88,8 +87,8 @@ Nodes (22): 10. Matriks Hak Akses, 11. Non-Functional Requirements, 12. Model Da
 
 ### Community 1 - "docs/README.md"
 
-Cohesion: 0.07
-Nodes (20): AI Agent Guidelines, Do's, Don'ts, Database Schema, Entity Relationship Diagram (ERD), Row Level Security (RLS), Branching Model, Conventional Commits (+12 more)
+Cohesion: 0.06
+Nodes (27): AI Agent Guidelines, Do's, Don'ts, Database Schema, Entity Relationship Diagram (ERD), Row Level Security (RLS), 1. Entity Relationship Diagram (ERD), 2.1 Alur Task Normal (dibuat → selesai) (+19 more)
 
 ### Community 2 - "compilerOptions"
 
@@ -113,13 +112,8 @@ Nodes (16): 9.10 Manajemen Anggota Tim, 9.11 Attachment & Search, 9.12 Task Depe
 
 ### Community 6 - "createClient"
 
-Cohesion: 0.13
-Nodes (18): GET(), ROUTES, login(), register(), signOut(), requireAuth(), getUser(), getUserProfile() (+10 more)
-
-### Community 7 - "2. Activity Diagram"
-
-Cohesion: 0.25
-Nodes (7): 1. Entity Relationship Diagram (ERD), 2.1 Alur Task Normal (dibuat → selesai), 2.2 Alur Task dari Komplain Customer Service, 2.3 Alur Leader Menyiapkan Laporan Town Hall, 2. Activity Diagram, 3. Use Case Diagram, Diagram — Task & Performance Dashboard
+Cohesion: 0.11
+Nodes (19): GET(), metadata, ROUTES, login(), signOut(), LoginForm(), requireAuth(), getUser() (+11 more)
 
 ### Community 8 - "dependencies"
 
@@ -139,12 +133,12 @@ Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent 
 ### Community 17 - "database.types.ts"
 
 Cohesion: 0.07
-Nodes (28): BoardColumn, BoardColumnInsert, Milestone, MilestoneInsert, MilestoneUpdate, Project, ProjectInsert, ProjectUpdate (+20 more)
+Nodes (26): BoardColumn, BoardColumnInsert, Milestone, MilestoneInsert, MilestoneUpdate, Project, ProjectInsert, ProjectUpdate (+18 more)
 
-### Community 18 - "dialog.tsx"
+### Community 19 - "login-form.tsx"
 
 Cohesion: 0.14
-Nodes (3): SubmitButtonProps, Button(), buttonVariants
+Nodes (18): metadata, SubmitButton(), SubmitButtonProps, Button(), buttonVariants, Card(), CardContent(), CardDescription() (+10 more)
 
 ### Community 20 - "Folder Structure & Clean Architecture"
 
@@ -178,7 +172,7 @@ Nodes (3): envPath, seedSql, seedSqlPath
 
 ## Knowledge Gaps
 
-- **196 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+191 more)
+- **198 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+193 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -187,16 +181,16 @@ Nodes (3): envPath, seedSql, seedSqlPath
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Product Requirements Document (PRD)` connect `Product Requirements Document (PRD)` to `docs/README.md`, `9. Functional Requirements`?**
-  _High betweenness centrality (0.027) - this node is a cross-community bridge._
+  _High betweenness centrality (0.026) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `dependencies` to `package.json`?**
   _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.018) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _196 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _198 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Product Requirements Document (PRD)` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `docs/README.md` be split into smaller, more focused modules?**
-  _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05714285714285714 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
