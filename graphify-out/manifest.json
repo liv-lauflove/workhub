@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
-    "mtime": 1788857655.2393644,
-    "ast_hash": "2addda180c429849b6c75b4b7bab54ef",
+    "mtime": 1788926399.8475683,
+    "ast_hash": "dd3fe8e065b5194ab6a3f7de98dc307a",
     "semantic_hash": ""
   },
   "src/components/ui/button.tsx": {
@@ -220,8 +220,8 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/layout.tsx": {
-    "mtime": 1788925665.0238914,
-    "ast_hash": "cec31847d7c1a503b0bdcf7e96b3e377",
+    "mtime": 1788925920.601985,
+    "ast_hash": "feb8882c54922ea58100609b41c6ebdd",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/page.tsx": {
@@ -245,18 +245,18 @@
     "semantic_hash": ""
   },
   "src/components/layout/header.tsx": {
-    "mtime": 1788925640.6895807,
-    "ast_hash": "f0d30baadfdb869a864f0675959b8bd3",
+    "mtime": 1788925920.680099,
+    "ast_hash": "96c84cf4ab103667ac90dc6f48a47816",
     "semantic_hash": ""
   },
   "src/components/layout/mobile-nav.tsx": {
-    "mtime": 1788925611.8190663,
-    "ast_hash": "f06087c2250cb22923110adbb56b532a",
+    "mtime": 1788926425.5124588,
+    "ast_hash": "fe7fb95530e06fe182f7afa82d380905",
     "semantic_hash": ""
   },
   "src/components/layout/sidebar.tsx": {
-    "mtime": 1788925598.3779721,
-    "ast_hash": "9234590c13a09b3e2335da698f34bea2",
+    "mtime": 1788926378.1474946,
+    "ast_hash": "ee30e947075c4438a218b92b9e16b737",
     "semantic_hash": ""
   },
   "src/config/feature-flags.ts": {

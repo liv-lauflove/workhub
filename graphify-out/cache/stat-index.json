@@ -196,9 +196,9 @@
     }
   },
   "src/app/layout.tsx": {
-    "size": 806,
-    "mtime_ns": 1788857655239364400,
-    "word_count": 84
+    "size": 837,
+    "mtime_ns": 1788926399847568300,
+    "word_count": 88
   },
   "src/components/ui/button.tsx": {
     "size": 3287,
@@ -274,8 +274,8 @@
     "word_count": 35
   },
   "src/app/(dashboard)/layout.tsx": {
-    "size": 990,
-    "mtime_ns": 1788925665023891500,
+    "size": 997,
+    "mtime_ns": 1788925920601985000,
     "word_count": 109
   },
   "src/app/(dashboard)/page.tsx": {
@@ -299,19 +299,19 @@
     "word_count": 62
   },
   "src/components/layout/header.tsx": {
-    "size": 2920,
-    "mtime_ns": 1788925640689580700,
+    "size": 2936,
+    "mtime_ns": 1788925920680099100,
     "word_count": 259
   },
   "src/components/layout/mobile-nav.tsx": {
-    "size": 2037,
-    "mtime_ns": 1788925611819066300,
-    "word_count": 192
+    "size": 2704,
+    "mtime_ns": 1788926425512458800,
+    "word_count": 265
   },
   "src/components/layout/sidebar.tsx": {
-    "size": 4190,
-    "mtime_ns": 1788925598377972200,
-    "word_count": 396
+    "size": 4254,
+    "mtime_ns": 1788926378147494500,
+    "word_count": 399
   },
   "src/config/feature-flags.ts": {
     "size": 661,

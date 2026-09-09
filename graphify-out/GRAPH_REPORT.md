@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 89 files · ~19,178 words
+- 89 files · ~19,258 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 417 nodes · 468 edges · 50 communities (39 shown, 11 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
+- 418 nodes · 470 edges · 50 communities (39 shown, 11 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 3 edges (avg confidence: 0.7)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `0a759555`
+- Built from commit: `b4f687a8`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -112,8 +112,8 @@ Nodes (16): 9.10 Manajemen Anggota Tim, 9.11 Attachment & Search, 9.12 Task Depe
 
 ### Community 6 - "createClient"
 
-Cohesion: 0.10
-Nodes (25): GET(), DashboardLayout(), Header(), HeaderProps, MobileNav(), MobileNavProps, ICON_MAP, NAV_ITEMS (+17 more)
+Cohesion: 0.09
+Nodes (26): GET(), DashboardLayout(), Header(), HeaderProps, emptySubscribe(), MobileNav(), MobileNavProps, ICON_MAP (+18 more)
 
 ### Community 8 - "dependencies"
 
