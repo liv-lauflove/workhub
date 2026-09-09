@@ -1,19 +1,19 @@
-# Graph Report - workhub (2026-09-08)
+# Graph Report - workhub (2026-09-09)
 
 ## Corpus Check
 
-- 82 files · ~15,867 words
+- 84 files · ~17,083 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 389 nodes · 383 edges · 54 communities (44 shown, 10 thin omitted)
+- 394 nodes · 387 edges · 55 communities (45 shown, 10 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `38c5d6a5`
+- Built from commit: `328e6e12`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -47,6 +47,7 @@
 - global.d.ts
 - prompt-templates.ts
 - dashboard.types.ts
+- seed.mjs
 
 ## God Nodes (most connected - your core abstractions)
 
@@ -54,8 +55,8 @@
 2. `createClient()` - 18 edges
 3. `compilerOptions` - 16 edges
 4. `9. Functional Requirements` - 16 edges
-5. `Database` - 8 edges
-6. `scripts` - 7 edges
+5. `scripts` - 8 edges
+6. `Database` - 8 edges
 7. `include` - 7 edges
 8. `tailwind` - 6 edges
 9. `aliases` - 6 edges
@@ -78,7 +79,7 @@
 
 - None detected.
 
-## Communities (54 total, 10 thin omitted)
+## Communities (55 total, 10 thin omitted)
 
 ### Community 0 - "Product Requirements Document (PRD)"
 
@@ -103,7 +104,7 @@ Nodes (27): eslint, eslint-config-next, eslint-config-prettier, husky, lint-stag
 ### Community 4 - "package.json"
 
 Cohesion: 0.12
-Nodes (16): lint-staged, *.{js,jsx,ts,tsx}, *.{json,css,md}, name, packageManager, private, scripts, build (+8 more)
+Nodes (17): lint-staged, *.{js,jsx,ts,tsx}, *.{json,css,md}, name, packageManager, private, scripts, build (+9 more)
 
 ### Community 5 - "9. Functional Requirements"
 
@@ -170,9 +171,14 @@ Nodes (3): dateRangeSchema, paginationSchema, uuidSchema
 Cohesion: 0.50
 Nodes (3): ActionState, PaginationParams, SortDirection
 
+### Community 54 - "seed.mjs"
+
+Cohesion: 0.50
+Nodes (3): envPath, seedSql, seedSqlPath
+
 ## Knowledge Gaps
 
-- **190 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+185 more)
+- **194 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+189 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -181,13 +187,13 @@ Nodes (3): ActionState, PaginationParams, SortDirection
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `Product Requirements Document (PRD)` connect `Product Requirements Document (PRD)` to `docs/README.md`, `9. Functional Requirements`?**
-  _High betweenness centrality (0.029) - this node is a cross-community bridge._
+  _High betweenness centrality (0.028) - this node is a cross-community bridge._
 - **Why does `dependencies` connect `dependencies` to `package.json`?**
   _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.019) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _190 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _194 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Product Requirements Document (PRD)` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `docs/README.md` be split into smaller, more focused modules?**

@@ -114,11 +114,11 @@
     "word_count": 23
   },
   "package.json": {
-    "size": 1298,
-    "mtime_ns": 1788919043079259900,
+    "size": 1352,
+    "mtime_ns": 1788921190414463300,
     "word_count": 111,
     "hashes": {
-      "package.json": "0016bdf3c770b8d68289ccd60f20239f75e1051271d0c3703430ce303cc50dd9"
+      "package.json": "1dcc80e57a6547f9455a91031648fca2dfe7cb1e52a412d6998abff3f1c0c6a6"
     }
   },
   "pnpm-workspace.yaml": {
@@ -181,7 +181,7 @@
   },
   "docs/PROJECT_SETUP_CHECKLIST.md": {
     "size": 2638,
-    "mtime_ns": 1788918519178840500,
+    "mtime_ns": 1788921190380610000,
     "word_count": 346,
     "hashes": {
       "docs/project_setup_checklist.md": "6e0b1cd871b70576866006a393160f7c3e2dfe42a9e8144f9bb1b712f95e38b7"
@@ -226,9 +226,9 @@
     "word_count": 25
   },
   "src/lib/supabase/middleware.ts": {
-    "size": 1124,
-    "mtime_ns": 1788879095099345900,
-    "word_count": 89
+    "size": 2598,
+    "mtime_ns": 1788922351985837100,
+    "word_count": 240
   },
   "src/lib/supabase/server.ts": {
     "size": 937,
@@ -254,9 +254,9 @@
     }
   },
   "src/app/(auth)/auth/callback/route.ts": {
-    "size": 674,
-    "mtime_ns": 1788918393311696300,
-    "word_count": 81
+    "size": 855,
+    "mtime_ns": 1788922361227733800,
+    "word_count": 102
   },
   "src/app/(auth)/layout.tsx": {
     "size": 280,
@@ -349,9 +349,9 @@
     "word_count": 13
   },
   "src/features/auth/actions/auth.actions.ts": {
-    "size": 303,
-    "mtime_ns": 1788918393330945500,
-    "word_count": 34
+    "size": 2205,
+    "mtime_ns": 1788922343939073700,
+    "word_count": 244
   },
   "src/features/auth/lib/auth.utils.ts": {
     "size": 294,
@@ -509,16 +509,21 @@
     "word_count": 69
   },
   "scripts/seed.mjs": {
-    "size": 2354,
-    "mtime_ns": 1788918566472709600,
+    "size": 2416,
+    "mtime_ns": 1788921190415935100,
     "word_count": 256
   },
   "supabase/seed.sql": {
-    "size": 12515,
-    "mtime_ns": 1788919269045747200,
+    "size": 12891,
+    "mtime_ns": 1788921190415935100,
     "word_count": 940,
     "hashes": {
-      "supabase/seed.sql": "38b87cf02d0d7c1a1f4a785984ae1ff3535a221fc173734a05734da727e1fcd3"
+      "supabase/seed.sql": "7dc5c3d92535fee8f0e54dcd7239eb1552b0fabea517e54acbab0cea4b9a1e4b"
     }
+  },
+  "src/features/auth/types/auth.types.ts": {
+    "size": 637,
+    "mtime_ns": 1788922310453428400,
+    "word_count": 74
   }
 }
