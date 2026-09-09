@@ -52,7 +52,7 @@ export function Sidebar({ user, profile, onClose }: SidebarProps) {
   const roleLabel = profile?.role === 'leader' ? 'Team Lead' : 'Member';
 
   return (
-    <aside className="flex h-full w-64 flex-col border-r bg-card text-card-foreground">
+    <aside className="flex h-full w-full md:w-64 flex-col border-r bg-card text-card-foreground">
       {/* Brand Header */}
       <div className="flex h-14 items-center justify-between border-b px-6">
         <Link href="/" className="flex items-center gap-2" onClick={onClose}>
