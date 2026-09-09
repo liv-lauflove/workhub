@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test": "echo \"No tests specified yet\" && exit 0",
+    "db:seed": "node scripts/seed.mjs",
     "prepare": "husky"
   },
   "dependencies": {
