@@ -6,7 +6,7 @@ Dokumen ini berfungsi sebagai panduan teknis ("second memory") untuk memastikan 
 
 - [x] **Setup Supabase Cloud & Client SDK:** Menggunakan Supabase Cloud sebagai basis data terpusat (_Single Source of Truth_). Dependensi `@supabase/ssr` dan helper client telah terpasang.
 - [x] **Sistem Migrasi (Version Control):** Skema `schema.sql` telah diubah menjadi format migrasi Supabase (`supabase/migrations/`). Seluruh perubahan tabel wajib dicatat di folder migrasi ini.
-- [ ] **Data Seeder (`supabase/seed.sql`):** Buat _script_ SQL berisi data _dummy_ realistis untuk populasi awal di Supabase Cloud.
+- [x] **Data Seeder (`supabase/seed.sql`):** File `supabase/seed.sql` dan helper runner `pnpm run db:seed` telah dibuat berisi data tiruan relasional (2 Profil, 2 Tim, 1 Milestone, 2 Project, 8 Kolom Kanban, 10 Task).
 
 ## 2. 🧩 UI Component & Design System
 

@@ -48,11 +48,11 @@
     }
   },
   "docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md": {
-    "size": 10698,
-    "mtime_ns": 1788879113087096600,
-    "word_count": 1183,
+    "size": 11532,
+    "mtime_ns": 1788918393272581100,
+    "word_count": 1187,
     "hashes": {
-      "docs/folder_structure_and_architecture.md": "b5f0afdeefd31048555f7e3981e1cbe5b4582b57cd9b747dcc7085197f64835f"
+      "docs/folder_structure_and_architecture.md": "92bb97029a9b110596b0678bccce0db63afedcbce9cfd3fa86728d313b26ea1d"
     }
   },
   "docs/GITFLOW_AND_CONVENTIONS.md": {
@@ -114,11 +114,11 @@
     "word_count": 23
   },
   "package.json": {
-    "size": 1311,
-    "mtime_ns": 1788879113204560100,
-    "word_count": 108,
+    "size": 1298,
+    "mtime_ns": 1788919043079259900,
+    "word_count": 111,
     "hashes": {
-      "package.json": "fc1d48a6df1bb80216362c0fb4fbee24b52955d95c97e909152431470982d723"
+      "package.json": "0016bdf3c770b8d68289ccd60f20239f75e1051271d0c3703430ce303cc50dd9"
     }
   },
   "pnpm-workspace.yaml": {
@@ -180,11 +180,11 @@
     "word_count": 38
   },
   "docs/PROJECT_SETUP_CHECKLIST.md": {
-    "size": 2552,
-    "mtime_ns": 1788879095052739500,
-    "word_count": 333,
+    "size": 2638,
+    "mtime_ns": 1788918519178840500,
+    "word_count": 346,
     "hashes": {
-      "docs/project_setup_checklist.md": "883b8cd86e5c1541c19f2f371d6c8dd8c39480b22142aae6415f8e88939ef294"
+      "docs/project_setup_checklist.md": "6e0b1cd871b70576866006a393160f7c3e2dfe42a9e8144f9bb1b712f95e38b7"
     }
   },
   "components.json": {
@@ -254,258 +254,271 @@
     }
   },
   "src/app/(auth)/auth/callback/route.ts": {
-    "size": 666,
-    "mtime_ns": 1788879114428497600,
+    "size": 674,
+    "mtime_ns": 1788918393311696300,
     "word_count": 81
   },
   "src/app/(auth)/layout.tsx": {
-    "size": 278,
-    "mtime_ns": 1788879114442612400,
+    "size": 280,
+    "mtime_ns": 1788918393313761700,
     "word_count": 27
   },
   "src/app/(auth)/login/page.tsx": {
-    "size": 314,
-    "mtime_ns": 1788879114457112500,
+    "size": 315,
+    "mtime_ns": 1788918393315313700,
     "word_count": 34
   },
   "src/app/(auth)/register/page.tsx": {
-    "size": 319,
-    "mtime_ns": 1788879114474170100,
+    "size": 320,
+    "mtime_ns": 1788918393315850700,
     "word_count": 32
   },
   "src/app/(dashboard)/layout.tsx": {
-    "size": 511,
-    "mtime_ns": 1788879114487508500,
+    "size": 515,
+    "mtime_ns": 1788918393317546000,
     "word_count": 54
   },
   "src/app/(dashboard)/page.tsx": {
-    "size": 440,
-    "mtime_ns": 1788879114501171200,
+    "size": 441,
+    "mtime_ns": 1788918393317546000,
     "word_count": 52
   },
   "src/app/error.tsx": {
-    "size": 576,
-    "mtime_ns": 1788879114512495700,
+    "size": 580,
+    "mtime_ns": 1788918393317546000,
     "word_count": 54
   },
   "src/app/not-found.tsx": {
-    "size": 451,
-    "mtime_ns": 1788879114527154800,
+    "size": 453,
+    "mtime_ns": 1788918393317546000,
     "word_count": 38
   },
   "src/components/forms/submit-button.tsx": {
-    "size": 536,
-    "mtime_ns": 1788879114539228700,
+    "size": 544,
+    "mtime_ns": 1788918393320070300,
     "word_count": 62
   },
   "src/components/layout/header.tsx": {
-    "size": 266,
-    "mtime_ns": 1788879114555046900,
+    "size": 267,
+    "mtime_ns": 1788918393320070300,
     "word_count": 24
   },
   "src/components/layout/mobile-nav.tsx": {
-    "size": 65,
-    "mtime_ns": 1788879114580977200,
+    "size": 67,
+    "mtime_ns": 1788918393321978300,
     "word_count": 9
   },
   "src/components/layout/sidebar.tsx": {
-    "size": 729,
-    "mtime_ns": 1788879114596023800,
+    "size": 732,
+    "mtime_ns": 1788918393323237900,
     "word_count": 61
   },
   "src/config/feature-flags.ts": {
-    "size": 658,
-    "mtime_ns": 1788879114609925300,
+    "size": 661,
+    "mtime_ns": 1788918393324460500,
     "word_count": 94
   },
   "src/config/routes.ts": {
-    "size": 596,
-    "mtime_ns": 1788879114622318800,
+    "size": 597,
+    "mtime_ns": 1788918393325400100,
     "word_count": 69
   },
   "src/config/site.ts": {
-    "size": 735,
-    "mtime_ns": 1788879114635805900,
+    "size": 737,
+    "mtime_ns": 1788918393325941700,
     "word_count": 97
   },
   "src/features/ai/actions/ai.actions.ts": {
-    "size": 81,
-    "mtime_ns": 1788879114649286000,
+    "size": 83,
+    "mtime_ns": 1788918393327315700,
     "word_count": 10
   },
   "src/features/ai/lib/llm-client.ts": {
-    "size": 79,
-    "mtime_ns": 1788879114665800500,
+    "size": 81,
+    "mtime_ns": 1788918393327315700,
     "word_count": 10
   },
   "src/features/ai/lib/prompt-templates.ts": {
-    "size": 100,
-    "mtime_ns": 1788879114685238400,
+    "size": 101,
+    "mtime_ns": 1788918393327315700,
     "word_count": 15
   },
   "src/features/ai/queries/ai-cache.queries.ts": {
-    "size": 124,
-    "mtime_ns": 1788879114699557500,
+    "size": 127,
+    "mtime_ns": 1788918393330945500,
     "word_count": 13
   },
   "src/features/auth/actions/auth.actions.ts": {
-    "size": 296,
-    "mtime_ns": 1788879114723327200,
+    "size": 303,
+    "mtime_ns": 1788918393330945500,
     "word_count": 34
   },
   "src/features/auth/lib/auth.utils.ts": {
-    "size": 287,
-    "mtime_ns": 1788879114737848500,
+    "size": 294,
+    "mtime_ns": 1788918393330945500,
     "word_count": 36
   },
   "src/features/auth/queries/auth.queries.ts": {
-    "size": 560,
-    "mtime_ns": 1788879114752222100,
+    "size": 570,
+    "mtime_ns": 1788918393330945500,
     "word_count": 70
   },
   "src/features/dashboard/queries/dashboard.queries.ts": {
-    "size": 90,
-    "mtime_ns": 1788879114764666700,
+    "size": 92,
+    "mtime_ns": 1788918393335383100,
     "word_count": 10
   },
   "src/features/dashboard/types/dashboard.types.ts": {
-    "size": 95,
-    "mtime_ns": 1788879114780305600,
+    "size": 99,
+    "mtime_ns": 1788918393336460100,
     "word_count": 18
   },
   "src/features/github/actions/github.actions.ts": {
-    "size": 85,
-    "mtime_ns": 1788879114793652400,
+    "size": 87,
+    "mtime_ns": 1788918393337577000,
     "word_count": 10
   },
   "src/features/github/lib/github-api.ts": {
-    "size": 91,
-    "mtime_ns": 1788879114804794900,
+    "size": 93,
+    "mtime_ns": 1788918393338162900,
     "word_count": 10
   },
   "src/features/github/queries/github.queries.ts": {
-    "size": 84,
-    "mtime_ns": 1788879114815597600,
+    "size": 86,
+    "mtime_ns": 1788918393338162900,
     "word_count": 10
   },
   "src/features/kanban/actions/kanban.actions.ts": {
-    "size": 85,
-    "mtime_ns": 1788879114828456800,
+    "size": 87,
+    "mtime_ns": 1788918393343555700,
     "word_count": 10
   },
   "src/features/kanban/types/kanban.types.ts": {
-    "size": 227,
-    "mtime_ns": 1788879114843437900,
+    "size": 233,
+    "mtime_ns": 1788918393345100200,
     "word_count": 17
   },
   "src/features/milestones/actions/milestone.actions.ts": {
-    "size": 88,
-    "mtime_ns": 1788879114857294000,
+    "size": 90,
+    "mtime_ns": 1788918393346133800,
     "word_count": 10
   },
   "src/features/milestones/queries/milestone.queries.ts": {
-    "size": 386,
-    "mtime_ns": 1788879114874864600,
+    "size": 392,
+    "mtime_ns": 1788918393346133800,
     "word_count": 43
   },
   "src/features/milestones/types/milestone.types.ts": {
-    "size": 301,
-    "mtime_ns": 1788879114891643800,
+    "size": 311,
+    "mtime_ns": 1788918393348806400,
     "word_count": 22
   },
   "src/features/notifications/actions/notification.actions.ts": {
-    "size": 91,
-    "mtime_ns": 1788879114906139500,
+    "size": 93,
+    "mtime_ns": 1788918393348806400,
     "word_count": 10
   },
   "src/features/notifications/queries/notification.queries.ts": {
-    "size": 387,
-    "mtime_ns": 1788879114918931500,
+    "size": 393,
+    "mtime_ns": 1788918393351260400,
     "word_count": 43
   },
   "src/features/projects/actions/project.actions.ts": {
-    "size": 86,
-    "mtime_ns": 1788879114931664900,
+    "size": 88,
+    "mtime_ns": 1788918393353276200,
     "word_count": 10
   },
   "src/features/projects/queries/project.queries.ts": {
-    "size": 317,
-    "mtime_ns": 1788879114943770400,
+    "size": 323,
+    "mtime_ns": 1788918393354287500,
     "word_count": 37
   },
   "src/features/projects/types/project.types.ts": {
-    "size": 289,
-    "mtime_ns": 1788879114958139700,
+    "size": 293,
+    "mtime_ns": 1788918393355842500,
     "word_count": 22
   },
   "src/features/tasks/actions/task.actions.ts": {
-    "size": 83,
-    "mtime_ns": 1788879114970526400,
+    "size": 85,
+    "mtime_ns": 1788918393357536400,
     "word_count": 10
   },
   "src/features/tasks/queries/task.queries.ts": {
-    "size": 341,
-    "mtime_ns": 1788879114984370200,
+    "size": 347,
+    "mtime_ns": 1788918393358957600,
     "word_count": 38
   },
   "src/features/tasks/types/task.types.ts": {
-    "size": 351,
-    "mtime_ns": 1788879114997879400,
+    "size": 356,
+    "mtime_ns": 1788918393360528100,
     "word_count": 27
   },
   "src/features/team/actions/team.actions.ts": {
-    "size": 83,
-    "mtime_ns": 1788879115009262700,
+    "size": 85,
+    "mtime_ns": 1788918393362083100,
     "word_count": 10
   },
   "src/features/team/queries/team.queries.ts": {
-    "size": 267,
-    "mtime_ns": 1788879115025261500,
+    "size": 273,
+    "mtime_ns": 1788918393362083100,
     "word_count": 33
   },
   "src/features/workload/lib/capacity.utils.ts": {
-    "size": 372,
-    "mtime_ns": 1788879115037934800,
+    "size": 376,
+    "mtime_ns": 1788918393365120500,
     "word_count": 40
   },
   "src/features/workload/queries/workload.queries.ts": {
-    "size": 85,
-    "mtime_ns": 1788879115053100800,
+    "size": 87,
+    "mtime_ns": 1788918393366158200,
     "word_count": 10
   },
   "src/hooks/use-debounce.ts": {
-    "size": 379,
-    "mtime_ns": 1788879115063912800,
+    "size": 386,
+    "mtime_ns": 1788918393367193500,
     "word_count": 44
   },
   "src/hooks/use-media-query.ts": {
-    "size": 429,
-    "mtime_ns": 1788879115077772700,
+    "size": 435,
+    "mtime_ns": 1788918393367193500,
     "word_count": 39
   },
   "src/hooks/use-user.ts": {
-    "size": 747,
-    "mtime_ns": 1788879115091292500,
+    "size": 763,
+    "mtime_ns": 1788918393369293000,
     "word_count": 85
   },
   "src/lib/constants.ts": {
-    "size": 833,
-    "mtime_ns": 1788879115103711300,
+    "size": 838,
+    "mtime_ns": 1788918393369932700,
     "word_count": 92
   },
   "src/lib/validations/common.ts": {
-    "size": 638,
-    "mtime_ns": 1788879115112501600,
+    "size": 642,
+    "mtime_ns": 1788918393369932700,
     "word_count": 68
   },
   "src/middleware.ts": {
-    "size": 591,
-    "mtime_ns": 1788879115122220100,
+    "size": 595,
+    "mtime_ns": 1788918393371964800,
     "word_count": 68
   },
   "src/types/global.d.ts": {
-    "size": 453,
-    "mtime_ns": 1788879115135831200,
+    "size": 458,
+    "mtime_ns": 1788918393372980400,
     "word_count": 69
+  },
+  "scripts/seed.mjs": {
+    "size": 2354,
+    "mtime_ns": 1788918566472709600,
+    "word_count": 256
+  },
+  "supabase/seed.sql": {
+    "size": 12515,
+    "mtime_ns": 1788919269045747200,
+    "word_count": 940,
+    "hashes": {
+      "supabase/seed.sql": "38b87cf02d0d7c1a1f4a785984ae1ff3535a221fc173734a05734da727e1fcd3"
+    }
   }
 }
