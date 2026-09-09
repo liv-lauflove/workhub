@@ -1162,7 +1162,7 @@
       "label": "GET()",
       "file_type": "code",
       "source_file": "src/app/(auth)/auth/callback/route.ts",
-      "source_location": "L10",
+      "source_location": "L9",
       "_origin": "ast",
       "id": "src_app_auth_auth_callback_route_get",
       "community": 6,
@@ -1940,10 +1940,32 @@
       "norm_label": "auth.actions.ts"
     },
     {
+      "label": "login()",
+      "file_type": "code",
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "src_features_auth_actions_auth_actions_login",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "login()"
+    },
+    {
+      "label": "register()",
+      "file_type": "code",
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "src_features_auth_actions_auth_actions_register",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "register()"
+    },
+    {
       "label": "signOut()",
       "file_type": "code",
       "source_file": "src/features/auth/actions/auth.actions.ts",
-      "source_location": "L7",
+      "source_location": "L93",
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_signout",
       "community": 6,
@@ -2004,6 +2026,61 @@
       "community": 6,
       "community_name": "createClient",
       "norm_label": "getuserprofile()"
+    },
+    {
+      "label": "auth.types.ts",
+      "file_type": "code",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_auth_types_auth_types",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "auth.types.ts"
+    },
+    {
+      "label": "loginSchema",
+      "file_type": "code",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_features_auth_types_auth_types_loginschema",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "loginschema"
+    },
+    {
+      "label": "registerSchema",
+      "file_type": "code",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "src_features_auth_types_auth_types_registerschema",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "registerschema"
+    },
+    {
+      "label": "LoginInput",
+      "file_type": "code",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "src_features_auth_types_auth_types_logininput",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "logininput"
+    },
+    {
+      "label": "RegisterInput",
+      "file_type": "code",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "src_features_auth_types_auth_types_registerinput",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "registerinput"
     },
     {
       "label": "dashboard.queries.ts",
@@ -2730,6 +2807,17 @@
       "community": 17,
       "community_name": "database.types.ts",
       "norm_label": "updatesession()"
+    },
+    {
+      "label": "IMPORTANT: getUser validates the token on Supabase server to prevent spoofing",
+      "file_type": "rationale",
+      "source_file": "src/lib/supabase/middleware.ts",
+      "source_location": "L34",
+      "_origin": "ast",
+      "id": "src_lib_supabase_middleware_rationale_34",
+      "community": 17,
+      "community_name": "database.types.ts",
+      "norm_label": "important: getuser validates the token on supabase server to prevent spoofing"
     },
     {
       "label": "server.ts",
@@ -5461,7 +5549,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(auth)/auth/callback/route.ts",
-      "source_location": "L10",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_auth_auth_callback_route",
@@ -6081,7 +6169,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/auth/actions/auth.actions.ts",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_actions_auth_actions",
@@ -6105,7 +6193,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/auth/actions/auth.actions.ts",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_actions_auth_actions",
@@ -6194,11 +6282,69 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/auth/actions/auth.actions.ts",
-      "source_location": "L7",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_actions_auth_actions",
+      "target": "src_features_auth_actions_auth_actions_login",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L50",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_actions_auth_actions",
+      "target": "src_features_auth_actions_auth_actions_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L93",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_actions_auth_actions",
       "target": "src_features_auth_actions_auth_actions_signout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_actions_auth_actions",
+      "target": "src_features_auth_types_auth_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_actions_auth_actions",
+      "target": "src_features_auth_types_auth_types_loginschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_actions_auth_actions",
+      "target": "src_features_auth_types_auth_types_registerschema",
       "confidence_score": 1.0
     },
     {
@@ -6231,7 +6377,31 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/auth/actions/auth.actions.ts",
-      "source_location": "L8",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_actions_auth_actions_login",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_actions_auth_actions_register",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/auth/actions/auth.actions.ts",
+      "source_location": "L94",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_actions_auth_actions_signout",
@@ -6365,6 +6535,50 @@
       "_origin": "ast",
       "source": "src_features_auth_queries_auth_queries_getuserprofile",
       "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_types_auth_types",
+      "target": "src_features_auth_types_auth_types_logininput",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_types_auth_types",
+      "target": "src_features_auth_types_auth_types_loginschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_types_auth_types",
+      "target": "src_features_auth_types_auth_types_registerinput",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/auth/types/auth.types.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_auth_types_auth_types",
+      "target": "src_features_auth_types_auth_types_registerschema",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -7154,6 +7368,17 @@
       "_origin": "ast",
       "source": "src_lib_supabase_middleware",
       "target": "src_types_database_types_database",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/lib/supabase/middleware.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_lib_supabase_middleware_rationale_34",
+      "target": "src_lib_supabase_middleware",
       "confidence_score": 1.0
     },
     {
@@ -8702,5 +8927,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "328e6e1224e5d5e09c23fe08ca51613e8b3595c7"
+  "built_at_commit": "f93aa1283d5c3f04841e1c29152e64cb2e742213"
 }

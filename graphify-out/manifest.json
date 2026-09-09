@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1788919043.0792599,
-    "ast_hash": "927a3e4446f7ac95951a841c05e2a1a5",
+    "mtime": 1788921190.4144633,
+    "ast_hash": "e54568f5f2fd3488da048a51c649af08",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -135,7 +135,7 @@
     "semantic_hash": ""
   },
   "docs/PROJECT_SETUP_CHECKLIST.md": {
-    "mtime": 1788918519.1788404,
+    "mtime": 1788921190.38061,
     "ast_hash": "9e0f3d3aa2a933ede46acf9bacb84077",
     "semantic_hash": ""
   },
@@ -175,8 +175,8 @@
     "semantic_hash": ""
   },
   "src/lib/supabase/middleware.ts": {
-    "mtime": 1788879095.099346,
-    "ast_hash": "fb1cd41e17faf921b8a7b560d72e31fb",
+    "mtime": 1788922351.985837,
+    "ast_hash": "344b13b5ac6adf3a30b4398fb2675a8e",
     "semantic_hash": ""
   },
   "src/lib/supabase/server.ts": {
@@ -200,8 +200,8 @@
     "semantic_hash": ""
   },
   "src/app/(auth)/auth/callback/route.ts": {
-    "mtime": 1788918393.3116963,
-    "ast_hash": "df99828f73eaf63636c9d7d56cd1c599",
+    "mtime": 1788922361.2277339,
+    "ast_hash": "d70d9ddb63f18a49f0deaa67bccc6754",
     "semantic_hash": ""
   },
   "src/app/(auth)/layout.tsx": {
@@ -295,8 +295,8 @@
     "semantic_hash": ""
   },
   "src/features/auth/actions/auth.actions.ts": {
-    "mtime": 1788918393.3309455,
-    "ast_hash": "ead196ee478b4fd0b3c213b7d4ecc010",
+    "mtime": 1788922343.9390738,
+    "ast_hash": "41838f03a0be2093c28a4b764bbc556f",
     "semantic_hash": ""
   },
   "src/features/auth/lib/auth.utils.ts": {
@@ -455,13 +455,18 @@
     "semantic_hash": ""
   },
   "scripts/seed.mjs": {
-    "mtime": 1788918566.4727097,
-    "ast_hash": "73490831764667b4b10195c339fd6ef4",
+    "mtime": 1788921190.415935,
+    "ast_hash": "9b1a3a16a1dfbcf9e3930043bf3ebad2",
     "semantic_hash": ""
   },
   "supabase/seed.sql": {
-    "mtime": 1788919269.0457473,
-    "ast_hash": "a0580e462f0e0632a496800d0bc4bf8f",
+    "mtime": 1788921190.415935,
+    "ast_hash": "ee940af4ed967d6c1837b7cfe5433b0e",
+    "semantic_hash": ""
+  },
+  "src/features/auth/types/auth.types.ts": {
+    "mtime": 1788922310.4534285,
+    "ast_hash": "77e99e306ad93529b194bb308139a97c",
     "semantic_hash": ""
   }
 }

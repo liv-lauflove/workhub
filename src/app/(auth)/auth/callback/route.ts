@@ -4,17 +4,23 @@ import { createClient } from '@/lib/supabase/server';
 
 /**
  * OAuth callback handler for Supabase Auth.
- * Exchanges the auth code for a session and redirects to dashboard.
- * Will be fully implemented in Issue #12 (Auth Setup).
+ * Exchanges the auth code for a session and redirects to destination.
  */
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const next = requestUrl.searchParams.get('next') ?? '/';
 
   if (code) {
     const supabase = await createClient();
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (!error) {
+      return NextResponse.redirect(new URL(next, requestUrl.origin));
+    }
   }
 
-  return NextResponse.redirect(new URL('/', requestUrl.origin));
+  // Redirect to login with error parameter if exchange fails
+  return NextResponse.redirect(
+    new URL('/login?error=oauth_failed', requestUrl.origin)
+  );
 }
