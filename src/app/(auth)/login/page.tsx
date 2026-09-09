@@ -1,9 +1,10 @@
+import { LoginForm } from '@/features/auth/components/login-form';
+
+export const metadata = {
+  title: 'Masuk | Workhub',
+  description: 'Masuk ke dashboard Workhub Task & Performance',
+};
+
 export default function LoginPage() {
-  return (
-    <div className="space-y-4 text-center">
-      <h1 className="text-2xl font-bold">Login</h1>
-      <p className="text-muted-foreground">Sign in to your Workhub account</p>
-      {/* LoginForm will be added in Issue #12 (Auth Setup) */}
-    </div>
-  );
+  return <LoginForm />;
 }
