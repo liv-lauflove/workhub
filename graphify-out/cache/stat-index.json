@@ -454,9 +454,9 @@
     "word_count": 27
   },
   "src/features/team/actions/team.actions.ts": {
-    "size": 4037,
-    "mtime_ns": 1789010026818683800,
-    "word_count": 473
+    "size": 5950,
+    "mtime_ns": 1789015615812553100,
+    "word_count": 651
   },
   "src/features/team/queries/team.queries.ts": {
     "size": 1136,
@@ -514,11 +514,11 @@
     "word_count": 256
   },
   "supabase/seed.sql": {
-    "size": 12891,
-    "mtime_ns": 1788921190415935100,
-    "word_count": 940,
+    "size": 13508,
+    "mtime_ns": 1789013195498099200,
+    "word_count": 968,
     "hashes": {
-      "supabase/seed.sql": "7dc5c3d92535fee8f0e54dcd7239eb1552b0fabea517e54acbab0cea4b9a1e4b"
+      "supabase/seed.sql": "89375cdebbe040f5fd212fa9f8be1ff8bc165b87bb969be68419e36ce6602cfb"
     }
   },
   "src/features/auth/types/auth.types.ts": {
@@ -542,8 +542,8 @@
     "word_count": 219
   },
   "src/features/auth/components/register-form.tsx": {
-    "size": 4338,
-    "mtime_ns": 1789010663511066000,
+    "size": 4203,
+    "mtime_ns": 1789010895897335400,
     "word_count": 310
   },
   "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": {
@@ -573,9 +573,9 @@
     "word_count": 394
   },
   "src/features/team/components/invite-modal.tsx": {
-    "size": 3504,
-    "mtime_ns": 1789010026930313900,
-    "word_count": 260
+    "size": 4002,
+    "mtime_ns": 1789015304320138900,
+    "word_count": 316
   },
   "src/features/team/components/team-member-list.tsx": {
     "size": 2303,
@@ -589,5 +589,10 @@
     "hashes": {
       "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": "56e640b73b87e388f1d89b6088c934cb45f744084059bdd1bd4cae113267d1f9"
     }
+  },
+  "src/lib/supabase/admin.ts": {
+    "size": 649,
+    "mtime_ns": 1789011207406596400,
+    "word_count": 70
   }
 }
