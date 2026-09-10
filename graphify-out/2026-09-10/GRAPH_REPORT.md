@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 97 files · ~22,350 words
+- 96 files · ~22,018 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 442 nodes · 542 edges · 50 communities (39 shown, 11 thin omitted)
+- 439 nodes · 539 edges · 50 communities (39 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `ba6be7be`
+- Built from commit: `b1f226c4`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -52,14 +52,14 @@
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `Product Requirements Document (PRD)` - 23 edges
-2. `createClient()` - 22 edges
+1. `createClient()` - 25 edges
+2. `Product Requirements Document (PRD)` - 23 edges
 3. `compilerOptions` - 16 edges
 4. `9. Functional Requirements` - 16 edges
 5. `getUserProfile()` - 10 edges
-6. `Database` - 9 edges
-7. `scripts` - 8 edges
-8. `Button()` - 8 edges
+6. `scripts` - 8 edges
+7. `Button()` - 8 edges
+8. `Database` - 8 edges
 9. `getUser()` - 7 edges
 10. `include` - 7 edges
 
@@ -73,8 +73,8 @@
   src/features/team/components/invitation-list.tsx → src/features/team/actions/team.actions.ts
 - `GET()` --calls--> `createClient()` [EXTRACTED]
   src/app/(auth)/auth/callback/route.ts → src/lib/supabase/server.ts
-- `DashboardLayout()` --calls--> `getUserProfile()` [EXTRACTED]
-  src/app/(dashboard)/layout.tsx → src/features/auth/queries/auth.queries.ts
+- `login()` --calls--> `createClient()` [EXTRACTED]
+  src/features/auth/actions/auth.actions.ts → src/lib/supabase/server.ts
 
 ## Import Cycles
 
@@ -114,18 +114,18 @@ Nodes (16): 9.10 Manajemen Anggota Tim, 9.11 Attachment & Search, 9.12 Task Depe
 
 ### Community 6 - "createClient"
 
-Cohesion: 0.17
-Nodes (14): GET(), metadata, TeamPage(), getMilestones(), getNotifications(), getProjects(), getTasksByProject(), TeamMember (+6 more)
+Cohesion: 0.09
+Nodes (31): react, react, GET(), DashboardLayout(), metadata, TeamPage(), ROUTES, requireAuth() (+23 more)
 
 ### Community 7 - "auth.actions.ts"
 
-Cohesion: 0.13
-Nodes (18): DashboardLayout(), Header(), HeaderProps, emptySubscribe(), MobileNav(), MobileNavProps, ICON_MAP, NAV_ITEMS (+10 more)
+Cohesion: 0.15
+Nodes (14): Header(), HeaderProps, emptySubscribe(), MobileNav(), MobileNavProps, ICON_MAP, NAV_ITEMS, Sidebar() (+6 more)
 
 ### Community 8 - "dependencies"
 
-Cohesion: 0.07
-Nodes (29): @base-ui/react, class-variance-authority, cn, lucide-react, next, dependencies, @base-ui/react, class-variance-authority (+21 more)
+Cohesion: 0.08
+Nodes (25): @base-ui/react, class-variance-authority, cn, lucide-react, next, dependencies, @base-ui/react, class-variance-authority (+17 more)
 
 ### Community 9 - "README.md"
 
@@ -144,8 +144,8 @@ Nodes (26): BoardColumn, BoardColumnInsert, Milestone, MilestoneInsert, Mileston
 
 ### Community 18 - "invite-modal.tsx"
 
-Cohesion: 0.11
-Nodes (21): Button(), buttonVariants, Dialog(), DialogContent(), DialogDescription(), DialogFooter(), DialogHeader(), DialogTitle() (+13 more)
+Cohesion: 0.22
+Nodes (10): Button(), buttonVariants, Dialog(), DialogContent(), DialogDescription(), DialogFooter(), DialogHeader(), DialogTitle() (+2 more)
 
 ### Community 19 - "login-form.tsx"
 
@@ -179,7 +179,7 @@ Nodes (3): envPath, seedSql, seedSqlPath
 
 ## Knowledge Gaps
 
-- **213 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+208 more)
+- **212 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+207 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -187,17 +187,17 @@ Nodes (3): envPath, seedSql, seedSqlPath
 
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `dependencies` connect `dependencies` to `package.json`?**
-  _High betweenness centrality (0.121) - this node is a cross-community bridge._
-- **Why does `InviteModal()` connect `dependencies` to `invite-modal.tsx`, `createClient`?**
-  _High betweenness centrality (0.089) - this node is a cross-community bridge._
+- **Why does `dependencies` connect `dependencies` to `package.json`, `createClient`?**
+  _High betweenness centrality (0.120) - this node is a cross-community bridge._
+- **Why does `react` connect `createClient` to `dependencies`?**
+  _High betweenness centrality (0.108) - this node is a cross-community bridge._
+- **Why does `InviteModal()` connect `createClient` to `invite-modal.tsx`?**
+  _High betweenness centrality (0.091) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _213 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _212 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Product Requirements Document (PRD)` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `docs/README.md` be split into smaller, more focused modules?**
   _Cohesion score 0.05714285714285714 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
-- **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._

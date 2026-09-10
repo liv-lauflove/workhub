@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/card';
 import type { ActionState } from '@/types/global';
 
-export function RegisterForm() {
+export function RegisterForm({ defaultEmail }: { defaultEmail?: string } = {}) {
   const [state, formAction] = useActionState<ActionState | null, FormData>(
     register,
     null
@@ -71,6 +71,7 @@ export function RegisterForm() {
               id="email"
               name="email"
               type="email"
+              defaultValue={defaultEmail ?? ''}
               placeholder="nama@workhub.com"
               required
               autoComplete="email"

@@ -43,7 +43,7 @@ insert into auth.users (
     'd1111111-1111-1111-1111-111111111111',
     'authenticated',
     'authenticated',
-    'leader@workhub.com',
+    'leader.aegis@workhub.com',
     crypt('Password123!', gen_salt('bf')),
     now(),
     '{"provider":"email","providers":["email"]}'::jsonb,
@@ -65,6 +65,23 @@ insert into auth.users (
     now(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     '{"full_name":"Bima"}'::jsonb,
+    now(),
+    now(),
+    '',
+    '',
+    '',
+    ''
+  ),
+  (
+    '00000000-0000-0000-0000-000000000000',
+    'd3333333-3333-3333-3333-333333333333',
+    'authenticated',
+    'authenticated',
+    'leader.sentinel@workhub.com',
+    crypt('Password123!', gen_salt('bf')),
+    now(),
+    '{"provider":"email","providers":["email"]}'::jsonb,
+    '{"full_name":"Bang Aris"}'::jsonb,
     now(),
     now(),
     '',
@@ -93,6 +110,14 @@ insert into profiles (id, full_name, role, team_id, github_username, avatar_url)
     'e1111111-1111-1111-1111-111111111111',
     'bima-sentinel',
     'https://api.dicebear.com/7.x/avataaars/svg?seed=Bima'
+  ),
+  (
+    'd3333333-3333-3333-3333-333333333333',
+    'Bang Aris',
+    'leader',
+    'e2222222-2222-2222-2222-222222222222',
+    'aris-sentinel',
+    'https://api.dicebear.com/7.x/avataaars/svg?seed=Aris'
   )
 on conflict (id) do nothing;
 

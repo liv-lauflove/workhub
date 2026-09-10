@@ -593,8 +593,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "package_dependencies_react",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "react"
     },
     {
@@ -604,8 +604,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "react",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "react"
     },
     {
@@ -1264,8 +1264,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_layout",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "(dashboard)/layout.tsx"
     },
     {
@@ -1275,8 +1275,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_app_dashboard_layout_dashboardlayout",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "dashboardlayout()"
     },
     {
@@ -1935,8 +1935,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_config_routes",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "routes.ts"
     },
     {
@@ -1946,8 +1946,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_config_routes_routes",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "routes"
     },
     {
@@ -2188,8 +2188,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_lib_auth_utils",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "auth.utils.ts"
     },
     {
@@ -2199,8 +2199,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_features_auth_lib_auth_utils_requireauth",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "requireauth()"
     },
     {
@@ -2210,8 +2210,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_queries_auth_queries",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "auth.queries.ts"
     },
     {
@@ -2221,8 +2221,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_features_auth_queries_auth_queries_getuser",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "getuser()"
     },
     {
@@ -2232,8 +2232,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_features_auth_queries_auth_queries_getuserprofile",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "getuserprofile()"
     },
     {
@@ -2782,52 +2782,41 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "team.actions.ts"
     },
     {
       "label": "inviteSchema",
       "file_type": "code",
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L12",
+      "source_location": "L9",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteschema",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "inviteschema"
-    },
-    {
-      "label": "InviteTeamMemberInput",
-      "file_type": "code",
-      "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L20",
-      "_origin": "ast",
-      "id": "src_features_team_actions_team_actions_inviteteammemberinput",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
-      "norm_label": "inviteteammemberinput"
     },
     {
       "label": "inviteTeamMember()",
       "file_type": "code",
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L30",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteteammember",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "inviteteammember()"
     },
     {
       "label": "revokeInvitation()",
       "file_type": "code",
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L169",
+      "source_location": "L122",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_revokeinvitation",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "revokeinvitation()"
     },
     {
@@ -2837,8 +2826,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "invitation-list.tsx"
     },
     {
@@ -2848,8 +2837,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitation",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "invitation"
     },
     {
@@ -2859,8 +2848,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitationlistprops",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "invitationlistprops"
     },
     {
@@ -2870,8 +2859,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_status_config",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "status_config"
     },
     {
@@ -2881,8 +2870,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_copylinkbutton",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "copylinkbutton()"
     },
     {
@@ -2892,8 +2881,8 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_revokebutton",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "revokebutton()"
     },
     {
@@ -2903,8 +2892,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitationlist",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "invitationlist()"
     },
     {
@@ -2922,7 +2911,7 @@
       "label": "InviteModalProps",
       "file_type": "code",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L20",
+      "source_location": "L19",
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal_invitemodalprops",
       "community": 18,
@@ -2933,11 +2922,11 @@
       "label": "InviteModal()",
       "file_type": "code",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L24",
+      "source_location": "L23",
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal_invitemodal",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "invitemodal()"
     },
     {
@@ -3181,28 +3170,6 @@
       "community": 25,
       "community_name": "capacity.utils.ts",
       "norm_label": "team_names"
-    },
-    {
-      "label": "admin.ts",
-      "file_type": "code",
-      "source_file": "src/lib/supabase/admin.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_lib_supabase_admin",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
-      "norm_label": "admin.ts"
-    },
-    {
-      "label": "createAdminClient()",
-      "file_type": "code",
-      "source_file": "src/lib/supabase/admin.ts",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "src_lib_supabase_admin_createadminclient",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
-      "norm_label": "createadminclient()"
     },
     {
       "label": "client.ts",
@@ -5542,7 +5509,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L26",
+      "source_location": "L24",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal_invitemodal",
@@ -6981,7 +6948,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L6",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7041,7 +7008,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L6",
+      "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7408,7 +7375,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7420,7 +7387,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7432,7 +7399,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7444,7 +7411,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7456,7 +7423,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7468,7 +7435,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7480,7 +7447,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7492,7 +7459,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L9",
+      "source_location": "L8",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7539,7 +7506,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L7",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7575,7 +7542,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L7",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7622,7 +7589,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -7658,7 +7625,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -8300,7 +8267,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L61",
+      "source_location": "L40",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions_inviteteammember",
@@ -8312,7 +8279,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L183",
+      "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions_revokeinvitation",
@@ -8892,7 +8859,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L12",
+      "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions",
@@ -8903,7 +8870,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L30",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions",
@@ -8914,18 +8881,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_team_actions_team_actions",
-      "target": "src_features_team_actions_team_actions_inviteteammemberinput",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L169",
+      "source_location": "L122",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions",
@@ -8941,7 +8897,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions",
-      "target": "src_lib_supabase_admin",
+      "target": "src_lib_supabase_server",
       "confidence_score": 1.0
     },
     {
@@ -8953,7 +8909,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions",
-      "target": "src_lib_supabase_admin_createadminclient",
+      "target": "src_lib_supabase_server_createclient",
       "confidence_score": 1.0
     },
     {
@@ -8973,7 +8929,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -8986,18 +8942,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L88",
+      "source_location": "L54",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions_inviteteammember",
-      "target": "src_lib_supabase_admin_createadminclient"
+      "target": "src_lib_supabase_server_createclient"
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L18",
+      "source_location": "L17",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -9009,12 +8965,24 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L34",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal_invitemodal",
+      "target": "src_features_team_actions_team_actions_inviteteammember"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/features/team/actions/team.actions.ts",
-      "source_location": "L191",
+      "source_location": "L144",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions_revokeinvitation",
-      "target": "src_lib_supabase_admin_createadminclient"
+      "target": "src_lib_supabase_server_createclient"
     },
     {
       "relation": "imports",
@@ -9110,7 +9078,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L24",
+      "source_location": "L23",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -9121,7 +9089,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
-      "source_location": "L20",
+      "source_location": "L19",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
@@ -9388,41 +9356,6 @@
       "_origin": "ast",
       "source": "src_lib_constants",
       "target": "src_lib_constants_team_names",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/supabase/admin.ts",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_lib_supabase_admin",
-      "target": "src_lib_supabase_admin_createadminclient",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/supabase/admin.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_lib_supabase_admin",
-      "target": "src_types_database_types",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/lib/supabase/admin.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_lib_supabase_admin",
-      "target": "src_types_database_types_database",
       "confidence_score": 1.0
     },
     {
@@ -11052,5 +10985,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "ba6be7be7dda346e2dbb8f8e1415d2530b38f2ce"
+  "built_at_commit": "b1f226c4881dfa69232e28d12d420a1fb66d290f"
 }
