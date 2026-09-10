@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import { UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,25 +22,38 @@ interface InviteModalProps {
 }
 
 export function InviteModal({ teamId }: InviteModalProps) {
+  const router = useRouter();
   const [open, setOpen] = React.useState(false);
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, setIsPending] = React.useState(false);
   const [error, setError] = React.useState<Record<string, string[]> | null>(
     null
   );
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    startTransition(async () => {
-      const res = await inviteTeamMember(null, formData);
+  async function handleAction(formData: FormData) {
+    setIsPending(true);
+    setError(null);
+    try {
+      const email = (formData.get('email') as string)?.trim();
+      const role = (formData.get('role') as 'leader' | 'member') || 'member';
+
+      console.log('🚀 [InviteModal] Submitting form:', { email, role, teamId });
+
+      const res = await inviteTeamMember({ email, role, teamId });
+      console.log('🚀 [InviteModal] Response received:', res);
+
       if (res.success) {
         setOpen(false);
-        setError(null);
+        router.refresh();
       } else {
         setError(res.error);
       }
-    });
-  };
+    } catch (err) {
+      console.error('🚀 [InviteModal] Unhandled error:', err);
+      setError({ _form: ['Terjadi kesalahan. Silakan coba lagi.'] });
+    } finally {
+      setIsPending(false);
+    }
+  }
 
   return (
     <Dialog
@@ -65,7 +79,7 @@ export function InviteModal({ teamId }: InviteModalProps) {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form action={handleAction} className="space-y-4">
           <input type="hidden" name="teamId" value={teamId} />
 
           <div className="space-y-2">
