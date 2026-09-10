@@ -400,13 +400,13 @@
     "semantic_hash": ""
   },
   "src/features/team/actions/team.actions.ts": {
-    "mtime": 1788918393.3620832,
-    "ast_hash": "1e8ce214e8d13a76ef9c753a08466a94",
+    "mtime": 1789009752.8876407,
+    "ast_hash": "a64cf5b5e605af5240afcffc68cf06cf",
     "semantic_hash": ""
   },
   "src/features/team/queries/team.queries.ts": {
-    "mtime": 1788918393.3620832,
-    "ast_hash": "00ef4f75946d840a8f788362bbaaffa4",
+    "mtime": 1789009537.1026056,
+    "ast_hash": "fdec4b8a998c9b7d656d5bf77d379db0",
     "semantic_hash": ""
   },
   "src/features/workload/lib/capacity.utils.ts": {
@@ -495,8 +495,28 @@
     "semantic_hash": ""
   },
   "supabase/migrations/20260910000001_rls_profiles_and_teams.sql": {
-    "mtime": 1789006892.2264304,
-    "ast_hash": "550b88968c34bbe09ffe42497af27d02",
+    "mtime": 1789008072.8922646,
+    "ast_hash": "718d7e7f6b4f4a03bfe7f44007f0efbe",
+    "semantic_hash": ""
+  },
+  "src/app/(dashboard)/team/page.tsx": {
+    "mtime": 1789009698.6902587,
+    "ast_hash": "3c567fe4f8e5b445985a60a3ff958a5d",
+    "semantic_hash": ""
+  },
+  "src/features/team/components/invitation-list.tsx": {
+    "mtime": 1789009635.9670792,
+    "ast_hash": "c066cd26e89d23205b75ea345c243045",
+    "semantic_hash": ""
+  },
+  "src/features/team/components/invite-modal.tsx": {
+    "mtime": 1789009853.7290084,
+    "ast_hash": "fa8e0967e18a5afa2263f73b7c273666",
+    "semantic_hash": ""
+  },
+  "src/features/team/components/team-member-list.tsx": {
+    "mtime": 1789009667.4386442,
+    "ast_hash": "b0f6b72e477bcb385f0cd02960742cde",
     "semantic_hash": ""
   }
 }

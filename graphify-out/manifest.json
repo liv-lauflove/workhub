@@ -215,8 +215,8 @@
     "semantic_hash": ""
   },
   "src/app/(auth)/register/page.tsx": {
-    "mtime": 1788940994.653266,
-    "ast_hash": "129853e9c2f62564b9ee5e773284ed59",
+    "mtime": 1789010638.7777352,
+    "ast_hash": "82744e768c37fc51a6a30cbcbf50bd0a",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/layout.tsx": {
@@ -400,8 +400,8 @@
     "semantic_hash": ""
   },
   "src/features/team/actions/team.actions.ts": {
-    "mtime": 1789009752.8876407,
-    "ast_hash": "a64cf5b5e605af5240afcffc68cf06cf",
+    "mtime": 1789010026.8186839,
+    "ast_hash": "154f52355a7622e972ec0267d3346a9a",
     "semantic_hash": ""
   },
   "src/features/team/queries/team.queries.ts": {
@@ -485,8 +485,8 @@
     "semantic_hash": ""
   },
   "src/features/auth/components/register-form.tsx": {
-    "mtime": 1788940994.6649415,
-    "ast_hash": "a2eedad3b3b503aa5326e1c94911c577",
+    "mtime": 1789010663.511066,
+    "ast_hash": "60e88c1ad3ee8097caa9170db7b9f6af",
     "semantic_hash": ""
   },
   "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": {
@@ -500,23 +500,28 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/team/page.tsx": {
-    "mtime": 1789009698.6902587,
-    "ast_hash": "3c567fe4f8e5b445985a60a3ff958a5d",
+    "mtime": 1789010026.6980064,
+    "ast_hash": "fba544775fac1a11eedf351dbdf65ec0",
     "semantic_hash": ""
   },
   "src/features/team/components/invitation-list.tsx": {
-    "mtime": 1789009635.9670792,
-    "ast_hash": "c066cd26e89d23205b75ea345c243045",
+    "mtime": 1789010688.2040498,
+    "ast_hash": "748b776fa14b42da087a42a9ad502616",
     "semantic_hash": ""
   },
   "src/features/team/components/invite-modal.tsx": {
-    "mtime": 1789009853.7290084,
-    "ast_hash": "fa8e0967e18a5afa2263f73b7c273666",
+    "mtime": 1789010026.9303138,
+    "ast_hash": "dcb5ddb5e976098ca3aa242c5b1d8dac",
     "semantic_hash": ""
   },
   "src/features/team/components/team-member-list.tsx": {
-    "mtime": 1789009667.4386442,
-    "ast_hash": "b0f6b72e477bcb385f0cd02960742cde",
+    "mtime": 1789010026.969454,
+    "ast_hash": "7bbcf4e366657fe0cacf414bf3f08ee2",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": {
+    "mtime": 1789010580.7374468,
+    "ast_hash": "423dc65ab712d9cc0a5b82b0d1ffb226",
     "semantic_hash": ""
   }
 }

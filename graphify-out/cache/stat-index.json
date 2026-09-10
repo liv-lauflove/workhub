@@ -269,9 +269,9 @@
     "word_count": 33
   },
   "src/app/(auth)/register/page.tsx": {
-    "size": 288,
-    "mtime_ns": 1788940994653266000,
-    "word_count": 35
+    "size": 418,
+    "mtime_ns": 1789010638777735200,
+    "word_count": 51
   },
   "src/app/(dashboard)/layout.tsx": {
     "size": 1028,
@@ -454,9 +454,9 @@
     "word_count": 27
   },
   "src/features/team/actions/team.actions.ts": {
-    "size": 3966,
-    "mtime_ns": 1789009752887640600,
-    "word_count": 467
+    "size": 4037,
+    "mtime_ns": 1789010026818683800,
+    "word_count": 473
   },
   "src/features/team/queries/team.queries.ts": {
     "size": 1136,
@@ -542,9 +542,9 @@
     "word_count": 219
   },
   "src/features/auth/components/register-form.tsx": {
-    "size": 4241,
-    "mtime_ns": 1788940994664941500,
-    "word_count": 299
+    "size": 4338,
+    "mtime_ns": 1789010663511066000,
+    "word_count": 310
   },
   "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": {
     "size": 2556,
@@ -563,23 +563,31 @@
     }
   },
   "src/app/(dashboard)/team/page.tsx": {
-    "size": 3435,
-    "mtime_ns": 1789009698690258700,
-    "word_count": 311
+    "size": 3463,
+    "mtime_ns": 1789010026698006400,
+    "word_count": 313
   },
   "src/features/team/components/invitation-list.tsx": {
-    "size": 3426,
-    "mtime_ns": 1789009635967079200,
-    "word_count": 302
+    "size": 4413,
+    "mtime_ns": 1789010688204049900,
+    "word_count": 394
   },
   "src/features/team/components/invite-modal.tsx": {
-    "size": 3496,
-    "mtime_ns": 1789009853729008500,
-    "word_count": 258
+    "size": 3504,
+    "mtime_ns": 1789010026930313900,
+    "word_count": 260
   },
   "src/features/team/components/team-member-list.tsx": {
-    "size": 2332,
-    "mtime_ns": 1789009667438644100,
-    "word_count": 196
+    "size": 2303,
+    "mtime_ns": 1789010026969454100,
+    "word_count": 195
+  },
+  "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": {
+    "size": 2859,
+    "mtime_ns": 1789010580737446700,
+    "word_count": 300,
+    "hashes": {
+      "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": "56e640b73b87e388f1d89b6088c934cb45f744084059bdd1bd4cae113267d1f9"
+    }
   }
 }

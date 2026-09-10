@@ -1302,6 +1302,39 @@
       "norm_label": "dashboardpage()"
     },
     {
+      "label": "team/page.tsx",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_app_dashboard_team_page",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "team/page.tsx"
+    },
+    {
+      "label": "metadata",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "src_app_dashboard_team_page_metadata",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "metadata"
+    },
+    {
+      "label": "TeamPage()",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "src_app_dashboard_team_page_teampage",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "teampage()"
+    },
+    {
       "label": "error.tsx",
       "file_type": "code",
       "source_file": "src/app/error.tsx",
@@ -1440,8 +1473,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_layout_header",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "header.tsx"
     },
     {
@@ -1451,8 +1484,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_components_layout_header_headerprops",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "headerprops"
     },
     {
@@ -1462,8 +1495,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_components_layout_header_header",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "header()"
     },
     {
@@ -1473,8 +1506,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_layout_mobile_nav",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "mobile-nav.tsx"
     },
     {
@@ -1484,8 +1517,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_components_layout_mobile_nav_emptysubscribe",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "emptysubscribe()"
     },
     {
@@ -1495,8 +1528,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_components_layout_mobile_nav_mobilenavprops",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "mobilenavprops"
     },
     {
@@ -1506,8 +1539,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_components_layout_mobile_nav_mobilenav",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "mobilenav()"
     },
     {
@@ -1517,8 +1550,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_layout_sidebar",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "sidebar.tsx"
     },
     {
@@ -1528,8 +1561,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_components_layout_sidebar_icon_map",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "icon_map"
     },
     {
@@ -1539,8 +1572,8 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "src_components_layout_sidebar_nav_items",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "nav_items"
     },
     {
@@ -1550,8 +1583,8 @@
       "source_location": "L37",
       "_origin": "ast",
       "id": "src_components_layout_sidebar_sidebarprops",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "sidebarprops"
     },
     {
@@ -1561,8 +1594,8 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "src_components_layout_sidebar_sidebar",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "sidebar()"
     },
     {
@@ -1572,8 +1605,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_button",
-      "community": 19,
-      "community_name": "login-form.tsx",
+      "community": 18,
+      "community_name": "invite-modal.tsx",
       "norm_label": "button.tsx"
     },
     {
@@ -1583,8 +1616,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_components_ui_button_buttonvariants",
-      "community": 19,
-      "community_name": "login-form.tsx",
+      "community": 18,
+      "community_name": "invite-modal.tsx",
       "norm_label": "buttonvariants"
     },
     {
@@ -1594,8 +1627,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_components_ui_button_button",
-      "community": 19,
-      "community_name": "login-form.tsx",
+      "community": 18,
+      "community_name": "invite-modal.tsx",
       "norm_label": "button()"
     },
     {
@@ -1694,7 +1727,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialog.tsx"
     },
     {
@@ -1705,7 +1738,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialog",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialog()"
     },
     {
@@ -1716,7 +1749,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogtrigger",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogtrigger()"
     },
     {
@@ -1727,7 +1760,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogportal",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogportal()"
     },
     {
@@ -1738,7 +1771,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogclose",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogclose()"
     },
     {
@@ -1749,7 +1782,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogoverlay",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogoverlay()"
     },
     {
@@ -1760,7 +1793,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogcontent",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogcontent()"
     },
     {
@@ -1771,7 +1804,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogheader",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogheader()"
     },
     {
@@ -1782,7 +1815,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogfooter",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogfooter()"
     },
     {
@@ -1793,7 +1826,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogtitle",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogtitle()"
     },
     {
@@ -1804,7 +1837,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogdescription",
       "community": 18,
-      "community_name": "dialog.tsx",
+      "community_name": "invite-modal.tsx",
       "norm_label": "dialogdescription()"
     },
     {
@@ -2045,8 +2078,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "auth.actions.ts"
     },
     {
@@ -2078,8 +2111,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_signout",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "signout()"
     },
     {
@@ -2210,8 +2243,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_types_auth_types",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "auth.types.ts"
     },
     {
@@ -2221,8 +2254,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_features_auth_types_auth_types_loginschema",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "loginschema"
     },
     {
@@ -2232,8 +2265,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_features_auth_types_auth_types_registerschema",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "registerschema"
     },
     {
@@ -2243,8 +2276,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_features_auth_types_auth_types_logininput",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "logininput"
     },
     {
@@ -2254,8 +2287,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_features_auth_types_auth_types_registerinput",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "registerinput"
     },
     {
@@ -2749,20 +2782,185 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions",
-      "community": 50,
-      "community_name": "team.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "team.actions.ts"
     },
     {
-      "label": "placeholderTeamAction()",
+      "label": "inviteSchema",
       "file_type": "code",
       "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_features_team_actions_team_actions_inviteschema",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "inviteschema"
+    },
+    {
+      "label": "inviteTeamMember()",
+      "file_type": "code",
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "src_features_team_actions_team_actions_inviteteammember",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "inviteteammember()"
+    },
+    {
+      "label": "revokeInvitation()",
+      "file_type": "code",
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L111",
+      "_origin": "ast",
+      "id": "src_features_team_actions_team_actions_revokeinvitation",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "revokeinvitation()"
+    },
+    {
+      "label": "invitation-list.tsx",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_team_components_invitation_list",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "invitation-list.tsx"
+    },
+    {
+      "label": "Invitation",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_features_team_components_invitation_list_invitation",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "invitation"
+    },
+    {
+      "label": "InvitationListProps",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "src_features_team_components_invitation_list_invitationlistprops",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "invitationlistprops"
+    },
+    {
+      "label": "STATUS_CONFIG",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L24",
+      "_origin": "ast",
+      "id": "src_features_team_components_invitation_list_status_config",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "status_config"
+    },
+    {
+      "label": "RevokeButton()",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "src_features_team_components_invitation_list_revokebutton",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "revokebutton()"
+    },
+    {
+      "label": "InvitationList()",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L67",
+      "_origin": "ast",
+      "id": "src_features_team_components_invitation_list_invitationlist",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "invitationlist()"
+    },
+    {
+      "label": "invite-modal.tsx",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_team_components_invite_modal",
+      "community": 18,
+      "community_name": "invite-modal.tsx",
+      "norm_label": "invite-modal.tsx"
+    },
+    {
+      "label": "InviteModalProps",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "src_features_team_components_invite_modal_invitemodalprops",
+      "community": 18,
+      "community_name": "invite-modal.tsx",
+      "norm_label": "invitemodalprops"
+    },
+    {
+      "label": "InviteModal()",
+      "file_type": "code",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "src_features_team_components_invite_modal_invitemodal",
+      "community": 8,
+      "community_name": "dependencies",
+      "norm_label": "invitemodal()"
+    },
+    {
+      "label": "team-member-list.tsx",
+      "file_type": "code",
+      "source_file": "src/features/team/components/team-member-list.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_team_components_team_member_list",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "team-member-list.tsx"
+    },
+    {
+      "label": "TeamMember",
+      "file_type": "code",
+      "source_file": "src/features/team/components/team-member-list.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "src_features_team_actions_team_actions_placeholderteamaction",
-      "community": 50,
-      "community_name": "team.actions.ts",
-      "norm_label": "placeholderteamaction()"
+      "id": "src_features_team_components_team_member_list_teammember",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "teammember"
+    },
+    {
+      "label": "TeamMemberListProps",
+      "file_type": "code",
+      "source_file": "src/features/team/components/team-member-list.tsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_features_team_components_team_member_list_teammemberlistprops",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "teammemberlistprops"
+    },
+    {
+      "label": "TeamMemberList()",
+      "file_type": "code",
+      "source_file": "src/features/team/components/team-member-list.tsx",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "src_features_team_components_team_member_list_teammemberlist",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "teammemberlist()"
     },
     {
       "label": "team.queries.ts",
@@ -2785,6 +2983,28 @@
       "community": 6,
       "community_name": "createClient",
       "norm_label": "getteams()"
+    },
+    {
+      "label": "getTeamMembers()",
+      "file_type": "code",
+      "source_file": "src/features/team/queries/team.queries.ts",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "src_features_team_queries_team_queries_getteammembers",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "getteammembers()"
+    },
+    {
+      "label": "getTeamInvitations()",
+      "file_type": "code",
+      "source_file": "src/features/team/queries/team.queries.ts",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "src_features_team_queries_team_queries_getteaminvitations",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "getteaminvitations()"
     },
     {
       "label": "capacity.utils.ts",
@@ -5261,6 +5481,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal_invitemodal",
+      "target": "package_dependencies_react"
+    },
+    {
       "relation": "imports",
       "confidence": "EXTRACTED",
       "source_file": "package.json",
@@ -6004,6 +6236,244 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_app_dashboard_team_page_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_app_dashboard_team_page_teampage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_config_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_config_routes_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_auth_queries_auth_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_components_invitation_list",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_components_invitation_list_invitationlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_components_invite_modal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_components_invite_modal_invitemodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_components_team_member_list",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_components_team_member_list_teammemberlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_queries_team_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_queries_team_queries_getteaminvitations",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_queries_team_queries_getteammembers",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page",
+      "target": "src_features_team_queries_team_queries_getteams",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page_teampage",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page_teampage",
+      "target": "src_features_team_queries_team_queries_getteaminvitations"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L62",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page_teampage",
+      "target": "src_features_team_queries_team_queries_getteammembers"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/team/page.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_team_page_teampage",
+      "target": "src_features_team_queries_team_queries_getteams"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/app/error.tsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -6439,6 +6909,30 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_components_ui_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_button",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -6471,6 +6965,30 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_components_oauth_buttons",
+      "target": "src_components_ui_button_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_components_ui_button_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
       "target": "src_components_ui_button_button",
       "confidence_score": 1.0
     },
@@ -6830,6 +7348,102 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_dialog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_dialog_dialog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_dialog_dialogtrigger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_dialog_dialogcontent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_dialog_dialogheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_dialog_dialogfooter",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_dialog_dialogtitle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_dialog_dialogdescription",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/components/ui/input.tsx",
@@ -6865,6 +7479,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_input",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -6885,6 +7511,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_input_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
       "target": "src_components_ui_input_input",
       "confidence_score": 1.0
     },
@@ -6924,6 +7562,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_components_ui_label",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -6944,6 +7594,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_label_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
       "target": "src_components_ui_label_label",
       "confidence_score": 1.0
     },
@@ -7517,6 +8179,18 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions",
+      "target": "src_features_auth_queries_auth_queries",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -7551,6 +8225,42 @@
       "_origin": "ast",
       "source": "src_features_auth_queries_auth_queries_getuserprofile",
       "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions_inviteteammember",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L125",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions_revokeinvitation",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile"
     },
     {
       "relation": "contains",
@@ -8126,11 +8836,285 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions",
+      "target": "src_features_team_actions_team_actions_inviteschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions",
+      "target": "src_features_team_actions_team_actions_inviteteammember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L111",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions",
+      "target": "src_features_team_actions_team_actions_revokeinvitation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/actions/team.actions.ts",
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_actions_team_actions",
-      "target": "src_features_team_actions_team_actions_placeholderteamaction",
+      "target": "src_lib_supabase_server",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions",
+      "target": "src_lib_supabase_server_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_features_team_actions_team_actions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_features_team_actions_team_actions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions_inviteteammember",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_features_team_actions_team_actions_inviteteammember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal_invitemodal",
+      "target": "src_features_team_actions_team_actions_inviteteammember"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/team/actions/team.actions.ts",
+      "source_location": "L133",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_actions_team_actions_revokeinvitation",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_features_team_actions_team_actions_revokeinvitation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L48",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list_revokebutton",
+      "target": "src_features_team_actions_team_actions_revokeinvitation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_features_team_components_invitation_list_invitation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L67",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_features_team_components_invitation_list_invitationlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_features_team_components_invitation_list_invitationlistprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L47",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_features_team_components_invitation_list_revokebutton",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invitation-list.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invitation_list",
+      "target": "src_features_team_components_invitation_list_status_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_features_team_components_invite_modal_invitemodal",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/invite-modal.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_invite_modal",
+      "target": "src_features_team_components_invite_modal_invitemodalprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/team-member-list.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_team_member_list",
+      "target": "src_features_team_components_team_member_list_teammember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/team-member-list.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_team_member_list",
+      "target": "src_features_team_components_team_member_list_teammemberlist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/components/team-member-list.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_components_team_member_list",
+      "target": "src_features_team_components_team_member_list_teammemberlistprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/queries/team.queries.ts",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_queries_team_queries",
+      "target": "src_features_team_queries_team_queries_getteaminvitations",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/team/queries/team.queries.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_queries_team_queries",
+      "target": "src_features_team_queries_team_queries_getteammembers",
       "confidence_score": 1.0
     },
     {
@@ -8178,6 +9162,30 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_queries_team_queries_getteams",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/team/queries/team.queries.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_queries_team_queries_getteammembers",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/team/queries/team.queries.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_team_queries_team_queries_getteaminvitations",
       "target": "src_lib_supabase_server_createclient"
     },
     {
@@ -9943,5 +10951,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "b4f687a8ddd0437d1707ad114d2c38a63ea0ef08"
+  "built_at_commit": "6ca8f95edad4310dcfb998d11882afeda5a29a4d"
 }
