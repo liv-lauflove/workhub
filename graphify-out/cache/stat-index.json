@@ -454,14 +454,14 @@
     "word_count": 27
   },
   "src/features/team/actions/team.actions.ts": {
-    "size": 85,
-    "mtime_ns": 1788918393362083100,
-    "word_count": 10
+    "size": 3966,
+    "mtime_ns": 1789009752887640600,
+    "word_count": 467
   },
   "src/features/team/queries/team.queries.ts": {
-    "size": 273,
-    "mtime_ns": 1788918393362083100,
-    "word_count": 33
+    "size": 1136,
+    "mtime_ns": 1789009537102605500,
+    "word_count": 139
   },
   "src/features/workload/lib/capacity.utils.ts": {
     "size": 376,
@@ -555,11 +555,31 @@
     }
   },
   "supabase/migrations/20260910000001_rls_profiles_and_teams.sql": {
-    "size": 3886,
-    "mtime_ns": 1789006892226430300,
+    "size": 3996,
+    "mtime_ns": 1789008072892264700,
     "word_count": 462,
     "hashes": {
-      "supabase/migrations/20260910000001_rls_profiles_and_teams.sql": "412c7d9fef01f460967aab698cdb74beb51f481e9ed8389c81df1d2acdceabc5"
+      "supabase/migrations/20260910000001_rls_profiles_and_teams.sql": "e57f9b325ea664bf76e3dd9f29040f2059c36632b41c7ecf83023df846c1d29d"
     }
+  },
+  "src/app/(dashboard)/team/page.tsx": {
+    "size": 3435,
+    "mtime_ns": 1789009698690258700,
+    "word_count": 311
+  },
+  "src/features/team/components/invitation-list.tsx": {
+    "size": 3426,
+    "mtime_ns": 1789009635967079200,
+    "word_count": 302
+  },
+  "src/features/team/components/invite-modal.tsx": {
+    "size": 3496,
+    "mtime_ns": 1789009853729008500,
+    "word_count": 258
+  },
+  "src/features/team/components/team-member-list.tsx": {
+    "size": 2332,
+    "mtime_ns": 1789009667438644100,
+    "word_count": 196
   }
 }
