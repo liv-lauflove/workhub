@@ -1,7 +1,8 @@
 'use client';
 
+import * as React from 'react';
 import { useActionState } from 'react';
-import { Clock, XCircle, CheckCircle2, Ban } from 'lucide-react';
+import { Clock, XCircle, CheckCircle2, Ban, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { revokeInvitation } from '@/features/team/actions/team.actions';
 import { cn } from 'cn';
@@ -45,6 +46,43 @@ const STATUS_CONFIG = {
     className: 'text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-950/30',
   },
 } as const;
+
+function CopyLinkButton({ email }: { email: string }) {
+  const [copied, setCopied] = React.useState(false);
+
+  const handleCopy = async () => {
+    try {
+      const url = `${window.location.origin}/register?email=${encodeURIComponent(email)}`;
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Ignore clipboard write failures
+    }
+  };
+
+  return (
+    <Button
+      type="button"
+      variant="outline"
+      size="xs"
+      onClick={handleCopy}
+      className="text-xs"
+    >
+      {copied ? (
+        <>
+          <Check className="h-3 w-3 text-green-500" />
+          Tersalin
+        </>
+      ) : (
+        <>
+          <Copy className="h-3 w-3" />
+          Salin Tautan
+        </>
+      )}
+    </Button>
+  );
+}
 
 function RevokeButton({
   invitationId,
@@ -120,7 +158,10 @@ export function InvitationList({
               </span>
 
               {isLeader && inv.status === 'pending' && (
-                <RevokeButton invitationId={inv.id} teamId={teamId} />
+                <>
+                  <CopyLinkButton email={inv.email} />
+                  <RevokeButton invitationId={inv.id} teamId={teamId} />
+                </>
               )}
             </div>
           </div>

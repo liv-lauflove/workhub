@@ -5,6 +5,11 @@ export const metadata = {
   description: 'Daftar akun baru di Workhub Task & Performance Dashboard',
 };
 
-export default function RegisterPage() {
-  return <RegisterForm />;
+export default async function RegisterPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ email?: string }>;
+}) {
+  const params = await searchParams;
+  return <RegisterForm defaultEmail={params.email} />;
 }
