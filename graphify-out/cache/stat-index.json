@@ -547,11 +547,19 @@
     "word_count": 299
   },
   "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": {
-    "size": 2466,
-    "mtime_ns": 1789004769332898500,
+    "size": 2556,
+    "mtime_ns": 1789005355955805600,
     "word_count": 240,
     "hashes": {
-      "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": "d4529852f89e8757087ae699c634746798722e5ff779f21780044ee6db6479a2"
+      "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": "723070b9b5639a19a085fe84daefb039ed2ec51adc3d00d1ea0346d4d5e0259a"
+    }
+  },
+  "supabase/migrations/20260910000001_rls_profiles_and_teams.sql": {
+    "size": 3886,
+    "mtime_ns": 1789006892226430300,
+    "word_count": 462,
+    "hashes": {
+      "supabase/migrations/20260910000001_rls_profiles_and_teams.sql": "412c7d9fef01f460967aab698cdb74beb51f481e9ed8389c81df1d2acdceabc5"
     }
   }
 }
