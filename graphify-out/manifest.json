@@ -490,8 +490,13 @@
     "semantic_hash": ""
   },
   "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": {
-    "mtime": 1789004769.3328986,
-    "ast_hash": "ef5a834685af1c596575da4242c1d5a4",
+    "mtime": 1789005355.9558055,
+    "ast_hash": "5a5c90f9cd8207d6f0e174b27236b3b9",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260910000001_rls_profiles_and_teams.sql": {
+    "mtime": 1789006892.2264304,
+    "ast_hash": "550b88968c34bbe09ffe42497af27d02",
     "semantic_hash": ""
   }
 }
