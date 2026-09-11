@@ -16,9 +16,22 @@ export interface MilestoneProgressInfo {
 
 /**
  * Format ISO date string (YYYY-MM-DD) to Indonesian localized date.
+ * Safely parses year, month, day to prevent timezone date shifting.
  */
 export function formatMilestoneDate(dateStr: string): string {
   try {
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      const year = parseInt(parts[0], 10);
+      const monthIndex = parseInt(parts[1], 10) - 1;
+      const day = parseInt(parts[2], 10);
+      const date = new Date(year, monthIndex, day);
+      return new Intl.DateTimeFormat('id-ID', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }).format(date);
+    }
     const date = new Date(dateStr);
     return new Intl.DateTimeFormat('id-ID', {
       day: 'numeric',
@@ -57,12 +70,27 @@ export function calculateMilestoneTimeProgress(
     };
   }
 
-  const start = new Date(startDateStr).getTime();
-  const target = new Date(targetDateStr).getTime();
-  // Normalize current date to midnight for accurate day difference
+  const startParts = startDateStr.split('-').map(Number);
+  const targetParts = targetDateStr.split('-').map(Number);
+
+  const start = new Date(
+    startParts[0] || 0,
+    (startParts[1] || 1) - 1,
+    startParts[2] || 1
+  ).getTime();
+  const target = new Date(
+    targetParts[0] || 0,
+    (targetParts[1] || 1) - 1,
+    targetParts[2] || 1
+  ).getTime();
+
+  // Normalize current date to midnight for consistent day difference
   const now = new Date();
-  now.setHours(0, 0, 0, 0);
-  const currentTime = now.getTime();
+  const currentTime = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  ).getTime();
 
   const MS_PER_DAY = 1000 * 60 * 60 * 24;
   const totalDays = Math.max(1, Math.round((target - start) / MS_PER_DAY));
