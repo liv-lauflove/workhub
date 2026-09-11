@@ -399,14 +399,14 @@
     "word_count": 17
   },
   "src/features/milestones/actions/milestone.actions.ts": {
-    "size": 90,
-    "mtime_ns": 1788918393346133800,
-    "word_count": 10
+    "size": 2681,
+    "mtime_ns": 1789111544528632400,
+    "word_count": 286
   },
   "src/features/milestones/queries/milestone.queries.ts": {
-    "size": 392,
-    "mtime_ns": 1788918393346133800,
-    "word_count": 43
+    "size": 808,
+    "mtime_ns": 1789111527846840400,
+    "word_count": 91
   },
   "src/features/milestones/types/milestone.types.ts": {
     "size": 311,
@@ -459,8 +459,8 @@
     "word_count": 899
   },
   "src/features/team/queries/team.queries.ts": {
-    "size": 1199,
-    "mtime_ns": 1789110511080356100,
+    "size": 1157,
+    "mtime_ns": 1789110973801400400,
     "word_count": 142
   },
   "src/features/workload/lib/capacity.utils.ts": {
@@ -563,8 +563,8 @@
     }
   },
   "src/app/(dashboard)/team/page.tsx": {
-    "size": 3648,
-    "mtime_ns": 1789110537409126800,
+    "size": 3499,
+    "mtime_ns": 1789110973704208100,
     "word_count": 315
   },
   "src/features/team/components/invitation-list.tsx": {
@@ -578,8 +578,8 @@
     "word_count": 316
   },
   "src/features/team/components/team-member-list.tsx": {
-    "size": 5978,
-    "mtime_ns": 1789110608333927300,
+    "size": 5802,
+    "mtime_ns": 1789110973773097200,
     "word_count": 402
   },
   "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": {
@@ -611,6 +611,34 @@
     "word_count": 108,
     "hashes": {
       "supabase/migrations/20260911062351_issue_17_role_management_rls.sql": "f03ff07ae0cf7c5ef217d2328ec54c9157811f5c4238189fc269f9250ff1dd19"
+    }
+  },
+  "src/app/(dashboard)/milestones/page.tsx": {
+    "size": 4904,
+    "mtime_ns": 1789111584446252700,
+    "word_count": 389
+  },
+  "src/components/ui/textarea.tsx": {
+    "size": 723,
+    "mtime_ns": 1789111307247435400,
+    "word_count": 58
+  },
+  "src/features/milestones/components/create-milestone-dialog.tsx": {
+    "size": 6904,
+    "mtime_ns": 1789111571561651000,
+    "word_count": 501
+  },
+  "src/features/milestones/schemas/milestone.schema.ts": {
+    "size": 1356,
+    "mtime_ns": 1789111699104947800,
+    "word_count": 130
+  },
+  "supabase/migrations/20260911073000_milestones_rls.sql": {
+    "size": 1376,
+    "mtime_ns": 1789111397012137100,
+    "word_count": 156,
+    "hashes": {
+      "supabase/migrations/20260911073000_milestones_rls.sql": "ad248b52ad9ba1774c55f3e30151dbafa0aad8fe169fd4d8f8b6e7dc93341bce"
     }
   }
 }

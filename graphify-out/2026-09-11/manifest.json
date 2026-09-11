@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1788921190.4144633,
-    "ast_hash": "e54568f5f2fd3488da048a51c649af08",
+    "mtime": 1789109492.848055,
+    "ast_hash": "c71ffe876f0d32f7705506abcde70fb3",
     "semantic_hash": ""
   },
   "postcss.config.mjs": {
@@ -145,8 +145,8 @@
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
-    "mtime": 1788940994.653266,
-    "ast_hash": "e4d19ffe3f84ed1a4f34bca4d1690990",
+    "mtime": 1789109492.8514533,
+    "ast_hash": "363ac0aa79c2aba633bdcfe148ae0366",
     "semantic_hash": ""
   },
   "src/components/ui/button.tsx": {
@@ -215,8 +215,8 @@
     "semantic_hash": ""
   },
   "src/app/(auth)/register/page.tsx": {
-    "mtime": 1789010638.7777352,
-    "ast_hash": "82744e768c37fc51a6a30cbcbf50bd0a",
+    "mtime": 1789021805.0883622,
+    "ast_hash": "6c424207b93c925669adfdbeb14d8b04",
     "semantic_hash": ""
   },
   "src/app/(dashboard)/layout.tsx": {
@@ -400,13 +400,13 @@
     "semantic_hash": ""
   },
   "src/features/team/actions/team.actions.ts": {
-    "mtime": 1789015615.8125532,
-    "ast_hash": "f84cf8366ec067900cae61782af411cd",
+    "mtime": 1789109492.8540187,
+    "ast_hash": "951f5b63a543b0d048e089a70dad03cf",
     "semantic_hash": ""
   },
   "src/features/team/queries/team.queries.ts": {
-    "mtime": 1789009537.1026056,
-    "ast_hash": "fdec4b8a998c9b7d656d5bf77d379db0",
+    "mtime": 1789110511.0803561,
+    "ast_hash": "ce0c0aaccf5969fca6544a1fa59bdaf3",
     "semantic_hash": ""
   },
   "src/features/workload/lib/capacity.utils.ts": {
@@ -460,7 +460,7 @@
     "semantic_hash": ""
   },
   "supabase/seed.sql": {
-    "mtime": 1789013195.498099,
+    "mtime": 1789021805.1004763,
     "ast_hash": "322656e3201959d5f89c9ebd52311d49",
     "semantic_hash": ""
   },
@@ -485,8 +485,8 @@
     "semantic_hash": ""
   },
   "src/features/auth/components/register-form.tsx": {
-    "mtime": 1789010895.8973353,
-    "ast_hash": "abf8de136d64b52c52e15fbdd37bc7cb",
+    "mtime": 1789021805.0928733,
+    "ast_hash": "60e88c1ad3ee8097caa9170db7b9f6af",
     "semantic_hash": ""
   },
   "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": {
@@ -500,33 +500,48 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/team/page.tsx": {
-    "mtime": 1789010026.6980064,
-    "ast_hash": "fba544775fac1a11eedf351dbdf65ec0",
+    "mtime": 1789110537.4091268,
+    "ast_hash": "7b727f6ac762c5655a449f9390169829",
     "semantic_hash": ""
   },
   "src/features/team/components/invitation-list.tsx": {
-    "mtime": 1789010688.2040498,
-    "ast_hash": "748b776fa14b42da087a42a9ad502616",
+    "mtime": 1789021805.0959232,
+    "ast_hash": "1ca2de0b5348fae97a14803b20c5b2d4",
     "semantic_hash": ""
   },
   "src/features/team/components/invite-modal.tsx": {
-    "mtime": 1789015304.320139,
-    "ast_hash": "7a060844c1b5376d7d3bbaa2fb628fe8",
+    "mtime": 1789021805.0964556,
+    "ast_hash": "de2ae34275f8303f71d79e97ee0a815d",
     "semantic_hash": ""
   },
   "src/features/team/components/team-member-list.tsx": {
-    "mtime": 1789010026.969454,
-    "ast_hash": "7bbcf4e366657fe0cacf414bf3f08ee2",
+    "mtime": 1789110608.3339274,
+    "ast_hash": "238e7ad457a5d1d066cf73baff69c526",
     "semantic_hash": ""
   },
   "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": {
-    "mtime": 1789010580.7374468,
-    "ast_hash": "423dc65ab712d9cc0a5b82b0d1ffb226",
+    "mtime": 1789021805.099451,
+    "ast_hash": "3836230f0e320719e8663ad856347e65",
     "semantic_hash": ""
   },
   "src/lib/supabase/admin.ts": {
-    "mtime": 1789011207.4065964,
-    "ast_hash": "31e78366eeaf881227421e0be3c0e388",
+    "mtime": 1789021805.0984502,
+    "ast_hash": "4c4ab284fe302183b3971865ccc164f7",
+    "semantic_hash": ""
+  },
+  "src/components/ui/dropdown-menu.tsx": {
+    "mtime": 1789109492.8528144,
+    "ast_hash": "53ab0c5834b982c24fa4e66828e088c2",
+    "semantic_hash": ""
+  },
+  "src/components/ui/table.tsx": {
+    "mtime": 1789109492.8528144,
+    "ast_hash": "d7318054dfffef7fbd20131d9059805d",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260911062351_issue_17_role_management_rls.sql": {
+    "mtime": 1789109492.8568,
+    "ast_hash": "883ba35262759a849859b9ab5e55b456",
     "semantic_hash": ""
   }
 }

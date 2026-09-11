@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 100 files · ~23,698 words
+- 105 files · ~25,256 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 470 nodes · 587 edges · 50 communities (39 shown, 11 thin omitted)
+- 484 nodes · 636 edges · 49 communities (38 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `5beb3c37`
+- Built from commit: `d457262e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -37,9 +37,9 @@
 - next.config.ts
 - postcss.config.mjs
 - database.types.ts
-- invite-modal.tsx
-- login-form.tsx
-- Folder Structure & Clean Architecture
+- team.actions.ts
+- create-milestone-dialog.tsx
+- 9. Functional Requirements
 - layout.tsx
 - site.ts
 - capacity.utils.ts
@@ -52,12 +52,12 @@
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `Product Requirements Document (PRD)` - 23 edges
-2. `createClient()` - 22 edges
+1. `createClient()` - 25 edges
+2. `Product Requirements Document (PRD)` - 23 edges
 3. `compilerOptions` - 16 edges
 4. `9. Functional Requirements` - 16 edges
-5. `getUserProfile()` - 11 edges
-6. `Button()` - 9 edges
+5. `getUserProfile()` - 13 edges
+6. `Button()` - 10 edges
 7. `Database` - 9 edges
 8. `scripts` - 8 edges
 9. `getUser()` - 7 edges
@@ -67,30 +67,30 @@
 
 - `CopyLinkButton()` --references--> `react` [EXTRACTED]
   src/features/team/components/invitation-list.tsx → package.json
+- `CreateMilestoneDialog()` --references--> `react` [EXTRACTED]
+  src/features/milestones/components/create-milestone-dialog.tsx → package.json
 - `InviteModal()` --references--> `react` [EXTRACTED]
   src/features/team/components/invite-modal.tsx → package.json
 - `RevokeButton()` --indirect_call--> `revokeInvitation()` [INFERRED]
   src/features/team/components/invitation-list.tsx → src/features/team/actions/team.actions.ts
 - `GET()` --calls--> `createClient()` [EXTRACTED]
   src/app/(auth)/auth/callback/route.ts → src/lib/supabase/server.ts
-- `login()` --calls--> `createClient()` [EXTRACTED]
-  src/features/auth/actions/auth.actions.ts → src/lib/supabase/server.ts
 
 ## Import Cycles
 
 - None detected.
 
-## Communities (50 total, 11 thin omitted)
+## Communities (49 total, 11 thin omitted)
 
 ### Community 0 - "Product Requirements Document (PRD)"
 
-Cohesion: 0.05
-Nodes (38): 10. Matriks Hak Akses, 11. Non-Functional Requirements, 12. Model Data, 13. Alur Pengguna Utama, 14. Daftar Halaman / Layar, 15. Rencana Rilis & Timeline, 16. Risiko & Mitigasi, 17. Dependensi & Asumsi (+30 more)
+Cohesion: 0.09
+Nodes (22): 10. Matriks Hak Akses, 11. Non-Functional Requirements, 12. Model Data, 13. Alur Pengguna Utama, 14. Daftar Halaman / Layar, 15. Rencana Rilis & Timeline, 16. Risiko & Mitigasi, 17. Dependensi & Asumsi (+14 more)
 
 ### Community 1 - "docs/README.md"
 
-Cohesion: 0.06
-Nodes (27): AI Agent Guidelines, Do's, Don'ts, Database Schema, Entity Relationship Diagram (ERD), Row Level Security (RLS), 1. Entity Relationship Diagram (ERD), 2.1 Alur Task Normal (dibuat → selesai) (+19 more)
+Cohesion: 0.05
+Nodes (35): AI Agent Guidelines, Do's, Don'ts, Database Schema, Entity Relationship Diagram (ERD), Row Level Security (RLS), 1. Entity Relationship Diagram (ERD), 2.1 Alur Task Normal (dibuat → selesai) (+27 more)
 
 ### Community 2 - "compilerOptions"
 
@@ -114,18 +114,18 @@ Nodes (12): DropdownMenu(), DropdownMenuContent(), DropdownMenuItem(), DropdownM
 
 ### Community 6 - "createClient"
 
-Cohesion: 0.10
-Nodes (28): GET(), DashboardLayout(), metadata, TeamPage(), Header(), requireAuth(), getUser(), getUserProfile() (+20 more)
+Cohesion: 0.12
+Nodes (25): GET(), DashboardLayout(), metadata, MilestonesPage(), STATUS_LABELS, metadata, TeamPage(), ROUTES (+17 more)
 
 ### Community 7 - "auth.actions.ts"
 
 Cohesion: 0.15
-Nodes (14): HeaderProps, emptySubscribe(), MobileNav(), MobileNavProps, ICON_MAP, NAV_ITEMS, Sidebar(), SidebarProps (+6 more)
+Nodes (14): Header(), HeaderProps, emptySubscribe(), MobileNav(), MobileNavProps, ICON_MAP, NAV_ITEMS, Sidebar() (+6 more)
 
 ### Community 8 - "dependencies"
 
-Cohesion: 0.06
-Nodes (31): @base-ui/react, class-variance-authority, cn, lucide-react, next, dependencies, @base-ui/react, class-variance-authority (+23 more)
+Cohesion: 0.07
+Nodes (27): @base-ui/react, class-variance-authority, cn, lucide-react, next, dependencies, @base-ui/react, class-variance-authority (+19 more)
 
 ### Community 9 - "README.md"
 
@@ -140,22 +140,22 @@ Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent 
 ### Community 17 - "database.types.ts"
 
 Cohesion: 0.07
-Nodes (26): BoardColumn, BoardColumnInsert, Milestone, MilestoneInsert, MilestoneUpdate, Project, ProjectInsert, ProjectUpdate (+18 more)
+Nodes (28): BoardColumn, BoardColumnInsert, Milestone, MilestoneInsert, MilestoneUpdate, Project, ProjectInsert, ProjectUpdate (+20 more)
 
-### Community 18 - "invite-modal.tsx"
+### Community 18 - "team.actions.ts"
 
-Cohesion: 0.22
-Nodes (10): Button(), buttonVariants, Dialog(), DialogContent(), DialogDescription(), DialogFooter(), DialogHeader(), DialogTitle() (+2 more)
+Cohesion: 0.14
+Nodes (15): react, react, CreateMilestoneDialog(), inviteSchema, inviteTeamMember(), InviteTeamMemberInput, revokeInvitation(), CopyLinkButton() (+7 more)
 
-### Community 19 - "login-form.tsx"
+### Community 19 - "create-milestone-dialog.tsx"
+
+Cohesion: 0.09
+Nodes (31): metadata, metadata, SubmitButton(), SubmitButtonProps, Button(), buttonVariants, Card(), CardContent() (+23 more)
+
+### Community 20 - "9. Functional Requirements"
 
 Cohesion: 0.12
-Nodes (19): metadata, metadata, SubmitButton(), SubmitButtonProps, Card(), CardContent(), CardDescription(), CardFooter() (+11 more)
-
-### Community 20 - "Folder Structure & Clean Architecture"
-
-Cohesion: 0.22
-Nodes (8): 1. Prinsip Utama Arsitektur, 2. Struktur Direktori Lengkap (`src/`), 3. Pola Komponen & Pemisahan Boundaries, 4. Keamanan & Proteksi Sesi, Folder Structure & Clean Architecture, Isolasi Server Code (`server-only`), Mutasi Data via Server Actions, Server Components vs Client Components
+Nodes (16): 9.10 Manajemen Anggota Tim, 9.11 Attachment & Search, 9.12 Task Dependencies, 9.13 Export Laporan, 9.14 AI Guardrails, 9.15 Archiving, 9.1 Autentikasi & Manajemen Pengguna, 9.2 Milestone Management (+8 more)
 
 ### Community 21 - "layout.tsx"
 
@@ -179,7 +179,7 @@ Nodes (3): envPath, seedSql, seedSqlPath
 
 ## Knowledge Gaps
 
-- **214 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+209 more)
+- **218 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+213 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -187,17 +187,17 @@ Nodes (3): envPath, seedSql, seedSqlPath
 
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `dependencies` connect `dependencies` to `package.json`?**
-  _High betweenness centrality (0.127) - this node is a cross-community bridge._
-- **Why does `InviteModal()` connect `dependencies` to `invite-modal.tsx`, `createClient`?**
-  _High betweenness centrality (0.098) - this node is a cross-community bridge._
+- **Why does `dependencies` connect `dependencies` to `team.actions.ts`, `package.json`?**
+  _High betweenness centrality (0.130) - this node is a cross-community bridge._
+- **Why does `react` connect `team.actions.ts` to `dependencies`?**
+  _High betweenness centrality (0.120) - this node is a cross-community bridge._
+- **Why does `InviteModal()` connect `team.actions.ts` to `create-milestone-dialog.tsx`, `createClient`?**
+  _High betweenness centrality (0.061) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _214 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _218 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Product Requirements Document (PRD)` be split into smaller, more focused modules?**
-  _Cohesion score 0.05263157894736842 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `docs/README.md` be split into smaller, more focused modules?**
-  _Cohesion score 0.05714285714285714 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.045454545454545456 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**
   _Cohesion score 0.06896551724137931 - nodes in this community are weakly interconnected._
-- **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
