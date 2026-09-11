@@ -399,19 +399,19 @@
     "word_count": 17
   },
   "src/features/milestones/actions/milestone.actions.ts": {
-    "size": 2681,
-    "mtime_ns": 1789111544528632400,
+    "size": 2806,
+    "mtime_ns": 1789112382301489900,
     "word_count": 286
   },
   "src/features/milestones/queries/milestone.queries.ts": {
-    "size": 808,
-    "mtime_ns": 1789111527846840400,
-    "word_count": 91
+    "size": 1474,
+    "mtime_ns": 1789112454723481700,
+    "word_count": 162
   },
   "src/features/milestones/types/milestone.types.ts": {
-    "size": 311,
-    "mtime_ns": 1788918393348806400,
-    "word_count": 22
+    "size": 498,
+    "mtime_ns": 1789112449477797200,
+    "word_count": 47
   },
   "src/features/notifications/actions/notification.actions.ts": {
     "size": 93,
@@ -614,31 +614,51 @@
     }
   },
   "src/app/(dashboard)/milestones/page.tsx": {
-    "size": 4904,
-    "mtime_ns": 1789111584446252700,
-    "word_count": 389
+    "size": 2383,
+    "mtime_ns": 1789112479591459500,
+    "word_count": 226
   },
   "src/components/ui/textarea.tsx": {
-    "size": 723,
-    "mtime_ns": 1789111307247435400,
+    "size": 740,
+    "mtime_ns": 1789112382299761200,
     "word_count": 58
   },
   "src/features/milestones/components/create-milestone-dialog.tsx": {
-    "size": 6904,
-    "mtime_ns": 1789111571561651000,
-    "word_count": 501
+    "size": 7185,
+    "mtime_ns": 1789112382302506400,
+    "word_count": 504
   },
   "src/features/milestones/schemas/milestone.schema.ts": {
-    "size": 1356,
-    "mtime_ns": 1789111699104947800,
+    "size": 1394,
+    "mtime_ns": 1789112382304502000,
     "word_count": 130
   },
   "supabase/migrations/20260911073000_milestones_rls.sql": {
-    "size": 1376,
-    "mtime_ns": 1789111397012137100,
+    "size": 1423,
+    "mtime_ns": 1789112382307060500,
     "word_count": 156,
     "hashes": {
-      "supabase/migrations/20260911073000_milestones_rls.sql": "ad248b52ad9ba1774c55f3e30151dbafa0aad8fe169fd4d8f8b6e7dc93341bce"
+      "supabase/migrations/20260911073000_milestones_rls.sql": "6bd42c1f5c8c3314f1b37afd2b38dd3d4ff83377aef4450ca4b0dd7e8b113e68"
     }
+  },
+  "src/app/(dashboard)/milestones/[id]/page.tsx": {
+    "size": 7634,
+    "mtime_ns": 1789112562448762300,
+    "word_count": 590
+  },
+  "src/features/milestones/components/milestone-card.tsx": {
+    "size": 5385,
+    "mtime_ns": 1789112462303060100,
+    "word_count": 414
+  },
+  "src/features/milestones/components/milestone-list.tsx": {
+    "size": 5643,
+    "mtime_ns": 1789112569778180100,
+    "word_count": 442
+  },
+  "src/features/milestones/lib/milestone.utils.ts": {
+    "size": 2737,
+    "mtime_ns": 1789112444930753600,
+    "word_count": 311
   }
 }
