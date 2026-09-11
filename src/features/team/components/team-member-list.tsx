@@ -138,16 +138,18 @@ export function TeamMemberList({
               {isLeader && (
                 <TableCell className="text-right">
                   <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                        disabled={isPending}
-                      >
-                        <span className="sr-only">Buka menu</span>
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
+                    <DropdownMenuTrigger
+                      render={
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          disabled={isPending}
+                        />
+                      }
+                    >
+                      <span className="sr-only">Buka menu</span>
+                      <MoreHorizontal className="h-4 w-4" />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                       {member.role === 'member' ? (
