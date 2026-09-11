@@ -3043,7 +3043,7 @@
       "label": "formatMilestoneDate()",
       "file_type": "code",
       "source_file": "src/features/milestones/lib/milestone.utils.ts",
-      "source_location": "L20",
+      "source_location": "L21",
       "_origin": "ast",
       "id": "src_features_milestones_lib_milestone_utils_formatmilestonedate",
       "community": 22,
@@ -3054,7 +3054,7 @@
       "label": "calculateMilestoneTimeProgress()",
       "file_type": "code",
       "source_file": "src/features/milestones/lib/milestone.utils.ts",
-      "source_location": "L37",
+      "source_location": "L50",
       "_origin": "ast",
       "id": "src_features_milestones_lib_milestone_utils_calculatemilestonetimeprogress",
       "community": 22,
@@ -10513,7 +10513,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/milestones/lib/milestone.utils.ts",
-      "source_location": "L37",
+      "source_location": "L50",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_lib_milestone_utils",
@@ -10524,7 +10524,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/milestones/lib/milestone.utils.ts",
-      "source_location": "L20",
+      "source_location": "L21",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_lib_milestone_utils",
@@ -10547,7 +10547,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/features/milestones/lib/milestone.utils.ts",
-      "source_location": "L42",
+      "source_location": "L55",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_lib_milestone_utils_calculatemilestonetimeprogress",
@@ -13296,5 +13296,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "adccfb48de17115a2822ea298b9b6ccfb8804d1b"
+  "built_at_commit": "0a1f1a586c45c723db4831b950ebe4cf727f5ef2"
 }

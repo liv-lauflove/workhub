@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 105 files · ~25,256 words
+- 109 files · ~26,949 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 484 nodes · 636 edges · 49 communities (38 shown, 11 thin omitted)
+- 502 nodes · 678 edges · 50 communities (39 shown, 11 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.73)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `d457262e`
+- Built from commit: `adccfb48`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -41,6 +41,7 @@
 - create-milestone-dialog.tsx
 - 9. Functional Requirements
 - layout.tsx
+- milestone-list.tsx
 - site.ts
 - capacity.utils.ts
 - feature-flags.ts
@@ -52,7 +53,7 @@
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `createClient()` - 25 edges
+1. `createClient()` - 26 edges
 2. `Product Requirements Document (PRD)` - 23 edges
 3. `compilerOptions` - 16 edges
 4. `9. Functional Requirements` - 16 edges
@@ -61,10 +62,12 @@
 7. `Database` - 9 edges
 8. `scripts` - 8 edges
 9. `getUser()` - 7 edges
-10. `include` - 7 edges
+10. `MilestoneWithDetails` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 
+- `MilestoneList()` --references--> `react` [EXTRACTED]
+  src/features/milestones/components/milestone-list.tsx → package.json
 - `CopyLinkButton()` --references--> `react` [EXTRACTED]
   src/features/team/components/invitation-list.tsx → package.json
 - `CreateMilestoneDialog()` --references--> `react` [EXTRACTED]
@@ -73,14 +76,12 @@
   src/features/team/components/invite-modal.tsx → package.json
 - `RevokeButton()` --indirect_call--> `revokeInvitation()` [INFERRED]
   src/features/team/components/invitation-list.tsx → src/features/team/actions/team.actions.ts
-- `GET()` --calls--> `createClient()` [EXTRACTED]
-  src/app/(auth)/auth/callback/route.ts → src/lib/supabase/server.ts
 
 ## Import Cycles
 
 - None detected.
 
-## Communities (49 total, 11 thin omitted)
+## Communities (50 total, 11 thin omitted)
 
 ### Community 0 - "Product Requirements Document (PRD)"
 
@@ -115,7 +116,7 @@ Nodes (12): DropdownMenu(), DropdownMenuContent(), DropdownMenuItem(), DropdownM
 ### Community 6 - "createClient"
 
 Cohesion: 0.12
-Nodes (25): GET(), DashboardLayout(), metadata, MilestonesPage(), STATUS_LABELS, metadata, TeamPage(), ROUTES (+17 more)
+Nodes (24): GET(), DashboardLayout(), metadata, MilestonesPage(), metadata, TeamPage(), ROUTES, requireAuth() (+16 more)
 
 ### Community 7 - "auth.actions.ts"
 
@@ -139,8 +140,8 @@ Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent 
 
 ### Community 17 - "database.types.ts"
 
-Cohesion: 0.07
-Nodes (28): BoardColumn, BoardColumnInsert, Milestone, MilestoneInsert, MilestoneUpdate, Project, ProjectInsert, ProjectUpdate (+20 more)
+Cohesion: 0.08
+Nodes (23): BoardColumn, BoardColumnInsert, Project, ProjectInsert, ProjectUpdate, Task, TaskComment, TaskInsert (+15 more)
 
 ### Community 18 - "team.actions.ts"
 
@@ -149,8 +150,8 @@ Nodes (15): react, react, CreateMilestoneDialog(), inviteSchema, inviteTeamMembe
 
 ### Community 19 - "create-milestone-dialog.tsx"
 
-Cohesion: 0.09
-Nodes (31): metadata, metadata, SubmitButton(), SubmitButtonProps, Button(), buttonVariants, Card(), CardContent() (+23 more)
+Cohesion: 0.08
+Nodes (33): metadata, metadata, SubmitButton(), SubmitButtonProps, Button(), buttonVariants, Card(), CardContent() (+25 more)
 
 ### Community 20 - "9. Functional Requirements"
 
@@ -161,6 +162,11 @@ Nodes (16): 9.10 Manajemen Anggota Tim, 9.11 Attachment & Search, 9.12 Task Depe
 
 Cohesion: 0.40
 Nodes (3): geistMono, geistSans, metadata
+
+### Community 22 - "milestone-list.tsx"
+
+Cohesion: 0.14
+Nodes (18): generateMetadata(), MilestoneDetailPage(), MilestoneDetailPageProps, STATUS_CONFIG, MilestoneCard(), MilestoneCardProps, STATUS_CONFIG, MilestoneList() (+10 more)
 
 ### Community 27 - "common.ts"
 
@@ -179,7 +185,7 @@ Nodes (3): envPath, seedSql, seedSqlPath
 
 ## Knowledge Gaps
 
-- **218 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+213 more)
+- **221 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+216 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -188,13 +194,13 @@ Nodes (3): envPath, seedSql, seedSqlPath
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `dependencies` connect `dependencies` to `team.actions.ts`, `package.json`?**
-  _High betweenness centrality (0.130) - this node is a cross-community bridge._
-- **Why does `react` connect `team.actions.ts` to `dependencies`?**
-  _High betweenness centrality (0.120) - this node is a cross-community bridge._
-- **Why does `InviteModal()` connect `team.actions.ts` to `create-milestone-dialog.tsx`, `createClient`?**
-  _High betweenness centrality (0.061) - this node is a cross-community bridge._
+  _High betweenness centrality (0.131) - this node is a cross-community bridge._
+- **Why does `react` connect `team.actions.ts` to `dependencies`, `milestone-list.tsx`?**
+  _High betweenness centrality (0.122) - this node is a cross-community bridge._
+- **Why does `devDependencies` connect `devDependencies` to `package.json`?**
+  _High betweenness centrality (0.055) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _218 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _221 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Product Requirements Document (PRD)` be split into smaller, more focused modules?**
   _Cohesion score 0.09090909090909091 - nodes in this community are weakly interconnected._
 - **Should `docs/README.md` be split into smaller, more focused modules?**

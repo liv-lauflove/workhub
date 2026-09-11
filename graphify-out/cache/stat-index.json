@@ -404,13 +404,13 @@
     "word_count": 286
   },
   "src/features/milestones/queries/milestone.queries.ts": {
-    "size": 1474,
-    "mtime_ns": 1789112454723481700,
+    "size": 1524,
+    "mtime_ns": 1789113407840763600,
     "word_count": 162
   },
   "src/features/milestones/types/milestone.types.ts": {
-    "size": 498,
-    "mtime_ns": 1789112449477797200,
+    "size": 516,
+    "mtime_ns": 1789113407841772000,
     "word_count": 47
   },
   "src/features/notifications/actions/notification.actions.ts": {
@@ -578,9 +578,9 @@
     "word_count": 316
   },
   "src/features/team/components/team-member-list.tsx": {
-    "size": 5802,
-    "mtime_ns": 1789110973773097200,
-    "word_count": 402
+    "size": 5855,
+    "mtime_ns": 1789113664108713000,
+    "word_count": 404
   },
   "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": {
     "size": 2951,
@@ -614,8 +614,8 @@
     }
   },
   "src/app/(dashboard)/milestones/page.tsx": {
-    "size": 2383,
-    "mtime_ns": 1789112479591459500,
+    "size": 2450,
+    "mtime_ns": 1789113407837975100,
     "word_count": 226
   },
   "src/components/ui/textarea.tsx": {
@@ -642,23 +642,23 @@
     }
   },
   "src/app/(dashboard)/milestones/[id]/page.tsx": {
-    "size": 7634,
-    "mtime_ns": 1789112562448762300,
-    "word_count": 590
+    "size": 7892,
+    "mtime_ns": 1789113407836634500,
+    "word_count": 591
   },
   "src/features/milestones/components/milestone-card.tsx": {
-    "size": 5385,
-    "mtime_ns": 1789112462303060100,
+    "size": 5538,
+    "mtime_ns": 1789113407838485500,
     "word_count": 414
   },
   "src/features/milestones/components/milestone-list.tsx": {
-    "size": 5643,
-    "mtime_ns": 1789112569778180100,
+    "size": 5796,
+    "mtime_ns": 1789113407839224500,
     "word_count": 442
   },
   "src/features/milestones/lib/milestone.utils.ts": {
-    "size": 2737,
-    "mtime_ns": 1789112444930753600,
-    "word_count": 311
+    "size": 3517,
+    "mtime_ns": 1789113718157297600,
+    "word_count": 400
   }
 }

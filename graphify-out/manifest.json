@@ -350,13 +350,13 @@
     "semantic_hash": ""
   },
   "src/features/milestones/queries/milestone.queries.ts": {
-    "mtime": 1789112454.7234817,
-    "ast_hash": "549a296b7883951fdf1837644916497a",
+    "mtime": 1789113407.8407636,
+    "ast_hash": "56e9739e11e9f92ea5fc2d1230730ffd",
     "semantic_hash": ""
   },
   "src/features/milestones/types/milestone.types.ts": {
-    "mtime": 1789112449.4777973,
-    "ast_hash": "46afdd14b8d63345d75fbc7b685ac325",
+    "mtime": 1789113407.841772,
+    "ast_hash": "2988a43529d9755890ab05f3ec9511b1",
     "semantic_hash": ""
   },
   "src/features/notifications/actions/notification.actions.ts": {
@@ -515,8 +515,8 @@
     "semantic_hash": ""
   },
   "src/features/team/components/team-member-list.tsx": {
-    "mtime": 1789110973.7730973,
-    "ast_hash": "2dba5e8c3f26db471fe1723583e409c0",
+    "mtime": 1789113664.108713,
+    "ast_hash": "449ce56e2aed661961eb515f2b71f62f",
     "semantic_hash": ""
   },
   "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": {
@@ -545,8 +545,8 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/milestones/page.tsx": {
-    "mtime": 1789112479.5914595,
-    "ast_hash": "c87a7313b25ff5aa497a99f796b26c91",
+    "mtime": 1789113407.837975,
+    "ast_hash": "0a7e92ee7493610c98e2634f71cdb3e6",
     "semantic_hash": ""
   },
   "src/components/ui/textarea.tsx": {
@@ -570,23 +570,23 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/milestones/[id]/page.tsx": {
-    "mtime": 1789112562.4487624,
-    "ast_hash": "cca20c17f47ffa9e2a74a6c8830f69de",
+    "mtime": 1789113407.8366344,
+    "ast_hash": "b0259cf2cd4e72ec01cac35f72445ffe",
     "semantic_hash": ""
   },
   "src/features/milestones/components/milestone-card.tsx": {
-    "mtime": 1789112462.30306,
-    "ast_hash": "e1b22476472b93e7c25bfdb35fa98722",
+    "mtime": 1789113407.8384855,
+    "ast_hash": "fc0e2a2e80d579934ba131694eebe9e5",
     "semantic_hash": ""
   },
   "src/features/milestones/components/milestone-list.tsx": {
-    "mtime": 1789112569.7781801,
-    "ast_hash": "080a2b7259588d344d17421f5074a318",
+    "mtime": 1789113407.8392246,
+    "ast_hash": "e0b100936408971ec44fa09993985937",
     "semantic_hash": ""
   },
   "src/features/milestones/lib/milestone.utils.ts": {
-    "mtime": 1789112444.9307537,
-    "ast_hash": "939fe4cf737f4b55bc3a2ed92c6842d4",
+    "mtime": 1789113718.1572976,
+    "ast_hash": "9b772d2500cf3b839bc57997ba9b2597",
     "semantic_hash": ""
   }
 }
