@@ -114,11 +114,11 @@
     "word_count": 23
   },
   "package.json": {
-    "size": 1352,
-    "mtime_ns": 1788921190414463300,
-    "word_count": 111,
+    "size": 1377,
+    "mtime_ns": 1789109492848054900,
+    "word_count": 113,
     "hashes": {
-      "package.json": "1dcc80e57a6547f9455a91031648fca2dfe7cb1e52a412d6998abff3f1c0c6a6"
+      "package.json": "9693546518f20eb998bf75618f3668117983a9cd5a3fbfd7d1262cef4ef7dec2"
     }
   },
   "pnpm-workspace.yaml": {
@@ -196,9 +196,9 @@
     }
   },
   "src/app/layout.tsx": {
-    "size": 881,
-    "mtime_ns": 1788940994653266000,
-    "word_count": 88
+    "size": 969,
+    "mtime_ns": 1789109492851453300,
+    "word_count": 98
   },
   "src/components/ui/button.tsx": {
     "size": 3287,
@@ -269,8 +269,8 @@
     "word_count": 33
   },
   "src/app/(auth)/register/page.tsx": {
-    "size": 418,
-    "mtime_ns": 1789010638777735200,
+    "size": 433,
+    "mtime_ns": 1789021805088362200,
     "word_count": 51
   },
   "src/app/(dashboard)/layout.tsx": {
@@ -454,14 +454,14 @@
     "word_count": 27
   },
   "src/features/team/actions/team.actions.ts": {
-    "size": 5950,
-    "mtime_ns": 1789015615812553100,
-    "word_count": 651
+    "size": 8200,
+    "mtime_ns": 1789109492854018700,
+    "word_count": 899
   },
   "src/features/team/queries/team.queries.ts": {
-    "size": 1136,
-    "mtime_ns": 1789009537102605500,
-    "word_count": 139
+    "size": 1199,
+    "mtime_ns": 1789110511080356100,
+    "word_count": 142
   },
   "src/features/workload/lib/capacity.utils.ts": {
     "size": 376,
@@ -515,7 +515,7 @@
   },
   "supabase/seed.sql": {
     "size": 13508,
-    "mtime_ns": 1789013195498099200,
+    "mtime_ns": 1789021805100476300,
     "word_count": 968,
     "hashes": {
       "supabase/seed.sql": "89375cdebbe040f5fd212fa9f8be1ff8bc165b87bb969be68419e36ce6602cfb"
@@ -542,8 +542,8 @@
     "word_count": 219
   },
   "src/features/auth/components/register-form.tsx": {
-    "size": 4203,
-    "mtime_ns": 1789010895897335400,
+    "size": 4338,
+    "mtime_ns": 1789021805092873400,
     "word_count": 310
   },
   "supabase/migrations/20260910000000_sync_user_profile_trigger.sql": {
@@ -563,36 +563,54 @@
     }
   },
   "src/app/(dashboard)/team/page.tsx": {
-    "size": 3463,
-    "mtime_ns": 1789010026698006400,
-    "word_count": 313
+    "size": 3648,
+    "mtime_ns": 1789110537409126800,
+    "word_count": 315
   },
   "src/features/team/components/invitation-list.tsx": {
-    "size": 4413,
-    "mtime_ns": 1789010688204049900,
+    "size": 4585,
+    "mtime_ns": 1789021805095923300,
     "word_count": 394
   },
   "src/features/team/components/invite-modal.tsx": {
-    "size": 4002,
-    "mtime_ns": 1789015304320138900,
+    "size": 4134,
+    "mtime_ns": 1789021805096455500,
     "word_count": 316
   },
   "src/features/team/components/team-member-list.tsx": {
-    "size": 2303,
-    "mtime_ns": 1789010026969454100,
-    "word_count": 195
+    "size": 5978,
+    "mtime_ns": 1789110608333927300,
+    "word_count": 402
   },
   "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": {
-    "size": 2859,
-    "mtime_ns": 1789010580737446700,
+    "size": 2951,
+    "mtime_ns": 1789021805099451100,
     "word_count": 300,
     "hashes": {
-      "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": "56e640b73b87e388f1d89b6088c934cb45f744084059bdd1bd4cae113267d1f9"
+      "supabase/migrations/20260910000002_auto_claim_team_invitations.sql": "0d452556a0eabac5a05ce08933716ad88998176a358d9fea0233845f05d9f8d6"
     }
   },
   "src/lib/supabase/admin.ts": {
-    "size": 649,
-    "mtime_ns": 1789011207406596400,
+    "size": 669,
+    "mtime_ns": 1789021805098450300,
     "word_count": 70
+  },
+  "src/components/ui/dropdown-menu.tsx": {
+    "size": 9062,
+    "mtime_ns": 1789109492852814400,
+    "word_count": 571
+  },
+  "src/components/ui/table.tsx": {
+    "size": 2519,
+    "mtime_ns": 1789109492852814400,
+    "word_count": 197
+  },
+  "supabase/migrations/20260911062351_issue_17_role_management_rls.sql": {
+    "size": 1039,
+    "mtime_ns": 1789109492856800000,
+    "word_count": 108,
+    "hashes": {
+      "supabase/migrations/20260911062351_issue_17_role_management_rls.sql": "f03ff07ae0cf7c5ef217d2328ec54c9157811f5c4238189fc269f9250ff1dd19"
+    }
   }
 }

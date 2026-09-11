@@ -27,17 +27,19 @@ interface TeamMember {
   avatar_url: string | null;
   github_username: string | null;
   created_at: string;
-  team_id?: string;
+  team_id?: string | null;
 }
 
 interface TeamMemberListProps {
   members: TeamMember[];
   isLeader?: boolean;
+  teamId?: string;
 }
 
 export function TeamMemberList({
   members,
   isLeader = false,
+  teamId,
 }: TeamMemberListProps) {
   const [isPending, startTransition] = useTransition();
 
@@ -51,7 +53,7 @@ export function TeamMemberList({
       const formData = new FormData();
       formData.append('userId', member.id);
       formData.append('role', newRole);
-      formData.append('teamId', member.team_id || '');
+      formData.append('teamId', member.team_id || teamId || '');
 
       const result = await updateMemberRole(null, formData);
       if (!result.success) {

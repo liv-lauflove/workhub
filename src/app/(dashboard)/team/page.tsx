@@ -88,7 +88,7 @@ export default async function TeamPage() {
       {/* Team Members Section */}
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">Anggota</h2>
-        <TeamMemberList members={members} isLeader={isLeader} />
+        <TeamMemberList members={members} isLeader={isLeader} teamId={teamId} />
       </section>
 
       {/* Invitations Section (Leader Only) */}

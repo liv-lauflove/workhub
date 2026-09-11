@@ -15,7 +15,9 @@ export async function getTeamMembers(teamId: string) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, full_name, role, avatar_url, github_username, created_at')
+    .select(
+      'id, full_name, role, team_id, avatar_url, github_username, created_at'
+    )
     .eq('team_id', teamId)
     .order('role', { ascending: true })
     .order('full_name', { ascending: true });
