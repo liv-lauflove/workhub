@@ -593,8 +593,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "package_dependencies_react",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "react"
     },
     {
@@ -604,8 +604,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "react",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "react"
     },
     {
@@ -1221,7 +1221,7 @@
       "_origin": "ast",
       "id": "src_app_auth_login_page",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "login/page.tsx"
     },
     {
@@ -1232,7 +1232,7 @@
       "_origin": "ast",
       "id": "src_app_auth_login_page_metadata",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "metadata"
     },
     {
@@ -1243,7 +1243,7 @@
       "_origin": "ast",
       "id": "src_app_auth_login_page_loginpage",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "loginpage()"
     },
     {
@@ -1254,7 +1254,7 @@
       "_origin": "ast",
       "id": "src_app_auth_register_page",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "register/page.tsx"
     },
     {
@@ -1265,7 +1265,7 @@
       "_origin": "ast",
       "id": "src_app_auth_register_page_metadata",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "metadata"
     },
     {
@@ -1276,7 +1276,7 @@
       "_origin": "ast",
       "id": "src_app_auth_register_page_registerpage",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "registerpage()"
     },
     {
@@ -1300,6 +1300,50 @@
       "community": 6,
       "community_name": "createClient",
       "norm_label": "dashboardlayout()"
+    },
+    {
+      "label": "milestones/page.tsx",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_app_dashboard_milestones_page",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "milestones/page.tsx"
+    },
+    {
+      "label": "metadata",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L12",
+      "_origin": "ast",
+      "id": "src_app_dashboard_milestones_page_metadata",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "metadata"
+    },
+    {
+      "label": "STATUS_LABELS",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "src_app_dashboard_milestones_page_status_labels",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "status_labels"
+    },
+    {
+      "label": "MilestonesPage()",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "src_app_dashboard_milestones_page_milestonespage",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "milestonespage()"
     },
     {
       "label": "(dashboard)/page.tsx",
@@ -1463,7 +1507,7 @@
       "_origin": "ast",
       "id": "src_components_forms_submit_button",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "submit-button.tsx"
     },
     {
@@ -1474,7 +1518,7 @@
       "_origin": "ast",
       "id": "src_components_forms_submit_button_submitbuttonprops",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "submitbuttonprops"
     },
     {
@@ -1485,7 +1529,7 @@
       "_origin": "ast",
       "id": "src_components_forms_submit_button_submitbutton",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "submitbutton()"
     },
     {
@@ -1517,8 +1561,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_components_layout_header_header",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 7,
+      "community_name": "auth.actions.ts",
       "norm_label": "header()"
     },
     {
@@ -1627,8 +1671,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_button",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "button.tsx"
     },
     {
@@ -1638,8 +1682,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_components_ui_button_buttonvariants",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "buttonvariants"
     },
     {
@@ -1649,8 +1693,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_components_ui_button_button",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "button()"
     },
     {
@@ -1661,7 +1705,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "card.tsx"
     },
     {
@@ -1672,7 +1716,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_card",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "card()"
     },
     {
@@ -1683,7 +1727,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardheader",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardheader()"
     },
     {
@@ -1694,7 +1738,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardtitle",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardtitle()"
     },
     {
@@ -1705,7 +1749,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_carddescription",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "carddescription()"
     },
     {
@@ -1716,7 +1760,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardaction",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardaction()"
     },
     {
@@ -1727,7 +1771,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardcontent",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardcontent()"
     },
     {
@@ -1738,7 +1782,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardfooter",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardfooter()"
     },
     {
@@ -1748,8 +1792,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_dialog",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialog.tsx"
     },
     {
@@ -1759,8 +1803,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialog",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialog()"
     },
     {
@@ -1770,8 +1814,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogtrigger",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogtrigger()"
     },
     {
@@ -1781,8 +1825,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogportal",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogportal()"
     },
     {
@@ -1792,8 +1836,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogclose",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogclose()"
     },
     {
@@ -1803,8 +1847,8 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogoverlay",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogoverlay()"
     },
     {
@@ -1814,8 +1858,8 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogcontent",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogcontent()"
     },
     {
@@ -1825,8 +1869,8 @@
       "source_location": "L83",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogheader",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogheader()"
     },
     {
@@ -1836,8 +1880,8 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogfooter",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogfooter()"
     },
     {
@@ -1847,8 +1891,8 @@
       "source_location": "L120",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogtitle",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogtitle()"
     },
     {
@@ -1858,8 +1902,8 @@
       "source_location": "L133",
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogdescription",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogdescription()"
     },
     {
@@ -2046,7 +2090,7 @@
       "_origin": "ast",
       "id": "src_components_ui_input",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "input.tsx"
     },
     {
@@ -2057,7 +2101,7 @@
       "_origin": "ast",
       "id": "src_components_ui_input_input",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "input()"
     },
     {
@@ -2068,7 +2112,7 @@
       "_origin": "ast",
       "id": "src_components_ui_label",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "label.tsx"
     },
     {
@@ -2079,7 +2123,7 @@
       "_origin": "ast",
       "id": "src_components_ui_label_label",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "label()"
     },
     {
@@ -2182,6 +2226,28 @@
       "norm_label": "tablecaption()"
     },
     {
+      "label": "textarea.tsx",
+      "file_type": "code",
+      "source_file": "src/components/ui/textarea.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_components_ui_textarea",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
+      "norm_label": "textarea.tsx"
+    },
+    {
+      "label": "Textarea()",
+      "file_type": "code",
+      "source_file": "src/components/ui/textarea.tsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "src_components_ui_textarea_textarea",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
+      "norm_label": "textarea()"
+    },
+    {
       "label": "feature-flags.ts",
       "file_type": "code",
       "source_file": "src/config/feature-flags.ts",
@@ -2232,8 +2298,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_config_routes",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "routes.ts"
     },
     {
@@ -2243,8 +2309,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_config_routes_routes",
-      "community": 7,
-      "community_name": "auth.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "routes"
     },
     {
@@ -2387,7 +2453,7 @@
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_login",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "login()"
     },
     {
@@ -2398,7 +2464,7 @@
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_register",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "register()"
     },
     {
@@ -2420,7 +2486,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_login_form",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "login-form.tsx"
     },
     {
@@ -2431,7 +2497,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_login_form_loginform",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "loginform()"
     },
     {
@@ -2442,7 +2508,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_oauth_buttons",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "oauth-buttons.tsx"
     },
     {
@@ -2453,7 +2519,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_oauth_buttons_oauthbuttons",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "oauthbuttons()"
     },
     {
@@ -2464,7 +2530,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_register_form",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "register-form.tsx"
     },
     {
@@ -2475,7 +2541,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_register_form_registerform",
       "community": 19,
-      "community_name": "login-form.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "registerform()"
     },
     {
@@ -2760,20 +2826,64 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_milestones_actions_milestone_actions",
-      "community": 46,
-      "community_name": "milestone.actions.ts",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "milestone.actions.ts"
     },
     {
-      "label": "placeholderMilestoneAction()",
+      "label": "createMilestone()",
       "file_type": "code",
       "source_file": "src/features/milestones/actions/milestone.actions.ts",
-      "source_location": "L3",
+      "source_location": "L15",
       "_origin": "ast",
-      "id": "src_features_milestones_actions_milestone_actions_placeholdermilestoneaction",
-      "community": 46,
-      "community_name": "milestone.actions.ts",
-      "norm_label": "placeholdermilestoneaction()"
+      "id": "src_features_milestones_actions_milestone_actions_createmilestone",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "createmilestone()"
+    },
+    {
+      "label": "create-milestone-dialog.tsx",
+      "file_type": "code",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_milestones_components_create_milestone_dialog",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
+      "norm_label": "create-milestone-dialog.tsx"
+    },
+    {
+      "label": "EligiblePIC",
+      "file_type": "code",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "src_features_milestones_components_create_milestone_dialog_eligiblepic",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
+      "norm_label": "eligiblepic"
+    },
+    {
+      "label": "CreateMilestoneDialogProps",
+      "file_type": "code",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "src_features_milestones_components_create_milestone_dialog_createmilestonedialogprops",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
+      "norm_label": "createmilestonedialogprops"
+    },
+    {
+      "label": "CreateMilestoneDialog()",
+      "file_type": "code",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L35",
+      "_origin": "ast",
+      "id": "src_features_milestones_components_create_milestone_dialog_createmilestonedialog",
+      "community": 18,
+      "community_name": "team.actions.ts",
+      "norm_label": "createmilestonedialog()"
     },
     {
       "label": "milestone.queries.ts",
@@ -2796,6 +2906,50 @@
       "community": 6,
       "community_name": "createClient",
       "norm_label": "getmilestones()"
+    },
+    {
+      "label": "getEligiblePICs()",
+      "file_type": "code",
+      "source_file": "src/features/milestones/queries/milestone.queries.ts",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "src_features_milestones_queries_milestone_queries_geteligiblepics",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "geteligiblepics()"
+    },
+    {
+      "label": "milestone.schema.ts",
+      "file_type": "code",
+      "source_file": "src/features/milestones/schemas/milestone.schema.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_milestones_schemas_milestone_schema",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "milestone.schema.ts"
+    },
+    {
+      "label": "createMilestoneSchema",
+      "file_type": "code",
+      "source_file": "src/features/milestones/schemas/milestone.schema.ts",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_features_milestones_schemas_milestone_schema_createmilestoneschema",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "createmilestoneschema"
+    },
+    {
+      "label": "CreateMilestoneInput",
+      "file_type": "code",
+      "source_file": "src/features/milestones/schemas/milestone.schema.ts",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "src_features_milestones_schemas_milestone_schema_createmilestoneinput",
+      "community": 6,
+      "community_name": "createClient",
+      "norm_label": "createmilestoneinput"
     },
     {
       "label": "milestone.types.ts",
@@ -3079,8 +3233,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "team.actions.ts"
     },
     {
@@ -3090,8 +3244,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteschema",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "inviteschema"
     },
     {
@@ -3101,8 +3255,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteteammemberinput",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "inviteteammemberinput"
     },
     {
@@ -3112,8 +3266,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteteammember",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "inviteteammember()"
     },
     {
@@ -3123,8 +3277,8 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_revokeinvitation",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "revokeinvitation()"
     },
     {
@@ -3145,8 +3299,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitation-list.tsx"
     },
     {
@@ -3156,8 +3310,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitation",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitation"
     },
     {
@@ -3167,8 +3321,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitationlistprops",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitationlistprops"
     },
     {
@@ -3178,8 +3332,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_status_config",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "status_config"
     },
     {
@@ -3189,8 +3343,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_copylinkbutton",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "copylinkbutton()"
     },
     {
@@ -3200,8 +3354,8 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_revokebutton",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "revokebutton()"
     },
     {
@@ -3211,8 +3365,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitationlist",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitationlist()"
     },
     {
@@ -3222,8 +3376,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "invite-modal.tsx"
     },
     {
@@ -3233,8 +3387,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal_invitemodalprops",
-      "community": 18,
-      "community_name": "invite-modal.tsx",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "invitemodalprops"
     },
     {
@@ -3244,8 +3398,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal_invitemodal",
-      "community": 8,
-      "community_name": "dependencies",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitemodal()"
     },
     {
@@ -3442,8 +3596,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_use_user",
-      "community": 19,
-      "community_name": "login-form.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "use-user.ts"
     },
     {
@@ -3453,8 +3607,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_hooks_use_user_useuser",
-      "community": 19,
-      "community_name": "login-form.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "useuser()"
     },
     {
@@ -3497,8 +3651,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_supabase_admin",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "admin.ts"
     },
     {
@@ -3508,8 +3662,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_lib_supabase_admin_createadminclient",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "createadminclient()"
     },
     {
@@ -3519,8 +3673,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_supabase_client",
-      "community": 19,
-      "community_name": "login-form.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "client.ts"
     },
     {
@@ -3530,8 +3684,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_lib_supabase_client_createclient",
-      "community": 19,
-      "community_name": "login-form.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "createclient()"
     },
     {
@@ -4366,8 +4520,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "folder_structure_and_architecture.md"
     },
     {
@@ -4377,8 +4531,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_folder_structure_clean_architecture",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "folder structure & clean architecture"
     },
     {
@@ -4388,8 +4542,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_1_prinsip_utama_arsitektur",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "1. prinsip utama arsitektur"
     },
     {
@@ -4399,8 +4553,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_2_struktur_direktori_lengkap_src",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "2. struktur direktori lengkap (`src/`)"
     },
     {
@@ -4410,8 +4564,8 @@
       "source_location": "L140",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_3_pola_komponen_pemisahan_boundaries",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "3. pola komponen & pemisahan boundaries"
     },
     {
@@ -4421,8 +4575,8 @@
       "source_location": "L142",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_server_components_vs_client_components",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "server components vs client components"
     },
     {
@@ -4432,8 +4586,8 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_isolasi_server_code_server_only",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "isolasi server code (`server-only`)"
     },
     {
@@ -4443,8 +4597,8 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_mutasi_data_via_server_actions",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "mutasi data via server actions"
     },
     {
@@ -4454,8 +4608,8 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "docs_folder_structure_and_architecture_4_keamanan_proteksi_sesi",
-      "community": 20,
-      "community_name": "Folder Structure & Clean Architecture",
+      "community": 1,
+      "community_name": "docs/README.md",
       "norm_label": "4. keamanan & proteksi sesi"
     },
     {
@@ -4883,8 +5037,8 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "docs_prd_9_functional_requirements",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9. functional requirements"
     },
     {
@@ -4894,8 +5048,8 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "docs_prd_9_1_autentikasi_manajemen_pengguna",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.1 autentikasi & manajemen pengguna"
     },
     {
@@ -4905,8 +5059,8 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "docs_prd_9_2_milestone_management",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.2 milestone management"
     },
     {
@@ -4916,8 +5070,8 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "docs_prd_9_3_project_management",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.3 project management"
     },
     {
@@ -4927,8 +5081,8 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "docs_prd_9_4_task_kanban_board",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.4 task & kanban board"
     },
     {
@@ -4938,8 +5092,8 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "docs_prd_9_5_dashboard_performa",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.5 dashboard performa"
     },
     {
@@ -4949,8 +5103,8 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "docs_prd_9_6_workload_capacity_management",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.6 workload & capacity management"
     },
     {
@@ -4960,8 +5114,8 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "docs_prd_9_7_integrasi_github",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.7 integrasi github"
     },
     {
@@ -4971,8 +5125,8 @@
       "source_location": "L183",
       "_origin": "ast",
       "id": "docs_prd_9_8_fitur_ai",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.8 fitur ai"
     },
     {
@@ -4982,8 +5136,8 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "docs_prd_9_9_notifikasi_activity_log",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.9 notifikasi & activity log"
     },
     {
@@ -4993,8 +5147,8 @@
       "source_location": "L195",
       "_origin": "ast",
       "id": "docs_prd_9_10_manajemen_anggota_tim",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.10 manajemen anggota tim"
     },
     {
@@ -5004,8 +5158,8 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "docs_prd_9_11_attachment_search",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.11 attachment & search"
     },
     {
@@ -5015,8 +5169,8 @@
       "source_location": "L205",
       "_origin": "ast",
       "id": "docs_prd_9_12_task_dependencies",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.12 task dependencies"
     },
     {
@@ -5026,8 +5180,8 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "docs_prd_9_13_export_laporan",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.13 export laporan"
     },
     {
@@ -5037,8 +5191,8 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "docs_prd_9_14_ai_guardrails",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.14 ai guardrails"
     },
     {
@@ -5048,8 +5202,8 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "docs_prd_9_15_archiving",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.15 archiving"
     },
     {
@@ -5848,6 +6002,18 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L40",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog_createmilestonedialog",
+      "target": "package_dependencies_react"
+    },
+    {
+      "relation": "references",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/features/team/components/invitation-list.tsx",
       "source_location": "L51",
       "weight": 1.0,
@@ -6612,6 +6778,183 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_app_dashboard_milestones_page_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L36",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_app_dashboard_milestones_page_milestonespage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_app_dashboard_milestones_page_status_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_config_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_config_routes_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_features_auth_queries_auth_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_features_milestones_components_create_milestone_dialog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_features_milestones_components_create_milestone_dialog_createmilestonedialog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_features_milestones_queries_milestone_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_features_milestones_queries_milestone_queries_geteligiblepics",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page",
+      "target": "src_features_milestones_queries_milestone_queries_getmilestones",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L37",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page_milestonespage",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L45",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page_milestonespage",
+      "target": "src_features_milestones_queries_milestone_queries_geteligiblepics"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/milestones/page.tsx",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_milestones_page_milestonespage",
+      "target": "src_features_milestones_queries_milestone_queries_getmilestones"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/page.tsx",
       "source_location": "L5",
       "weight": 1.0,
@@ -7299,6 +7642,18 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invitation-list.tsx",
       "source_location": "L6",
       "weight": 1.0,
@@ -7364,6 +7719,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_components_oauth_buttons",
+      "target": "src_components_ui_button_button",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
       "target": "src_components_ui_button_button",
       "confidence_score": 1.0
     },
@@ -7762,12 +8129,36 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
       "target": "src_components_ui_dialog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog_dialog",
       "confidence_score": 1.0
     },
     {
@@ -7786,12 +8177,48 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog_dialogtrigger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
       "target": "src_components_ui_dialog_dialogtrigger",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog_dialogclose",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog_dialogcontent",
       "confidence_score": 1.0
     },
     {
@@ -7810,12 +8237,36 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog_dialogheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
       "target": "src_components_ui_dialog_dialogheader",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog_dialogfooter",
       "confidence_score": 1.0
     },
     {
@@ -7834,12 +8285,36 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog_dialogtitle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_team_components_invite_modal",
       "target": "src_components_ui_dialog_dialogtitle",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_dialog_dialogdescription",
       "confidence_score": 1.0
     },
     {
@@ -8118,6 +8593,18 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L7",
       "weight": 1.0,
@@ -8147,6 +8634,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_input_input",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
       "target": "src_components_ui_input_input",
       "confidence_score": 1.0
     },
@@ -8201,6 +8700,18 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L8",
       "weight": 1.0,
@@ -8230,6 +8741,18 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_auth_components_register_form",
+      "target": "src_components_ui_label_label",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
       "target": "src_components_ui_label_label",
       "confidence_score": 1.0
     },
@@ -8415,6 +8938,41 @@
       "_origin": "ast",
       "source": "src_features_team_components_team_member_list",
       "target": "src_components_ui_table_tablecell",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/components/ui/textarea.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_components_ui_textarea",
+      "target": "src_components_ui_textarea_textarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_textarea",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_components_ui_textarea_textarea",
       "confidence_score": 1.0
     },
     {
@@ -9242,11 +9800,151 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/milestones/actions/milestone.actions.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_actions_milestone_actions",
+      "target": "src_features_milestones_actions_milestone_actions_createmilestone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/actions/milestone.actions.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_actions_milestone_actions",
+      "target": "src_features_milestones_schemas_milestone_schema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/actions/milestone.actions.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_actions_milestone_actions",
+      "target": "src_features_milestones_schemas_milestone_schema_createmilestoneinput",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/actions/milestone.actions.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_actions_milestone_actions",
+      "target": "src_features_milestones_schemas_milestone_schema_createmilestoneschema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/actions/milestone.actions.ts",
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_actions_milestone_actions",
-      "target": "src_features_milestones_actions_milestone_actions_placeholdermilestoneaction",
+      "target": "src_lib_supabase_server",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/actions/milestone.actions.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_actions_milestone_actions",
+      "target": "src_lib_supabase_server_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_features_milestones_actions_milestone_actions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/milestones/actions/milestone.actions.ts",
+      "source_location": "L53",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_actions_milestone_actions_createmilestone",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_features_milestones_actions_milestone_actions_createmilestone",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_features_milestones_components_create_milestone_dialog_createmilestonedialog",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_features_milestones_components_create_milestone_dialog_createmilestonedialogprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_components_create_milestone_dialog",
+      "target": "src_features_milestones_components_create_milestone_dialog_eligiblepic",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/queries/milestone.queries.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_queries_milestone_queries",
+      "target": "src_features_milestones_queries_milestone_queries_geteligiblepics",
       "confidence_score": 1.0
     },
     {
@@ -9295,6 +9993,40 @@
       "_origin": "ast",
       "source": "src_features_milestones_queries_milestone_queries_getmilestones",
       "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/milestones/queries/milestone.queries.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_queries_milestone_queries_geteligiblepics",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/schemas/milestone.schema.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_schemas_milestone_schema",
+      "target": "src_features_milestones_schemas_milestone_schema_createmilestoneinput",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/milestones/schemas/milestone.schema.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_milestones_schemas_milestone_schema",
+      "target": "src_features_milestones_schemas_milestone_schema_createmilestoneschema",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11876,5 +12608,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5beb3c37dea3817ba6aeb871de72a83bf3e3ac69"
+  "built_at_commit": "d457262eeeff9e9efc7c7f001e65fff320d3269c"
 }
