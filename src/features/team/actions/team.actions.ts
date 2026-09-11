@@ -227,3 +227,71 @@ export async function revokeInvitation(
   revalidatePath('/team');
   return { success: true };
 }
+
+/**
+ * Update a team member's role.
+ * Only leaders of the team can perform this action.
+ */
+export async function updateMemberRole(
+  _prevState: ActionState | null,
+  formData: FormData
+): Promise<ActionState> {
+  const userId = formData.get('userId') as string;
+  const newRole = formData.get('role') as 'leader' | 'member';
+  const teamId = formData.get('teamId') as string;
+
+  if (!userId || !newRole || !teamId) {
+    return {
+      success: false,
+      error: { _form: ['Data tidak lengkap.'] },
+    };
+  }
+
+  const profile = await getUserProfile();
+  if (!profile || profile.role !== 'leader' || profile.team_id !== teamId) {
+    return {
+      success: false,
+      error: { _form: ['Hanya leader tim yang dapat mengubah role anggota.'] },
+    };
+  }
+
+  // Prevent leader from demoting themselves if they are the only leader
+  if (profile.id === userId && newRole === 'member') {
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+    const { count } = await supabase
+      .from('profiles')
+      .select('*', { count: 'exact', head: true })
+      .eq('team_id', teamId)
+      .eq('role', 'leader');
+
+    if (count && count <= 1) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Anda adalah leader terakhir. Promosikan anggota lain sebelum turun jabatan.',
+          ],
+        },
+      };
+    }
+  }
+
+  const { createClient } = await import('@/lib/supabase/server');
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('profiles')
+    .update({ role: newRole })
+    .eq('id', userId)
+    .eq('team_id', teamId);
+
+  if (error) {
+    return {
+      success: false,
+      error: { _form: [error.message] },
+    };
+  }
+
+  revalidatePath('/team');
+  return { success: true };
+}
