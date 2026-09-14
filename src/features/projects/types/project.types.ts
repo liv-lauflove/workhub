@@ -20,3 +20,10 @@ export type ProjectWithDetails = Project & {
     avatar_url: string | null;
   } | null;
 };
+
+export type ProjectWithProgress = ProjectWithDetails & {
+  totalTasks: number;
+  completedTasks: number;
+  progress: number;
+  memberCount: number;
+};
