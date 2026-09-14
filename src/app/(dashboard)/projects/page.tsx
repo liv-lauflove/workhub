@@ -253,7 +253,7 @@ export default async function ProjectsPage({
           >
             Semua ({allProjects.length})
           </Link>
-          {allMilestones.map((m) => (
+          {allMilestones.map((m: { id: string; title: string }) => (
             <Link
               key={m.id}
               href={`/projects?milestone_id=${m.id}`}
