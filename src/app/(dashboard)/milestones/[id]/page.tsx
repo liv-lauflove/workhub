@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Calendar, User, FolderKanban, Layers } from 'lucide-react';
 import {
-  ChevronLeft,
-  Calendar,
-  User,
-  FolderKanban,
-  Layers,
-} from 'lucide-react';
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
 import {
   getMilestoneById,
   getMilestones,
@@ -16,7 +18,10 @@ import {
 import { calculateMilestoneTimeProgress } from '@/features/milestones/lib/milestone.utils';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
 import { getTeams } from '@/features/team/queries/team.queries';
+import { getProjectsByMilestoneId } from '@/features/projects/queries/project.queries';
 import { CreateProjectDialog } from '@/features/projects/components/create-project-dialog';
+import { ProjectList } from '@/features/projects/components/project-list';
+import { ROUTES } from '@/config/routes';
 
 interface MilestoneDetailPageProps {
   params: Promise<{ id: string }>;
@@ -91,26 +96,30 @@ export default async function MilestoneDetailPage({
     milestone.status
   );
 
-  const projects =
-    (milestone.projects as unknown as Array<{
-      id: string;
-      name: string;
-      description: string | null;
-      status: string;
-    }>) || [];
+  const projects = await getProjectsByMilestoneId(id);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
-      {/* Navigation Breadcrumb / Back button */}
-      <div>
-        <Link
-          href="/milestones"
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ChevronLeft className="h-4 w-4" />
-          <span>Kembali ke Daftar Milestone</span>
-        </Link>
-      </div>
+      {/* Navigation Breadcrumbs */}
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink render={<Link href="/" />}>
+              Dashboard
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink render={<Link href="/milestones" />}>
+              Milestones
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{milestone.title}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
 
       {/* Milestone Header Banner */}
       <div className="rounded-xl border bg-card p-6 shadow-xs space-y-6">
@@ -201,14 +210,24 @@ export default async function MilestoneDetailPage({
             </span>
           </div>
 
-          <CreateProjectDialog
-            isLeader={isLeader}
-            defaultMilestoneId={milestone.id}
-            milestones={allMilestones}
-            teams={teams}
-            eligiblePICs={eligiblePICs}
-            userTeamId={profile?.team_id || undefined}
-          />
+          <div className="flex flex-wrap items-center gap-2">
+            <Link
+              href={ROUTES.projects(milestone.id)}
+              className="inline-flex items-center gap-1.5 rounded-lg border bg-background px-3 py-1.5 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+            >
+              <FolderKanban className="h-3.5 w-3.5" />
+              <span>Halaman Khusus Project</span>
+            </Link>
+
+            <CreateProjectDialog
+              isLeader={isLeader}
+              defaultMilestoneId={milestone.id}
+              milestones={allMilestones}
+              teams={teams}
+              eligiblePICs={eligiblePICs}
+              userTeamId={profile?.team_id || undefined}
+            />
+          </div>
         </div>
 
         {projects.length === 0 ? (
@@ -235,26 +254,7 @@ export default async function MilestoneDetailPage({
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {projects.map((proj) => (
-              <div
-                key={proj.id}
-                className="rounded-lg border bg-card p-4 text-card-foreground shadow-xs"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <h4 className="font-semibold text-sm">{proj.name}</h4>
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                    {proj.status}
-                  </span>
-                </div>
-                {proj.description && (
-                  <p className="mt-2 text-xs text-muted-foreground line-clamp-2">
-                    {proj.description}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
+          <ProjectList projects={projects} />
         )}
       </div>
     </div>

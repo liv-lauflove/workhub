@@ -12,6 +12,10 @@ export const ROUTES = {
   dashboard: '/',
   milestones: '/milestones',
   milestone: (id: string) => `/milestones/${id}` as const,
+  projects: (milestoneId?: string) =>
+    milestoneId
+      ? (`/projects?milestone_id=${milestoneId}` as const)
+      : ('/projects' as const),
   project: (id: string) => `/projects/${id}` as const,
   task: (id: string) => `/tasks/${id}` as const,
   team: '/team',
