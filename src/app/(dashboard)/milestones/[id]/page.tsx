@@ -8,8 +8,15 @@ import {
   FolderKanban,
   Layers,
 } from 'lucide-react';
-import { getMilestoneById } from '@/features/milestones/queries/milestone.queries';
+import {
+  getMilestoneById,
+  getMilestones,
+  getEligiblePICs,
+} from '@/features/milestones/queries/milestone.queries';
 import { calculateMilestoneTimeProgress } from '@/features/milestones/lib/milestone.utils';
+import { getUserProfile } from '@/features/auth/queries/auth.queries';
+import { getTeams } from '@/features/team/queries/team.queries';
+import { CreateProjectDialog } from '@/features/projects/components/create-project-dialog';
 
 interface MilestoneDetailPageProps {
   params: Promise<{ id: string }>;
@@ -62,11 +69,20 @@ export default async function MilestoneDetailPage({
   params,
 }: MilestoneDetailPageProps) {
   const { id } = await params;
-  const milestone = await getMilestoneById(id);
+  const [profile, milestone, teams, eligiblePICs, allMilestones] =
+    await Promise.all([
+      getUserProfile(),
+      getMilestoneById(id),
+      getTeams(),
+      getEligiblePICs(),
+      getMilestones(),
+    ]);
 
   if (!milestone) {
     notFound();
   }
+
+  const isLeader = profile?.role === 'leader';
 
   const statusCfg = STATUS_CONFIG[milestone.status] || STATUS_CONFIG.planned;
   const progress = calculateMilestoneTimeProgress(
@@ -174,7 +190,7 @@ export default async function MilestoneDetailPage({
 
       {/* Projects under Milestone Section */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-2">
             <FolderKanban className="h-5 w-5 text-primary" />
             <h2 className="text-lg font-semibold">
@@ -184,6 +200,15 @@ export default async function MilestoneDetailPage({
               {projects.length}
             </span>
           </div>
+
+          <CreateProjectDialog
+            isLeader={isLeader}
+            defaultMilestoneId={milestone.id}
+            milestones={allMilestones}
+            teams={teams}
+            eligiblePICs={eligiblePICs}
+            userTeamId={profile?.team_id || undefined}
+          />
         </div>
 
         {projects.length === 0 ? (
@@ -191,9 +216,23 @@ export default async function MilestoneDetailPage({
             <Layers className="mx-auto h-10 w-10 text-muted-foreground/40" />
             <h3 className="mt-3 text-sm font-semibold">Belum Ada Project</h3>
             <p className="mx-auto mt-1 max-w-sm text-xs text-muted-foreground">
-              Milestone ini belum memiliki project terkait. Project baru dapat
-              ditambahkan melalui form pembuatan project.
+              Milestone ini belum memiliki project terkait.{' '}
+              {isLeader
+                ? 'Mulai dengan menambahkan project baru di bawah milestone ini.'
+                : 'Hubungi leader tim untuk menambahkan project baru.'}
             </p>
+            {isLeader && (
+              <div className="mt-4 flex justify-center">
+                <CreateProjectDialog
+                  isLeader={isLeader}
+                  defaultMilestoneId={milestone.id}
+                  milestones={allMilestones}
+                  teams={teams}
+                  eligiblePICs={eligiblePICs}
+                  userTeamId={profile?.team_id || undefined}
+                />
+              </div>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
