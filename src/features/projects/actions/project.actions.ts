@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import {
   createProjectSchema,
@@ -117,7 +118,8 @@ export async function createProject(
     };
   }
 
-  const { data, error } = await supabase
+  const adminClient = createAdminClient();
+  const { data, error } = await adminClient
     .from('projects')
     .insert({
       name: parsed.data.name,
@@ -141,8 +143,10 @@ export async function createProject(
 
   revalidatePath('/milestones');
   revalidatePath(`/milestones/${parsed.data.milestoneId}`);
+  revalidatePath('/milestones/[id]', 'page');
   revalidatePath('/projects');
-  revalidatePath('/');
+  revalidatePath('/projects', 'page');
+  revalidatePath('/', 'layout');
 
   return {
     success: true,

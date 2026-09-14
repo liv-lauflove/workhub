@@ -1,5 +1,5 @@
 import 'server-only';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import type { ProjectWithProgress } from '../types/project.types';
 
 interface RawProjectQueryResult {
@@ -72,7 +72,7 @@ function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
 }
 
 export async function getProjects(): Promise<ProjectWithProgress[]> {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from('projects')
     .select(
@@ -101,7 +101,7 @@ export async function getProjects(): Promise<ProjectWithProgress[]> {
 export async function getProjectById(
   id: string
 ): Promise<ProjectWithProgress | null> {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from('projects')
     .select(
@@ -138,7 +138,7 @@ export async function getProjectById(
 export async function getProjectsByMilestoneId(
   milestoneId: string
 ): Promise<ProjectWithProgress[]> {
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from('projects')
     .select(
