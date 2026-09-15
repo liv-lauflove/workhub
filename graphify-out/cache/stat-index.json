@@ -394,9 +394,9 @@
     "word_count": 10
   },
   "src/features/kanban/types/kanban.types.ts": {
-    "size": 233,
-    "mtime_ns": 1788918393345100200,
-    "word_count": 17
+    "size": 647,
+    "mtime_ns": 1789438893738856500,
+    "word_count": 58
   },
   "src/features/milestones/actions/milestone.actions.ts": {
     "size": 2806,
@@ -702,6 +702,34 @@
     "word_count": 160,
     "hashes": {
       "supabase/migrations/20260914000000_projects_rls.sql": "92099f4404d33326da7d7f6799984f185748b55fa9ac93d6386a7ad0b8dbd764"
+    }
+  },
+  "src/app/(dashboard)/projects/[id]/page.tsx": {
+    "size": 8292,
+    "mtime_ns": 1789439022176167700,
+    "word_count": 606
+  },
+  "src/features/kanban/components/kanban-board.tsx": {
+    "size": 1137,
+    "mtime_ns": 1789439013210758900,
+    "word_count": 117
+  },
+  "src/features/kanban/components/kanban-column.tsx": {
+    "size": 5633,
+    "mtime_ns": 1789439004102556600,
+    "word_count": 407
+  },
+  "src/features/kanban/queries/kanban.queries.ts": {
+    "size": 2931,
+    "mtime_ns": 1789439683255067300,
+    "word_count": 340
+  },
+  "supabase/migrations/20260915000000_board_columns_and_tasks_rls.sql": {
+    "size": 2084,
+    "mtime_ns": 1789438827080231600,
+    "word_count": 218,
+    "hashes": {
+      "supabase/migrations/20260915000000_board_columns_and_tasks_rls.sql": "156fae9180f4fee66d62f6c66e17e8b3f4c65043995c5f09410d1e2972748233"
     }
   }
 }

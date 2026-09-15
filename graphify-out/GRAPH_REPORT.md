@@ -2,18 +2,18 @@
 
 ## Corpus Check
 
-- 117 files · ~30,803 words
+- 122 files · ~32,532 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
 
-- 541 nodes · 817 edges · 50 communities (38 shown, 12 thin omitted)
+- 561 nodes · 875 edges · 51 communities (39 shown, 12 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.65)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
 
-- Built from commit: `871bad93`
+- Built from commit: `6a2ba03c`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -37,9 +37,9 @@
 - next.config.ts
 - postcss.config.mjs
 - database.types.ts
-- [id]/page.tsx
+- milestones/[id]/page.tsx
 - create-project-dialog.tsx
-- project-list.tsx
+- login-form.tsx
 - layout.tsx
 - milestone-list.tsx
 - site.ts
@@ -48,41 +48,42 @@
 - common.ts
 - global.d.ts
 - [id]/projects/page.tsx
+- kanban.types.ts
 - prompt-templates.ts
 - dashboard.types.ts
 - seed.mjs
 
 ## God Nodes (most connected - your core abstractions)
 
-1. `Product Requirements Document (PRD)` - 23 edges
-2. `createClient()` - 22 edges
-3. `getUserProfile()` - 17 edges
-4. `compilerOptions` - 16 edges
-5. `9. Functional Requirements` - 16 edges
-6. `createAdminClient()` - 14 edges
+1. `createClient()` - 24 edges
+2. `Product Requirements Document (PRD)` - 23 edges
+3. `getUserProfile()` - 19 edges
+4. `createAdminClient()` - 16 edges
+5. `compilerOptions` - 16 edges
+6. `9. Functional Requirements` - 16 edges
 7. `Button()` - 11 edges
 8. `MilestoneDetailPage()` - 9 edges
-9. `Database` - 9 edges
-10. `scripts` - 8 edges
+9. `ROUTES` - 9 edges
+10. `Database` - 9 edges
 
 ## Surprising Connections (you probably didn't know these)
 
-- `CopyLinkButton()` --references--> `react` [EXTRACTED]
-  src/features/team/components/invitation-list.tsx → package.json
-- `CreateMilestoneDialog()` --references--> `react` [EXTRACTED]
-  src/features/milestones/components/create-milestone-dialog.tsx → package.json
 - `MilestoneList()` --references--> `react` [EXTRACTED]
   src/features/milestones/components/milestone-list.tsx → package.json
-- `CreateProjectDialog()` --references--> `react` [EXTRACTED]
-  src/features/projects/components/create-project-dialog.tsx → package.json
 - `ProjectList()` --references--> `react` [EXTRACTED]
   src/features/projects/components/project-list.tsx → package.json
+- `CopyLinkButton()` --references--> `react` [EXTRACTED]
+  src/features/team/components/invitation-list.tsx → package.json
+- `RevokeButton()` --indirect_call--> `revokeInvitation()` [INFERRED]
+  src/features/team/components/invitation-list.tsx → src/features/team/actions/team.actions.ts
+- `CreateMilestoneDialog()` --references--> `react` [EXTRACTED]
+  src/features/milestones/components/create-milestone-dialog.tsx → package.json
 
 ## Import Cycles
 
 - None detected.
 
-## Communities (50 total, 12 thin omitted)
+## Communities (51 total, 12 thin omitted)
 
 ### Community 0 - "Product Requirements Document (PRD)"
 
@@ -111,13 +112,13 @@ Nodes (17): lint-staged, *.{js,jsx,ts,tsx}, *.{json,css,md}, name, packageManage
 
 ### Community 5 - "team-member-list.tsx"
 
-Cohesion: 0.10
-Nodes (12): DropdownMenu(), DropdownMenuContent(), DropdownMenuItem(), DropdownMenuTrigger(), Table(), TableBody(), TableCell(), TableHead() (+4 more)
+Cohesion: 0.09
+Nodes (14): DropdownMenu(), DropdownMenuContent(), DropdownMenuItem(), DropdownMenuTrigger(), Table(), TableBody(), TableCell(), TableHead() (+6 more)
 
 ### Community 6 - "createClient"
 
-Cohesion: 0.09
-Nodes (30): GET(), DashboardLayout(), metadata, TeamPage(), getUser(), getUserProfile(), createMilestone(), CreateMilestoneInput (+22 more)
+Cohesion: 0.16
+Nodes (15): GET(), metadata, TeamPage(), createMilestone(), CreateMilestoneInput, createMilestoneSchema, getNotifications(), createProject() (+7 more)
 
 ### Community 7 - "auth.actions.ts"
 
@@ -141,23 +142,23 @@ Nodes (21): aliases, components, hooks, lib, ui, utils, iconLibrary, menuAccent 
 
 ### Community 17 - "database.types.ts"
 
-Cohesion: 0.09
-Nodes (22): BoardColumn, BoardColumnInsert, Task, TaskComment, TaskInsert, TaskUpdate, useUser(), createClient() (+14 more)
+Cohesion: 0.07
+Nodes (31): ProjectCard(), ProjectCardProps, STATUS_CONFIG, ProjectList(), ProjectListProps, StatusFilter, RawProjectQueryResult, Project (+23 more)
 
-### Community 18 - "[id]/page.tsx"
+### Community 18 - "milestones/[id]/page.tsx"
 
 Cohesion: 0.12
-Nodes (32): react, react, generateMetadata(), MilestoneDetailPage(), MilestoneDetailPageProps, STATUS_CONFIG, metadata, MilestonesPage() (+24 more)
+Nodes (37): DashboardLayout(), generateMetadata(), MilestoneDetailPage(), MilestoneDetailPageProps, STATUS_CONFIG, metadata, MilestonesPage(), generateMetadata() (+29 more)
 
 ### Community 19 - "create-project-dialog.tsx"
 
-Cohesion: 0.09
-Nodes (35): metadata, metadata, SubmitButton(), SubmitButtonProps, Button(), buttonVariants, Card(), CardContent() (+27 more)
+Cohesion: 0.10
+Nodes (31): react, react, Button(), buttonVariants, Dialog(), DialogClose(), DialogContent(), DialogDescription() (+23 more)
 
-### Community 20 - "project-list.tsx"
+### Community 20 - "login-form.tsx"
 
-Cohesion: 0.19
-Nodes (12): ProjectCard(), ProjectCardProps, STATUS_CONFIG, ProjectListProps, StatusFilter, RawProjectQueryResult, Project, ProjectInsert (+4 more)
+Cohesion: 0.13
+Nodes (17): metadata, metadata, SubmitButton(), SubmitButtonProps, Card(), CardContent(), CardDescription(), CardFooter() (+9 more)
 
 ### Community 21 - "layout.tsx"
 
@@ -166,8 +167,8 @@ Nodes (3): geistMono, geistSans, metadata
 
 ### Community 22 - "milestone-list.tsx"
 
-Cohesion: 0.21
-Nodes (12): MilestoneCard(), MilestoneCardProps, STATUS_CONFIG, MilestoneListProps, StatusFilter, calculateMilestoneTimeProgress(), formatMilestoneDate(), MilestoneProgressInfo (+4 more)
+Cohesion: 0.19
+Nodes (13): MilestoneCard(), MilestoneCardProps, STATUS_CONFIG, MilestoneList(), MilestoneListProps, StatusFilter, calculateMilestoneTimeProgress(), formatMilestoneDate() (+5 more)
 
 ### Community 27 - "common.ts"
 
@@ -179,6 +180,11 @@ Nodes (3): dateRangeSchema, paginationSchema, uuidSchema
 Cohesion: 0.50
 Nodes (3): ActionState, PaginationParams, SortDirection
 
+### Community 31 - "kanban.types.ts"
+
+Cohesion: 0.21
+Nodes (13): KanbanBoard(), KanbanBoardProps, getColumnStatusDot(), getPriorityBadgeClass(), KanbanColumn(), KanbanColumnProps, DEFAULT_COLUMNS, BoardColumn (+5 more)
+
 ### Community 54 - "seed.mjs"
 
 Cohesion: 0.50
@@ -186,7 +192,7 @@ Nodes (3): envPath, seedSql, seedSqlPath
 
 ## Knowledge Gaps
 
-- **231 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+226 more)
+- **234 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+229 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -194,14 +200,14 @@ Nodes (3): envPath, seedSql, seedSqlPath
 
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `dependencies` connect `dependencies` to `[id]/page.tsx`, `package.json`?**
+- **Why does `dependencies` connect `dependencies` to `create-project-dialog.tsx`, `package.json`?**
   _High betweenness centrality (0.131) - this node is a cross-community bridge._
-- **Why does `react` connect `[id]/page.tsx` to `dependencies`, `createClient`?**
+- **Why does `react` connect `create-project-dialog.tsx` to `dependencies`, `database.types.ts`, `milestone-list.tsx`?**
   _High betweenness centrality (0.125) - this node is a cross-community bridge._
 - **Why does `devDependencies` connect `devDependencies` to `package.json`?**
   _High betweenness centrality (0.054) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _231 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _234 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Product Requirements Document (PRD)` be split into smaller, more focused modules?**
   _Cohesion score 0.05263157894736842 - nodes in this community are weakly interconnected._
 - **Should `docs/README.md` be split into smaller, more focused modules?**
