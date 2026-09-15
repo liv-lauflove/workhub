@@ -197,7 +197,7 @@
   },
   "src/app/layout.tsx": {
     "size": 969,
-    "mtime_ns": 1789109492851453300,
+    "mtime_ns": 1789366906641192200,
     "word_count": 98
   },
   "src/components/ui/button.tsx": {
@@ -319,9 +319,9 @@
     "word_count": 94
   },
   "src/config/routes.ts": {
-    "size": 597,
-    "mtime_ns": 1788918393325400100,
-    "word_count": 69
+    "size": 746,
+    "mtime_ns": 1789374597597442800,
+    "word_count": 82
   },
   "src/config/site.ts": {
     "size": 737,
@@ -404,9 +404,9 @@
     "word_count": 286
   },
   "src/features/milestones/queries/milestone.queries.ts": {
-    "size": 1524,
-    "mtime_ns": 1789113407840763600,
-    "word_count": 162
+    "size": 1676,
+    "mtime_ns": 1789378446469765500,
+    "word_count": 177
   },
   "src/features/milestones/types/milestone.types.ts": {
     "size": 516,
@@ -424,19 +424,19 @@
     "word_count": 43
   },
   "src/features/projects/actions/project.actions.ts": {
-    "size": 88,
-    "mtime_ns": 1788918393353276200,
-    "word_count": 10
+    "size": 4075,
+    "mtime_ns": 1789378446472421900,
+    "word_count": 409
   },
   "src/features/projects/queries/project.queries.ts": {
-    "size": 323,
-    "mtime_ns": 1788918393354287500,
-    "word_count": 37
+    "size": 4411,
+    "mtime_ns": 1789378446473694400,
+    "word_count": 406
   },
   "src/features/projects/types/project.types.ts": {
-    "size": 293,
-    "mtime_ns": 1788918393355842500,
-    "word_count": 22
+    "size": 805,
+    "mtime_ns": 1789374597604038800,
+    "word_count": 82
   },
   "src/features/tasks/actions/task.actions.ts": {
     "size": 85,
@@ -642,9 +642,9 @@
     }
   },
   "src/app/(dashboard)/milestones/[id]/page.tsx": {
-    "size": 7892,
-    "mtime_ns": 1789113407836634500,
-    "word_count": 591
+    "size": 9469,
+    "mtime_ns": 1789374597579717400,
+    "word_count": 669
   },
   "src/features/milestones/components/milestone-card.tsx": {
     "size": 5538,
@@ -660,5 +660,48 @@
     "size": 3517,
     "mtime_ns": 1789113718157297600,
     "word_count": 400
+  },
+  "src/app/(dashboard)/milestones/[id]/projects/page.tsx": {
+    "size": 269,
+    "mtime_ns": 1789374597595262700,
+    "word_count": 33
+  },
+  "src/app/(dashboard)/projects/page.tsx": {
+    "size": 10498,
+    "mtime_ns": 1789378446469765500,
+    "word_count": 790
+  },
+  "src/components/ui/breadcrumb.tsx": {
+    "size": 2686,
+    "mtime_ns": 1789374597597442800,
+    "word_count": 208
+  },
+  "src/features/projects/components/create-project-dialog.tsx": {
+    "size": 9731,
+    "mtime_ns": 1789367577185276500,
+    "word_count": 678
+  },
+  "src/features/projects/components/project-card.tsx": {
+    "size": 5260,
+    "mtime_ns": 1789374597597442800,
+    "word_count": 385
+  },
+  "src/features/projects/components/project-list.tsx": {
+    "size": 6102,
+    "mtime_ns": 1789374597600712800,
+    "word_count": 470
+  },
+  "src/features/projects/schemas/project.schema.ts": {
+    "size": 1093,
+    "mtime_ns": 1789367577187306000,
+    "word_count": 104
+  },
+  "supabase/migrations/20260914000000_projects_rls.sql": {
+    "size": 1415,
+    "mtime_ns": 1789367577188945400,
+    "word_count": 160,
+    "hashes": {
+      "supabase/migrations/20260914000000_projects_rls.sql": "92099f4404d33326da7d7f6799984f185748b55fa9ac93d6386a7ad0b8dbd764"
+    }
   }
 }

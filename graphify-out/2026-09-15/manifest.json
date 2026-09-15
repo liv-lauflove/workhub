@@ -145,7 +145,7 @@
     "semantic_hash": ""
   },
   "src/app/layout.tsx": {
-    "mtime": 1789366906.6411922,
+    "mtime": 1789109492.8514533,
     "ast_hash": "363ac0aa79c2aba633bdcfe148ae0366",
     "semantic_hash": ""
   },
@@ -265,8 +265,8 @@
     "semantic_hash": ""
   },
   "src/config/routes.ts": {
-    "mtime": 1789374597.5974429,
-    "ast_hash": "cd145695fdd25f16fb8e5871a91bc102",
+    "mtime": 1788918393.3254,
+    "ast_hash": "fc8902d5aa548813916b3cb70587d27a",
     "semantic_hash": ""
   },
   "src/config/site.ts": {
@@ -350,8 +350,8 @@
     "semantic_hash": ""
   },
   "src/features/milestones/queries/milestone.queries.ts": {
-    "mtime": 1789378446.4697654,
-    "ast_hash": "caf24007e2887005da0bb15131f5d207",
+    "mtime": 1789113407.8407636,
+    "ast_hash": "56e9739e11e9f92ea5fc2d1230730ffd",
     "semantic_hash": ""
   },
   "src/features/milestones/types/milestone.types.ts": {
@@ -370,18 +370,18 @@
     "semantic_hash": ""
   },
   "src/features/projects/actions/project.actions.ts": {
-    "mtime": 1789378446.472422,
-    "ast_hash": "2f8402e53bb4c99c4f13f6c49decc9a9",
+    "mtime": 1788918393.3532763,
+    "ast_hash": "3d2dc7d8758feb154b47482f877ff641",
     "semantic_hash": ""
   },
   "src/features/projects/queries/project.queries.ts": {
-    "mtime": 1789378446.4736943,
-    "ast_hash": "d927e1c2e85b886ed15a9d94baa4b2bb",
+    "mtime": 1788918393.3542874,
+    "ast_hash": "652d90acc43d1e8bb9468cd6092a6554",
     "semantic_hash": ""
   },
   "src/features/projects/types/project.types.ts": {
-    "mtime": 1789374597.6040387,
-    "ast_hash": "e3c6f4ee45cf253ebe0d72181c590aec",
+    "mtime": 1788918393.3558426,
+    "ast_hash": "499521d99513d84bd98e7b50c288f0ce",
     "semantic_hash": ""
   },
   "src/features/tasks/actions/task.actions.ts": {
@@ -570,8 +570,8 @@
     "semantic_hash": ""
   },
   "src/app/(dashboard)/milestones/[id]/page.tsx": {
-    "mtime": 1789374597.5797174,
-    "ast_hash": "32b002b4b12f6c014c8c9e84892dde00",
+    "mtime": 1789113407.8366344,
+    "ast_hash": "b0259cf2cd4e72ec01cac35f72445ffe",
     "semantic_hash": ""
   },
   "src/features/milestones/components/milestone-card.tsx": {
@@ -587,46 +587,6 @@
   "src/features/milestones/lib/milestone.utils.ts": {
     "mtime": 1789113718.1572976,
     "ast_hash": "9b772d2500cf3b839bc57997ba9b2597",
-    "semantic_hash": ""
-  },
-  "src/app/(dashboard)/milestones/[id]/projects/page.tsx": {
-    "mtime": 1789374597.5952628,
-    "ast_hash": "078b3245b5045901a2ae03d780fd8dbb",
-    "semantic_hash": ""
-  },
-  "src/app/(dashboard)/projects/page.tsx": {
-    "mtime": 1789378446.4697654,
-    "ast_hash": "6120b407945369183be5644c3944cc38",
-    "semantic_hash": ""
-  },
-  "src/components/ui/breadcrumb.tsx": {
-    "mtime": 1789374597.5974429,
-    "ast_hash": "eeb1fbc4fb550ab8d7082856c74bc668",
-    "semantic_hash": ""
-  },
-  "src/features/projects/components/create-project-dialog.tsx": {
-    "mtime": 1789367577.1852765,
-    "ast_hash": "c1db458b9973523c92cce90ed4104da8",
-    "semantic_hash": ""
-  },
-  "src/features/projects/components/project-card.tsx": {
-    "mtime": 1789374597.5974429,
-    "ast_hash": "ad500defb634d9ca6fb6ecf0d2c52032",
-    "semantic_hash": ""
-  },
-  "src/features/projects/components/project-list.tsx": {
-    "mtime": 1789374597.6007128,
-    "ast_hash": "b5722a072cb2a3d912bf0e61db571de4",
-    "semantic_hash": ""
-  },
-  "src/features/projects/schemas/project.schema.ts": {
-    "mtime": 1789367577.187306,
-    "ast_hash": "2c5d4f01f32867fe8e38b1e99f664cf0",
-    "semantic_hash": ""
-  },
-  "supabase/migrations/20260914000000_projects_rls.sql": {
-    "mtime": 1789367577.1889453,
-    "ast_hash": "6c5328dee15377a86be1a2b8c6600ac6",
     "semantic_hash": ""
   }
 }

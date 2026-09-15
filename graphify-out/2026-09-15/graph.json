@@ -594,7 +594,7 @@
       "_origin": "ast",
       "id": "package_dependencies_react",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "team.actions.ts",
       "norm_label": "react"
     },
     {
@@ -605,7 +605,7 @@
       "_origin": "ast",
       "id": "react",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "team.actions.ts",
       "norm_label": "react"
     },
     {
@@ -1221,7 +1221,7 @@
       "_origin": "ast",
       "id": "src_app_auth_login_page",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "login/page.tsx"
     },
     {
@@ -1232,7 +1232,7 @@
       "_origin": "ast",
       "id": "src_app_auth_login_page_metadata",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "metadata"
     },
     {
@@ -1243,7 +1243,7 @@
       "_origin": "ast",
       "id": "src_app_auth_login_page_loginpage",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "loginpage()"
     },
     {
@@ -1254,7 +1254,7 @@
       "_origin": "ast",
       "id": "src_app_auth_register_page",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "register/page.tsx"
     },
     {
@@ -1265,7 +1265,7 @@
       "_origin": "ast",
       "id": "src_app_auth_register_page_metadata",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "metadata"
     },
     {
@@ -1276,7 +1276,7 @@
       "_origin": "ast",
       "id": "src_app_auth_register_page_registerpage",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "registerpage()"
     },
     {
@@ -1308,86 +1308,53 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 22,
+      "community_name": "milestone-list.tsx",
       "norm_label": "[id]/page.tsx"
     },
     {
       "label": "MilestoneDetailPageProps",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L26",
+      "source_location": "L14",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page_milestonedetailpageprops",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 22,
+      "community_name": "milestone-list.tsx",
       "norm_label": "milestonedetailpageprops"
     },
     {
       "label": "generateMetadata()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L30",
+      "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page_generatemetadata",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 22,
+      "community_name": "milestone-list.tsx",
       "norm_label": "generatemetadata()"
     },
     {
       "label": "STATUS_CONFIG",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L44",
+      "source_location": "L32",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page_status_config",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 22,
+      "community_name": "milestone-list.tsx",
       "norm_label": "status_config"
     },
     {
       "label": "MilestoneDetailPage()",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L73",
+      "source_location": "L61",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page_milestonedetailpage",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 22,
+      "community_name": "milestone-list.tsx",
       "norm_label": "milestonedetailpage()"
-    },
-    {
-      "label": "[id]/projects/page.tsx",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/milestones/[id]/projects/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_app_dashboard_milestones_id_projects_page",
-      "community": 30,
-      "community_name": "[id]/projects/page.tsx",
-      "norm_label": "[id]/projects/page.tsx"
-    },
-    {
-      "label": "Props",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/milestones/[id]/projects/page.tsx",
-      "source_location": "L3",
-      "_origin": "ast",
-      "id": "src_app_dashboard_milestones_id_projects_page_props",
-      "community": 30,
-      "community_name": "[id]/projects/page.tsx",
-      "norm_label": "props"
-    },
-    {
-      "label": "MilestoneProjectsRedirectPage()",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/milestones/[id]/projects/page.tsx",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "src_app_dashboard_milestones_id_projects_page_milestoneprojectsredirectpage",
-      "community": 30,
-      "community_name": "[id]/projects/page.tsx",
-      "norm_label": "milestoneprojectsredirectpage()"
     },
     {
       "label": "milestones/page.tsx",
@@ -1396,8 +1363,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_page",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "milestones/page.tsx"
     },
     {
@@ -1407,8 +1374,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_page_metadata",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "metadata"
     },
     {
@@ -1418,8 +1385,8 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_page_milestonespage",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "milestonespage()"
     },
     {
@@ -1443,50 +1410,6 @@
       "community": 32,
       "community_name": "(dashboard)/page.tsx",
       "norm_label": "dashboardpage()"
-    },
-    {
-      "label": "(dashboard)/projects/page.tsx",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_app_dashboard_projects_page",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "(dashboard)/projects/page.tsx"
-    },
-    {
-      "label": "ProjectsPageProps",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "src_app_dashboard_projects_page_projectspageprops",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "projectspageprops"
-    },
-    {
-      "label": "generateMetadata()",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L32",
-      "_origin": "ast",
-      "id": "src_app_dashboard_projects_page_generatemetadata",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "generatemetadata()"
-    },
-    {
-      "label": "ProjectsPage()",
-      "file_type": "code",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L51",
-      "_origin": "ast",
-      "id": "src_app_dashboard_projects_page_projectspage",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "projectspage()"
     },
     {
       "label": "team/page.tsx",
@@ -1628,7 +1551,7 @@
       "_origin": "ast",
       "id": "src_components_forms_submit_button",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "submit-button.tsx"
     },
     {
@@ -1639,7 +1562,7 @@
       "_origin": "ast",
       "id": "src_components_forms_submit_button_submitbuttonprops",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "submitbuttonprops"
     },
     {
@@ -1650,7 +1573,7 @@
       "_origin": "ast",
       "id": "src_components_forms_submit_button_submitbutton",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "submitbutton()"
     },
     {
@@ -1786,94 +1709,6 @@
       "norm_label": "sidebar()"
     },
     {
-      "label": "breadcrumb.tsx",
-      "file_type": "code",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_components_ui_breadcrumb",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "breadcrumb.tsx"
-    },
-    {
-      "label": "Breadcrumb()",
-      "file_type": "code",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "src_components_ui_breadcrumb_breadcrumb",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "breadcrumb()"
-    },
-    {
-      "label": "BreadcrumbList()",
-      "file_type": "code",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L18",
-      "_origin": "ast",
-      "id": "src_components_ui_breadcrumb_breadcrumblist",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "breadcrumblist()"
-    },
-    {
-      "label": "BreadcrumbItem()",
-      "file_type": "code",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L31",
-      "_origin": "ast",
-      "id": "src_components_ui_breadcrumb_breadcrumbitem",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "breadcrumbitem()"
-    },
-    {
-      "label": "BreadcrumbLink()",
-      "file_type": "code",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L41",
-      "_origin": "ast",
-      "id": "src_components_ui_breadcrumb_breadcrumblink",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "breadcrumblink()"
-    },
-    {
-      "label": "BreadcrumbPage()",
-      "file_type": "code",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L61",
-      "_origin": "ast",
-      "id": "src_components_ui_breadcrumb_breadcrumbpage",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "breadcrumbpage()"
-    },
-    {
-      "label": "BreadcrumbSeparator()",
-      "file_type": "code",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L74",
-      "_origin": "ast",
-      "id": "src_components_ui_breadcrumb_breadcrumbseparator",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "breadcrumbseparator()"
-    },
-    {
-      "label": "BreadcrumbEllipsis()",
-      "file_type": "code",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L92",
-      "_origin": "ast",
-      "id": "src_components_ui_breadcrumb_breadcrumbellipsis",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "breadcrumbellipsis()"
-    },
-    {
       "label": "button.tsx",
       "file_type": "code",
       "source_file": "src/components/ui/button.tsx",
@@ -1881,7 +1716,7 @@
       "_origin": "ast",
       "id": "src_components_ui_button",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "button.tsx"
     },
     {
@@ -1892,7 +1727,7 @@
       "_origin": "ast",
       "id": "src_components_ui_button_buttonvariants",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "buttonvariants"
     },
     {
@@ -1903,7 +1738,7 @@
       "_origin": "ast",
       "id": "src_components_ui_button_button",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "button()"
     },
     {
@@ -1914,7 +1749,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "card.tsx"
     },
     {
@@ -1925,7 +1760,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_card",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "card()"
     },
     {
@@ -1936,7 +1771,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardheader",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardheader()"
     },
     {
@@ -1947,7 +1782,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardtitle",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardtitle()"
     },
     {
@@ -1958,7 +1793,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_carddescription",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "carddescription()"
     },
     {
@@ -1969,7 +1804,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardaction",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardaction()"
     },
     {
@@ -1980,7 +1815,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardcontent",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardcontent()"
     },
     {
@@ -1991,7 +1826,7 @@
       "_origin": "ast",
       "id": "src_components_ui_card_cardfooter",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "cardfooter()"
     },
     {
@@ -2002,7 +1837,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialog.tsx"
     },
     {
@@ -2013,7 +1848,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialog",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialog()"
     },
     {
@@ -2024,7 +1859,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogtrigger",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogtrigger()"
     },
     {
@@ -2035,7 +1870,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogportal",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogportal()"
     },
     {
@@ -2046,7 +1881,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogclose",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogclose()"
     },
     {
@@ -2057,7 +1892,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogoverlay",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogoverlay()"
     },
     {
@@ -2068,7 +1903,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogcontent",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogcontent()"
     },
     {
@@ -2079,7 +1914,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogheader",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogheader()"
     },
     {
@@ -2090,7 +1925,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogfooter",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogfooter()"
     },
     {
@@ -2101,7 +1936,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogtitle",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogtitle()"
     },
     {
@@ -2112,7 +1947,7 @@
       "_origin": "ast",
       "id": "src_components_ui_dialog_dialogdescription",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "dialogdescription()"
     },
     {
@@ -2299,7 +2134,7 @@
       "_origin": "ast",
       "id": "src_components_ui_input",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "input.tsx"
     },
     {
@@ -2310,7 +2145,7 @@
       "_origin": "ast",
       "id": "src_components_ui_input_input",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "input()"
     },
     {
@@ -2321,7 +2156,7 @@
       "_origin": "ast",
       "id": "src_components_ui_label",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "label.tsx"
     },
     {
@@ -2332,7 +2167,7 @@
       "_origin": "ast",
       "id": "src_components_ui_label_label",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "label()"
     },
     {
@@ -2442,7 +2277,7 @@
       "_origin": "ast",
       "id": "src_components_ui_textarea",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "textarea.tsx"
     },
     {
@@ -2453,7 +2288,7 @@
       "_origin": "ast",
       "id": "src_components_ui_textarea_textarea",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "textarea()"
     },
     {
@@ -2507,8 +2342,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_config_routes",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "routes.ts"
     },
     {
@@ -2518,8 +2353,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_config_routes_routes",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "routes"
     },
     {
@@ -2662,7 +2497,7 @@
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_login",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "login()"
     },
     {
@@ -2673,7 +2508,7 @@
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_register",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "register()"
     },
     {
@@ -2695,7 +2530,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_login_form",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "login-form.tsx"
     },
     {
@@ -2706,7 +2541,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_login_form_loginform",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "loginform()"
     },
     {
@@ -2717,7 +2552,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_oauth_buttons",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "oauth-buttons.tsx"
     },
     {
@@ -2728,7 +2563,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_oauth_buttons_oauthbuttons",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "oauthbuttons()"
     },
     {
@@ -2739,7 +2574,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_register_form",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "register-form.tsx"
     },
     {
@@ -2750,7 +2585,7 @@
       "_origin": "ast",
       "id": "src_features_auth_components_register_form_registerform",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "registerform()"
     },
     {
@@ -2760,8 +2595,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_lib_auth_utils",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "auth.utils.ts"
     },
     {
@@ -2771,8 +2606,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_features_auth_lib_auth_utils_requireauth",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "requireauth()"
     },
     {
@@ -3058,7 +2893,7 @@
       "_origin": "ast",
       "id": "src_features_milestones_components_create_milestone_dialog",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "create-milestone-dialog.tsx"
     },
     {
@@ -3069,7 +2904,7 @@
       "_origin": "ast",
       "id": "src_features_milestones_components_create_milestone_dialog_eligiblepic",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "eligiblepic"
     },
     {
@@ -3080,7 +2915,7 @@
       "_origin": "ast",
       "id": "src_features_milestones_components_create_milestone_dialog_createmilestonedialogprops",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "createmilestonedialogprops"
     },
     {
@@ -3091,7 +2926,7 @@
       "_origin": "ast",
       "id": "src_features_milestones_components_create_milestone_dialog_createmilestonedialog",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "team.actions.ts",
       "norm_label": "createmilestonedialog()"
     },
     {
@@ -3178,8 +3013,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_features_milestones_components_milestone_list_milestonelist",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 22,
+      "community_name": "milestone-list.tsx",
       "norm_label": "milestonelist()"
     },
     {
@@ -3233,8 +3068,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_milestones_queries_milestone_queries",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "milestone.queries.ts"
     },
     {
@@ -3244,8 +3079,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_features_milestones_queries_milestone_queries_getmilestones",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "getmilestones()"
     },
     {
@@ -3255,8 +3090,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_features_milestones_queries_milestone_queries_getmilestonebyid",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 22,
+      "community_name": "milestone-list.tsx",
       "norm_label": "getmilestonebyid()"
     },
     {
@@ -3266,8 +3101,8 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "src_features_milestones_queries_milestone_queries_geteligiblepics",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "geteligiblepics()"
     },
     {
@@ -3409,174 +3244,20 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_projects_actions_project_actions",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 48,
+      "community_name": "project.actions.ts",
       "norm_label": "project.actions.ts"
     },
     {
-      "label": "createProject()",
+      "label": "placeholderProjectAction()",
       "file_type": "code",
       "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L16",
+      "source_location": "L3",
       "_origin": "ast",
-      "id": "src_features_projects_actions_project_actions_createproject",
-      "community": 6,
-      "community_name": "createClient",
-      "norm_label": "createproject()"
-    },
-    {
-      "label": "create-project-dialog.tsx",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_features_projects_components_create_project_dialog",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
-      "norm_label": "create-project-dialog.tsx"
-    },
-    {
-      "label": "MilestoneOption",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L23",
-      "_origin": "ast",
-      "id": "src_features_projects_components_create_project_dialog_milestoneoption",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
-      "norm_label": "milestoneoption"
-    },
-    {
-      "label": "TeamOption",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L28",
-      "_origin": "ast",
-      "id": "src_features_projects_components_create_project_dialog_teamoption",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
-      "norm_label": "teamoption"
-    },
-    {
-      "label": "PICOption",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L33",
-      "_origin": "ast",
-      "id": "src_features_projects_components_create_project_dialog_picoption",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
-      "norm_label": "picoption"
-    },
-    {
-      "label": "CreateProjectDialogProps",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "src_features_projects_components_create_project_dialog_createprojectdialogprops",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
-      "norm_label": "createprojectdialogprops"
-    },
-    {
-      "label": "CreateProjectDialog()",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L50",
-      "_origin": "ast",
-      "id": "src_features_projects_components_create_project_dialog_createprojectdialog",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "createprojectdialog()"
-    },
-    {
-      "label": "project-card.tsx",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_features_projects_components_project_card",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "project-card.tsx"
-    },
-    {
-      "label": "ProjectCardProps",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L7",
-      "_origin": "ast",
-      "id": "src_features_projects_components_project_card_projectcardprops",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "projectcardprops"
-    },
-    {
-      "label": "STATUS_CONFIG",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "src_features_projects_components_project_card_status_config",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "status_config"
-    },
-    {
-      "label": "ProjectCard()",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L40",
-      "_origin": "ast",
-      "id": "src_features_projects_components_project_card_projectcard",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "projectcard()"
-    },
-    {
-      "label": "project-list.tsx",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_features_projects_components_project_list",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "project-list.tsx"
-    },
-    {
-      "label": "ProjectListProps",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L9",
-      "_origin": "ast",
-      "id": "src_features_projects_components_project_list_projectlistprops",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "projectlistprops"
-    },
-    {
-      "label": "StatusFilter",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L14",
-      "_origin": "ast",
-      "id": "src_features_projects_components_project_list_statusfilter",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "statusfilter"
-    },
-    {
-      "label": "ProjectList()",
-      "file_type": "code",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "src_features_projects_components_project_list_projectlist",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "projectlist()"
+      "id": "src_features_projects_actions_project_actions_placeholderprojectaction",
+      "community": 48,
+      "community_name": "project.actions.ts",
+      "norm_label": "placeholderprojectaction()"
     },
     {
       "label": "project.queries.ts",
@@ -3585,97 +3266,20 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_projects_queries_project_queries",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "project.queries.ts"
-    },
-    {
-      "label": "RawProjectQueryResult",
-      "file_type": "code",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L5",
-      "_origin": "ast",
-      "id": "src_features_projects_queries_project_queries_rawprojectqueryresult",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "rawprojectqueryresult"
-    },
-    {
-      "label": "mapProjectWithProgress()",
-      "file_type": "code",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "src_features_projects_queries_project_queries_mapprojectwithprogress",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "mapprojectwithprogress()"
     },
     {
       "label": "getProjects()",
       "file_type": "code",
       "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L74",
+      "source_location": "L4",
       "_origin": "ast",
       "id": "src_features_projects_queries_project_queries_getprojects",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 6,
+      "community_name": "createClient",
       "norm_label": "getprojects()"
-    },
-    {
-      "label": "getProjectById()",
-      "file_type": "code",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L101",
-      "_origin": "ast",
-      "id": "src_features_projects_queries_project_queries_getprojectbyid",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "getprojectbyid()"
-    },
-    {
-      "label": "getProjectsByMilestoneId()",
-      "file_type": "code",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L138",
-      "_origin": "ast",
-      "id": "src_features_projects_queries_project_queries_getprojectsbymilestoneid",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "getprojectsbymilestoneid()"
-    },
-    {
-      "label": "project.schema.ts",
-      "file_type": "code",
-      "source_file": "src/features/projects/schemas/project.schema.ts",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "src_features_projects_schemas_project_schema",
-      "community": 6,
-      "community_name": "createClient",
-      "norm_label": "project.schema.ts"
-    },
-    {
-      "label": "createProjectSchema",
-      "file_type": "code",
-      "source_file": "src/features/projects/schemas/project.schema.ts",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "src_features_projects_schemas_project_schema_createprojectschema",
-      "community": 6,
-      "community_name": "createClient",
-      "norm_label": "createprojectschema"
-    },
-    {
-      "label": "CreateProjectInput",
-      "file_type": "code",
-      "source_file": "src/features/projects/schemas/project.schema.ts",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "src_features_projects_schemas_project_schema_createprojectinput",
-      "community": 6,
-      "community_name": "createClient",
-      "norm_label": "createprojectinput"
     },
     {
       "label": "project.types.ts",
@@ -3684,8 +3288,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "project.types.ts"
     },
     {
@@ -3695,8 +3299,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_project",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "project"
     },
     {
@@ -3706,8 +3310,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_projectinsert",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectinsert"
     },
     {
@@ -3717,42 +3321,9 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_projectupdate",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectupdate"
-    },
-    {
-      "label": "ProjectStatus",
-      "file_type": "code",
-      "source_file": "src/features/projects/types/project.types.ts",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "src_features_projects_types_project_types_projectstatus",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "projectstatus"
-    },
-    {
-      "label": "ProjectWithDetails",
-      "file_type": "code",
-      "source_file": "src/features/projects/types/project.types.ts",
-      "source_location": "L8",
-      "_origin": "ast",
-      "id": "src_features_projects_types_project_types_projectwithdetails",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "projectwithdetails"
-    },
-    {
-      "label": "ProjectWithProgress",
-      "file_type": "code",
-      "source_file": "src/features/projects/types/project.types.ts",
-      "source_location": "L24",
-      "_origin": "ast",
-      "id": "src_features_projects_types_project_types_projectwithprogress",
-      "community": 20,
-      "community_name": "project-list.tsx",
-      "norm_label": "projectwithprogress"
     },
     {
       "label": "task.actions.ts",
@@ -3860,8 +3431,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "team.actions.ts"
     },
     {
@@ -3871,8 +3442,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteschema",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "inviteschema"
     },
     {
@@ -3882,8 +3453,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteteammemberinput",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "inviteteammemberinput"
     },
     {
@@ -3893,8 +3464,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteteammember",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "inviteteammember()"
     },
     {
@@ -3904,8 +3475,8 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_revokeinvitation",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "revokeinvitation()"
     },
     {
@@ -3926,8 +3497,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitation-list.tsx"
     },
     {
@@ -3937,8 +3508,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitation",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitation"
     },
     {
@@ -3948,8 +3519,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitationlistprops",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitationlistprops"
     },
     {
@@ -3959,8 +3530,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_status_config",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "status_config"
     },
     {
@@ -3970,8 +3541,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_copylinkbutton",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "copylinkbutton()"
     },
     {
@@ -3981,8 +3552,8 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_revokebutton",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "revokebutton()"
     },
     {
@@ -3992,8 +3563,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitationlist",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "team.actions.ts",
       "norm_label": "invitationlist()"
     },
     {
@@ -4004,7 +3575,7 @@
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "invite-modal.tsx"
     },
     {
@@ -4015,7 +3586,7 @@
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal_invitemodalprops",
       "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "invitemodalprops"
     },
     {
@@ -4026,7 +3597,7 @@
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal_invitemodal",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "team.actions.ts",
       "norm_label": "invitemodal()"
     },
     {
@@ -4223,8 +3794,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_use_user",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "use-user.ts"
     },
     {
@@ -4234,8 +3805,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_hooks_use_user_useuser",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "useuser()"
     },
     {
@@ -4279,7 +3850,7 @@
       "_origin": "ast",
       "id": "src_lib_supabase_admin",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "team.actions.ts",
       "norm_label": "admin.ts"
     },
     {
@@ -4290,7 +3861,7 @@
       "_origin": "ast",
       "id": "src_lib_supabase_admin_createadminclient",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "team.actions.ts",
       "norm_label": "createadminclient()"
     },
     {
@@ -4300,8 +3871,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_supabase_client",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "client.ts"
     },
     {
@@ -4311,8 +3882,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_lib_supabase_client_createclient",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 19,
+      "community_name": "create-milestone-dialog.tsx",
       "norm_label": "createclient()"
     },
     {
@@ -5664,8 +5235,8 @@
       "source_location": "L145",
       "_origin": "ast",
       "id": "docs_prd_9_functional_requirements",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9. functional requirements"
     },
     {
@@ -5675,8 +5246,8 @@
       "source_location": "L147",
       "_origin": "ast",
       "id": "docs_prd_9_1_autentikasi_manajemen_pengguna",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.1 autentikasi & manajemen pengguna"
     },
     {
@@ -5686,8 +5257,8 @@
       "source_location": "L153",
       "_origin": "ast",
       "id": "docs_prd_9_2_milestone_management",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.2 milestone management"
     },
     {
@@ -5697,8 +5268,8 @@
       "source_location": "L158",
       "_origin": "ast",
       "id": "docs_prd_9_3_project_management",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.3 project management"
     },
     {
@@ -5708,8 +5279,8 @@
       "source_location": "L162",
       "_origin": "ast",
       "id": "docs_prd_9_4_task_kanban_board",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.4 task & kanban board"
     },
     {
@@ -5719,8 +5290,8 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "docs_prd_9_5_dashboard_performa",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.5 dashboard performa"
     },
     {
@@ -5730,8 +5301,8 @@
       "source_location": "L174",
       "_origin": "ast",
       "id": "docs_prd_9_6_workload_capacity_management",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.6 workload & capacity management"
     },
     {
@@ -5741,8 +5312,8 @@
       "source_location": "L179",
       "_origin": "ast",
       "id": "docs_prd_9_7_integrasi_github",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.7 integrasi github"
     },
     {
@@ -5752,8 +5323,8 @@
       "source_location": "L183",
       "_origin": "ast",
       "id": "docs_prd_9_8_fitur_ai",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.8 fitur ai"
     },
     {
@@ -5763,8 +5334,8 @@
       "source_location": "L189",
       "_origin": "ast",
       "id": "docs_prd_9_9_notifikasi_activity_log",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.9 notifikasi & activity log"
     },
     {
@@ -5774,8 +5345,8 @@
       "source_location": "L195",
       "_origin": "ast",
       "id": "docs_prd_9_10_manajemen_anggota_tim",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.10 manajemen anggota tim"
     },
     {
@@ -5785,8 +5356,8 @@
       "source_location": "L200",
       "_origin": "ast",
       "id": "docs_prd_9_11_attachment_search",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.11 attachment & search"
     },
     {
@@ -5796,8 +5367,8 @@
       "source_location": "L205",
       "_origin": "ast",
       "id": "docs_prd_9_12_task_dependencies",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.12 task dependencies"
     },
     {
@@ -5807,8 +5378,8 @@
       "source_location": "L210",
       "_origin": "ast",
       "id": "docs_prd_9_13_export_laporan",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.13 export laporan"
     },
     {
@@ -5818,8 +5389,8 @@
       "source_location": "L213",
       "_origin": "ast",
       "id": "docs_prd_9_14_ai_guardrails",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.14 ai guardrails"
     },
     {
@@ -5829,8 +5400,8 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "docs_prd_9_15_archiving",
-      "community": 0,
-      "community_name": "Product Requirements Document (PRD)",
+      "community": 20,
+      "community_name": "9. Functional Requirements",
       "norm_label": "9.15 archiving"
     },
     {
@@ -6653,30 +6224,6 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L60",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog_createprojectdialog",
-      "target": "package_dependencies_react"
-    },
-    {
-      "relation": "references",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list_projectlist",
-      "target": "package_dependencies_react"
-    },
-    {
-      "relation": "references",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
       "source_file": "src/features/team/components/invitation-list.tsx",
       "source_location": "L51",
       "weight": 1.0,
@@ -7442,7 +6989,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L30",
+      "source_location": "L18",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page",
@@ -7453,7 +7000,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L73",
+      "source_location": "L61",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page",
@@ -7464,7 +7011,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L26",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page",
@@ -7475,7 +7022,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L44",
+      "source_location": "L32",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page",
@@ -7487,139 +7034,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_components_ui_breadcrumb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_components_ui_breadcrumb_breadcrumb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_components_ui_breadcrumb_breadcrumbitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_components_ui_breadcrumb_breadcrumblink",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_components_ui_breadcrumb_breadcrumblist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_components_ui_breadcrumb_breadcrumbpage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_components_ui_breadcrumb_breadcrumbseparator",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_config_routes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_config_routes_routes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_auth_queries_auth_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_auth_queries_auth_queries_getuserprofile",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L18",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page",
@@ -7631,7 +7046,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L18",
+      "source_location": "L12",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page",
@@ -7643,7 +7058,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page",
@@ -7655,19 +7070,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_milestones_queries_milestone_queries_geteligiblepics",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page",
@@ -7675,156 +7078,24 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_milestones_queries_milestone_queries_getmilestones",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_projects_components_create_project_dialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L22",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_projects_components_create_project_dialog_createprojectdialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_projects_components_project_list",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_projects_components_project_list_projectlist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_projects_queries_project_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L21",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_projects_queries_project_queries_getprojectsbymilestoneid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_team_queries_team_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page",
-      "target": "src_features_team_queries_team_queries_getteams",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L34",
+      "source_location": "L22",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page_generatemetadata",
       "target": "src_features_milestones_queries_milestone_queries_getmilestonebyid"
     },
     {
-      "relation": "references",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L215",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page_milestonedetailpage",
-      "target": "src_config_routes_routes"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L79",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page_milestonedetailpage",
-      "target": "src_features_auth_queries_auth_queries_getuserprofile"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L93",
+      "source_location": "L72",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page_milestonedetailpage",
@@ -7836,81 +7107,11 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L82",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page_milestonedetailpage",
-      "target": "src_features_milestones_queries_milestone_queries_geteligiblepics"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L80",
+      "source_location": "L65",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_app_dashboard_milestones_id_page_milestonedetailpage",
       "target": "src_features_milestones_queries_milestone_queries_getmilestonebyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L83",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page_milestonedetailpage",
-      "target": "src_features_milestones_queries_milestone_queries_getmilestones"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L99",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page_milestonedetailpage",
-      "target": "src_features_projects_queries_project_queries_getprojectsbymilestoneid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
-      "source_location": "L81",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_page_milestonedetailpage",
-      "target": "src_features_team_queries_team_queries_getteams"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/projects/page.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_projects_page",
-      "target": "src_app_dashboard_milestones_id_projects_page_milestoneprojectsredirectpage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/milestones/[id]/projects/page.tsx",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_milestones_id_projects_page",
-      "target": "src_app_dashboard_milestones_id_projects_page_props",
-      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8112,423 +7313,6 @@
       "source": "src_app_dashboard_page",
       "target": "src_app_dashboard_page_dashboardpage",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L32",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_app_dashboard_projects_page_generatemetadata",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L51",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_app_dashboard_projects_page_projectspage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_app_dashboard_projects_page_projectspageprops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_components_ui_breadcrumb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_components_ui_breadcrumb_breadcrumb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_components_ui_breadcrumb_breadcrumbitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_components_ui_breadcrumb_breadcrumblink",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_components_ui_breadcrumb_breadcrumblist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_components_ui_breadcrumb_breadcrumbpage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_components_ui_breadcrumb_breadcrumbseparator",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_config_routes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L26",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_config_routes_routes",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_auth_queries_auth_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L13",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_auth_queries_auth_queries_getuserprofile",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_milestones_queries_milestone_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_milestones_queries_milestone_queries_geteligiblepics",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_milestones_queries_milestone_queries_getmilestonebyid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_milestones_queries_milestone_queries_getmilestones",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_projects_components_create_project_dialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L25",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_projects_components_create_project_dialog_createprojectdialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_projects_components_project_list",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_projects_components_project_list_projectlist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_projects_queries_project_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_projects_queries_project_queries_getprojects",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_projects_queries_project_queries_getprojectsbymilestoneid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_team_queries_team_queries",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L19",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page",
-      "target": "src_features_team_queries_team_queries_getteams",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page_generatemetadata",
-      "target": "src_features_milestones_queries_milestone_queries_getmilestonebyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L54",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page_projectspage",
-      "target": "src_features_auth_queries_auth_queries_getuserprofile"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L65",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page_projectspage",
-      "target": "src_features_milestones_queries_milestone_queries_geteligiblepics"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L71",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page_projectspage",
-      "target": "src_features_milestones_queries_milestone_queries_getmilestonebyid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L66",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page_projectspage",
-      "target": "src_features_milestones_queries_milestone_queries_getmilestones"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L192",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page_projectspage",
-      "target": "src_features_projects_queries_project_queries_getprojects"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L74",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page_projectspage",
-      "target": "src_features_projects_queries_project_queries_getprojectsbymilestoneid"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/app/(dashboard)/projects/page.tsx",
-      "source_location": "L64",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_app_dashboard_projects_page_projectspage",
-      "target": "src_features_team_queries_team_queries_getteams"
     },
     {
       "relation": "contains",
@@ -9162,83 +7946,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_ui_breadcrumb",
-      "target": "src_components_ui_breadcrumb_breadcrumb",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L92",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_ui_breadcrumb",
-      "target": "src_components_ui_breadcrumb_breadcrumbellipsis",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L31",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_ui_breadcrumb",
-      "target": "src_components_ui_breadcrumb_breadcrumbitem",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L41",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_ui_breadcrumb",
-      "target": "src_components_ui_breadcrumb_breadcrumblink",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L18",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_ui_breadcrumb",
-      "target": "src_components_ui_breadcrumb_breadcrumblist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L61",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_ui_breadcrumb",
-      "target": "src_components_ui_breadcrumb_breadcrumbpage",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/components/ui/breadcrumb.tsx",
-      "source_location": "L74",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_components_ui_breadcrumb",
-      "target": "src_components_ui_breadcrumb_breadcrumbseparator",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "src/components/ui/button.tsx",
       "source_location": "L42",
       "weight": 1.0,
@@ -9291,18 +7998,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_components_create_milestone_dialog",
-      "target": "src_components_ui_button",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
       "target": "src_components_ui_button",
       "confidence_score": 1.0
     },
@@ -9387,18 +8082,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_components_create_milestone_dialog",
-      "target": "src_components_ui_button_button",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
       "target": "src_components_ui_button_button",
       "confidence_score": 1.0
     },
@@ -9809,18 +8492,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_dialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
@@ -9845,18 +8516,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_dialog_dialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
@@ -9874,18 +8533,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_components_create_milestone_dialog",
-      "target": "src_components_ui_dialog_dialogtrigger",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
       "target": "src_components_ui_dialog_dialogtrigger",
       "confidence_score": 1.0
     },
@@ -9917,35 +8564,11 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_dialog_dialogclose",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/milestones/components/create-milestone-dialog.tsx",
       "source_location": "L10",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_components_create_milestone_dialog",
-      "target": "src_components_ui_dialog_dialogcontent",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
       "target": "src_components_ui_dialog_dialogcontent",
       "confidence_score": 1.0
     },
@@ -9977,18 +8600,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_dialog_dialogheader",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
@@ -10013,18 +8624,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_dialog_dialogfooter",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
@@ -10049,18 +8648,6 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_dialog_dialogtitle",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L9",
       "weight": 1.0,
@@ -10078,18 +8665,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_components_create_milestone_dialog",
-      "target": "src_components_ui_dialog_dialogdescription",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
       "target": "src_components_ui_dialog_dialogdescription",
       "confidence_score": 1.0
     },
@@ -10393,30 +8968,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_input",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
-      "target": "src_components_ui_input",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L7",
       "weight": 1.0,
@@ -10470,30 +9021,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_components_milestone_list",
-      "target": "src_components_ui_input_input",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_input_input",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
       "target": "src_components_ui_input_input",
       "confidence_score": 1.0
     },
@@ -10560,18 +9087,6 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_label",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
       "source_file": "src/features/team/components/invite-modal.tsx",
       "source_location": "L8",
       "weight": 1.0,
@@ -10613,18 +9128,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_components_create_milestone_dialog",
-      "target": "src_components_ui_label_label",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
       "target": "src_components_ui_label_label",
       "confidence_score": 1.0
     },
@@ -10836,18 +9339,6 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_components_ui_textarea",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -10856,18 +9347,6 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_components_create_milestone_dialog",
-      "target": "src_components_ui_textarea_textarea",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
       "target": "src_components_ui_textarea_textarea",
       "confidence_score": 1.0
     },
@@ -12141,7 +10620,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_queries_milestone_queries",
-      "target": "src_lib_supabase_admin",
+      "target": "src_lib_supabase_server",
       "confidence_score": 1.0
     },
     {
@@ -12153,7 +10632,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_queries_milestone_queries",
-      "target": "src_lib_supabase_admin_createadminclient",
+      "target": "src_lib_supabase_server_createclient",
       "confidence_score": 1.0
     },
     {
@@ -12166,7 +10645,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_queries_milestone_queries_getmilestones",
-      "target": "src_lib_supabase_admin_createadminclient"
+      "target": "src_lib_supabase_server_createclient"
     },
     {
       "relation": "calls",
@@ -12178,7 +10657,7 @@
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_queries_milestone_queries_getmilestonebyid",
-      "target": "src_lib_supabase_admin_createadminclient"
+      "target": "src_lib_supabase_server_createclient"
     },
     {
       "relation": "calls",
@@ -12186,11 +10665,11 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "src/features/milestones/queries/milestone.queries.ts",
-      "source_location": "L47",
+      "source_location": "L39",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_milestones_queries_milestone_queries_geteligiblepics",
-      "target": "src_lib_supabase_admin_createadminclient"
+      "target": "src_lib_supabase_server_createclient"
     },
     {
       "relation": "contains",
@@ -12356,378 +10835,18 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions",
-      "target": "src_features_projects_actions_project_actions_createproject",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions",
-      "target": "src_features_projects_schemas_project_schema",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions",
-      "target": "src_features_projects_schemas_project_schema_createprojectinput",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions",
-      "target": "src_features_projects_schemas_project_schema_createprojectschema",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions",
-      "target": "src_lib_supabase_admin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions",
-      "target": "src_lib_supabase_admin_createadminclient",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/actions/project.actions.ts",
       "source_location": "L3",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_projects_actions_project_actions",
-      "target": "src_lib_supabase_server",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions",
-      "target": "src_lib_supabase_server_createclient",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_features_projects_actions_project_actions",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L121",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions_createproject",
-      "target": "src_lib_supabase_admin_createadminclient"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/features/projects/actions/project.actions.ts",
-      "source_location": "L57",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_actions_project_actions_createproject",
-      "target": "src_lib_supabase_server_createclient"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L20",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_features_projects_actions_project_actions_createproject",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L50",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_features_projects_components_create_project_dialog_createprojectdialog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_features_projects_components_create_project_dialog_createprojectdialogprops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L23",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_features_projects_components_create_project_dialog_milestoneoption",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L33",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_features_projects_components_create_project_dialog_picoption",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/create-project-dialog.tsx",
-      "source_location": "L28",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_create_project_dialog",
-      "target": "src_features_projects_components_create_project_dialog_teamoption",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L40",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_card",
-      "target": "src_features_projects_components_project_card_projectcard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_card",
-      "target": "src_features_projects_components_project_card_projectcardprops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L11",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_card",
-      "target": "src_features_projects_components_project_card_status_config",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_card",
-      "target": "src_features_projects_types_project_types",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_card",
-      "target": "src_features_projects_types_project_types_projectwithprogress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
-      "target": "src_features_projects_components_project_card",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-card.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_card_projectcardprops",
-      "target": "src_features_projects_types_project_types_projectwithprogress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
-      "target": "src_features_projects_components_project_card_projectcard",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L16",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
-      "target": "src_features_projects_components_project_list_projectlist",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
-      "target": "src_features_projects_components_project_list_projectlistprops",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L14",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
-      "target": "src_features_projects_components_project_list_statusfilter",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
-      "target": "src_features_projects_types_project_types",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L7",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list",
-      "target": "src_features_projects_types_project_types_projectwithprogress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/components/project-list.tsx",
-      "source_location": "L10",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_components_project_list_projectlistprops",
-      "target": "src_features_projects_types_project_types_projectwithprogress",
+      "target": "src_features_projects_actions_project_actions_placeholderprojectaction",
       "confidence_score": 1.0
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L101",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries",
-      "target": "src_features_projects_queries_project_queries_getprojectbyid",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L74",
+      "source_location": "L4",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_projects_queries_project_queries",
@@ -12735,191 +10854,40 @@
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L138",
+      "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_projects_queries_project_queries",
-      "target": "src_features_projects_queries_project_queries_getprojectsbymilestoneid",
+      "target": "src_lib_supabase_server",
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "imports",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L37",
+      "source_location": "L2",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_projects_queries_project_queries",
-      "target": "src_features_projects_queries_project_queries_mapprojectwithprogress",
+      "target": "src_lib_supabase_server_createclient",
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "calls",
+      "context": "call",
       "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
       "source_file": "src/features/projects/queries/project.queries.ts",
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries",
-      "target": "src_features_projects_queries_project_queries_rawprojectqueryresult",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries",
-      "target": "src_features_projects_types_project_types",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L3",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries",
-      "target": "src_features_projects_types_project_types_projectwithprogress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries",
-      "target": "src_lib_supabase_admin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries",
-      "target": "src_lib_supabase_admin_createadminclient",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "field",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L9",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries_rawprojectqueryresult",
-      "target": "src_features_projects_types_project_types_projectwithprogress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L131",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries_getprojectbyid",
-      "target": "src_features_projects_queries_project_queries_mapprojectwithprogress",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L98",
-      "weight": 1.0,
-      "_origin": "ast",
       "source": "src_features_projects_queries_project_queries_getprojects",
-      "target": "src_features_projects_queries_project_queries_mapprojectwithprogress",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "indirect_call",
-      "context": "argument",
-      "confidence": "INFERRED",
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L172",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries_getprojectsbymilestoneid",
-      "target": "src_features_projects_queries_project_queries_mapprojectwithprogress",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L75",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries_getprojects",
-      "target": "src_lib_supabase_admin_createadminclient"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L104",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries_getprojectbyid",
-      "target": "src_lib_supabase_admin_createadminclient"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "src/features/projects/queries/project.queries.ts",
-      "source_location": "L141",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_queries_project_queries_getprojectsbymilestoneid",
-      "target": "src_lib_supabase_admin_createadminclient"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/schemas/project.schema.ts",
-      "source_location": "L37",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_schemas_project_schema",
-      "target": "src_features_projects_schemas_project_schema_createprojectinput",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/schemas/project.schema.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_schemas_project_schema",
-      "target": "src_features_projects_schemas_project_schema_createprojectschema",
-      "confidence_score": 1.0
+      "target": "src_lib_supabase_server_createclient"
     },
     {
       "relation": "contains",
@@ -12947,44 +10915,11 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/features/projects/types/project.types.ts",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_types_project_types",
-      "target": "src_features_projects_types_project_types_projectstatus",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/types/project.types.ts",
       "source_location": "L5",
       "weight": 1.0,
       "_origin": "ast",
       "source": "src_features_projects_types_project_types",
       "target": "src_features_projects_types_project_types_projectupdate",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/types/project.types.ts",
-      "source_location": "L8",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_types_project_types",
-      "target": "src_features_projects_types_project_types_projectwithdetails",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/features/projects/types/project.types.ts",
-      "source_location": "L24",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "src_features_projects_types_project_types",
-      "target": "src_features_projects_types_project_types_projectwithprogress",
       "confidence_score": 1.0
     },
     {
@@ -15361,5 +13296,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "871bad9314b02390e825d7bc683621561b42a696"
+  "built_at_commit": "0a1f1a586c45c723db4831b950ebe4cf727f5ef2"
 }
