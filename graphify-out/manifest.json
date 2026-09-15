@@ -340,8 +340,8 @@
     "semantic_hash": ""
   },
   "src/features/kanban/types/kanban.types.ts": {
-    "mtime": 1788918393.3451002,
-    "ast_hash": "16182417e07b16dbd9a9fd6a35149d5d",
+    "mtime": 1789438893.7388566,
+    "ast_hash": "8fd8db69a362ceb944d990c103254b47",
     "semantic_hash": ""
   },
   "src/features/milestones/actions/milestone.actions.ts": {
@@ -627,6 +627,31 @@
   "supabase/migrations/20260914000000_projects_rls.sql": {
     "mtime": 1789367577.1889453,
     "ast_hash": "6c5328dee15377a86be1a2b8c6600ac6",
+    "semantic_hash": ""
+  },
+  "src/app/(dashboard)/projects/[id]/page.tsx": {
+    "mtime": 1789439022.1761677,
+    "ast_hash": "ec7dd36a236913d3329c732e377c696b",
+    "semantic_hash": ""
+  },
+  "src/features/kanban/components/kanban-board.tsx": {
+    "mtime": 1789439013.210759,
+    "ast_hash": "0f22d8e551ee365bb0b6d345d2b3c724",
+    "semantic_hash": ""
+  },
+  "src/features/kanban/components/kanban-column.tsx": {
+    "mtime": 1789439004.1025567,
+    "ast_hash": "b08429b00eb2568b5c9a5aa0a558c227",
+    "semantic_hash": ""
+  },
+  "src/features/kanban/queries/kanban.queries.ts": {
+    "mtime": 1789439683.2550673,
+    "ast_hash": "001779e0ebdad1c415d2d9444c030219",
+    "semantic_hash": ""
+  },
+  "supabase/migrations/20260915000000_board_columns_and_tasks_rls.sql": {
+    "mtime": 1789438827.0802317,
+    "ast_hash": "4ad8f38b822e8ba1b18b86d6fef1c266",
     "semantic_hash": ""
   }
 }

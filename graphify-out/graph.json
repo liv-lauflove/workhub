@@ -593,8 +593,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "package_dependencies_react",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "react"
     },
     {
@@ -604,8 +604,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "react",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "react"
     },
     {
@@ -1220,8 +1220,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_auth_login_page",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "login/page.tsx"
     },
     {
@@ -1231,8 +1231,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_app_auth_login_page_metadata",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "metadata"
     },
     {
@@ -1242,8 +1242,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_app_auth_login_page_loginpage",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "loginpage()"
     },
     {
@@ -1253,8 +1253,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_auth_register_page",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "register/page.tsx"
     },
     {
@@ -1264,8 +1264,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_app_auth_register_page_metadata",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "metadata"
     },
     {
@@ -1275,8 +1275,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_app_auth_register_page_registerpage",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "registerpage()"
     },
     {
@@ -1286,8 +1286,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_layout",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "(dashboard)/layout.tsx"
     },
     {
@@ -1297,20 +1297,20 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_app_dashboard_layout_dashboardlayout",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "dashboardlayout()"
     },
     {
-      "label": "[id]/page.tsx",
+      "label": "milestones/[id]/page.tsx",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/milestones/[id]/page.tsx",
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page",
       "community": 18,
-      "community_name": "[id]/page.tsx",
-      "norm_label": "[id]/page.tsx"
+      "community_name": "milestones/[id]/page.tsx",
+      "norm_label": "milestones/[id]/page.tsx"
     },
     {
       "label": "MilestoneDetailPageProps",
@@ -1320,7 +1320,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page_milestonedetailpageprops",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "milestonedetailpageprops"
     },
     {
@@ -1331,7 +1331,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page_generatemetadata",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "generatemetadata()"
     },
     {
@@ -1342,7 +1342,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page_status_config",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "status_config"
     },
     {
@@ -1353,7 +1353,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_id_page_milestonedetailpage",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "milestonedetailpage()"
     },
     {
@@ -1397,7 +1397,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_page",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "milestones/page.tsx"
     },
     {
@@ -1408,7 +1408,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_page_metadata",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "metadata"
     },
     {
@@ -1419,7 +1419,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_milestones_page_milestonespage",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "milestonespage()"
     },
     {
@@ -1445,6 +1445,61 @@
       "norm_label": "dashboardpage()"
     },
     {
+      "label": "projects/[id]/page.tsx",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_app_dashboard_projects_id_page",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
+      "norm_label": "projects/[id]/page.tsx"
+    },
+    {
+      "label": "ProjectDetailPageProps",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "src_app_dashboard_projects_id_page_projectdetailpageprops",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
+      "norm_label": "projectdetailpageprops"
+    },
+    {
+      "label": "STATUS_CONFIG",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "src_app_dashboard_projects_id_page_status_config",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
+      "norm_label": "status_config"
+    },
+    {
+      "label": "generateMetadata()",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L59",
+      "_origin": "ast",
+      "id": "src_app_dashboard_projects_id_page_generatemetadata",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
+      "norm_label": "generatemetadata()"
+    },
+    {
+      "label": "ProjectDetailPage()",
+      "file_type": "code",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L77",
+      "_origin": "ast",
+      "id": "src_app_dashboard_projects_id_page_projectdetailpage",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
+      "norm_label": "projectdetailpage()"
+    },
+    {
       "label": "(dashboard)/projects/page.tsx",
       "file_type": "code",
       "source_file": "src/app/(dashboard)/projects/page.tsx",
@@ -1452,7 +1507,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_projects_page",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "(dashboard)/projects/page.tsx"
     },
     {
@@ -1463,7 +1518,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_projects_page_projectspageprops",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "projectspageprops"
     },
     {
@@ -1474,7 +1529,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_projects_page_generatemetadata",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "generatemetadata()"
     },
     {
@@ -1485,7 +1540,7 @@
       "_origin": "ast",
       "id": "src_app_dashboard_projects_page_projectspage",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "projectspage()"
     },
     {
@@ -1627,8 +1682,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_forms_submit_button",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "submit-button.tsx"
     },
     {
@@ -1638,8 +1693,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_components_forms_submit_button_submitbuttonprops",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "submitbuttonprops"
     },
     {
@@ -1649,8 +1704,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_components_forms_submit_button_submitbutton",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "submitbutton()"
     },
     {
@@ -1793,7 +1848,7 @@
       "_origin": "ast",
       "id": "src_components_ui_breadcrumb",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "breadcrumb.tsx"
     },
     {
@@ -1804,7 +1859,7 @@
       "_origin": "ast",
       "id": "src_components_ui_breadcrumb_breadcrumb",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "breadcrumb()"
     },
     {
@@ -1815,7 +1870,7 @@
       "_origin": "ast",
       "id": "src_components_ui_breadcrumb_breadcrumblist",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "breadcrumblist()"
     },
     {
@@ -1826,7 +1881,7 @@
       "_origin": "ast",
       "id": "src_components_ui_breadcrumb_breadcrumbitem",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "breadcrumbitem()"
     },
     {
@@ -1837,7 +1892,7 @@
       "_origin": "ast",
       "id": "src_components_ui_breadcrumb_breadcrumblink",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "breadcrumblink()"
     },
     {
@@ -1848,7 +1903,7 @@
       "_origin": "ast",
       "id": "src_components_ui_breadcrumb_breadcrumbpage",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "breadcrumbpage()"
     },
     {
@@ -1859,7 +1914,7 @@
       "_origin": "ast",
       "id": "src_components_ui_breadcrumb_breadcrumbseparator",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "breadcrumbseparator()"
     },
     {
@@ -1870,7 +1925,7 @@
       "_origin": "ast",
       "id": "src_components_ui_breadcrumb_breadcrumbellipsis",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "breadcrumbellipsis()"
     },
     {
@@ -1913,8 +1968,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_components_ui_card",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "card.tsx"
     },
     {
@@ -1924,8 +1979,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_components_ui_card_card",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "card()"
     },
     {
@@ -1935,8 +1990,8 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_components_ui_card_cardheader",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "cardheader()"
     },
     {
@@ -1946,8 +2001,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_components_ui_card_cardtitle",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "cardtitle()"
     },
     {
@@ -1957,8 +2012,8 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_components_ui_card_carddescription",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "carddescription()"
     },
     {
@@ -1968,8 +2023,8 @@
       "source_location": "L58",
       "_origin": "ast",
       "id": "src_components_ui_card_cardaction",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "cardaction()"
     },
     {
@@ -1979,8 +2034,8 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_components_ui_card_cardcontent",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "cardcontent()"
     },
     {
@@ -1990,8 +2045,8 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_components_ui_card_cardfooter",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "cardfooter()"
     },
     {
@@ -2508,7 +2563,7 @@
       "_origin": "ast",
       "id": "src_config_routes",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "routes.ts"
     },
     {
@@ -2519,7 +2574,7 @@
       "_origin": "ast",
       "id": "src_config_routes_routes",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "routes"
     },
     {
@@ -2661,8 +2716,8 @@
       "source_location": "L13",
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_login",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "login()"
     },
     {
@@ -2672,8 +2727,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_features_auth_actions_auth_actions_register",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "register()"
     },
     {
@@ -2694,8 +2749,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_components_login_form",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "login-form.tsx"
     },
     {
@@ -2705,8 +2760,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_features_auth_components_login_form_loginform",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "loginform()"
     },
     {
@@ -2716,8 +2771,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_components_oauth_buttons",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "oauth-buttons.tsx"
     },
     {
@@ -2727,8 +2782,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_features_auth_components_oauth_buttons_oauthbuttons",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "oauthbuttons()"
     },
     {
@@ -2738,8 +2793,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_components_register_form",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "register-form.tsx"
     },
     {
@@ -2749,8 +2804,8 @@
       "source_location": "L21",
       "_origin": "ast",
       "id": "src_features_auth_components_register_form_registerform",
-      "community": 19,
-      "community_name": "create-project-dialog.tsx",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "registerform()"
     },
     {
@@ -2761,7 +2816,7 @@
       "_origin": "ast",
       "id": "src_features_auth_lib_auth_utils",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "auth.utils.ts"
     },
     {
@@ -2772,7 +2827,7 @@
       "_origin": "ast",
       "id": "src_features_auth_lib_auth_utils_requireauth",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "requireauth()"
     },
     {
@@ -2782,8 +2837,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_auth_queries_auth_queries",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "auth.queries.ts"
     },
     {
@@ -2793,8 +2848,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_features_auth_queries_auth_queries_getuser",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "getuser()"
     },
     {
@@ -2804,8 +2859,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_features_auth_queries_auth_queries_getuserprofile",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "getuserprofile()"
     },
     {
@@ -2996,14 +3051,135 @@
       "norm_label": "placeholderkanbanaction()"
     },
     {
+      "label": "kanban-board.tsx",
+      "file_type": "code",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_kanban_components_kanban_board",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "kanban-board.tsx"
+    },
+    {
+      "label": "KanbanBoardProps",
+      "file_type": "code",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "src_features_kanban_components_kanban_board_kanbanboardprops",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "kanbanboardprops"
+    },
+    {
+      "label": "KanbanBoard()",
+      "file_type": "code",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "src_features_kanban_components_kanban_board_kanbanboard",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "kanbanboard()"
+    },
+    {
+      "label": "kanban-column.tsx",
+      "file_type": "code",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_kanban_components_kanban_column",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "kanban-column.tsx"
+    },
+    {
+      "label": "KanbanColumnProps",
+      "file_type": "code",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "src_features_kanban_components_kanban_column_kanbancolumnprops",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "kanbancolumnprops"
+    },
+    {
+      "label": "getColumnStatusDot()",
+      "file_type": "code",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "src_features_kanban_components_kanban_column_getcolumnstatusdot",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "getcolumnstatusdot()"
+    },
+    {
+      "label": "getPriorityBadgeClass()",
+      "file_type": "code",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L28",
+      "_origin": "ast",
+      "id": "src_features_kanban_components_kanban_column_getprioritybadgeclass",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "getprioritybadgeclass()"
+    },
+    {
+      "label": "KanbanColumn()",
+      "file_type": "code",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "src_features_kanban_components_kanban_column_kanbancolumn",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "kanbancolumn()"
+    },
+    {
+      "label": "kanban.queries.ts",
+      "file_type": "code",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_features_kanban_queries_kanban_queries",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "kanban.queries.ts"
+    },
+    {
+      "label": "DEFAULT_COLUMNS",
+      "file_type": "code",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_features_kanban_queries_kanban_queries_default_columns",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "default_columns"
+    },
+    {
+      "label": "getProjectBoardColumns()",
+      "file_type": "code",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "src_features_kanban_queries_kanban_queries_getprojectboardcolumns",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
+      "norm_label": "getprojectboardcolumns()"
+    },
+    {
       "label": "kanban.types.ts",
       "file_type": "code",
       "source_file": "src/features/kanban/types/kanban.types.ts",
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_kanban_types_kanban_types",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 31,
+      "community_name": "kanban.types.ts",
       "norm_label": "kanban.types.ts"
     },
     {
@@ -3013,8 +3189,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_features_kanban_types_kanban_types_boardcolumn",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 31,
+      "community_name": "kanban.types.ts",
       "norm_label": "boardcolumn"
     },
     {
@@ -3024,9 +3200,53 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_features_kanban_types_kanban_types_boardcolumninsert",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 31,
+      "community_name": "kanban.types.ts",
       "norm_label": "boardcolumninsert"
+    },
+    {
+      "label": "BoardColumnUpdate",
+      "file_type": "code",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L6",
+      "_origin": "ast",
+      "id": "src_features_kanban_types_kanban_types_boardcolumnupdate",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "boardcolumnupdate"
+    },
+    {
+      "label": "Task",
+      "file_type": "code",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "src_features_kanban_types_kanban_types_task",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "task"
+    },
+    {
+      "label": "TaskWithAssignee",
+      "file_type": "code",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "src_features_kanban_types_kanban_types_taskwithassignee",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "taskwithassignee"
+    },
+    {
+      "label": "BoardColumnWithTasks",
+      "file_type": "code",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "src_features_kanban_types_kanban_types_boardcolumnwithtasks",
+      "community": 31,
+      "community_name": "kanban.types.ts",
+      "norm_label": "boardcolumnwithtasks"
     },
     {
       "label": "milestone.actions.ts",
@@ -3090,8 +3310,8 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_features_milestones_components_create_milestone_dialog_createmilestonedialog",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "createmilestonedialog()"
     },
     {
@@ -3178,8 +3398,8 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "src_features_milestones_components_milestone_list_milestonelist",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 22,
+      "community_name": "milestone-list.tsx",
       "norm_label": "milestonelist()"
     },
     {
@@ -3234,7 +3454,7 @@
       "_origin": "ast",
       "id": "src_features_milestones_queries_milestone_queries",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "milestone.queries.ts"
     },
     {
@@ -3245,7 +3465,7 @@
       "_origin": "ast",
       "id": "src_features_milestones_queries_milestone_queries_getmilestones",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "getmilestones()"
     },
     {
@@ -3256,7 +3476,7 @@
       "_origin": "ast",
       "id": "src_features_milestones_queries_milestone_queries_getmilestonebyid",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "getmilestonebyid()"
     },
     {
@@ -3267,7 +3487,7 @@
       "_origin": "ast",
       "id": "src_features_milestones_queries_milestone_queries_geteligiblepics",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "geteligiblepics()"
     },
     {
@@ -3486,8 +3706,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_features_projects_components_create_project_dialog_createprojectdialog",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "createprojectdialog()"
     },
     {
@@ -3497,8 +3717,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_projects_components_project_card",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "project-card.tsx"
     },
     {
@@ -3508,8 +3728,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_features_projects_components_project_card_projectcardprops",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectcardprops"
     },
     {
@@ -3519,8 +3739,8 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "src_features_projects_components_project_card_status_config",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "status_config"
     },
     {
@@ -3530,8 +3750,8 @@
       "source_location": "L40",
       "_origin": "ast",
       "id": "src_features_projects_components_project_card_projectcard",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectcard()"
     },
     {
@@ -3541,8 +3761,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_projects_components_project_list",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "project-list.tsx"
     },
     {
@@ -3552,8 +3772,8 @@
       "source_location": "L9",
       "_origin": "ast",
       "id": "src_features_projects_components_project_list_projectlistprops",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectlistprops"
     },
     {
@@ -3563,8 +3783,8 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "src_features_projects_components_project_list_statusfilter",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "statusfilter"
     },
     {
@@ -3574,8 +3794,8 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_features_projects_components_project_list_projectlist",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectlist()"
     },
     {
@@ -3586,7 +3806,7 @@
       "_origin": "ast",
       "id": "src_features_projects_queries_project_queries",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "project.queries.ts"
     },
     {
@@ -3596,8 +3816,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_features_projects_queries_project_queries_rawprojectqueryresult",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "rawprojectqueryresult"
     },
     {
@@ -3608,7 +3828,7 @@
       "_origin": "ast",
       "id": "src_features_projects_queries_project_queries_mapprojectwithprogress",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "mapprojectwithprogress()"
     },
     {
@@ -3619,7 +3839,7 @@
       "_origin": "ast",
       "id": "src_features_projects_queries_project_queries_getprojects",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "getprojects()"
     },
     {
@@ -3630,7 +3850,7 @@
       "_origin": "ast",
       "id": "src_features_projects_queries_project_queries_getprojectbyid",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "getprojectbyid()"
     },
     {
@@ -3641,7 +3861,7 @@
       "_origin": "ast",
       "id": "src_features_projects_queries_project_queries_getprojectsbymilestoneid",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "getprojectsbymilestoneid()"
     },
     {
@@ -3684,8 +3904,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "project.types.ts"
     },
     {
@@ -3695,8 +3915,8 @@
       "source_location": "L3",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_project",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "project"
     },
     {
@@ -3706,8 +3926,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_projectinsert",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectinsert"
     },
     {
@@ -3717,8 +3937,8 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_projectupdate",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectupdate"
     },
     {
@@ -3728,8 +3948,8 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_projectstatus",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectstatus"
     },
     {
@@ -3739,8 +3959,8 @@
       "source_location": "L8",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_projectwithdetails",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectwithdetails"
     },
     {
@@ -3750,8 +3970,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_features_projects_types_project_types_projectwithprogress",
-      "community": 20,
-      "community_name": "project-list.tsx",
+      "community": 17,
+      "community_name": "database.types.ts",
       "norm_label": "projectwithprogress"
     },
     {
@@ -3860,8 +4080,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "team.actions.ts"
     },
     {
@@ -3871,8 +4091,8 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteschema",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "inviteschema"
     },
     {
@@ -3882,8 +4102,8 @@
       "source_location": "L20",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteteammemberinput",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "inviteteammemberinput"
     },
     {
@@ -3893,8 +4113,8 @@
       "source_location": "L30",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_inviteteammember",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "inviteteammember()"
     },
     {
@@ -3904,8 +4124,8 @@
       "source_location": "L190",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_revokeinvitation",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 18,
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "revokeinvitation()"
     },
     {
@@ -3915,8 +4135,8 @@
       "source_location": "L235",
       "_origin": "ast",
       "id": "src_features_team_actions_team_actions_updatememberrole",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 5,
+      "community_name": "team-member-list.tsx",
       "norm_label": "updatememberrole()"
     },
     {
@@ -3926,8 +4146,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "invitation-list.tsx"
     },
     {
@@ -3937,8 +4157,8 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitation",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "invitation"
     },
     {
@@ -3948,8 +4168,8 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitationlistprops",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "invitationlistprops"
     },
     {
@@ -3959,8 +4179,8 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_status_config",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "status_config"
     },
     {
@@ -3970,8 +4190,8 @@
       "source_location": "L50",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_copylinkbutton",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "copylinkbutton()"
     },
     {
@@ -3981,8 +4201,8 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_revokebutton",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "revokebutton()"
     },
     {
@@ -3992,8 +4212,8 @@
       "source_location": "L113",
       "_origin": "ast",
       "id": "src_features_team_components_invitation_list_invitationlist",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "invitationlist()"
     },
     {
@@ -4025,8 +4245,8 @@
       "source_location": "L24",
       "_origin": "ast",
       "id": "src_features_team_components_invite_modal_invitemodal",
-      "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community": 19,
+      "community_name": "create-project-dialog.tsx",
       "norm_label": "invitemodal()"
     },
     {
@@ -4069,8 +4289,8 @@
       "source_location": "L39",
       "_origin": "ast",
       "id": "src_features_team_components_team_member_list_teammemberlist",
-      "community": 6,
-      "community_name": "createClient",
+      "community": 5,
+      "community_name": "team-member-list.tsx",
       "norm_label": "teammemberlist()"
     },
     {
@@ -4223,8 +4443,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_hooks_use_user",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "use-user.ts"
     },
     {
@@ -4234,8 +4454,8 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "src_hooks_use_user_useuser",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "useuser()"
     },
     {
@@ -4279,7 +4499,7 @@
       "_origin": "ast",
       "id": "src_lib_supabase_admin",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "admin.ts"
     },
     {
@@ -4290,7 +4510,7 @@
       "_origin": "ast",
       "id": "src_lib_supabase_admin_createadminclient",
       "community": 18,
-      "community_name": "[id]/page.tsx",
+      "community_name": "milestones/[id]/page.tsx",
       "norm_label": "createadminclient()"
     },
     {
@@ -4300,8 +4520,8 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_lib_supabase_client",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "client.ts"
     },
     {
@@ -4311,8 +4531,8 @@
       "source_location": "L4",
       "_origin": "ast",
       "id": "src_lib_supabase_client_createclient",
-      "community": 17,
-      "community_name": "database.types.ts",
+      "community": 20,
+      "community_name": "login-form.tsx",
       "norm_label": "createclient()"
     },
     {
@@ -8116,6 +8336,302 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L59",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_app_dashboard_projects_id_page_generatemetadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L77",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_app_dashboard_projects_id_page_projectdetailpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_app_dashboard_projects_id_page_projectdetailpageprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_app_dashboard_projects_id_page_status_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_components_ui_breadcrumb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_components_ui_breadcrumb_breadcrumb",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_components_ui_breadcrumb_breadcrumbitem",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_components_ui_breadcrumb_breadcrumblink",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_components_ui_breadcrumb_breadcrumblist",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_components_ui_breadcrumb_breadcrumbpage",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_components_ui_breadcrumb_breadcrumbseparator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_config_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_config_routes_routes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_features_auth_queries_auth_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L20",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_features_kanban_components_kanban_board",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L23",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_features_kanban_components_kanban_board_kanbanboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_features_kanban_queries_kanban_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_features_kanban_queries_kanban_queries_getprojectboardcolumns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_features_projects_queries_project_queries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page",
+      "target": "src_features_projects_queries_project_queries_getprojectbyid",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L63",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page_generatemetadata",
+      "target": "src_features_projects_queries_project_queries_getprojectbyid"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L83",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page_projectdetailpage",
+      "target": "src_features_auth_queries_auth_queries_getuserprofile"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L95",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page_projectdetailpage",
+      "target": "src_features_kanban_queries_kanban_queries_getprojectboardcolumns"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/app/(dashboard)/projects/[id]/page.tsx",
+      "source_location": "L84",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_app_dashboard_projects_id_page_projectdetailpage",
+      "target": "src_features_projects_queries_project_queries_getprojectbyid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/app/(dashboard)/projects/page.tsx",
       "source_location": "L32",
       "weight": 1.0,
@@ -11649,6 +12165,322 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_board",
+      "target": "src_features_kanban_components_kanban_board_kanbanboard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_board",
+      "target": "src_features_kanban_components_kanban_board_kanbanboardprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_board",
+      "target": "src_features_kanban_components_kanban_column",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_board",
+      "target": "src_features_kanban_components_kanban_column_kanbancolumn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_board",
+      "target": "src_features_kanban_types_kanban_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_board",
+      "target": "src_features_kanban_types_kanban_types_boardcolumnwithtasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-board.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_board_kanbanboardprops",
+      "target": "src_features_kanban_types_kanban_types_boardcolumnwithtasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column",
+      "target": "src_features_kanban_components_kanban_column_getcolumnstatusdot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column",
+      "target": "src_features_kanban_components_kanban_column_getprioritybadgeclass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column",
+      "target": "src_features_kanban_components_kanban_column_kanbancolumn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column",
+      "target": "src_features_kanban_components_kanban_column_kanbancolumnprops",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column",
+      "target": "src_features_kanban_types_kanban_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column",
+      "target": "src_features_kanban_types_kanban_types_boardcolumnwithtasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column_kanbancolumnprops",
+      "target": "src_features_kanban_types_kanban_types_boardcolumnwithtasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L44",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column_kanbancolumn",
+      "target": "src_features_kanban_components_kanban_column_getcolumnstatusdot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/components/kanban-column.tsx",
+      "source_location": "L98",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_components_kanban_column_kanbancolumn",
+      "target": "src_features_kanban_components_kanban_column_getprioritybadgeclass",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_features_kanban_queries_kanban_queries_default_columns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L21",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_features_kanban_queries_kanban_queries_getprojectboardcolumns",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_features_kanban_types_kanban_types",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_features_kanban_types_kanban_types_boardcolumnwithtasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_features_kanban_types_kanban_types_taskwithassignee",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_lib_supabase_admin",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_lib_supabase_admin_createadminclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_lib_supabase_server",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries",
+      "target": "src_lib_supabase_server_createclient",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries_getprojectboardcolumns",
+      "target": "src_lib_supabase_admin_createadminclient"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "src/features/kanban/queries/kanban.queries.ts",
+      "source_location": "L24",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_queries_kanban_queries_getprojectboardcolumns",
+      "target": "src_lib_supabase_server_createclient"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/features/kanban/types/kanban.types.ts",
       "source_location": "L3",
       "weight": 1.0,
@@ -11666,6 +12498,50 @@
       "_origin": "ast",
       "source": "src_features_kanban_types_kanban_types",
       "target": "src_features_kanban_types_kanban_types_boardcolumninsert",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_types_kanban_types",
+      "target": "src_features_kanban_types_kanban_types_boardcolumnupdate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_types_kanban_types",
+      "target": "src_features_kanban_types_kanban_types_boardcolumnwithtasks",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L9",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_types_kanban_types",
+      "target": "src_features_kanban_types_kanban_types_task",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_types_kanban_types",
+      "target": "src_features_kanban_types_kanban_types_taskwithassignee",
       "confidence_score": 1.0
     },
     {
@@ -11690,6 +12566,30 @@
       "_origin": "ast",
       "source": "src_features_kanban_types_kanban_types",
       "target": "src_types_database_types_database",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L19",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_types_kanban_types_boardcolumnwithtasks",
+      "target": "src_features_kanban_types_kanban_types_boardcolumn",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "inherits",
+      "context": "type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/features/kanban/types/kanban.types.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "src_features_kanban_types_kanban_types_taskwithassignee",
+      "target": "src_features_kanban_types_kanban_types_task",
       "confidence_score": 1.0
     },
     {
@@ -15361,5 +16261,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "871bad9314b02390e825d7bc683621561b42a696"
+  "built_at_commit": "6a2ba03c3fdd5e690bd88a8bd5167b5a2a9f2b0b"
 }
