@@ -34,14 +34,7 @@ export async function getProjectBoardColumns(
 
   if (colError) {
     console.error(`Error fetching columns for project ${projectId}:`, colError);
-    // Fallback using admin client if needed
-    const admin = createAdminClient();
-    const fallbackRes = await admin
-      .from('board_columns')
-      .select('*')
-      .eq('project_id', projectId)
-      .order('position', { ascending: true });
-    columns = fallbackRes.data;
+    return [];
   }
 
   // 2. If project has no columns, provision default ones
