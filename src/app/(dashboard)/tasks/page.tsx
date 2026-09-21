@@ -16,7 +16,7 @@ import { MyTasksList } from '@/features/tasks/components/my-tasks-list';
 import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
-  title: 'Tugas Saya — Workhub',
+  title: 'My Tasks — Workhub',
   description: 'Daftar tugas yang ditugaskan kepada Anda untuk fokus eksekusi.',
 };
 
@@ -41,7 +41,7 @@ export default async function MyTasksPage() {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Tugas Saya</BreadcrumbPage>
+            <BreadcrumbPage>My Tasks</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -51,7 +51,7 @@ export default async function MyTasksPage() {
         <div>
           <div className="flex items-center gap-2.5">
             <ListTodo className="h-6 w-6 text-primary" />
-            <h1 className="text-2xl font-bold tracking-tight">Tugas Saya</h1>
+            <h1 className="text-2xl font-bold tracking-tight">My Tasks</h1>
             <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
               {tasks.length} Tugas
             </span>
