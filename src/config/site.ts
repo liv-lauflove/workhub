@@ -13,6 +13,7 @@ export const siteConfig = {
  */
 export const navItems = [
   { label: 'Dashboard', href: '/', icon: 'LayoutDashboard' },
+  { label: 'Tugas Saya', href: '/tasks', icon: 'ListTodo' },
   { label: 'Milestones', href: '/milestones', icon: 'Target' },
   { label: 'Team', href: '/team', icon: 'Users' },
   { label: 'Workload', href: '/workload', icon: 'BarChart3' },
