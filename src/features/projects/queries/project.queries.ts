@@ -1,5 +1,7 @@
 import 'server-only';
 import { createClient } from '@/lib/supabase/server';
+import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
+import type { PaginationParams, PaginatedResult } from '@/types/global';
 import type { ProjectWithProgress } from '../types/project.types';
 
 interface RawProjectQueryResult {
@@ -28,18 +30,52 @@ interface RawProjectQueryResult {
     full_name: string;
     avatar_url: string | null;
   } | null;
+  total_tasks?: Array<{ count: number }> | null;
+  board_columns?: Array<{
+    id: string;
+    name: string;
+    tasks?: Array<{ count: number }> | null;
+  }> | null;
   tasks?: Array<{
     id: string;
     column?: { id: string; name: string } | null;
   }> | null;
 }
 
+const PROJECT_SELECT_QUERY = `
+  *,
+  milestone:milestones!projects_milestone_id_fkey(id, title),
+  team:teams!projects_team_id_fkey(
+    id,
+    name,
+    members:profiles!profiles_team_id_fkey(id)
+  ),
+  pic:profiles!projects_pic_id_fkey(id, full_name, avatar_url),
+  total_tasks:tasks(count),
+  board_columns(
+    id,
+    name,
+    tasks(count)
+  )
+`;
+
 function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
-  const tasks = p.tasks || [];
-  const totalTasks = tasks.length;
-  const completedTasks = tasks.filter(
-    (t) => t.column?.name?.toLowerCase() === 'done'
-  ).length;
+  let totalTasks = 0;
+  let completedTasks = 0;
+
+  if (p.total_tasks && p.total_tasks.length > 0) {
+    totalTasks = p.total_tasks[0]?.count || 0;
+    const doneCol = p.board_columns?.find(
+      (c) => c.name.toLowerCase() === 'done'
+    );
+    completedTasks = doneCol?.tasks?.[0]?.count || 0;
+  } else if (p.tasks) {
+    totalTasks = p.tasks.length;
+    completedTasks = p.tasks.filter(
+      (t) => t.column?.name?.toLowerCase() === 'done'
+    ).length;
+  }
+
   const progress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
   const memberCount = p.team?.members?.length || 0;
@@ -71,31 +107,46 @@ function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
   };
 }
 
-export async function getProjects(): Promise<ProjectWithProgress[]> {
+/**
+ * Fetch projects with pagination & range limits.
+ * Default and maximum page size is capped at DEFAULT_PAGE_SIZE (20).
+ */
+export async function getProjects(
+  params: PaginationParams = {}
+): Promise<PaginatedResult<ProjectWithProgress>> {
+  const page = Math.max(1, params.page || 1);
+  const pageSize = Math.min(
+    Math.max(1, params.pageSize || DEFAULT_PAGE_SIZE),
+    DEFAULT_PAGE_SIZE
+  );
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data, error, count } = await supabase
     .from('projects')
-    .select(
-      `
-      *,
-      milestone:milestones!projects_milestone_id_fkey(id, title),
-      team:teams!projects_team_id_fkey(
-        id,
-        name,
-        members:profiles!profiles_team_id_fkey(id)
-      ),
-      pic:profiles!projects_pic_id_fkey(id, full_name, avatar_url),
-      tasks(
-        id,
-        column:board_columns(id, name)
-      )
-    `
-    )
+    .select(PROJECT_SELECT_QUERY, { count: 'exact' })
     .is('archived_at', null)
+    .range(from, to)
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return (data || []).map(mapProjectWithProgress);
+
+  const total = count ?? 0;
+  const totalPages = Math.ceil(total / pageSize);
+
+  return {
+    data: (data || []).map((p) =>
+      mapProjectWithProgress(p as unknown as RawProjectQueryResult)
+    ),
+    metadata: {
+      page,
+      pageSize,
+      total,
+      totalPages,
+      hasMore: page < totalPages,
+    },
+  };
 }
 
 export async function getProjectById(
@@ -104,22 +155,7 @@ export async function getProjectById(
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('projects')
-    .select(
-      `
-      *,
-      milestone:milestones!projects_milestone_id_fkey(id, title),
-      team:teams!projects_team_id_fkey(
-        id,
-        name,
-        members:profiles!profiles_team_id_fkey(id)
-      ),
-      pic:profiles!projects_pic_id_fkey(id, full_name, avatar_url),
-      tasks(
-        id,
-        column:board_columns(id, name)
-      )
-    `
-    )
+    .select(PROJECT_SELECT_QUERY)
     .eq('id', id)
     .is('archived_at', null)
     .maybeSingle();
@@ -128,37 +164,34 @@ export async function getProjectById(
     console.error(`Error fetching project ${id}:`, error);
     return null;
   }
-  return data ? mapProjectWithProgress(data) : null;
+  return data
+    ? mapProjectWithProgress(data as unknown as RawProjectQueryResult)
+    : null;
 }
 
 /**
- * Fetch projects isolated to a specific milestone ID.
+ * Fetch projects isolated to a specific milestone ID with pagination.
  * Strict isolation: only projects linked to the milestone are returned.
  */
 export async function getProjectsByMilestoneId(
-  milestoneId: string
-): Promise<ProjectWithProgress[]> {
+  milestoneId: string,
+  params: PaginationParams = {}
+): Promise<PaginatedResult<ProjectWithProgress>> {
+  const page = Math.max(1, params.page || 1);
+  const pageSize = Math.min(
+    Math.max(1, params.pageSize || DEFAULT_PAGE_SIZE),
+    DEFAULT_PAGE_SIZE
+  );
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data, error, count } = await supabase
     .from('projects')
-    .select(
-      `
-      *,
-      milestone:milestones!projects_milestone_id_fkey(id, title),
-      team:teams!projects_team_id_fkey(
-        id,
-        name,
-        members:profiles!profiles_team_id_fkey(id)
-      ),
-      pic:profiles!projects_pic_id_fkey(id, full_name, avatar_url),
-      tasks(
-        id,
-        column:board_columns(id, name)
-      )
-    `
-    )
+    .select(PROJECT_SELECT_QUERY, { count: 'exact' })
     .eq('milestone_id', milestoneId)
     .is('archived_at', null)
+    .range(from, to)
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -166,8 +199,31 @@ export async function getProjectsByMilestoneId(
       `Error fetching projects for milestone ${milestoneId}:`,
       error
     );
-    return [];
+    return {
+      data: [],
+      metadata: {
+        page,
+        pageSize,
+        total: 0,
+        totalPages: 0,
+        hasMore: false,
+      },
+    };
   }
 
-  return (data || []).map(mapProjectWithProgress);
+  const total = count ?? 0;
+  const totalPages = Math.ceil(total / pageSize);
+
+  return {
+    data: (data || []).map((p) =>
+      mapProjectWithProgress(p as unknown as RawProjectQueryResult)
+    ),
+    metadata: {
+      page,
+      pageSize,
+      total,
+      totalPages,
+      hasMore: page < totalPages,
+    },
+  };
 }
