@@ -13,5 +13,20 @@ export type PaginationParams = {
   pageSize?: number;
 };
 
+/** Standard metadata for paginated query responses */
+export interface PaginationMetadata {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+  hasMore: boolean;
+}
+
+/** Standard paginated result structure */
+export interface PaginatedResult<T> {
+  data: T[];
+  metadata: PaginationMetadata;
+}
+
 /** Sort direction */
 export type SortDirection = 'asc' | 'desc';

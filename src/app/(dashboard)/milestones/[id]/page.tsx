@@ -96,7 +96,7 @@ export default async function MilestoneDetailPage({
     milestone.status
   );
 
-  const projects = await getProjectsByMilestoneId(id);
+  const { data: projects } = await getProjectsByMilestoneId(id);
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">

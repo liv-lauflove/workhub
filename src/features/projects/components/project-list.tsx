@@ -3,12 +3,17 @@
 import * as React from 'react';
 import { Search, FolderKanban } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Pagination } from '@/components/ui/pagination';
 import { ProjectCard } from './project-card';
 import type { ProjectWithProgress } from '../types/project.types';
+import type { PaginationMetadata } from '@/types/global';
 
 interface ProjectListProps {
   projects: ProjectWithProgress[];
   emptyMessage?: string;
+  metadata?: PaginationMetadata;
+  basePath?: string;
+  searchParams?: Record<string, string | undefined>;
 }
 
 type StatusFilter = 'all' | 'planned' | 'in_progress' | 'completed' | 'blocked';
@@ -16,6 +21,9 @@ type StatusFilter = 'all' | 'planned' | 'in_progress' | 'completed' | 'blocked';
 export function ProjectList({
   projects,
   emptyMessage = 'Belum ada project yang dibuat.',
+  metadata,
+  basePath,
+  searchParams,
 }: ProjectListProps) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [statusFilter, setStatusFilter] = React.useState<StatusFilter>('all');
@@ -155,6 +163,14 @@ export function ProjectList({
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
+      )}
+
+      {metadata && basePath && (
+        <Pagination
+          metadata={metadata}
+          basePath={basePath}
+          searchParams={searchParams}
+        />
       )}
     </div>
   );

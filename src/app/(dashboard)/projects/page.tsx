@@ -26,7 +26,7 @@ import { CreateProjectDialog } from '@/features/projects/components/create-proje
 import { ROUTES } from '@/config/routes';
 
 interface ProjectsPageProps {
-  searchParams: Promise<{ milestone_id?: string }>;
+  searchParams: Promise<{ milestone_id?: string; page?: string }>;
 }
 
 export async function generateMetadata({
@@ -57,7 +57,8 @@ export default async function ProjectsPage({
     redirect(ROUTES.login);
   }
 
-  const { milestone_id } = await searchParams;
+  const { milestone_id, page: rawPage } = await searchParams;
+  const currentPage = Math.max(1, Number(rawPage) || 1);
   const isLeader = profile.role === 'leader';
 
   const [teams, eligiblePICs, allMilestones] = await Promise.all([
@@ -70,8 +71,11 @@ export default async function ProjectsPage({
   if (milestone_id) {
     const milestone = await getMilestoneById(milestone_id);
 
-    // Strict isolation: only fetch projects belonging to this milestone
-    const projects = await getProjectsByMilestoneId(milestone_id);
+    // Strict isolation: only fetch projects belonging to this milestone with pagination
+    const { data: projects, metadata } = await getProjectsByMilestoneId(
+      milestone_id,
+      { page: currentPage }
+    );
 
     return (
       <div className="mx-auto max-w-6xl space-y-6">
@@ -134,7 +138,7 @@ export default async function ProjectsPage({
                 {milestone ? `Project: ${milestone.title}` : 'Daftar Project'}
               </h1>
               <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
-                {projects.length} Project
+                {metadata.total} Project
               </span>
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -182,14 +186,21 @@ export default async function ProjectsPage({
             )}
           </div>
         ) : (
-          <ProjectList projects={projects} />
+          <ProjectList
+            projects={projects}
+            metadata={metadata}
+            basePath="/projects"
+            searchParams={{ milestone_id }}
+          />
         )}
       </div>
     );
   }
 
   // Case 2: No specific milestone_id parameter provided in URL
-  const allProjects = await getProjects();
+  const { data: allProjects, metadata } = await getProjects({
+    page: currentPage,
+  });
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
@@ -223,7 +234,7 @@ export default async function ProjectsPage({
               Daftar Seluruh Project
             </h1>
             <span className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-semibold text-muted-foreground">
-              {allProjects.length} Project
+              {metadata.total} Project
             </span>
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -251,7 +262,7 @@ export default async function ProjectsPage({
             href="/projects"
             className="rounded-lg bg-primary text-primary-foreground px-2.5 py-1 text-xs font-medium shadow-xs"
           >
-            Semua ({allProjects.length})
+            Semua ({metadata.total})
           </Link>
           {allMilestones.map((m: { id: string; title: string }) => (
             <Link
@@ -279,7 +290,11 @@ export default async function ProjectsPage({
           </p>
         </div>
       ) : (
-        <ProjectList projects={allProjects} />
+        <ProjectList
+          projects={allProjects}
+          metadata={metadata}
+          basePath="/projects"
+        />
       )}
     </div>
   );
