@@ -10,6 +10,8 @@ export const ROUTES = {
 
   // Dashboard
   dashboard: '/',
+  myTasks: '/tasks',
+  tasks: '/tasks',
   milestones: '/milestones',
   milestone: (id: string) => `/milestones/${id}` as const,
   projects: (milestoneId?: string) =>

@@ -2,7 +2,52 @@ import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
 import type { PaginationParams, PaginatedResult } from '@/types/global';
-import type { Task } from '../types/task.types';
+import type { Task, MyTask } from '../types/task.types';
+
+const MY_TASKS_SELECT_QUERY = `
+  *,
+  project:projects(
+    id,
+    name,
+    milestone:milestones(id, title)
+  ),
+  column:board_columns(
+    id,
+    name,
+    position
+  )
+`;
+
+/**
+ * Fetch tasks assigned to the currently logged-in user.
+ * Ordered by due_date ascending (nulls last) and created_at descending.
+ * Filtered securely by assignee_id = auth.uid().
+ */
+export async function getMyTasks(): Promise<MyTask[]> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return [];
+  }
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .select(MY_TASKS_SELECT_QUERY)
+    .eq('assignee_id', user.id)
+    .order('due_date', { ascending: true, nullsFirst: false })
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching my tasks:', error);
+    return [];
+  }
+
+  return (data as unknown as MyTask[]) || [];
+}
 
 /**
  * Fetch tasks for a specific project with pagination & range limits.
