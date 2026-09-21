@@ -1,9 +1,9 @@
 import 'server-only';
-import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
 import type { MilestoneWithDetails } from '../types/milestone.types';
 
 export async function getMilestones(): Promise<MilestoneWithDetails[]> {
-  const supabase = createAdminClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('milestones')
     .select(
@@ -19,7 +19,7 @@ export async function getMilestones(): Promise<MilestoneWithDetails[]> {
 export async function getMilestoneById(
   id: string
 ): Promise<MilestoneWithDetails | null> {
-  const supabase = createAdminClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('milestones')
     .select(
@@ -44,7 +44,7 @@ export async function getEligiblePICs(): Promise<
     team_id: string | null;
   }>
 > {
-  const supabase = createAdminClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from('profiles')
     .select('id, full_name, avatar_url, role, team_id')

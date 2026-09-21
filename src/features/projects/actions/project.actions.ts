@@ -1,7 +1,6 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { createAdminClient } from '@/lib/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import {
   createProjectSchema,
@@ -118,8 +117,7 @@ export async function createProject(
     };
   }
 
-  const adminClient = createAdminClient();
-  const { data, error } = await adminClient
+  const { data, error } = await supabase
     .from('projects')
     .insert({
       name: parsed.data.name,
