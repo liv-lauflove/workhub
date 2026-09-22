@@ -2,6 +2,11 @@
 
 import * as React from 'react';
 import { MoreHorizontal } from 'lucide-react';
+import { useDroppable } from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import type { BoardColumnWithTasks } from '../types/kanban.types';
 import { KanbanCard } from './kanban-card';
 
@@ -55,8 +60,24 @@ export function KanbanColumn({ column }: KanbanColumnProps) {
   const dotColorClass = getColumnStatusDot(column.name);
   const isDoneColumn = checkIsDoneColumn(column.name);
 
+  const { setNodeRef, isOver } = useDroppable({
+    id: column.id,
+    data: {
+      type: 'Column',
+      column,
+    },
+  });
+
+  const taskIds = React.useMemo(() => {
+    return column.tasks.map((task) => task.id);
+  }, [column.tasks]);
+
   return (
-    <div className="flex w-[320px] min-w-[280px] max-w-[340px] shrink-0 flex-col rounded-xl border bg-muted/40 shadow-xs">
+    <div
+      className={`flex w-[320px] min-w-[280px] max-w-[340px] shrink-0 flex-col rounded-xl border bg-muted/40 shadow-xs transition-colors ${
+        isOver ? 'border-primary/50 ring-2 ring-primary/20 bg-muted/60' : ''
+      }`}
+    >
       {/* Column Header */}
       <div className="flex items-center justify-between border-b px-4 py-3 bg-card/60 rounded-t-xl">
         <div className="flex items-center gap-2 min-w-0">
@@ -85,21 +106,32 @@ export function KanbanColumn({ column }: KanbanColumnProps) {
       </div>
 
       {/* Column Body / Task List Container */}
-      <div className="flex flex-1 flex-col gap-2.5 p-3 overflow-y-auto max-h-[calc(100vh-280px)] min-h-[400px]">
-        {column.tasks.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed border-muted-foreground/25 bg-card/30 p-6 text-center min-h-[140px]">
-            <p className="text-xs font-medium text-muted-foreground">
-              Belum ada task
-            </p>
-            <p className="mt-1 text-[11px] text-muted-foreground/70">
-              Task yang ditambahkan akan tampil di sini
-            </p>
-          </div>
-        ) : (
-          column.tasks.map((task) => (
-            <KanbanCard key={task.id} task={task} isColumnDone={isDoneColumn} />
-          ))
-        )}
+      <div
+        ref={setNodeRef}
+        className={`flex flex-1 flex-col gap-2.5 p-3 overflow-y-auto max-h-[calc(100vh-280px)] min-h-[400px] transition-colors rounded-b-xl ${
+          isOver ? 'bg-primary/5' : ''
+        }`}
+      >
+        <SortableContext items={taskIds} strategy={verticalListSortingStrategy}>
+          {column.tasks.length === 0 ? (
+            <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed border-muted-foreground/25 bg-card/30 p-6 text-center min-h-[140px]">
+              <p className="text-xs font-medium text-muted-foreground">
+                Belum ada task
+              </p>
+              <p className="mt-1 text-[11px] text-muted-foreground/70">
+                Tarik task ke sini untuk memindahkan
+              </p>
+            </div>
+          ) : (
+            column.tasks.map((task) => (
+              <KanbanCard
+                key={task.id}
+                task={task}
+                isColumnDone={isDoneColumn}
+              />
+            ))
+          )}
+        </SortableContext>
       </div>
     </div>
   );
