@@ -16,6 +16,7 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
 import { Columns3 } from 'lucide-react';
+import { toast } from 'sonner';
 import { KanbanColumn } from './kanban-column';
 import { KanbanCard } from './kanban-card';
 import { updateTaskColumnAction } from '../actions/kanban.actions';
@@ -230,11 +231,28 @@ export function KanbanBoard({
 
     // Trigger async server action to persist to Supabase if moved across columns
     if (originalCol && overCol.id !== originalCol.id) {
+      const rollbackSnapshot = previousSnapshot;
+
       updateTaskColumnAction({
         taskId: activeId,
         targetColumnId: overCol.id,
         projectId,
-      });
+      })
+        .then((result) => {
+          if (!result.success) {
+            // Revert state if server action fails
+            setColumns(rollbackSnapshot);
+            const errorMsg =
+              result.error?._form?.[0] ||
+              'Gagal memindahkan task. Perubahan dibatalkan.';
+            toast.error(errorMsg);
+          }
+        })
+        .catch(() => {
+          // Revert state if network failure / connection lost
+          setColumns(rollbackSnapshot);
+          toast.error('Koneksi terputus. Kartu dikembalikan ke posisi semula.');
+        });
     }
   };
 
