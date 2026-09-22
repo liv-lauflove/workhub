@@ -18,6 +18,7 @@ import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
 import { Columns3 } from 'lucide-react';
 import { KanbanColumn } from './kanban-column';
 import { KanbanCard } from './kanban-card';
+import { updateTaskColumnAction } from '../actions/kanban.actions';
 import type {
   BoardColumnWithTasks,
   TaskWithAssignee,
@@ -30,7 +31,10 @@ interface KanbanBoardProps {
 
 const emptySubscribe = () => () => {};
 
-export function KanbanBoard({ columns: initialColumns }: KanbanBoardProps) {
+export function KanbanBoard({
+  columns: initialColumns,
+  projectId,
+}: KanbanBoardProps) {
   const [columns, setColumns] =
     React.useState<BoardColumnWithTasks[]>(initialColumns);
   const [prevInitialColumns, setPrevInitialColumns] =
@@ -38,6 +42,10 @@ export function KanbanBoard({ columns: initialColumns }: KanbanBoardProps) {
   const [activeTask, setActiveTask] = React.useState<TaskWithAssignee | null>(
     null
   );
+
+  // Snapshot of columns state before drag operation for change detection & rollback
+  const previousColumnsRef =
+    React.useRef<BoardColumnWithTasks[]>(initialColumns);
 
   const isMounted = React.useSyncExternalStore(
     emptySubscribe,
@@ -78,6 +86,9 @@ export function KanbanBoard({ columns: initialColumns }: KanbanBoardProps) {
   );
 
   const handleDragStart = (event: DragStartEvent) => {
+    // Record current snapshot before drag manipulation starts
+    previousColumnsRef.current = columns;
+
     const { active } = event;
     const taskData = active.data.current?.task as TaskWithAssignee | undefined;
 
@@ -167,6 +178,11 @@ export function KanbanBoard({ columns: initialColumns }: KanbanBoardProps) {
     const activeId = String(active.id);
     const overId = String(over.id);
 
+    const previousSnapshot = previousColumnsRef.current;
+    const originalCol = previousSnapshot.find((col) =>
+      col.tasks.some((t) => t.id === activeId)
+    );
+
     const activeCol = findColumnByTaskId(activeId);
     const overCol = findColumnByTaskId(overId) || findColumnById(overId);
 
@@ -210,6 +226,15 @@ export function KanbanBoard({ columns: initialColumns }: KanbanBoardProps) {
           return col;
         })
       );
+    }
+
+    // Trigger async server action to persist to Supabase if moved across columns
+    if (originalCol && overCol.id !== originalCol.id) {
+      updateTaskColumnAction({
+        taskId: activeId,
+        targetColumnId: overCol.id,
+        projectId,
+      });
     }
   };
 
