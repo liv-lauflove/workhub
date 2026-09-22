@@ -8,6 +8,8 @@ import {
   Flame,
   User as UserIcon,
 } from 'lucide-react';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import type { TaskWithAssignee } from '../types/kanban.types';
 
 interface KanbanCardProps {
@@ -15,6 +17,7 @@ interface KanbanCardProps {
   isColumnDone?: boolean;
   onClick?: (task: TaskWithAssignee) => void;
   className?: string;
+  isOverlay?: boolean;
 }
 
 /**
@@ -88,8 +91,30 @@ export function KanbanCard({
   isColumnDone = false,
   onClick,
   className = '',
+  isOverlay = false,
 }: KanbanCardProps) {
   const isCsComplaint = task.origin === 'cs_complaint';
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: task.id,
+    data: {
+      type: 'Task',
+      task,
+    },
+    disabled: isOverlay,
+  });
+
+  const style: React.CSSProperties = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+  };
 
   const todayStr = React.useMemo(() => {
     return new Date().toISOString().split('T')[0];
@@ -109,12 +134,24 @@ export function KanbanCard({
 
   return (
     <div
+      ref={setNodeRef}
+      style={style}
+      {...attributes}
+      {...listeners}
       role="article"
       tabIndex={0}
       aria-label={`Tugas: ${task.title}. Prioritas: ${task.priority || 'tidak diset'}.${isOverdue ? ' Batas waktu telah terlewat.' : ''}`}
       onClick={() => onClick?.(task)}
       onKeyDown={handleKeyDown}
-      className={`group relative flex flex-col gap-2.5 rounded-xl border bg-card p-3.5 shadow-xs transition-all select-none hover:border-primary/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 ${
+      className={`group relative flex flex-col gap-2.5 rounded-xl border bg-card p-3.5 shadow-xs transition-all select-none hover:border-primary/50 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-grab active:cursor-grabbing ${
+        isDragging
+          ? 'opacity-30 border-dashed border-primary/40 ring-2 ring-primary/20'
+          : ''
+      } ${
+        isOverlay
+          ? 'cursor-grabbing shadow-xl scale-[1.02] rotate-1 border-primary z-50 ring-2 ring-primary/30'
+          : ''
+      } ${
         isCsComplaint
           ? 'border-l-4 border-l-rose-500 dark:border-l-rose-500'
           : ''

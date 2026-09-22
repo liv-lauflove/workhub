@@ -20,3 +20,17 @@ export interface BoardColumnWithTasks extends BoardColumn {
   tasks: TaskWithAssignee[];
   taskCount: number;
 }
+
+export type DragItemType = 'Task';
+
+export interface TaskDragData {
+  type: DragItemType;
+  task: TaskWithAssignee;
+}
+
+export interface TaskMoveEvent {
+  taskId: string;
+  sourceColumnId: string;
+  destinationColumnId: string;
+  newPosition: number;
+}
