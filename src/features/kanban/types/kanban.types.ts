@@ -34,3 +34,9 @@ export interface TaskMoveEvent {
   destinationColumnId: string;
   newPosition: number;
 }
+
+export interface UpdateTaskColumnInput {
+  taskId: string;
+  targetColumnId: string;
+  projectId?: string;
+}
