@@ -63,6 +63,7 @@ export async function updateTaskColumnAction({
       revalidatePath(`/projects/${projectId}`);
     }
     revalidatePath('/tasks');
+    revalidatePath(`/tasks/${taskId}`);
 
     return {
       success: true,

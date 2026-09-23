@@ -15,6 +15,7 @@ import {
   type DragEndEvent,
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates, arrayMove } from '@dnd-kit/sortable';
+import { useRouter } from 'next/navigation';
 import { Columns3 } from 'lucide-react';
 import { toast } from 'sonner';
 import { KanbanColumn } from './kanban-column';
@@ -36,12 +37,20 @@ export function KanbanBoard({
   columns: initialColumns,
   projectId,
 }: KanbanBoardProps) {
+  const router = useRouter();
   const [columns, setColumns] =
     React.useState<BoardColumnWithTasks[]>(initialColumns);
   const [prevInitialColumns, setPrevInitialColumns] =
     React.useState<BoardColumnWithTasks[]>(initialColumns);
   const [activeTask, setActiveTask] = React.useState<TaskWithAssignee | null>(
     null
+  );
+
+  const handleCardClick = React.useCallback(
+    (task: TaskWithAssignee) => {
+      router.push(`/tasks/${task.id}`);
+    },
+    [router]
   );
 
   // Snapshot of columns state before drag operation for change detection & rollback
@@ -279,7 +288,11 @@ export function KanbanBoard({
       <div className="w-full overflow-x-auto pb-6 pt-2 select-none">
         <div className="flex items-start gap-4 min-w-max">
           {columns.map((column) => (
-            <KanbanColumn key={column.id} column={column} />
+            <KanbanColumn
+              key={column.id}
+              column={column}
+              onCardClick={handleCardClick}
+            />
           ))}
         </div>
       </div>

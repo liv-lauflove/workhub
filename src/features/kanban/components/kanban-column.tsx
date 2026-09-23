@@ -7,11 +7,15 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import type { BoardColumnWithTasks } from '../types/kanban.types';
+import type {
+  BoardColumnWithTasks,
+  TaskWithAssignee,
+} from '../types/kanban.types';
 import { KanbanCard } from './kanban-card';
 
 interface KanbanColumnProps {
   column: BoardColumnWithTasks;
+  onCardClick?: (task: TaskWithAssignee) => void;
 }
 
 function getColumnStatusDot(name: string): string {
@@ -56,7 +60,7 @@ function checkIsDoneColumn(name: string): boolean {
   );
 }
 
-export function KanbanColumn({ column }: KanbanColumnProps) {
+export function KanbanColumn({ column, onCardClick }: KanbanColumnProps) {
   const dotColorClass = getColumnStatusDot(column.name);
   const isDoneColumn = checkIsDoneColumn(column.name);
 
@@ -128,6 +132,7 @@ export function KanbanColumn({ column }: KanbanColumnProps) {
                 key={task.id}
                 task={task}
                 isColumnDone={isDoneColumn}
+                onClick={onCardClick}
               />
             ))
           )}

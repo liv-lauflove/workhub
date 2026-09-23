@@ -20,3 +20,34 @@ export interface MyTask extends Task {
     position: number;
   } | null;
 }
+
+export interface TaskDetail extends Task {
+  project?: {
+    id: string;
+    name: string;
+    team_id: string;
+    milestone?: {
+      id: string;
+      title: string;
+      target_date: string;
+      status: string;
+    } | null;
+  } | null;
+  column?: {
+    id: string;
+    name: string;
+    position: number;
+  } | null;
+  assignee?: {
+    id: string;
+    full_name: string;
+    email?: string;
+    avatar_url: string | null;
+  } | null;
+  creator?: {
+    id: string;
+    full_name: string;
+    email?: string;
+    avatar_url: string | null;
+  } | null;
+}
