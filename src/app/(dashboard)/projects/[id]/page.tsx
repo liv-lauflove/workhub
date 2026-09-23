@@ -20,7 +20,9 @@ import {
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
 import { getProjectById } from '@/features/projects/queries/project.queries';
 import { getProjectBoardColumns } from '@/features/kanban/queries/kanban.queries';
+import { getTeamMembers } from '@/features/team/queries/team.queries';
 import { KanbanBoard } from '@/features/kanban/components/kanban-board';
+import { CreateTaskDialog } from '@/features/tasks/components/create-task-dialog';
 import { ROUTES } from '@/config/routes';
 
 interface ProjectDetailPageProps {
@@ -92,7 +94,10 @@ export default async function ProjectDetailPage({
     notFound();
   }
 
-  const columns = await getProjectBoardColumns(id);
+  const [columns, teamMembers] = await Promise.all([
+    getProjectBoardColumns(id),
+    project.team_id ? getTeamMembers(project.team_id) : Promise.resolve([]),
+  ]);
   const statusCfg = STATUS_CONFIG[project.status] || STATUS_CONFIG.planned;
   const progressPercent = Math.min(Math.max(project.progress, 0), 100);
 
@@ -246,13 +251,27 @@ export default async function ProjectDetailPage({
 
       {/* Kanban Board Container */}
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-semibold tracking-tight">
-            Papan Kanban
-          </h2>
-          <span className="text-xs text-muted-foreground">
-            Geser horizontal untuk melihat seluruh kolom status
-          </span>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h2 className="text-base font-semibold tracking-tight">
+              Papan Kanban
+            </h2>
+            <span className="text-xs text-muted-foreground">
+              Geser kartu secara horizontal atau drag-and-drop untuk memperbarui
+              status
+            </span>
+          </div>
+
+          <CreateTaskDialog
+            projectId={project.id}
+            columns={columns.map((c) => ({ id: c.id, name: c.name }))}
+            teamMembers={teamMembers.map((m) => ({
+              id: m.id,
+              full_name: m.full_name,
+              role: m.role,
+              avatar_url: m.avatar_url,
+            }))}
+          />
         </div>
 
         <KanbanBoard columns={columns} projectId={project.id} />
