@@ -2,7 +2,7 @@ import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
 import type { PaginationParams, PaginatedResult } from '@/types/global';
-import type { Task, MyTask } from '../types/task.types';
+import type { Task, MyTask, TaskDetail } from '../types/task.types';
 
 const MY_TASKS_SELECT_QUERY = `
   *,
@@ -15,6 +15,36 @@ const MY_TASKS_SELECT_QUERY = `
     id,
     name,
     position
+  )
+`;
+
+const TASK_DETAIL_SELECT_QUERY = `
+  *,
+  project:projects(
+    id,
+    name,
+    team_id,
+    milestone:milestones(
+      id,
+      title,
+      target_date,
+      status
+    )
+  ),
+  column:board_columns(
+    id,
+    name,
+    position
+  ),
+  assignee:profiles!tasks_assignee_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  creator:profiles!tasks_created_by_fkey(
+    id,
+    full_name,
+    avatar_url
   )
 `;
 
@@ -126,4 +156,48 @@ export async function getTasks(
       hasMore: page < totalPages,
     },
   };
+}
+
+/**
+ * Fetch detailed task data by ID with full relations (project, milestone, column, assignee, creator).
+ */
+export async function getTaskDetailById(
+  taskId: string
+): Promise<TaskDetail | null> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('tasks')
+    .select(TASK_DETAIL_SELECT_QUERY)
+    .eq('id', taskId)
+    .maybeSingle();
+
+  if (error) {
+    console.error(`Error fetching task detail for id ${taskId}:`, error);
+    return null;
+  }
+
+  return (data as unknown as TaskDetail) || null;
+}
+
+/**
+ * Fetch all board columns for a given project.
+ */
+export async function getProjectColumns(
+  projectId: string
+): Promise<{ id: string; name: string; position: number }[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('board_columns')
+    .select('id, name, position')
+    .eq('project_id', projectId)
+    .order('position', { ascending: true });
+
+  if (error) {
+    console.error(`Error fetching columns for project ${projectId}:`, error);
+    return [];
+  }
+
+  return data || [];
 }
