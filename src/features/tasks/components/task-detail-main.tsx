@@ -8,8 +8,13 @@ import {
   CircleDot,
   Send,
   Sparkles,
+  Pencil,
+  Check,
+  X,
+  Loader2,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { updateTaskDescriptionAction } from '../actions/task.actions';
 import type { TaskDetail } from '../types/task.types';
 
 interface TaskDetailMainProps {
@@ -43,6 +48,41 @@ function formatDetailDate(dateStr?: string | null): string {
 export function TaskDetailMain({ task }: TaskDetailMainProps) {
   const creatorName = task.creator?.full_name || 'Anggota Tim';
   const isCsComplaint = task.origin === 'cs_complaint';
+
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [description, setDescription] = React.useState(task.description || '');
+  const [prevTaskDesc, setPrevTaskDesc] = React.useState(task.description);
+  const [isPending, startTransition] = React.useTransition();
+
+  // Sync prop changes during render
+  if (task.description !== prevTaskDesc) {
+    setPrevTaskDesc(task.description);
+    setDescription(task.description || '');
+  }
+
+  const handleSaveDescription = () => {
+    startTransition(async () => {
+      const res = await updateTaskDescriptionAction({
+        taskId: task.id,
+        description,
+        projectId: task.project_id,
+      });
+
+      if (res.success) {
+        setIsEditing(false);
+        toast.success('Deskripsi task berhasil diperbarui');
+      } else {
+        const errorMsg =
+          res.error?._form?.[0] || 'Gagal menyimpan perubahan deskripsi.';
+        toast.error(errorMsg);
+      }
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setDescription(task.description || '');
+    setIsEditing(false);
+  };
 
   return (
     <div className="space-y-6">
@@ -78,6 +118,18 @@ export function TaskDetailMain({ task }: TaskDetailMainProps) {
             <span className="rounded-md border bg-background/80 px-2 py-0.5 text-[11px] font-medium text-muted-foreground shadow-2xs">
               Author
             </span>
+
+            {!isEditing && (
+              <button
+                type="button"
+                onClick={() => setIsEditing(true)}
+                className="inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-medium text-primary hover:bg-primary/10 transition-colors cursor-pointer"
+                title="Edit deskripsi task"
+              >
+                <Pencil className="h-3 w-3" />
+                <span>Edit</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -103,15 +155,68 @@ export function TaskDetailMain({ task }: TaskDetailMainProps) {
             </div>
           )}
 
-          {/* Description Content */}
-          {task.description ? (
+          {/* Description Content / Edit Mode */}
+          {isEditing ? (
+            <div className="space-y-3">
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                disabled={isPending}
+                rows={6}
+                placeholder="Tuliskan deskripsi task, acceptance criteria, atau catatan pengerjaan..."
+                className="w-full resize-y rounded-lg border bg-background p-3.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary leading-relaxed font-sans"
+              />
+
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-1 border-t">
+                <span className="text-[11px] text-muted-foreground">
+                  Mendukung teks deskripsi leluasa & Markdown.
+                </span>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={handleCancelEdit}
+                    disabled={isPending}
+                    className="inline-flex items-center gap-1 rounded-lg border bg-card px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors shadow-2xs cursor-pointer"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    <span>Batal</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSaveDescription}
+                    disabled={isPending}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-2xs hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-pointer"
+                  >
+                    {isPending ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Check className="h-3.5 w-3.5" />
+                    )}
+                    <span>Simpan Perubahan</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : task.description ? (
             <div className="prose prose-sm dark:prose-invert max-w-none text-card-foreground leading-relaxed whitespace-pre-wrap font-sans text-sm sm:text-base selection:bg-primary/20">
               {task.description}
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground italic">
-              Tidak ada deskripsi rinci yang disediakan untuk task ini.
-            </p>
+            <div className="flex items-center justify-between rounded-lg border border-dashed p-4 bg-muted/20">
+              <p className="text-xs sm:text-sm text-muted-foreground italic">
+                Tidak ada deskripsi rinci yang disediakan untuk task ini.
+              </p>
+              <button
+                type="button"
+                onClick={() => setIsEditing(true)}
+                className="inline-flex items-center gap-1 rounded-lg border bg-card px-2.5 py-1 text-xs font-semibold text-primary hover:bg-primary/10 transition-colors shadow-2xs cursor-pointer"
+              >
+                <Pencil className="h-3 w-3" />
+                <span>Tambah Deskripsi</span>
+              </button>
+            </div>
           )}
         </div>
       </div>

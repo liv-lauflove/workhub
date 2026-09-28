@@ -135,3 +135,190 @@ export async function createTaskAction(
     };
   }
 }
+
+export interface UpdateTaskAssigneeInput {
+  taskId: string;
+  assigneeId: string | null;
+  projectId?: string | null;
+}
+
+/**
+ * Server action to update a task's assignee (PIC).
+ * Supports setting a specific user ID or null for unassigning.
+ * Enforces user authentication and Supabase Row Level Security.
+ */
+export async function updateTaskAssigneeAction({
+  taskId,
+  assigneeId,
+  projectId,
+}: UpdateTaskAssigneeInput): Promise<
+  ActionState<{
+    id: string;
+    assigneeId: string | null;
+    assignee: {
+      id: string;
+      full_name: string;
+      avatar_url: string | null;
+    } | null;
+  }>
+> {
+  if (!taskId) {
+    return {
+      success: false,
+      error: { _form: ['Task ID harus disediakan.'] },
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return {
+        success: false,
+        error: { _form: ['Sesi login tidak valid atau telah berakhir.'] },
+      };
+    }
+
+    const { data: updatedTask, error: updateError } = await supabase
+      .from('tasks')
+      .update({
+        assignee_id: assigneeId || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', taskId)
+      .select(
+        'id, assignee_id, assignee:profiles!tasks_assignee_id_fkey(id, full_name, avatar_url)'
+      )
+      .single();
+
+    if (updateError) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            updateError.message ||
+              'Gagal memperbarui penugasan task di database.',
+          ],
+        },
+      };
+    }
+
+    if (projectId) {
+      revalidatePath(`/projects/${projectId}`);
+    }
+    revalidatePath('/tasks');
+    revalidatePath(`/tasks/${taskId}`);
+
+    return {
+      success: true,
+      data: {
+        id: updatedTask.id,
+        assigneeId: updatedTask.assignee_id,
+        assignee:
+          (updatedTask.assignee as unknown as {
+            id: string;
+            full_name: string;
+            avatar_url: string | null;
+          } | null) || null,
+      },
+    };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : 'Terjadi kesalahan sistem saat sinkronisasi assignee ke database.';
+    return {
+      success: false,
+      error: { _form: [message] },
+    };
+  }
+}
+
+export interface UpdateTaskDescriptionInput {
+  taskId: string;
+  description: string;
+  projectId?: string | null;
+}
+
+/**
+ * Server action to update a task's description.
+ * Enforces user authentication and Supabase Row Level Security.
+ */
+export async function updateTaskDescriptionAction({
+  taskId,
+  description,
+  projectId,
+}: UpdateTaskDescriptionInput): Promise<
+  ActionState<{ id: string; description: string }>
+> {
+  if (!taskId) {
+    return {
+      success: false,
+      error: { _form: ['Task ID harus disediakan.'] },
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return {
+        success: false,
+        error: { _form: ['Sesi login tidak valid atau telah berakhir.'] },
+      };
+    }
+
+    const { data: updatedTask, error: updateError } = await supabase
+      .from('tasks')
+      .update({
+        description: description.trim() || null,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', taskId)
+      .select('id, description')
+      .single();
+
+    if (updateError) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            updateError.message ||
+              'Gagal memperbarui deskripsi task di database.',
+          ],
+        },
+      };
+    }
+
+    if (projectId) {
+      revalidatePath(`/projects/${projectId}`);
+    }
+    revalidatePath('/tasks');
+    revalidatePath(`/tasks/${taskId}`);
+
+    return {
+      success: true,
+      data: {
+        id: updatedTask.id,
+        description: updatedTask.description || '',
+      },
+    };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : 'Terjadi kesalahan sistem saat menyimpan deskripsi.';
+    return {
+      success: false,
+      error: { _form: [message] },
+    };
+  }
+}

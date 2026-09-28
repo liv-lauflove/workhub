@@ -25,10 +25,12 @@ import type {
   BoardColumnWithTasks,
   TaskWithAssignee,
 } from '../types/kanban.types';
+import type { TeamMemberOption } from '@/features/tasks/components/task-assignee-selector';
 
 interface KanbanBoardProps {
   columns: BoardColumnWithTasks[];
   projectId: string;
+  teamMembers?: TeamMemberOption[];
 }
 
 const emptySubscribe = () => () => {};
@@ -36,6 +38,7 @@ const emptySubscribe = () => () => {};
 export function KanbanBoard({
   columns: initialColumns,
   projectId,
+  teamMembers = [],
 }: KanbanBoardProps) {
   const router = useRouter();
   const [columns, setColumns] =
@@ -291,6 +294,7 @@ export function KanbanBoard({
             <KanbanColumn
               key={column.id}
               column={column}
+              teamMembers={teamMembers}
               onCardClick={handleCardClick}
             />
           ))}
