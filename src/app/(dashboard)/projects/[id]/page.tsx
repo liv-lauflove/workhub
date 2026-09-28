@@ -274,7 +274,11 @@ export default async function ProjectDetailPage({
           />
         </div>
 
-        <KanbanBoard columns={columns} projectId={project.id} />
+        <KanbanBoard
+          columns={columns}
+          projectId={project.id}
+          teamMembers={teamMembers}
+        />
       </div>
     </div>
   );

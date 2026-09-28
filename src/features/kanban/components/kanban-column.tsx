@@ -11,10 +11,12 @@ import type {
   BoardColumnWithTasks,
   TaskWithAssignee,
 } from '../types/kanban.types';
+import type { TeamMemberOption } from '@/features/tasks/components/task-assignee-selector';
 import { KanbanCard } from './kanban-card';
 
 interface KanbanColumnProps {
   column: BoardColumnWithTasks;
+  teamMembers?: TeamMemberOption[];
   onCardClick?: (task: TaskWithAssignee) => void;
 }
 
@@ -60,7 +62,11 @@ function checkIsDoneColumn(name: string): boolean {
   );
 }
 
-export function KanbanColumn({ column, onCardClick }: KanbanColumnProps) {
+export function KanbanColumn({
+  column,
+  teamMembers = [],
+  onCardClick,
+}: KanbanColumnProps) {
   const dotColorClass = getColumnStatusDot(column.name);
   const isDoneColumn = checkIsDoneColumn(column.name);
 
@@ -131,6 +137,7 @@ export function KanbanColumn({ column, onCardClick }: KanbanColumnProps) {
               <KanbanCard
                 key={task.id}
                 task={task}
+                teamMembers={teamMembers}
                 isColumnDone={isDoneColumn}
                 onClick={onCardClick}
               />

@@ -1,19 +1,18 @@
 'use client';
 
 import * as React from 'react';
-import {
-  Calendar,
-  AlertCircle,
-  GitBranch,
-  Flame,
-  User as UserIcon,
-} from 'lucide-react';
+import { Calendar, AlertCircle, GitBranch, Flame } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import {
+  TaskAssigneeSelector,
+  type TeamMemberOption,
+} from '@/features/tasks/components/task-assignee-selector';
 import type { TaskWithAssignee } from '../types/kanban.types';
 
 interface KanbanCardProps {
   task: TaskWithAssignee;
+  teamMembers?: TeamMemberOption[];
   isColumnDone?: boolean;
   onClick?: (task: TaskWithAssignee) => void;
   className?: string;
@@ -40,38 +39,6 @@ function getPriorityBadgeClass(priority?: string): string {
 }
 
 /**
- * Generate consistent 2-letter initials from a full name.
- */
-function getInitials(name?: string): string {
-  if (!name) return '?';
-  const parts = name.trim().split(/\s+/);
-  if (parts.length >= 2) {
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
-}
-
-/**
- * Generates a deterministic subtle background color based on name for avatar initials.
- */
-function getAvatarBgColor(name?: string): string {
-  if (!name) return 'bg-muted text-muted-foreground';
-  const colors = [
-    'bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-500/30',
-    'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/30',
-    'bg-violet-500/20 text-violet-700 dark:text-violet-300 border-violet-500/30',
-    'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-500/30',
-    'bg-rose-500/20 text-rose-700 dark:text-rose-300 border-rose-500/30',
-    'bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border-cyan-500/30',
-  ];
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return colors[Math.abs(hash) % colors.length];
-}
-
-/**
  * Format date string into Indonesian locale shorthand (e.g. "24 Sep").
  */
 function formatDueDate(dateStr: string): string {
@@ -88,6 +55,7 @@ function formatDueDate(dateStr: string): string {
 
 export function KanbanCard({
   task,
+  teamMembers = [],
   isColumnDone = false,
   onClick,
   className = '',
@@ -228,45 +196,14 @@ export function KanbanCard({
           </span>
         </div>
 
-        {/* Assignee Avatar & Name */}
-        <div
-          className="flex items-center gap-1.5 max-w-[150px] min-w-0"
-          title={
-            task.assignee?.full_name
-              ? `Ditugaskan kepada: ${task.assignee.full_name}`
-              : 'Belum ditugaskan'
-          }
-        >
-          {task.assignee ? (
-            <>
-              {task.assignee.avatar_url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={task.assignee.avatar_url}
-                  alt={task.assignee.full_name}
-                  className="h-5 w-5 rounded-full object-cover shrink-0 border ring-1 ring-background"
-                />
-              ) : (
-                <div
-                  className={`flex h-5 w-5 items-center justify-center rounded-full border text-[9px] font-bold shrink-0 ${getAvatarBgColor(
-                    task.assignee.full_name
-                  )}`}
-                  aria-hidden="true"
-                >
-                  {getInitials(task.assignee.full_name)}
-                </div>
-              )}
-              <span className="truncate text-[11px] font-medium text-foreground">
-                {task.assignee.full_name}
-              </span>
-            </>
-          ) : (
-            <div className="flex items-center gap-1 text-[11px] text-muted-foreground/80">
-              <UserIcon className="h-3.5 w-3.5" />
-              <span>Unassigned</span>
-            </div>
-          )}
-        </div>
+        {/* Assignee Selector / Avatar */}
+        <TaskAssigneeSelector
+          taskId={task.id}
+          projectId={task.project_id}
+          currentAssignee={task.assignee}
+          teamMembers={teamMembers}
+          variant="card"
+        />
       </div>
     </div>
   );
