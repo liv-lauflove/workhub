@@ -4,16 +4,19 @@ import * as React from 'react';
 import { TaskDetailHeader } from './task-detail-header';
 import { TaskDetailMain } from './task-detail-main';
 import { TaskDetailSidebar } from './task-detail-sidebar';
+import type { TeamMemberOption } from './task-assignee-selector';
 import type { TaskDetail } from '../types/task.types';
 
 interface TaskDetailViewProps {
   task: TaskDetail;
   availableColumns: { id: string; name: string; position: number }[];
+  teamMembers?: TeamMemberOption[];
 }
 
 export function TaskDetailView({
   task,
   availableColumns,
+  teamMembers = [],
 }: TaskDetailViewProps) {
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-12">
@@ -33,6 +36,7 @@ export function TaskDetailView({
             <TaskDetailSidebar
               task={task}
               availableColumns={availableColumns}
+              teamMembers={teamMembers}
             />
           </div>
         </div>

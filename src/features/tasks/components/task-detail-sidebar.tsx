@@ -3,7 +3,6 @@
 import * as React from 'react';
 import Link from 'next/link';
 import {
-  Users,
   Tag,
   FolderKanban,
   Target,
@@ -11,15 +10,19 @@ import {
   AlertCircle,
   GitBranch,
   Flame,
-  User as UserIcon,
   ArrowUpRight,
 } from 'lucide-react';
 import { TaskStatusSelector } from './task-status-selector';
+import {
+  TaskAssigneeSelector,
+  type TeamMemberOption,
+} from './task-assignee-selector';
 import type { TaskDetail } from '../types/task.types';
 
 interface TaskDetailSidebarProps {
   task: TaskDetail;
   availableColumns: { id: string; name: string; position: number }[];
+  teamMembers?: TeamMemberOption[];
 }
 
 function getPriorityBadgeClass(priority?: string): string {
@@ -38,15 +41,6 @@ function getPriorityBadgeClass(priority?: string): string {
   }
 }
 
-function getInitials(name?: string): string {
-  if (!name) return '?';
-  const parts = name.trim().split(/\s+/);
-  if (parts.length >= 2) {
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
-}
-
 function formatDueDate(dateStr: string): string {
   try {
     return new Date(dateStr).toLocaleDateString('id-ID', {
@@ -62,6 +56,7 @@ function formatDueDate(dateStr: string): string {
 export function TaskDetailSidebar({
   task,
   availableColumns,
+  teamMembers = [],
 }: TaskDetailSidebarProps) {
   const isCsComplaint = task.origin === 'cs_complaint';
   const todayStr = React.useMemo(
@@ -77,44 +72,15 @@ export function TaskDetailSidebar({
 
   return (
     <aside className="space-y-6 rounded-xl border bg-card p-5 shadow-xs">
-      {/* 1. Assignees Section */}
-      <div className="border-b pb-4 space-y-2">
-        <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
-          <div className="flex items-center gap-1.5">
-            <Users className="h-3.5 w-3.5" />
-            <span>Assignees</span>
-          </div>
-        </div>
-
-        {task.assignee ? (
-          <div className="flex items-center gap-2.5 pt-1">
-            {task.assignee.avatar_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={task.assignee.avatar_url}
-                alt={task.assignee.full_name}
-                className="h-7 w-7 rounded-full object-cover ring-1 ring-border shrink-0"
-              />
-            ) : (
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-primary text-xs font-bold shrink-0">
-                {getInitials(task.assignee.full_name)}
-              </div>
-            )}
-            <div className="min-w-0">
-              <p className="text-xs font-semibold text-foreground truncate">
-                {task.assignee.full_name}
-              </p>
-              <p className="text-[11px] text-muted-foreground truncate">
-                {task.assignee.email || 'Penanggung Jawab (PIC)'}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className="flex items-center gap-2 pt-1 text-xs text-muted-foreground/80">
-            <UserIcon className="h-4 w-4 text-muted-foreground/60" />
-            <span className="italic">Belum ada anggota yang ditugaskan</span>
-          </div>
-        )}
+      {/* 1. Assignees Section with ComboBox Selector */}
+      <div className="border-b pb-4">
+        <TaskAssigneeSelector
+          taskId={task.id}
+          projectId={task.project_id}
+          currentAssignee={task.assignee}
+          teamMembers={teamMembers}
+          variant="sidebar"
+        />
       </div>
 
       {/* 2. Labels / Priority Section */}
