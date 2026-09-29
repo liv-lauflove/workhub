@@ -5,7 +5,7 @@ import { Users, BarChart3 } from 'lucide-react';
 import type { DashboardPerformanceData } from '../types/dashboard.types';
 import { DashboardHeader } from './dashboard-header';
 import { MetricCardsGrid } from './metric-cards-grid';
-import { ChartPlaceholder } from './chart-placeholder';
+import { TaskCompletionChart } from './task-completion-chart';
 import { PriorityDistributionCard } from './priority-distribution-card';
 import { RecentTasksCard } from './recent-tasks-card';
 import { TeamCapacityWidget } from './team-capacity-widget';
@@ -84,11 +84,11 @@ export function DashboardView({ initialData }: DashboardViewProps) {
         aria-label="Tren Kuartalan dan Distribusi Prioritas"
         className="grid grid-cols-1 lg:grid-cols-3 gap-6"
       >
-        {/* Left: Chart Container Placeholder (col-span-2 on desktop) */}
+        {/* Left: Interactive Task Completion Chart (col-span-2 on desktop) */}
         <div className="lg:col-span-2">
-          <ChartPlaceholder
+          <TaskCompletionChart
+            trendData={initialData.trendData}
             quarterLabel={currentQuarter.label}
-            completionRate={metrics.completionRate}
           />
         </div>
 

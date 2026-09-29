@@ -3,7 +3,7 @@ import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 import { getTeamWorkload } from '@/features/workload/queries/workload.queries';
 import { isTaskActive } from '@/features/workload/lib/capacity.utils';
-import type {
+import {
   DashboardPerformanceData,
   DashboardMetrics,
   PriorityDistribution,
@@ -11,6 +11,7 @@ import type {
   DashboardMemberCapacity,
 } from '../types/dashboard.types';
 import type { PriorityLevel } from '@/features/workload/types/workload.types';
+import { buildCompletionTrendData } from '../lib/trend.utils';
 
 /**
  * Returns current quarter information based on date.
@@ -104,6 +105,7 @@ export async function getDashboardPerformance(
     due_date: string | null;
     project_id: string | null;
     created_at: string;
+    updated_at: string;
     column:
       { id: string; name: string } | { id: string; name: string }[] | null;
     assignee: {
@@ -124,6 +126,7 @@ export async function getDashboardPerformance(
         due_date,
         project_id,
         created_at,
+        updated_at,
         column:board_columns(
           id,
           name
@@ -239,6 +242,16 @@ export async function getDashboardPerformance(
     teamMembersCount: memberCapacities.length,
   };
 
+  const trendData = buildCompletionTrendData(
+    tasks.map((t) => ({
+      id: t.id,
+      createdAt: t.created_at,
+      updatedAt: t.updated_at,
+      columnName: Array.isArray(t.column) ? t.column[0]?.name : t.column?.name,
+    })),
+    totalTasks
+  );
+
   return {
     teamId,
     teamName,
@@ -248,5 +261,6 @@ export async function getDashboardPerformance(
     priorityDistribution,
     recentTasks,
     memberCapacities,
+    trendData,
   };
 }
