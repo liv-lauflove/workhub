@@ -56,6 +56,26 @@ export interface DashboardMemberCapacity {
   isOverloaded: boolean;
 }
 
+export interface CompletionTrendPoint {
+  period: string;
+  fullLabel: string;
+  completed: number;
+  created: number;
+  cumulativeCompleted: number;
+  target: number;
+}
+
+export interface CompletionTrendData {
+  weekly: CompletionTrendPoint[];
+  monthly: CompletionTrendPoint[];
+  summary: {
+    totalCompleted: number;
+    weeklyAverage: number;
+    completionVelocity: number;
+    targetPaceAchieved: boolean;
+  };
+}
+
 export interface DashboardPerformanceData {
   teamId: string | null;
   teamName: string;
@@ -69,4 +89,5 @@ export interface DashboardPerformanceData {
   priorityDistribution: PriorityDistribution;
   recentTasks: DashboardRecentTask[];
   memberCapacities: DashboardMemberCapacity[];
+  trendData: CompletionTrendData;
 }
