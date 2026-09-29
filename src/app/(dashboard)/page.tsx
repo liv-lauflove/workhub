@@ -1,15 +1,26 @@
-/**
- * Dashboard home page.
- * Will show performance overview in Phase 2 (Issues #28-#31).
- */
-export default function DashboardPage() {
-  return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-      <p className="text-muted-foreground">
-        Welcome to Workhub — Task & Performance Dashboard
-      </p>
-      {/* Dashboard widgets will be added in Phase 2 */}
-    </div>
-  );
+import type { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
+import { getUserProfile } from '@/features/auth/queries/auth.queries';
+import { getDashboardPerformance } from '@/features/dashboard/queries/dashboard.queries';
+import { DashboardView } from '@/features/dashboard/components/dashboard-view';
+
+export const metadata: Metadata = {
+  title: 'Dashboard Performa — Workhub',
+  description:
+    'Pemantauan performa kuartalan, progres tugas, dan kapasitas kerja tim.',
+};
+
+export default async function DashboardPage() {
+  const profile = await getUserProfile();
+
+  if (!profile) {
+    redirect(ROUTES.login);
+  }
+
+  const dashboardData = profile.team_id
+    ? await getDashboardPerformance(profile.team_id)
+    : null;
+
+  return <DashboardView initialData={dashboardData} />;
 }
