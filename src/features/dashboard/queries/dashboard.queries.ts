@@ -9,32 +9,116 @@ import {
   PriorityDistribution,
   DashboardRecentTask,
   DashboardMemberCapacity,
+  QuarterFilter,
 } from '../types/dashboard.types';
 import type { PriorityLevel } from '@/features/workload/types/workload.types';
 import { buildCompletionTrendData } from '../lib/trend.utils';
 
 /**
- * Returns current quarter information based on date.
+ * Returns quarter information and date boundaries based on quarter number and year.
+ * Defaults to current quarter and year if not specified.
  */
-function getCurrentQuarterInfo(date: Date = new Date()) {
-  const month = date.getMonth(); // 0 - 11
-  const quarter = (Math.floor(month / 3) + 1) as 1 | 2 | 3 | 4;
-  const year = date.getFullYear();
+export function getQuarterPeriod(quarter?: number, year?: number) {
+  const now = new Date();
+  const targetYear =
+    year && !isNaN(year) && year >= 2000 && year <= 2100
+      ? year
+      : now.getFullYear();
+  const currentQuarter = (Math.floor(now.getMonth() / 3) + 1) as 1 | 2 | 3 | 4;
+  const targetQuarter =
+    quarter && [1, 2, 3, 4].includes(quarter)
+      ? (quarter as 1 | 2 | 3 | 4)
+      : currentQuarter;
+
+  const startMonth = (targetQuarter - 1) * 3;
+  const startDate = new Date(targetYear, startMonth, 1, 0, 0, 0, 0);
+  const endDate = new Date(targetYear, startMonth + 3, 0, 23, 59, 59, 999);
 
   return {
-    year,
-    quarter,
-    label: `Q${quarter} ${year}`,
+    year: targetYear,
+    quarter: targetQuarter,
+    label: `Q${targetQuarter} ${targetYear}`,
+    startDate,
+    endDate,
   };
 }
 
 /**
+ * Checks whether a task is relevant to the specified quarter interval.
+ * Includes:
+ * 1. Tasks with due_date within the quarter
+ * 2. Tasks created during the quarter
+ * 3. Completed tasks whose updated_at falls within the quarter
+ * 4. Ongoing active tasks created on or prior to the quarter that have not been finished
+ */
+export function isTaskInQuarter(
+  task: {
+    created_at: string;
+    updated_at?: string | null;
+    due_date?: string | null;
+    column?:
+      { id: string; name: string } | { id: string; name: string }[] | null;
+  },
+  startDate: Date,
+  endDate: Date
+): boolean {
+  const start = startDate.getTime();
+  const end = endDate.getTime();
+
+  const colName = Array.isArray(task.column)
+    ? task.column[0]?.name
+    : task.column?.name;
+  const isActive = isTaskActive(colName);
+
+  const createTime = task.created_at ? new Date(task.created_at).getTime() : 0;
+  const dueTime = task.due_date ? new Date(task.due_date).getTime() : null;
+  const updateTime = task.updated_at
+    ? new Date(task.updated_at).getTime()
+    : null;
+
+  // Task created after the quarter ended did not exist in this quarter
+  if (createTime > end) {
+    return false;
+  }
+
+  // 1. Task has due date in this quarter
+  if (dueTime !== null && dueTime >= start && dueTime <= end) {
+    return true;
+  }
+
+  // 2. Task was created in this quarter
+  if (createTime >= start && createTime <= end) {
+    return true;
+  }
+
+  // 3. Task was completed in this quarter
+  if (
+    !isActive &&
+    updateTime !== null &&
+    updateTime >= start &&
+    updateTime <= end
+  ) {
+    return true;
+  }
+
+  // 4. Task is active and was created on or before this quarter without an earlier due date
+  if (isActive && createTime <= end) {
+    if (dueTime === null || dueTime >= start) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
  * Fetches aggregate performance data for the leader's dashboard.
- * Supports team-level scoping, task status breakdown, project metrics,
- * priority distribution, and team capacity integration.
+ * Supports team-level scoping, quarter/year filtering, task status breakdown,
+ * project metrics, priority distribution, and team capacity integration.
  */
 export async function getDashboardPerformance(
-  targetTeamId?: string
+  targetTeamId?: string,
+  filters?: QuarterFilter
 ): Promise<DashboardPerformanceData | null> {
   const supabase = await createClient();
 
@@ -148,7 +232,13 @@ export async function getDashboardPerformance(
     }
   }
 
-  // 6. Aggregate task metrics
+  // 6. Filter tasks belonging to target quarter & aggregate metrics
+  const quarterPeriod = getQuarterPeriod(filters?.quarter, filters?.year);
+
+  const quarterTasks = tasks.filter((task) =>
+    isTaskInQuarter(task, quarterPeriod.startDate, quarterPeriod.endDate)
+  );
+
   let completedTasks = 0;
   let inProgressTasks = 0;
 
@@ -164,7 +254,7 @@ export async function getDashboardPerformance(
 
   const recentTasks: DashboardRecentTask[] = [];
 
-  for (const task of tasks) {
+  for (const task of quarterTasks) {
     const colName = Array.isArray(task.column)
       ? task.column[0]?.name
       : task.column?.name;
@@ -212,7 +302,7 @@ export async function getDashboardPerformance(
     priorityDistribution.total++;
   }
 
-  const totalTasks = tasks.length;
+  const totalTasks = quarterTasks.length;
   const completionRate =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
 
@@ -242,6 +332,14 @@ export async function getDashboardPerformance(
     teamMembersCount: memberCapacities.length,
   };
 
+  const now = new Date();
+  const isCurrentQuarter =
+    quarterPeriod.year === now.getFullYear() &&
+    quarterPeriod.quarter === Math.floor(now.getMonth() / 3) + 1;
+
+  // Anchor trend reference date: current date for ongoing quarter, quarter end for past quarters
+  const trendReferenceDate = isCurrentQuarter ? now : quarterPeriod.endDate;
+
   const trendData = buildCompletionTrendData(
     tasks.map((t) => ({
       id: t.id,
@@ -249,14 +347,21 @@ export async function getDashboardPerformance(
       updatedAt: t.updated_at,
       columnName: Array.isArray(t.column) ? t.column[0]?.name : t.column?.name,
     })),
-    totalTasks
+    Math.max(quarterTasks.length, 1),
+    trendReferenceDate
   );
 
   return {
     teamId,
     teamName,
     userRole,
-    currentQuarter: getCurrentQuarterInfo(),
+    currentQuarter: {
+      year: quarterPeriod.year,
+      quarter: quarterPeriod.quarter,
+      label: quarterPeriod.label,
+      startDate: quarterPeriod.startDate.toISOString(),
+      endDate: quarterPeriod.endDate.toISOString(),
+    },
     metrics,
     priorityDistribution,
     recentTasks,

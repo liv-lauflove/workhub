@@ -5,8 +5,8 @@
 import type { PriorityLevel } from '@/features/workload/types/workload.types';
 
 export type QuarterFilter = {
-  year: number;
-  quarter: 1 | 2 | 3 | 4;
+  year?: number;
+  quarter?: 1 | 2 | 3 | 4;
   teamId?: string;
 };
 
@@ -84,6 +84,8 @@ export interface DashboardPerformanceData {
     year: number;
     quarter: number;
     label: string;
+    startDate?: string;
+    endDate?: string;
   };
   metrics: DashboardMetrics;
   priorityDistribution: PriorityDistribution;
