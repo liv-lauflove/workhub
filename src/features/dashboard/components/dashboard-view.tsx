@@ -67,6 +67,8 @@ export function DashboardView({ initialData }: DashboardViewProps) {
       <DashboardHeader
         teamName={teamName}
         quarterLabel={currentQuarter.label}
+        currentQuarter={currentQuarter.quarter}
+        currentYear={currentQuarter.year}
         userRole={userRole}
         overloadedMembersCount={metrics.overloadedMembersCount}
       />
