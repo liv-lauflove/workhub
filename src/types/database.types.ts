@@ -1,4 +1,4 @@
-﻿export type Json =
+export type Json =
   | string
   | number
   | boolean
@@ -451,6 +451,7 @@ export type Database = {
           full_name: string;
           github_username: string | null;
           id: string;
+          phone: string | null;
           role: Database['public']['Enums']['user_role'];
           team_id: string | null;
         };
@@ -460,6 +461,7 @@ export type Database = {
           full_name: string;
           github_username?: string | null;
           id: string;
+          phone?: string | null;
           role?: Database['public']['Enums']['user_role'];
           team_id?: string | null;
         };
@@ -469,6 +471,7 @@ export type Database = {
           full_name?: string;
           github_username?: string | null;
           id?: string;
+          phone?: string | null;
           role?: Database['public']['Enums']['user_role'];
           team_id?: string | null;
         };

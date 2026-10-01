@@ -25,4 +25,4 @@ export const ALLOWED_FILE_TYPES = [
 export const OVERLOAD_THRESHOLD = 80;
 
 /** Team names (matches DB constraint) */
-export const TEAM_NAMES = ['Aegis', 'Sentinel'] as const;
+export const TEAM_NAMES = ['Aegis', 'Sentinel', 'Management'] as const;
