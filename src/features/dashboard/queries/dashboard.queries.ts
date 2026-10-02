@@ -10,6 +10,8 @@ import {
   DashboardRecentTask,
   DashboardMemberCapacity,
   QuarterFilter,
+  DashboardExportData,
+  DashboardExportTaskItem,
 } from '../types/dashboard.types';
 import type { PriorityLevel } from '@/features/workload/types/workload.types';
 import { buildCompletionTrendData } from '../lib/trend.utils';
@@ -367,5 +369,96 @@ export async function getDashboardPerformance(
     recentTasks,
     memberCapacities,
     trendData,
+  };
+}
+
+/**
+ * Fetches complete dashboard performance data and all itemized tasks in the target quarter
+ * specifically tailored for CSV export reports (PRD §9.5, Issue #33).
+ */
+export async function getDashboardExportData(
+  targetTeamId?: string,
+  filters?: QuarterFilter
+): Promise<DashboardExportData | null> {
+  const performanceData = await getDashboardPerformance(targetTeamId, filters);
+
+  if (!performanceData || !performanceData.teamId) {
+    return null;
+  }
+
+  const supabase = await createClient();
+
+  // Fetch team projects to map project IDs to project names
+  const { data: projectsData } = await supabase
+    .from('projects')
+    .select('id, name')
+    .eq('team_id', performanceData.teamId)
+    .is('archived_at', null);
+
+  const projects = projectsData || [];
+  const projectIds = projects.map((p) => p.id);
+  const projectMap = new Map(projects.map((p) => [p.id, p.name]));
+
+  let tasks: DashboardExportTaskItem[] = [];
+
+  if (projectIds.length > 0) {
+    const { data: tasksData, error: tasksError } = await supabase
+      .from('tasks')
+      .select(
+        `
+        id,
+        title,
+        priority,
+        due_date,
+        project_id,
+        created_at,
+        updated_at,
+        column:board_columns(
+          id,
+          name
+        ),
+        assignee:profiles!tasks_assignee_id_fkey(
+          id,
+          full_name
+        )
+      `
+      )
+      .in('project_id', projectIds)
+      .order('created_at', { ascending: false });
+
+    if (tasksError) {
+      console.error('Error fetching tasks for dashboard export:', tasksError);
+    } else {
+      const quarterPeriod = getQuarterPeriod(filters?.quarter, filters?.year);
+
+      const quarterTasks = (tasksData || []).filter((task) =>
+        isTaskInQuarter(task, quarterPeriod.startDate, quarterPeriod.endDate)
+      );
+
+      tasks = quarterTasks.map((t) => {
+        const colName = Array.isArray(t.column)
+          ? t.column[0]?.name
+          : t.column?.name;
+        const assignee = Array.isArray(t.assignee) ? t.assignee[0] : t.assignee;
+
+        return {
+          id: t.id,
+          title: t.title,
+          projectName: t.project_id
+            ? projectMap.get(t.project_id) || null
+            : null,
+          assigneeName: assignee?.full_name || null,
+          priority: t.priority || 'medium',
+          columnName: colName || 'To Do',
+          dueDate: t.due_date,
+          createdAt: t.created_at,
+        };
+      });
+    }
+  }
+
+  return {
+    performanceData,
+    tasks,
   };
 }
