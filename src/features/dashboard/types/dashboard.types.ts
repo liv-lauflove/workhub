@@ -93,3 +93,19 @@ export interface DashboardPerformanceData {
   memberCapacities: DashboardMemberCapacity[];
   trendData: CompletionTrendData;
 }
+
+export interface DashboardExportTaskItem {
+  id: string;
+  title: string;
+  projectName: string | null;
+  assigneeName: string | null;
+  priority: string;
+  columnName: string;
+  dueDate: string | null;
+  createdAt: string;
+}
+
+export interface DashboardExportData {
+  performanceData: DashboardPerformanceData;
+  tasks: DashboardExportTaskItem[];
+}

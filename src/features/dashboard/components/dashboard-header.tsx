@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { ROUTES } from '@/config/routes';
 import { DashboardFilter } from './dashboard-filter';
+import { DashboardExportButton } from './dashboard-export-button';
 
 interface DashboardHeaderProps {
   teamName: string;
@@ -100,8 +101,8 @@ export function DashboardHeader({
         </div>
       </div>
 
-      {/* 3. Filter Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-card/60 p-2.5 shadow-2xs">
+      {/* 3. Filter & Export Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl border bg-card/60 p-2.5 shadow-2xs">
         <React.Suspense
           fallback={
             <div className="h-8 w-48 animate-pulse rounded-lg bg-muted/60" />
@@ -112,9 +113,15 @@ export function DashboardHeader({
             currentYear={currentYear}
           />
         </React.Suspense>
-        <div className="text-[11px] text-muted-foreground hidden md:block">
-          Data grafik dan statistik disinkronisasikan otomatis dengan kuartal
-          terpilih.
+
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          <React.Suspense
+            fallback={
+              <div className="h-8 w-24 animate-pulse rounded-lg bg-muted/60" />
+            }
+          >
+            <DashboardExportButton variant="toolbar" />
+          </React.Suspense>
         </div>
       </div>
     </div>
