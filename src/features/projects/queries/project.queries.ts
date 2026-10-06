@@ -38,6 +38,8 @@ interface RawProjectQueryResult {
   }> | null;
   tasks?: Array<{
     id: string;
+    dev_status?: string | null;
+    test_status?: string | null;
     column?: { id: string; name: string } | null;
   }> | null;
 }
@@ -52,6 +54,15 @@ const PROJECT_SELECT_QUERY = `
   ),
   pic:profiles!projects_pic_id_fkey(id, full_name, avatar_url),
   total_tasks:tasks(count),
+  tasks(
+    id,
+    dev_status,
+    test_status,
+    column:board_columns(
+      id,
+      name
+    )
+  ),
   board_columns(
     id,
     name,
@@ -62,22 +73,47 @@ const PROJECT_SELECT_QUERY = `
 function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
   let totalTasks = 0;
   let completedTasks = 0;
+  let devDoneTasks = 0;
+  let testPassedTasks = 0;
 
-  if (p.total_tasks && p.total_tasks.length > 0) {
+  if (p.tasks && p.tasks.length > 0) {
+    totalTasks = p.tasks.length;
+    for (const t of p.tasks) {
+      const isDevDone = t.dev_status === 'dev_done';
+      const isTestPassed = t.test_status === 'passed';
+      const colName = t.column?.name?.toLowerCase() || '';
+      const isColumnDone =
+        colName.includes('done') ||
+        colName.includes('selesai') ||
+        colName.includes('complete');
+
+      if (isDevDone || isColumnDone) {
+        devDoneTasks++;
+      }
+      if (isTestPassed || isColumnDone) {
+        testPassedTasks++;
+      }
+      // Dual-track syarat mutlak: development DAN testing keduanya tuntas (Issue #95)
+      if ((isDevDone && isTestPassed) || isColumnDone) {
+        completedTasks++;
+      }
+    }
+  } else if (p.total_tasks && p.total_tasks.length > 0) {
     totalTasks = p.total_tasks[0]?.count || 0;
     const doneCol = p.board_columns?.find(
       (c) => c.name.toLowerCase() === 'done'
     );
     completedTasks = doneCol?.tasks?.[0]?.count || 0;
-  } else if (p.tasks) {
-    totalTasks = p.tasks.length;
-    completedTasks = p.tasks.filter(
-      (t) => t.column?.name?.toLowerCase() === 'done'
-    ).length;
+    devDoneTasks = completedTasks;
+    testPassedTasks = completedTasks;
   }
 
   const progress =
     totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+  const devProgress =
+    totalTasks > 0 ? Math.round((devDoneTasks / totalTasks) * 100) : 0;
+  const testProgress =
+    totalTasks > 0 ? Math.round((testPassedTasks / totalTasks) * 100) : 0;
   const memberCount = p.team?.members?.length || 0;
 
   return {
@@ -103,6 +139,8 @@ function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
     totalTasks,
     completedTasks,
     progress,
+    devProgress,
+    testProgress,
     memberCount,
   };
 }
