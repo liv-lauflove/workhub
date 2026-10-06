@@ -51,3 +51,14 @@ export interface TaskDetail extends Task {
     avatar_url: string | null;
   } | null;
 }
+
+export type ActivityLog = Database['public']['Tables']['activity_log']['Row'];
+
+export interface TaskActivityLog extends ActivityLog {
+  actor?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+    role: string;
+  } | null;
+}

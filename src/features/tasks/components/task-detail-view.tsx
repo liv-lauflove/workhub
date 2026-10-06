@@ -5,18 +5,20 @@ import { TaskDetailHeader } from './task-detail-header';
 import { TaskDetailMain } from './task-detail-main';
 import { TaskDetailSidebar } from './task-detail-sidebar';
 import type { TeamMemberOption } from './task-assignee-selector';
-import type { TaskDetail } from '../types/task.types';
+import type { TaskDetail, TaskActivityLog } from '../types/task.types';
 
 interface TaskDetailViewProps {
   task: TaskDetail;
   availableColumns: { id: string; name: string; position: number }[];
   teamMembers?: TeamMemberOption[];
+  activities?: TaskActivityLog[];
 }
 
 export function TaskDetailView({
   task,
   availableColumns,
   teamMembers = [],
+  activities = [],
 }: TaskDetailViewProps) {
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-12">
@@ -27,7 +29,12 @@ export function TaskDetailView({
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         {/* Main Content (Left: ~70%) */}
         <main className="lg:col-span-8 space-y-6">
-          <TaskDetailMain task={task} />
+          <TaskDetailMain
+            task={task}
+            activities={activities}
+            availableColumns={availableColumns}
+            teamMembers={teamMembers}
+          />
         </main>
 
         {/* Sidebar Metadata (Right: ~30%) */}
