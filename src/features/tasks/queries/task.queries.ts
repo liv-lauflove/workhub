@@ -2,7 +2,12 @@ import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
 import type { PaginationParams, PaginatedResult } from '@/types/global';
-import type { Task, MyTask, TaskDetail } from '../types/task.types';
+import type {
+  Task,
+  MyTask,
+  TaskDetail,
+  TaskActivityLog,
+} from '../types/task.types';
 
 const MY_TASKS_SELECT_QUERY = `
   *,
@@ -200,4 +205,42 @@ export async function getProjectColumns(
   }
 
   return data || [];
+}
+
+const TASK_ACTIVITY_LOG_SELECT_QUERY = `
+  id,
+  task_id,
+  actor_id,
+  field_name,
+  old_value,
+  new_value,
+  created_at,
+  actor:profiles!activity_log_actor_id_fkey(
+    id,
+    full_name,
+    avatar_url,
+    role
+  )
+`;
+
+/**
+ * Fetch activity logs for a specific task ordered by created_at descending.
+ */
+export async function getTaskActivityLogs(
+  taskId: string
+): Promise<TaskActivityLog[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('activity_log')
+    .select(TASK_ACTIVITY_LOG_SELECT_QUERY)
+    .eq('task_id', taskId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(`Error fetching activity logs for task ${taskId}:`, error);
+    return [];
+  }
+
+  return (data as unknown as TaskActivityLog[]) || [];
 }
