@@ -17,7 +17,9 @@ import {
 
 console.log('--- RUNNING WORKLOAD ENGINE SPEC TESTS (ISSUE #95) ---');
 
-// 1. Test Urgency Multiplier
+// 1. Test Base Points & Urgency Multipliers
+assert.equal(BASE_TASK_LOAD_POINTS, 2.0);
+assert.equal(URGENCY_MULTIPLIERS.critical, 2.0);
 assert.equal(getUrgencyMultiplier('critical'), 2.0);
 assert.equal(getUrgencyMultiplier('urgent'), 2.0);
 assert.equal(getUrgencyMultiplier('high'), 1.5);
