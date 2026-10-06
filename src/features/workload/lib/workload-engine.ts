@@ -12,6 +12,8 @@ import {
   type CriticalWatchlistTask,
 } from '../types/workload.types';
 
+export type { DualTrackProgress, DynamicTaskScore, CriticalWatchlistTask };
+
 export interface WorkloadTaskInput {
   id: string;
   title?: string;
