@@ -13,6 +13,8 @@ import {
 import { toast } from 'sonner';
 import { updateTaskDescriptionAction } from '../actions/task.actions';
 import { TaskActivityTimeline } from './task-activity-timeline';
+import { TaskSubtasksChecklist } from './task-subtasks-checklist';
+import { TaskQaTransitionCard } from './task-qa-transition-card';
 import type { TaskDetail, TaskActivityLog } from '../types/task.types';
 
 interface TaskDetailMainProps {
@@ -227,7 +229,24 @@ export function TaskDetailMain({
         </div>
       </div>
 
-      {/* 2. Activity Timeline */}
+      {/* 2. Dev-to-Testing QA Transition & Test Documentation */}
+      <TaskQaTransitionCard
+        taskId={task.id}
+        projectId={task.project_id}
+        purpose={task.purpose}
+        initialDevStatus={task.dev_status}
+        initialTestStatus={task.test_status}
+        initialTestNotes={task.test_notes}
+      />
+
+      {/* 3. Subtask Checklist & Verification Criteria */}
+      <TaskSubtasksChecklist
+        taskId={task.id}
+        projectId={task.project_id}
+        initialSubtasks={task.subtasks || []}
+      />
+
+      {/* 4. Activity Timeline */}
       <div className="pt-2">
         <TaskActivityTimeline
           activities={activities}
