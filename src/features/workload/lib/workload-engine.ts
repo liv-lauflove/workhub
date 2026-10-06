@@ -25,6 +25,21 @@ export interface WorkloadTaskInput {
   developer_id?: string | null;
   tester_id?: string | null;
   assignee_id?: string | null;
+  developer?: {
+    id: string;
+    full_name?: string;
+    avatar_url?: string | null;
+  } | null;
+  tester?: {
+    id: string;
+    full_name?: string;
+    avatar_url?: string | null;
+  } | null;
+  assignee?: {
+    id: string;
+    full_name?: string;
+    avatar_url?: string | null;
+  } | null;
 }
 
 export interface DeadlineCalculationResult {
@@ -190,7 +205,12 @@ export function determineActiveTaskRole(
   // If dev is done, workload moves to QA/Tester
   if (devStatus === 'dev_done') {
     if (testStatus !== 'passed') {
-      const testerId = task.tester_id || task.assignee_id || null;
+      const testerId =
+        task.tester_id ||
+        task.tester?.id ||
+        task.assignee_id ||
+        task.assignee?.id ||
+        null;
       if (testerId) {
         return { activeRole: 'tester', userId: testerId };
       }
@@ -200,7 +220,12 @@ export function determineActiveTaskRole(
   }
 
   // Still in development stage
-  const devId = task.developer_id || task.assignee_id || null;
+  const devId =
+    task.developer_id ||
+    task.developer?.id ||
+    task.assignee_id ||
+    task.assignee?.id ||
+    null;
   if (devId) {
     return { activeRole: 'developer', userId: devId };
   }
