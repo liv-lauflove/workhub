@@ -13,7 +13,11 @@ import {
 import { toast } from 'sonner';
 import { updateTaskDescriptionAction } from '../actions/task.actions';
 import { TaskActivityTimeline } from './task-activity-timeline';
+import { TaskSubtasksChecklist } from './task-subtasks-checklist';
+import { MarkdownTaskEditor } from './markdown-task-editor';
 import { TaskAttachmentsSection } from './task-attachments-section';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import type {
   TaskDetail,
   TaskActivityLog,
@@ -175,18 +179,17 @@ export function TaskDetailMain({
           {/* Description Content / Edit Mode */}
           {isEditing ? (
             <div className="space-y-3">
-              <textarea
+              <MarkdownTaskEditor
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={setDescription}
                 disabled={isPending}
-                rows={6}
-                placeholder="Tuliskan deskripsi task, acceptance criteria, atau catatan pengerjaan..."
-                className="w-full resize-y rounded-lg border bg-background p-3.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary leading-relaxed font-sans"
+                minRows={8}
+                placeholder="Tuliskan deskripsi task, kriteria penerimaan (acceptance criteria), atau checklist markdown..."
               />
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-1 border-t">
                 <span className="text-[11px] text-muted-foreground">
-                  Mendukung teks deskripsi leluasa & Markdown.
+                  Mendukung format Markdown &amp; Tasklist GitHub.
                 </span>
 
                 <div className="flex items-center gap-2">
@@ -204,7 +207,7 @@ export function TaskDetailMain({
                     type="button"
                     onClick={handleSaveDescription}
                     disabled={isPending}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-2xs hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs hover:bg-emerald-700 transition-colors disabled:opacity-50 cursor-pointer"
                   >
                     {isPending ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -217,8 +220,10 @@ export function TaskDetailMain({
               </div>
             </div>
           ) : task.description ? (
-            <div className="prose prose-sm dark:prose-invert max-w-none text-card-foreground leading-relaxed whitespace-pre-wrap font-sans text-sm sm:text-base selection:bg-primary/20">
-              {task.description}
+            <div className="markdown-body text-card-foreground leading-relaxed selection:bg-primary/20 text-sm">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {task.description}
+              </ReactMarkdown>
             </div>
           ) : (
             <div className="flex items-center justify-between rounded-lg border border-dashed p-4 bg-muted/20">
@@ -238,7 +243,14 @@ export function TaskDetailMain({
         </div>
       </div>
 
-      {/* 2. Attachments Section */}
+      {/* 2. Subtask Checklist & Verification Criteria */}
+      <TaskSubtasksChecklist
+        taskId={task.id}
+        projectId={task.project_id}
+        initialSubtasks={task.subtasks || []}
+      />
+
+      {/* 3. Attachments Section */}
       <div className="rounded-xl border bg-card p-5 sm:p-6 shadow-xs">
         <TaskAttachmentsSection
           task={task}
