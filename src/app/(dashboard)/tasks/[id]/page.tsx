@@ -4,6 +4,7 @@ import { getUserProfile } from '@/features/auth/queries/auth.queries';
 import {
   getTaskDetailById,
   getProjectColumns,
+  getTaskActivityLogs,
 } from '@/features/tasks/queries/task.queries';
 import { getTeamMembers } from '@/features/team/queries/team.queries';
 import { TaskDetailView } from '@/features/tasks/components/task-detail-view';
@@ -49,9 +50,10 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
     notFound();
   }
 
-  const availableColumns = task.project_id
-    ? await getProjectColumns(task.project_id)
-    : [];
+  const [availableColumns, activities] = await Promise.all([
+    task.project_id ? getProjectColumns(task.project_id) : Promise.resolve([]),
+    getTaskActivityLogs(id),
+  ]);
 
   const teamId = task.project?.team_id || profile.team_id;
   const rawMembers = teamId ? await getTeamMembers(teamId) : [];
@@ -67,6 +69,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
       task={task}
       availableColumns={availableColumns}
       teamMembers={teamMembers}
+      activities={activities}
     />
   );
 }
