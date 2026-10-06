@@ -371,7 +371,6 @@ export async function updateTaskRoleAssigneeAction({
       };
     }
 
-    const fieldToUpdate = role === 'developer' ? 'developer_id' : 'tester_id';
     const selectQuery =
       role === 'developer'
         ? 'id, developer_id, developer:profiles!tasks_developer_id_fkey(id, full_name, avatar_url)'
