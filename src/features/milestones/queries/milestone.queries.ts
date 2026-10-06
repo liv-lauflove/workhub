@@ -1,10 +1,8 @@
 import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 import type { MilestoneWithDetails } from '../types/milestone.types';
-import {
-  calculateDualTrackProgress,
-  type DualTrackProgress,
-} from '@/features/workload/lib/workload-engine';
+import { calculateDualTrackProgress } from '@/features/workload/lib/workload-engine';
+import type { DualTrackProgress } from '@/features/workload/types/workload.types';
 
 export async function getMilestones(): Promise<MilestoneWithDetails[]> {
   const supabase = await createClient();
