@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
-  MAX_TASK_ATTACHMENT_SIZE_BYTES,
   MAX_TASK_ATTACHMENT_SIZE_LABEL,
   ALLOWED_ATTACHMENT_EXTENSIONS,
   formatAttachmentFileSize,
@@ -115,16 +114,8 @@ export function TaskAttachmentsSection({
     if (!validation.valid) {
       const errorMsg =
         validation.error ||
-        `Berkas ${file.name} melebihi batas ${MAX_TASK_ATTACHMENT_SIZE_LABEL}. Berkas otomatis ditolak.`;
-      // Trigger toast error and alert banner
+        `Berkas "${file.name}" melebihi batas ${MAX_TASK_ATTACHMENT_SIZE_LABEL}. Berkas otomatis ditolak.`;
       toast.error(errorMsg);
-      if (file.size > MAX_TASK_ATTACHMENT_SIZE_BYTES) {
-        alert(
-          `Peringatan: Berkas "${file.name}" (${formatAttachmentFileSize(
-            file.size
-          )}) ditolak karena melebihi batas maksimum ${MAX_TASK_ATTACHMENT_SIZE_LABEL}.`
-        );
-      }
       return;
     }
 
