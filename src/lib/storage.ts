@@ -11,6 +11,12 @@ export const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024; // 10,485,760 bytes
 /** Human-readable max file size string */
 export const MAX_ATTACHMENT_SIZE_LABEL = '10 MB';
 
+/** Maximum allowed file size for Task attachments: 5 Megabytes (in bytes) - Issue #37 */
+export const MAX_TASK_ATTACHMENT_SIZE_BYTES = 5 * 1024 * 1024; // 5,242,880 bytes
+
+/** Human-readable max task attachment file size string */
+export const MAX_TASK_ATTACHMENT_SIZE_LABEL = '5 MB';
+
 /**
  * MIME types allowed by server-level bucket configuration:
  * PDF documents and standard image formats (JPEG, PNG, WebP).
@@ -77,6 +83,46 @@ export function validateAttachmentFile(file: {
     return {
       valid: false,
       error: `Ukuran berkas (${formatAttachmentFileSize(file.size)}) melebihi batas maksimum ${MAX_ATTACHMENT_SIZE_LABEL}.`,
+    };
+  }
+
+  if (!isAllowedAttachmentMimeType(file.type)) {
+    return {
+      valid: false,
+      error: `Format berkas (${file.type || 'tidak dikenal'}) tidak didukung. Hanya PDF, JPG, PNG, dan WebP yang diizinkan.`,
+    };
+  }
+
+  return { valid: true };
+}
+
+/**
+ * Checks if task attachment file size does not exceed the 5MB limit.
+ */
+export function isAllowedTaskAttachmentFileSize(sizeInBytes: number): boolean {
+  return sizeInBytes > 0 && sizeInBytes <= MAX_TASK_ATTACHMENT_SIZE_BYTES;
+}
+
+/**
+ * Validates a task attachment file specifically against the 5MB limit and allowed MIME types.
+ */
+export function validateTaskAttachmentFile(file: {
+  size: number;
+  type: string;
+  name?: string;
+}): AttachmentValidationResult {
+  if (!file) {
+    return { valid: false, error: 'Berkas tidak ditemukan.' };
+  }
+
+  if (file.size <= 0) {
+    return { valid: false, error: 'Ukuran berkas tidak valid atau kosong.' };
+  }
+
+  if (!isAllowedTaskAttachmentFileSize(file.size)) {
+    return {
+      valid: false,
+      error: `Ukuran berkas (${formatAttachmentFileSize(file.size)}) melebihi batas maksimum ${MAX_TASK_ATTACHMENT_SIZE_LABEL}. Berkas otomatis ditolak.`,
     };
   }
 
