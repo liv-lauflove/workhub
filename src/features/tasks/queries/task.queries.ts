@@ -7,6 +7,7 @@ import type {
   MyTask,
   TaskDetail,
   TaskActivityLog,
+  TaskAttachmentItem,
 } from '../types/task.types';
 
 const MY_TASKS_SELECT_QUERY = `
@@ -243,4 +244,42 @@ export async function getTaskActivityLogs(
   }
 
   return (data as unknown as TaskActivityLog[]) || [];
+}
+
+const TASK_ATTACHMENTS_SELECT_QUERY = `
+  id,
+  task_id,
+  uploaded_by,
+  file_url,
+  file_name,
+  file_type,
+  file_size,
+  created_at,
+  uploader:profiles!task_attachments_uploaded_by_fkey(
+    id,
+    full_name,
+    avatar_url
+  )
+`;
+
+/**
+ * Fetch attachments for a specific task ordered by created_at descending.
+ */
+export async function getTaskAttachments(
+  taskId: string
+): Promise<TaskAttachmentItem[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('task_attachments')
+    .select(TASK_ATTACHMENTS_SELECT_QUERY)
+    .eq('task_id', taskId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(`Error fetching attachments for task ${taskId}:`, error);
+    return [];
+  }
+
+  return (data as unknown as TaskAttachmentItem[]) || [];
 }

@@ -50,6 +50,7 @@ export interface TaskDetail extends Task {
     email?: string;
     avatar_url: string | null;
   } | null;
+  attachments?: TaskAttachmentItem[];
 }
 
 export type ActivityLog = Database['public']['Tables']['activity_log']['Row'];
@@ -60,5 +61,16 @@ export interface TaskActivityLog extends ActivityLog {
     full_name: string;
     avatar_url: string | null;
     role: string;
+  } | null;
+}
+
+export type TaskAttachment =
+  Database['public']['Tables']['task_attachments']['Row'];
+
+export interface TaskAttachmentItem extends TaskAttachment {
+  uploader?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
   } | null;
 }
