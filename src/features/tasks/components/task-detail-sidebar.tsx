@@ -17,6 +17,7 @@ import {
   TaskAssigneeSelector,
   type TeamMemberOption,
 } from './task-assignee-selector';
+import { TaskRoleAssigneeSelector } from './task-role-assignee-selector';
 import type { TaskDetail } from '../types/task.types';
 
 interface TaskDetailSidebarProps {
@@ -72,7 +73,7 @@ export function TaskDetailSidebar({
 
   return (
     <aside className="space-y-6 rounded-xl border bg-card p-5 shadow-xs">
-      {/* 1. Assignees Section with ComboBox Selector */}
+      {/* 1. General Assignee (PIC Utama) */}
       <div className="border-b pb-4">
         <TaskAssigneeSelector
           taskId={task.id}
@@ -80,6 +81,25 @@ export function TaskDetailSidebar({
           currentAssignee={task.assignee}
           teamMembers={teamMembers}
           variant="sidebar"
+        />
+      </div>
+
+      {/* 2. Dual-Role Assignees: Developer (PIC Dev) & Tester (PIC QA) */}
+      <div className="border-b pb-4 space-y-4">
+        <TaskRoleAssigneeSelector
+          taskId={task.id}
+          projectId={task.project_id}
+          role="developer"
+          currentUser={task.developer}
+          teamMembers={teamMembers}
+        />
+
+        <TaskRoleAssigneeSelector
+          taskId={task.id}
+          projectId={task.project_id}
+          role="tester"
+          currentUser={task.tester}
+          teamMembers={teamMembers}
         />
       </div>
 
