@@ -12,6 +12,7 @@ truncate table activity_log cascade;
 truncate table task_dependencies cascade;
 truncate table task_comments cascade;
 truncate table task_attachments cascade;
+truncate table task_subtasks cascade;
 truncate table notifications cascade;
 truncate table tasks cascade;
 truncate table board_columns cascade;
@@ -893,6 +894,42 @@ insert into tasks (
   )
 on conflict (id) do nothing;
 
+
+-- =====================================================================
+-- STEP 5.1: Sync Dual-Assignee & Seed Testing Subtasks Checklist
+-- =====================================================================
+update public.tasks
+set developer_id = assignee_id
+where developer_id is null and assignee_id is not null;
+
+-- Set tester assignments (Ops / QA testers)
+update public.tasks
+set tester_id = 'd0000000-0000-0000-0000-00000000000c' -- Gita (QA / Tech Ops Manager)
+where project_id = 'b0000000-0000-0000-0000-000000000001' and tester_id is null;
+
+update public.tasks
+set tester_id = 'd0000000-0000-0000-0000-00000000000d' -- Sagung (QA / Tech Ops)
+where project_id = 'b0000000-0000-0000-0000-000000000002' and tester_id is null;
+
+update public.tasks
+set tester_id = 'd0000000-0000-0000-0000-000000000004' -- Detut (Tech Lead)
+where project_id in ('b0000000-0000-0000-0000-000000000003', 'b0000000-0000-0000-0000-000000000004') and tester_id is null;
+
+insert into public.task_subtasks (id, task_id, title, is_completed, tested_by, tested_at, sort_order) values
+  -- Bug CS Urgent (#2): Sesi Terputus
+  (gen_random_uuid(), '70000000-0000-0000-0000-000000000002', 'Reproduce bug auto-logout di Safari Mobile', true, 'd0000000-0000-0000-0000-00000000000c', now() - interval '3 hours', 0),
+  (gen_random_uuid(), '70000000-0000-0000-0000-000000000002', 'Verifikasi fix middleware refresh token cookie', true, 'd0000000-0000-0000-0000-00000000000c', now() - interval '1 hour', 1),
+  (gen_random_uuid(), '70000000-0000-0000-0000-000000000002', 'Regression test tab switching 5 menit idle', false, null, null, 2),
+
+  -- Kanban DnD (#1): Drag and Drop
+  (gen_random_uuid(), '70000000-0000-0000-0000-000000000001', 'Uji drag kartu antar kolom To Do ke In Progress', true, 'd0000000-0000-0000-0000-00000000000c', now() - interval '5 hours', 0),
+  (gen_random_uuid(), '70000000-0000-0000-0000-000000000001', 'Uji rollback UI jika koneksi offline atau gagal', false, null, null, 1),
+
+  -- Read Replica (#17): PostgreSQL Multi-AZ
+  (gen_random_uuid(), '70000000-0000-0000-0000-000000000011', 'Verifikasi latency koneksi port 5433 < 15ms', true, 'd0000000-0000-0000-0000-000000000004', now() - interval '1 day', 0),
+  (gen_random_uuid(), '70000000-0000-0000-0000-000000000011', 'Simulasi failover primary ke replica', false, null, null, 1)
+on conflict (id) do nothing;
+
 -- ===================
 -- STEP 6: Discussion Comments (Thread percakapan realistik)
 -- ===================
@@ -1013,6 +1050,8 @@ union all
 select 'board_columns', count(*) from board_columns
 union all
 select 'tasks', count(*) from tasks
+union all
+select 'task_subtasks', count(*) from task_subtasks
 union all
 select 'task_comments', count(*) from task_comments
 union all
