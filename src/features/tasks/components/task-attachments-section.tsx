@@ -13,18 +13,15 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { createClient } from '@/lib/supabase/client';
 import {
-  ATTACHMENTS_BUCKET,
   MAX_TASK_ATTACHMENT_SIZE_BYTES,
   MAX_TASK_ATTACHMENT_SIZE_LABEL,
   ALLOWED_ATTACHMENT_EXTENSIONS,
   formatAttachmentFileSize,
   validateTaskAttachmentFile,
-  generateAttachmentStoragePath,
 } from '@/lib/storage';
 import {
-  recordTaskAttachmentAction,
+  uploadTaskAttachmentAction,
   deleteTaskAttachmentAction,
   getAttachmentSignedUrlAction,
 } from '../actions/task.actions';
@@ -135,34 +132,15 @@ export function TaskAttachmentsSection({
       setIsUploading(true);
       setUploadProgress(`Mengunggah "${file.name}"...`);
 
-      // 2. Upload to Supabase Cloud Storage
-      const supabase = createClient();
-      const storagePath = generateAttachmentStoragePath(task.id, file.name);
-
-      const { error: storageError } = await supabase.storage
-        .from(ATTACHMENTS_BUCKET)
-        .upload(storagePath, file, {
-          cacheControl: '3600',
-          upsert: false,
-        });
-
-      if (storageError) {
-        throw new Error(
-          storageError.message || 'Gagal mengunggah berkas ke storage.'
-        );
+      // 2. Upload and record attachment via Server Action
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('taskId', task.id);
+      if (task.project_id) {
+        formData.append('projectId', task.project_id);
       }
 
-      setUploadProgress('Merekam data lampiran...');
-
-      // 3. Record metadata in task_attachments database table via Server Action
-      const res = await recordTaskAttachmentAction({
-        taskId: task.id,
-        fileName: file.name,
-        fileUrl: storagePath,
-        fileType: file.type || null,
-        fileSize: file.size,
-        projectId: task.project_id,
-      });
+      const res = await uploadTaskAttachmentAction(formData);
 
       if (!res.success) {
         const errorMsg =
