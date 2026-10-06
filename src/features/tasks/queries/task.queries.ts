@@ -46,10 +46,35 @@ const TASK_DETAIL_SELECT_QUERY = `
     full_name,
     avatar_url
   ),
+  developer:profiles!tasks_developer_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  tester:profiles!tasks_tester_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
   creator:profiles!tasks_created_by_fkey(
     id,
     full_name,
     avatar_url
+  ),
+  subtasks:task_subtasks(
+    id,
+    task_id,
+    title,
+    is_completed,
+    sort_order,
+    tested_by,
+    tested_at,
+    created_at,
+    tester:profiles!task_subtasks_tested_by_fkey(
+      id,
+      full_name,
+      avatar_url
+    )
   )
 `;
 
@@ -175,6 +200,8 @@ export async function getTaskDetailById(
     .from('tasks')
     .select(TASK_DETAIL_SELECT_QUERY)
     .eq('id', taskId)
+    .order('sort_order', { referencedTable: 'task_subtasks', ascending: true })
+    .order('created_at', { referencedTable: 'task_subtasks', ascending: true })
     .maybeSingle();
 
   if (error) {
