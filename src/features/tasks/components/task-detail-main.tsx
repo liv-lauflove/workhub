@@ -15,15 +15,23 @@ import { updateTaskDescriptionAction } from '../actions/task.actions';
 import { TaskActivityTimeline } from './task-activity-timeline';
 import { TaskSubtasksChecklist } from './task-subtasks-checklist';
 import { MarkdownTaskEditor } from './markdown-task-editor';
+import { TaskAttachmentsSection } from './task-attachments-section';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import type { TaskDetail, TaskActivityLog } from '../types/task.types';
+import type {
+  TaskDetail,
+  TaskActivityLog,
+  TaskAttachmentItem,
+} from '../types/task.types';
 
 interface TaskDetailMainProps {
   task: TaskDetail;
   activities?: TaskActivityLog[];
+  attachments?: TaskAttachmentItem[];
   availableColumns?: { id: string; name: string; position: number }[];
   teamMembers?: { id: string; full_name: string; avatar_url?: string | null }[];
+  currentUserId?: string;
+  isLeader?: boolean;
 }
 
 function getInitials(name?: string): string {
@@ -53,8 +61,11 @@ function formatDetailDate(dateStr?: string | null): string {
 export function TaskDetailMain({
   task,
   activities = [],
+  attachments = [],
   availableColumns = [],
   teamMembers = [],
+  currentUserId,
+  isLeader = false,
 }: TaskDetailMainProps) {
   const creatorName = task.creator?.full_name || 'Anggota Tim';
   const isCsComplaint = task.origin === 'cs_complaint';
@@ -239,6 +250,16 @@ export function TaskDetailMain({
         initialSubtasks={task.subtasks || []}
       />
 
+      {/* 3. Attachments Section */}
+      <div className="rounded-xl border bg-card p-5 sm:p-6 shadow-xs">
+        <TaskAttachmentsSection
+          task={task}
+          initialAttachments={attachments}
+          currentUserId={currentUserId}
+          isLeader={isLeader}
+        />
+      </div>
+
       {/* 3. Activity Timeline */}
       <div className="pt-2">
         <TaskActivityTimeline
@@ -249,7 +270,7 @@ export function TaskDetailMain({
         />
       </div>
 
-      {/* 3. Discussion & Comment Card */}
+      {/* 4. Discussion & Comment Card */}
       <div className="space-y-4 pt-4 border-t">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/80">
           <MessageSquare className="h-4 w-4" />
