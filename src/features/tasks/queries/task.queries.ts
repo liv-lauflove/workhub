@@ -21,6 +21,21 @@ const MY_TASKS_SELECT_QUERY = `
     id,
     name,
     position
+  ),
+  assignee:profiles!tasks_assignee_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  developer:profiles!tasks_developer_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  tester:profiles!tasks_tester_id_fkey(
+    id,
+    full_name,
+    avatar_url
   )
 `;
 
@@ -80,9 +95,9 @@ const TASK_DETAIL_SELECT_QUERY = `
 `;
 
 /**
- * Fetch tasks assigned to the currently logged-in user.
+ * Fetch tasks assigned to the currently logged-in user as Assignee, Developer, or Tester.
  * Ordered by due_date ascending (nulls last) and created_at descending.
- * Filtered securely by assignee_id = auth.uid().
+ * Filtered securely by assignee_id = auth.uid() OR developer_id = auth.uid() OR tester_id = auth.uid().
  */
 export async function getMyTasks(): Promise<MyTask[]> {
   const supabase = await createClient();
@@ -98,7 +113,9 @@ export async function getMyTasks(): Promise<MyTask[]> {
   const { data, error } = await supabase
     .from('tasks')
     .select(MY_TASKS_SELECT_QUERY)
-    .eq('assignee_id', user.id)
+    .or(
+      `assignee_id.eq.${user.id},developer_id.eq.${user.id},tester_id.eq.${user.id}`
+    )
     .order('due_date', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false });
 
