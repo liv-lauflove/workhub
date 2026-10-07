@@ -26,4 +26,8 @@ export type ProjectWithProgress = ProjectWithDetails & {
   completedTasks: number;
   progress: number;
   memberCount: number;
+  /** Dual-Track development progress percentage (0 - 100%) (Issue #95) */
+  devProgress?: number;
+  /** Dual-Track QA/testing progress percentage (0 - 100%) (Issue #95) */
+  testProgress?: number;
 };

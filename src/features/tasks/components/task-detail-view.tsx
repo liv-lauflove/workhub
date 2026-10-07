@@ -5,13 +5,20 @@ import { TaskDetailHeader } from './task-detail-header';
 import { TaskDetailMain } from './task-detail-main';
 import { TaskDetailSidebar } from './task-detail-sidebar';
 import type { TeamMemberOption } from './task-assignee-selector';
-import type { TaskDetail, TaskActivityLog } from '../types/task.types';
+import type {
+  TaskDetail,
+  TaskActivityLog,
+  TaskAttachmentItem,
+} from '../types/task.types';
 
 interface TaskDetailViewProps {
   task: TaskDetail;
   availableColumns: { id: string; name: string; position: number }[];
   teamMembers?: TeamMemberOption[];
   activities?: TaskActivityLog[];
+  attachments?: TaskAttachmentItem[];
+  currentUserId?: string;
+  isLeader?: boolean;
 }
 
 export function TaskDetailView({
@@ -19,6 +26,9 @@ export function TaskDetailView({
   availableColumns,
   teamMembers = [],
   activities = [],
+  attachments = [],
+  currentUserId,
+  isLeader = false,
 }: TaskDetailViewProps) {
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-12">
@@ -32,8 +42,11 @@ export function TaskDetailView({
           <TaskDetailMain
             task={task}
             activities={activities}
+            attachments={attachments}
             availableColumns={availableColumns}
             teamMembers={teamMembers}
+            currentUserId={currentUserId}
+            isLeader={isLeader}
           />
         </main>
 

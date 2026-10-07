@@ -7,6 +7,7 @@ import type {
   MyTask,
   TaskDetail,
   TaskActivityLog,
+  TaskAttachmentItem,
 } from '../types/task.types';
 
 const MY_TASKS_SELECT_QUERY = `
@@ -20,6 +21,21 @@ const MY_TASKS_SELECT_QUERY = `
     id,
     name,
     position
+  ),
+  assignee:profiles!tasks_assignee_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  developer:profiles!tasks_developer_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  tester:profiles!tasks_tester_id_fkey(
+    id,
+    full_name,
+    avatar_url
   )
 `;
 
@@ -46,17 +62,42 @@ const TASK_DETAIL_SELECT_QUERY = `
     full_name,
     avatar_url
   ),
+  developer:profiles!tasks_developer_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  tester:profiles!tasks_tester_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
   creator:profiles!tasks_created_by_fkey(
     id,
     full_name,
     avatar_url
+  ),
+  subtasks:task_subtasks(
+    id,
+    task_id,
+    title,
+    is_completed,
+    sort_order,
+    tested_by,
+    tested_at,
+    created_at,
+    tester:profiles!task_subtasks_tested_by_fkey(
+      id,
+      full_name,
+      avatar_url
+    )
   )
 `;
 
 /**
- * Fetch tasks assigned to the currently logged-in user.
+ * Fetch tasks assigned to the currently logged-in user as Assignee, Developer, or Tester.
  * Ordered by due_date ascending (nulls last) and created_at descending.
- * Filtered securely by assignee_id = auth.uid().
+ * Filtered securely by assignee_id = auth.uid() OR developer_id = auth.uid() OR tester_id = auth.uid().
  */
 export async function getMyTasks(): Promise<MyTask[]> {
   const supabase = await createClient();
@@ -72,7 +113,9 @@ export async function getMyTasks(): Promise<MyTask[]> {
   const { data, error } = await supabase
     .from('tasks')
     .select(MY_TASKS_SELECT_QUERY)
-    .eq('assignee_id', user.id)
+    .or(
+      `assignee_id.eq.${user.id},developer_id.eq.${user.id},tester_id.eq.${user.id}`
+    )
     .order('due_date', { ascending: true, nullsFirst: false })
     .order('created_at', { ascending: false });
 
@@ -175,6 +218,8 @@ export async function getTaskDetailById(
     .from('tasks')
     .select(TASK_DETAIL_SELECT_QUERY)
     .eq('id', taskId)
+    .order('sort_order', { referencedTable: 'task_subtasks', ascending: true })
+    .order('created_at', { referencedTable: 'task_subtasks', ascending: true })
     .maybeSingle();
 
   if (error) {
@@ -243,4 +288,42 @@ export async function getTaskActivityLogs(
   }
 
   return (data as unknown as TaskActivityLog[]) || [];
+}
+
+const TASK_ATTACHMENTS_SELECT_QUERY = `
+  id,
+  task_id,
+  uploaded_by,
+  file_url,
+  file_name,
+  file_type,
+  file_size,
+  created_at,
+  uploader:profiles!task_attachments_uploaded_by_fkey(
+    id,
+    full_name,
+    avatar_url
+  )
+`;
+
+/**
+ * Fetch attachments for a specific task ordered by created_at descending.
+ */
+export async function getTaskAttachments(
+  taskId: string
+): Promise<TaskAttachmentItem[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('task_attachments')
+    .select(TASK_ATTACHMENTS_SELECT_QUERY)
+    .eq('task_id', taskId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(`Error fetching attachments for task ${taskId}:`, error);
+    return [];
+  }
+
+  return (data as unknown as TaskAttachmentItem[]) || [];
 }

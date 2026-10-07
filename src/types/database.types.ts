@@ -679,13 +679,64 @@ export type Database = {
           },
         ];
       };
+      task_subtasks: {
+        Row: {
+          created_at: string;
+          id: string;
+          is_completed: boolean;
+          sort_order: number;
+          task_id: string;
+          tested_at: string | null;
+          tested_by: string | null;
+          title: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          is_completed?: boolean;
+          sort_order?: number;
+          task_id: string;
+          tested_at?: string | null;
+          tested_by?: string | null;
+          title: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          is_completed?: boolean;
+          sort_order?: number;
+          task_id?: string;
+          tested_at?: string | null;
+          tested_by?: string | null;
+          title?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'task_subtasks_task_id_fkey';
+            columns: ['task_id'];
+            isOneToOne: false;
+            referencedRelation: 'tasks';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'task_subtasks_tested_by_fkey';
+            columns: ['tested_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       tasks: {
         Row: {
           assignee_id: string | null;
+          base_points: number;
           column_id: string;
           created_at: string;
           created_by: string;
           description: string | null;
+          dev_status: Database['public']['Enums']['task_dev_status'];
+          developer_id: string | null;
           due_date: string | null;
           github_branch: string | null;
           id: string;
@@ -693,15 +744,22 @@ export type Database = {
           origin_note: string | null;
           priority: string;
           project_id: string | null;
+          purpose: Database['public']['Enums']['task_purpose'];
+          test_notes: string | null;
+          test_status: Database['public']['Enums']['task_test_status'];
+          tester_id: string | null;
           title: string;
           updated_at: string;
         };
         Insert: {
           assignee_id?: string | null;
+          base_points?: number;
           column_id: string;
           created_at?: string;
           created_by: string;
           description?: string | null;
+          dev_status?: Database['public']['Enums']['task_dev_status'];
+          developer_id?: string | null;
           due_date?: string | null;
           github_branch?: string | null;
           id?: string;
@@ -709,15 +767,22 @@ export type Database = {
           origin_note?: string | null;
           priority?: string;
           project_id?: string | null;
+          purpose?: Database['public']['Enums']['task_purpose'];
+          test_notes?: string | null;
+          test_status?: Database['public']['Enums']['task_test_status'];
+          tester_id?: string | null;
           title: string;
           updated_at?: string;
         };
         Update: {
           assignee_id?: string | null;
+          base_points?: number;
           column_id?: string;
           created_at?: string;
           created_by?: string;
           description?: string | null;
+          dev_status?: Database['public']['Enums']['task_dev_status'];
+          developer_id?: string | null;
           due_date?: string | null;
           github_branch?: string | null;
           id?: string;
@@ -725,6 +790,10 @@ export type Database = {
           origin_note?: string | null;
           priority?: string;
           project_id?: string | null;
+          purpose?: Database['public']['Enums']['task_purpose'];
+          test_notes?: string | null;
+          test_status?: Database['public']['Enums']['task_test_status'];
+          tester_id?: string | null;
           title?: string;
           updated_at?: string;
         };
@@ -732,6 +801,20 @@ export type Database = {
           {
             foreignKeyName: 'tasks_assignee_id_fkey';
             columns: ['assignee_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_developer_id_fkey';
+            columns: ['developer_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'tasks_tester_id_fkey';
+            columns: ['tester_id'];
             isOneToOne: false;
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
@@ -851,7 +934,10 @@ export type Database = {
         | 'task_status_changed'
         | 'member_overload';
       project_status: 'planned' | 'in_progress' | 'completed' | 'blocked';
+      task_dev_status: 'todo' | 'in_progress' | 'dev_done';
       task_origin: 'normal' | 'cs_complaint';
+      task_purpose: 'development' | 'testing' | 'full_lifecycle';
+      task_test_status: 'pending' | 'testing' | 'passed' | 'failed';
       user_role: 'leader' | 'member';
     };
     CompositeTypes: {
@@ -989,7 +1075,10 @@ export const Constants = {
         'member_overload',
       ],
       project_status: ['planned', 'in_progress', 'completed', 'blocked'],
+      task_dev_status: ['todo', 'in_progress', 'dev_done'],
       task_origin: ['normal', 'cs_complaint'],
+      task_purpose: ['development', 'testing', 'full_lifecycle'],
+      task_test_status: ['pending', 'testing', 'passed', 'failed'],
       user_role: ['leader', 'member'],
     },
   },

@@ -9,17 +9,30 @@ import {
   Check,
   X,
   Loader2,
+  FlaskConical,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateTaskDescriptionAction } from '../actions/task.actions';
 import { TaskActivityTimeline } from './task-activity-timeline';
-import type { TaskDetail, TaskActivityLog } from '../types/task.types';
+import { TaskSubtasksChecklist } from './task-subtasks-checklist';
+import { MarkdownTaskEditor } from './markdown-task-editor';
+import { TaskAttachmentsSection } from './task-attachments-section';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import type {
+  TaskDetail,
+  TaskActivityLog,
+  TaskAttachmentItem,
+} from '../types/task.types';
 
 interface TaskDetailMainProps {
   task: TaskDetail;
   activities?: TaskActivityLog[];
+  attachments?: TaskAttachmentItem[];
   availableColumns?: { id: string; name: string; position: number }[];
   teamMembers?: { id: string; full_name: string; avatar_url?: string | null }[];
+  currentUserId?: string;
+  isLeader?: boolean;
 }
 
 function getInitials(name?: string): string {
@@ -49,8 +62,11 @@ function formatDetailDate(dateStr?: string | null): string {
 export function TaskDetailMain({
   task,
   activities = [],
+  attachments = [],
   availableColumns = [],
   teamMembers = [],
+  currentUserId,
+  isLeader = false,
 }: TaskDetailMainProps) {
   const creatorName = task.creator?.full_name || 'Anggota Tim';
   const isCsComplaint = task.origin === 'cs_complaint';
@@ -92,6 +108,53 @@ export function TaskDetailMain({
 
   return (
     <div className="space-y-6">
+      {/* Tester Responsibility Notice Callout */}
+      {currentUserId && task.tester_id === currentUserId && (
+        <div
+          className={`rounded-xl border p-4 text-xs shadow-xs transition-all ${
+            task.test_status === 'passed'
+              ? 'border-emerald-500/30 bg-emerald-500/[0.06] text-emerald-950 dark:text-emerald-200'
+              : task.dev_status === 'dev_done'
+                ? 'border-amber-500/40 bg-amber-500/[0.08] text-amber-950 dark:text-amber-200 ring-1 ring-amber-500/20'
+                : 'border-purple-500/30 bg-purple-500/[0.06] text-purple-950 dark:text-purple-200'
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div
+              className={`rounded-lg p-2 shrink-0 ${
+                task.test_status === 'passed'
+                  ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                  : task.dev_status === 'dev_done'
+                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300'
+                    : 'bg-purple-500/20 text-purple-700 dark:text-purple-300'
+              }`}
+            >
+              <FlaskConical className="h-4 w-4" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-sm">
+                  Anda adalah Tester (QA) untuk tugas ini
+                </span>
+                {task.dev_status === 'dev_done' &&
+                  task.test_status !== 'passed' && (
+                    <span className="rounded-full bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:text-amber-300 animate-pulse">
+                      Siap Anda Uji
+                    </span>
+                  )}
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                {task.test_status === 'passed'
+                  ? 'Pengujian telah selesai dan diverifikasi lolos oleh Anda.'
+                  : task.dev_status === 'dev_done'
+                    ? 'Developer telah menyelesaikan pengerjaan (Dev Done). Tugas ini sekarang menunggu verifikasi subtask checklist dan status pengujian dari Anda.'
+                    : 'Developer masih aktif mengerjakan tugas ini. Pengujian komprehensif dapat dilakukan setelah status developer selesai (Dev Done).'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 1. Main Issue Description Card (GitHub Issue Style) */}
       <div className="rounded-xl border bg-card shadow-xs overflow-hidden">
         {/* Card Header (Author & Meta Bar) */}
@@ -164,18 +227,17 @@ export function TaskDetailMain({
           {/* Description Content / Edit Mode */}
           {isEditing ? (
             <div className="space-y-3">
-              <textarea
+              <MarkdownTaskEditor
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={setDescription}
                 disabled={isPending}
-                rows={6}
-                placeholder="Tuliskan deskripsi task, acceptance criteria, atau catatan pengerjaan..."
-                className="w-full resize-y rounded-lg border bg-background p-3.5 text-xs sm:text-sm text-foreground placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary leading-relaxed font-sans"
+                minRows={8}
+                placeholder="Tuliskan deskripsi task, kriteria penerimaan (acceptance criteria), atau checklist markdown..."
               />
 
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-1 border-t">
                 <span className="text-[11px] text-muted-foreground">
-                  Mendukung teks deskripsi leluasa & Markdown.
+                  Mendukung format Markdown &amp; Tasklist GitHub.
                 </span>
 
                 <div className="flex items-center gap-2">
@@ -193,7 +255,7 @@ export function TaskDetailMain({
                     type="button"
                     onClick={handleSaveDescription}
                     disabled={isPending}
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-primary px-3.5 py-1.5 text-xs font-semibold text-primary-foreground shadow-2xs hover:bg-primary/90 transition-colors disabled:opacity-50 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-2xs hover:bg-emerald-700 transition-colors disabled:opacity-50 cursor-pointer"
                   >
                     {isPending ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -206,8 +268,10 @@ export function TaskDetailMain({
               </div>
             </div>
           ) : task.description ? (
-            <div className="prose prose-sm dark:prose-invert max-w-none text-card-foreground leading-relaxed whitespace-pre-wrap font-sans text-sm sm:text-base selection:bg-primary/20">
-              {task.description}
+            <div className="markdown-body text-card-foreground leading-relaxed selection:bg-primary/20 text-sm">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {task.description}
+              </ReactMarkdown>
             </div>
           ) : (
             <div className="flex items-center justify-between rounded-lg border border-dashed p-4 bg-muted/20">
@@ -227,7 +291,24 @@ export function TaskDetailMain({
         </div>
       </div>
 
-      {/* 2. Activity Timeline */}
+      {/* 2. Subtask Checklist & Verification Criteria */}
+      <TaskSubtasksChecklist
+        taskId={task.id}
+        projectId={task.project_id}
+        initialSubtasks={task.subtasks || []}
+      />
+
+      {/* 3. Attachments Section */}
+      <div className="rounded-xl border bg-card p-5 sm:p-6 shadow-xs">
+        <TaskAttachmentsSection
+          task={task}
+          initialAttachments={attachments}
+          currentUserId={currentUserId}
+          isLeader={isLeader}
+        />
+      </div>
+
+      {/* 3. Activity Timeline */}
       <div className="pt-2">
         <TaskActivityTimeline
           activities={activities}
@@ -237,7 +318,7 @@ export function TaskDetailMain({
         />
       </div>
 
-      {/* 3. Discussion & Comment Card */}
+      {/* 4. Discussion & Comment Card */}
       <div className="space-y-4 pt-4 border-t">
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-muted-foreground/80">
           <MessageSquare className="h-4 w-4" />

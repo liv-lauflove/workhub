@@ -17,6 +17,8 @@ import {
   TaskAssigneeSelector,
   type TeamMemberOption,
 } from './task-assignee-selector';
+import { TaskRoleAssigneeSelector } from './task-role-assignee-selector';
+import { TaskDevTestControls } from './task-dev-test-controls';
 import type { TaskDetail } from '../types/task.types';
 
 interface TaskDetailSidebarProps {
@@ -72,7 +74,7 @@ export function TaskDetailSidebar({
 
   return (
     <aside className="space-y-6 rounded-xl border bg-card p-5 shadow-xs">
-      {/* 1. Assignees Section with ComboBox Selector */}
+      {/* 1. Assignee / Developer (PIC Pengerjaan) */}
       <div className="border-b pb-4">
         <TaskAssigneeSelector
           taskId={task.id}
@@ -80,6 +82,29 @@ export function TaskDetailSidebar({
           currentAssignee={task.assignee}
           teamMembers={teamMembers}
           variant="sidebar"
+        />
+      </div>
+
+      {/* 2. Tester / QA (PIC Pengujian) */}
+      <div className="border-b pb-4">
+        <TaskRoleAssigneeSelector
+          taskId={task.id}
+          projectId={task.project_id}
+          role="tester"
+          currentUser={task.tester}
+          teamMembers={teamMembers}
+        />
+      </div>
+
+      {/* 3. Dev & Testing Status Controls */}
+      <div className="border-b pb-4">
+        <TaskDevTestControls
+          taskId={task.id}
+          projectId={task.project_id}
+          purpose={task.purpose}
+          initialDevStatus={task.dev_status}
+          initialTestStatus={task.test_status}
+          initialTestNotes={task.test_notes}
         />
       </div>
 

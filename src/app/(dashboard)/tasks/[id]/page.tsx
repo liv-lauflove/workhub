@@ -5,6 +5,7 @@ import {
   getTaskDetailById,
   getProjectColumns,
   getTaskActivityLogs,
+  getTaskAttachments,
 } from '@/features/tasks/queries/task.queries';
 import { getTeamMembers } from '@/features/team/queries/team.queries';
 import { TaskDetailView } from '@/features/tasks/components/task-detail-view';
@@ -50,9 +51,10 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
     notFound();
   }
 
-  const [availableColumns, activities] = await Promise.all([
+  const [availableColumns, activities, attachments] = await Promise.all([
     task.project_id ? getProjectColumns(task.project_id) : Promise.resolve([]),
     getTaskActivityLogs(id),
+    getTaskAttachments(id),
   ]);
 
   const teamId = task.project?.team_id || profile.team_id;
@@ -70,6 +72,9 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
       availableColumns={availableColumns}
       teamMembers={teamMembers}
       activities={activities}
+      attachments={attachments}
+      currentUserId={profile.id}
+      isLeader={profile.role === 'leader'}
     />
   );
 }

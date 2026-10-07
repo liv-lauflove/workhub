@@ -41,6 +41,7 @@ console.log('   - Milestones: 3 (Q4 2026 Platform, Q4 2026 Cloud Resilience, Q1 
 console.log('   - Projects: 5 (Across Aegis & Sentinel)')
 console.log('   - Board Columns: 20 (4 columns per project)')
 console.log('   - Tasks: 31 (All future due dates: Oct - Dec 2026)')
+console.log('   - Dual-Assignee (Developer & Tester) & Testing Subtasks Checklists included')
 console.log('   - Task Comments, Dependencies & Activity Logs included')
 console.log('====================================')
 
