@@ -64,7 +64,7 @@ export default async function MyTasksPage() {
       </div>
 
       {/* Main Tasks Content */}
-      <MyTasksList tasks={tasks} />
+      <MyTasksList tasks={tasks} currentUserId={profile.id} />
     </div>
   );
 }

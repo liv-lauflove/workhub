@@ -37,6 +37,21 @@ export interface MyTask extends Task {
     name: string;
     position: number;
   } | null;
+  assignee?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+  } | null;
+  developer?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+  } | null;
+  tester?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+  } | null;
 }
 
 export interface TaskDetail extends Task {

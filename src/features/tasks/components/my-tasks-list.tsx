@@ -11,15 +11,20 @@ import {
   ArrowUpRight,
   CheckCircle2,
   AlertCircle,
+  FlaskConical,
+  Code,
+  Clock,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import type { MyTask } from '../types/task.types';
 
 interface MyTasksListProps {
   tasks: MyTask[];
+  currentUserId?: string;
 }
 
 type StatusTab = 'all' | 'todo' | 'in_progress' | 'review' | 'done';
+type RoleTab = 'all' | 'tester' | 'developer';
 type PriorityFilter = 'all' | 'critical' | 'high' | 'medium' | 'low';
 
 function normalizeStatus(
@@ -85,9 +90,10 @@ function getPriorityBadgeClass(priority: string): string {
   }
 }
 
-export function MyTasksList({ tasks }: MyTasksListProps) {
+export function MyTasksList({ tasks, currentUserId }: MyTasksListProps) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [statusTab, setStatusTab] = React.useState<StatusTab>('all');
+  const [roleTab, setRoleTab] = React.useState<RoleTab>('all');
   const [priorityFilter, setPriorityFilter] =
     React.useState<PriorityFilter>('all');
 
@@ -103,8 +109,26 @@ export function MyTasksList({ tasks }: MyTasksListProps) {
         .length,
       done: tasks.filter((t) => normalizeStatus(t.column?.name) === 'done')
         .length,
+      asTester: currentUserId
+        ? tasks.filter((t) => t.tester_id === currentUserId).length
+        : 0,
+      asDeveloper: currentUserId
+        ? tasks.filter(
+            (t) =>
+              t.developer_id === currentUserId ||
+              (t.assignee_id === currentUserId && !t.developer_id)
+          ).length
+        : 0,
+      needsTestingCount: currentUserId
+        ? tasks.filter(
+            (t) =>
+              t.tester_id === currentUserId &&
+              t.dev_status === 'dev_done' &&
+              t.test_status !== 'passed'
+          ).length
+        : 0,
     };
-  }, [tasks]);
+  }, [tasks, currentUserId]);
 
   const filteredTasks = React.useMemo(() => {
     return tasks.filter((task) => {
@@ -126,9 +150,22 @@ export function MyTasksList({ tasks }: MyTasksListProps) {
           ? true
           : task.priority.toLowerCase() === priorityFilter;
 
-      return matchesSearch && matchesStatus && matchesPriority;
+      let matchesRole = true;
+      if (roleTab === 'tester') {
+        matchesRole = Boolean(
+          currentUserId && task.tester_id === currentUserId
+        );
+      } else if (roleTab === 'developer') {
+        matchesRole = Boolean(
+          currentUserId &&
+          (task.developer_id === currentUserId ||
+            (task.assignee_id === currentUserId && !task.developer_id))
+        );
+      }
+
+      return matchesSearch && matchesStatus && matchesPriority && matchesRole;
     });
-  }, [tasks, searchQuery, statusTab, priorityFilter]);
+  }, [tasks, searchQuery, statusTab, priorityFilter, roleTab, currentUserId]);
 
   if (tasks.length === 0) {
     return (
@@ -161,6 +198,81 @@ export function MyTasksList({ tasks }: MyTasksListProps) {
 
   return (
     <div className="space-y-5">
+      {/* Role Filter Tabs (Semua, Sebagai Tester, Sebagai Developer) */}
+      {currentUserId && (counts.asTester > 0 || counts.asDeveloper > 0) && (
+        <div className="flex flex-wrap items-center gap-2 p-1.5 bg-muted/30 rounded-xl border">
+          <span className="text-xs font-semibold text-muted-foreground ml-1.5 mr-1">
+            Fokus Peran:
+          </span>
+          <button
+            type="button"
+            onClick={() => setRoleTab('all')}
+            className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${
+              roleTab === 'all'
+                ? 'bg-foreground text-background font-semibold shadow-2xs'
+                : 'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'
+            }`}
+          >
+            <span>Semua Tanggung Jawab</span>
+            <span className="rounded-full bg-background/20 px-1.5 py-0.2 text-[10px]">
+              {counts.all}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setRoleTab('tester')}
+            className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${
+              roleTab === 'tester'
+                ? 'bg-purple-600 text-white font-semibold shadow-2xs'
+                : 'bg-purple-500/10 text-purple-700 dark:text-purple-300 hover:bg-purple-500/20'
+            }`}
+          >
+            <FlaskConical className="h-3.5 w-3.5" />
+            <span>Sebagai Tester (QA)</span>
+            <span
+              className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
+                roleTab === 'tester'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-purple-500/20 text-purple-800 dark:text-purple-200'
+              }`}
+            >
+              {counts.asTester}
+            </span>
+            {counts.needsTestingCount > 0 && (
+              <span
+                className="ml-0.5 rounded-full bg-amber-500 px-1.5 py-0.2 text-[10px] font-bold text-white animate-pulse"
+                title={`${counts.needsTestingCount} task menunggu pengujian Anda!`}
+              >
+                {counts.needsTestingCount} siap uji
+              </span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setRoleTab('developer')}
+            className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-all ${
+              roleTab === 'developer'
+                ? 'bg-blue-600 text-white font-semibold shadow-2xs'
+                : 'bg-blue-500/10 text-blue-700 dark:text-blue-300 hover:bg-blue-500/20'
+            }`}
+          >
+            <Code className="h-3.5 w-3.5" />
+            <span>Sebagai Developer</span>
+            <span
+              className={`rounded-full px-1.5 py-0.2 text-[10px] font-bold ${
+                roleTab === 'developer'
+                  ? 'bg-white/20 text-white'
+                  : 'bg-blue-500/20 text-blue-800 dark:text-blue-200'
+              }`}
+            >
+              {counts.asDeveloper}
+            </span>
+          </button>
+        </div>
+      )}
+
       {/* Status Tabs Bar */}
       <div className="flex flex-wrap items-center gap-1.5 border-b pb-3">
         <button
@@ -272,13 +384,17 @@ export function MyTasksList({ tasks }: MyTasksListProps) {
             Coba sesuaikan kata kunci pencarian atau filter status dan
             prioritas.
           </p>
-          {(searchQuery || statusTab !== 'all' || priorityFilter !== 'all') && (
+          {(searchQuery ||
+            statusTab !== 'all' ||
+            priorityFilter !== 'all' ||
+            roleTab !== 'all') && (
             <button
               type="button"
               onClick={() => {
                 setSearchQuery('');
                 setStatusTab('all');
                 setPriorityFilter('all');
+                setRoleTab('all');
               }}
               className="mt-3 text-xs font-medium text-primary hover:underline"
             >
@@ -292,11 +408,28 @@ export function MyTasksList({ tasks }: MyTasksListProps) {
             const isDone = normalizeStatus(task.column?.name) === 'done';
             const isOverdue =
               task.due_date && task.due_date < todayStr && !isDone;
+            const isTester = Boolean(
+              currentUserId && task.tester_id === currentUserId
+            );
+            const isDeveloper = Boolean(
+              currentUserId &&
+              (task.developer_id === currentUserId ||
+                (task.assignee_id === currentUserId && !task.developer_id))
+            );
+            const isReadyForTesting =
+              isTester &&
+              task.dev_status === 'dev_done' &&
+              task.test_status !== 'passed' &&
+              !isDone;
 
             return (
               <div
                 key={task.id}
-                className="flex flex-col justify-between rounded-xl border bg-card p-5 shadow-xs hover:border-primary/40 hover:shadow-sm transition-all"
+                className={`flex flex-col justify-between rounded-xl border bg-card p-5 shadow-xs hover:border-primary/40 hover:shadow-sm transition-all ${
+                  isReadyForTesting
+                    ? 'ring-1 ring-amber-500/30 border-amber-500/40 bg-amber-500/[0.02]'
+                    : ''
+                }`}
               >
                 <div className="space-y-3">
                   {/* Top Badges (Status & Priority) */}
@@ -325,6 +458,39 @@ export function MyTasksList({ tasks }: MyTasksListProps) {
                       </span>
                     )}
                   </div>
+
+                  {/* Role Responsibility Badges (Notice for Tester & Developer) */}
+                  {(isTester || isDeveloper) && (
+                    <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                      {isTester && (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-purple-500/30 bg-purple-500/15 px-2 py-0.5 text-[11px] font-semibold text-purple-700 dark:text-purple-300">
+                          <FlaskConical className="h-3 w-3" />
+                          <span>Tanggung Jawab: Tester (QA)</span>
+                        </span>
+                      )}
+                      {isReadyForTesting && (
+                        <span
+                          className="inline-flex items-center gap-1 rounded-md border border-amber-500/40 bg-amber-500/20 px-2 py-0.5 text-[11px] font-bold text-amber-800 dark:text-amber-300 animate-pulse"
+                          title="Developer telah menyelesaikan pengerjaan. Tugas ini sekarang menunggu pengujian Anda!"
+                        >
+                          <Clock className="h-3 w-3" />
+                          <span>⚡ Giliran Anda Menguji</span>
+                        </span>
+                      )}
+                      {isTester && task.test_status === 'passed' && (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
+                          <CheckCircle2 className="h-3 w-3" />
+                          <span>Lolos Uji QA</span>
+                        </span>
+                      )}
+                      {isDeveloper && !isTester && (
+                        <span className="inline-flex items-center gap-1 rounded-md border border-blue-500/30 bg-blue-500/15 px-2 py-0.5 text-[11px] font-semibold text-blue-700 dark:text-blue-300">
+                          <Code className="h-3 w-3" />
+                          <span>Tanggung Jawab: Developer</span>
+                        </span>
+                      )}
+                    </div>
+                  )}
 
                   {/* Title & Description */}
                   <div>

@@ -86,17 +86,15 @@ export function TaskDetailSidebar({
       </div>
 
       {/* 2. Tester / QA (PIC Pengujian) */}
-      {task.purpose !== 'development' && (
-        <div className="border-b pb-4">
-          <TaskRoleAssigneeSelector
-            taskId={task.id}
-            projectId={task.project_id}
-            role="tester"
-            currentUser={task.tester}
-            teamMembers={teamMembers}
-          />
-        </div>
-      )}
+      <div className="border-b pb-4">
+        <TaskRoleAssigneeSelector
+          taskId={task.id}
+          projectId={task.project_id}
+          role="tester"
+          currentUser={task.tester}
+          teamMembers={teamMembers}
+        />
+      </div>
 
       {/* 3. Dev & Testing Status Controls */}
       <div className="border-b pb-4">
