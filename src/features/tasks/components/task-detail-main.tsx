@@ -9,6 +9,7 @@ import {
   Check,
   X,
   Loader2,
+  FlaskConical,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateTaskDescriptionAction } from '../actions/task.actions';
@@ -107,6 +108,53 @@ export function TaskDetailMain({
 
   return (
     <div className="space-y-6">
+      {/* Tester Responsibility Notice Callout */}
+      {currentUserId && task.tester_id === currentUserId && (
+        <div
+          className={`rounded-xl border p-4 text-xs shadow-xs transition-all ${
+            task.test_status === 'passed'
+              ? 'border-emerald-500/30 bg-emerald-500/[0.06] text-emerald-950 dark:text-emerald-200'
+              : task.dev_status === 'dev_done'
+                ? 'border-amber-500/40 bg-amber-500/[0.08] text-amber-950 dark:text-amber-200 ring-1 ring-amber-500/20'
+                : 'border-purple-500/30 bg-purple-500/[0.06] text-purple-950 dark:text-purple-200'
+          }`}
+        >
+          <div className="flex items-start gap-3">
+            <div
+              className={`rounded-lg p-2 shrink-0 ${
+                task.test_status === 'passed'
+                  ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-300'
+                  : task.dev_status === 'dev_done'
+                    ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300'
+                    : 'bg-purple-500/20 text-purple-700 dark:text-purple-300'
+              }`}
+            >
+              <FlaskConical className="h-4 w-4" />
+            </div>
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-sm">
+                  Anda adalah Tester (QA) untuk tugas ini
+                </span>
+                {task.dev_status === 'dev_done' &&
+                  task.test_status !== 'passed' && (
+                    <span className="rounded-full bg-amber-500/20 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-800 dark:text-amber-300 animate-pulse">
+                      Siap Anda Uji
+                    </span>
+                  )}
+              </div>
+              <p className="text-muted-foreground leading-relaxed">
+                {task.test_status === 'passed'
+                  ? 'Pengujian telah selesai dan diverifikasi lolos oleh Anda.'
+                  : task.dev_status === 'dev_done'
+                    ? 'Developer telah menyelesaikan pengerjaan (Dev Done). Tugas ini sekarang menunggu verifikasi subtask checklist dan status pengujian dari Anda.'
+                    : 'Developer masih aktif mengerjakan tugas ini. Pengujian komprehensif dapat dilakukan setelah status developer selesai (Dev Done).'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 1. Main Issue Description Card (GitHub Issue Style) */}
       <div className="rounded-xl border bg-card shadow-xs overflow-hidden">
         {/* Card Header (Author & Meta Bar) */}
