@@ -68,7 +68,14 @@ export async function getProjectBoardColumns(
   const { data: tasks, error: taskError } = await supabase
     .from('tasks')
     .select(
-      '*, assignee:profiles!tasks_assignee_id_fkey(id, full_name, avatar_url)'
+      `
+      *,
+      assignee:profiles!tasks_assignee_id_fkey(id, full_name, avatar_url),
+      developer:profiles!tasks_developer_id_fkey(id, full_name, avatar_url),
+      tester:profiles!tasks_tester_id_fkey(id, full_name, avatar_url),
+      creator:profiles!tasks_created_by_fkey(id, full_name, avatar_url),
+      comments:task_comments(count)
+    `
     )
     .eq('project_id', projectId)
     .order('created_at', { ascending: true });
@@ -81,7 +88,16 @@ export async function getProjectBoardColumns(
 
   // 4. Map tasks into respective columns
   return columns.map((column) => {
-    const colTasks = allTasks.filter((t) => t.column_id === column.id);
+    const colTasks = allTasks
+      .filter((t) => t.column_id === column.id)
+      .map((t) => ({
+        ...t,
+        column: {
+          id: column.id,
+          name: column.name,
+          position: column.position,
+        },
+      }));
     return {
       ...column,
       tasks: colTasks,
