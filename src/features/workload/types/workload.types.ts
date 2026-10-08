@@ -70,6 +70,8 @@ export interface MemberWorkload {
   fullName: string;
   avatarUrl: string | null;
   role: string;
+  position?: string | null;
+  capacityPoints?: number;
   teamId: string;
   activeTaskCount: number;
   totalWeight: number;
