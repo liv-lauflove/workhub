@@ -447,31 +447,37 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null;
+          capacity_points: number;
           created_at: string;
           full_name: string;
           github_username: string | null;
           id: string;
           phone: string | null;
+          position: string | null;
           role: Database['public']['Enums']['user_role'];
           team_id: string | null;
         };
         Insert: {
           avatar_url?: string | null;
+          capacity_points?: number;
           created_at?: string;
           full_name: string;
           github_username?: string | null;
           id: string;
           phone?: string | null;
+          position?: string | null;
           role?: Database['public']['Enums']['user_role'];
           team_id?: string | null;
         };
         Update: {
           avatar_url?: string | null;
+          capacity_points?: number;
           created_at?: string;
           full_name?: string;
           github_username?: string | null;
           id?: string;
           phone?: string | null;
+          position?: string | null;
           role?: Database['public']['Enums']['user_role'];
           team_id?: string | null;
         };

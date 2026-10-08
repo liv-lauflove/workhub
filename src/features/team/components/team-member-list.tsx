@@ -28,6 +28,8 @@ interface TeamMember {
   github_username: string | null;
   created_at: string;
   team_id?: string | null;
+  position?: string | null;
+  capacity_points?: number | null;
 }
 
 interface TeamMemberListProps {
