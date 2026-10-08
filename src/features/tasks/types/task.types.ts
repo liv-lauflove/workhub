@@ -120,3 +120,32 @@ export interface TaskAttachmentItem extends TaskAttachment {
     avatar_url: string | null;
   } | null;
 }
+
+export interface ProjectTaskItem extends Task {
+  column?: {
+    id: string;
+    name: string;
+    position: number;
+  } | null;
+  assignee?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+  } | null;
+  developer?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+  } | null;
+  tester?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+  } | null;
+  creator?: {
+    id: string;
+    full_name: string;
+    avatar_url: string | null;
+  } | null;
+  comments?: Array<{ count: number }> | null;
+}

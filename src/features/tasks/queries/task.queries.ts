@@ -8,7 +8,38 @@ import type {
   TaskDetail,
   TaskActivityLog,
   TaskAttachmentItem,
+  ProjectTaskItem,
 } from '../types/task.types';
+
+const PROJECT_TASKS_SELECT_QUERY = `
+  *,
+  column:board_columns(
+    id,
+    name,
+    position
+  ),
+  assignee:profiles!tasks_assignee_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  developer:profiles!tasks_developer_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  tester:profiles!tasks_tester_id_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  creator:profiles!tasks_created_by_fkey(
+    id,
+    full_name,
+    avatar_url
+  ),
+  comments:task_comments(count)
+`;
 
 const MY_TASKS_SELECT_QUERY = `
   *,
@@ -125,6 +156,27 @@ export async function getMyTasks(): Promise<MyTask[]> {
   }
 
   return (data as unknown as MyTask[]) || [];
+}
+
+/**
+ * Fetch all tasks for a specific project with rich relations (column, assignee, developer, tester, creator, comments count).
+ */
+export async function getProjectTasks(
+  projectId: string
+): Promise<ProjectTaskItem[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('tasks')
+    .select(PROJECT_TASKS_SELECT_QUERY)
+    .eq('project_id', projectId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(`Error fetching tasks for project ${projectId}:`, error);
+    return [];
+  }
+
+  return (data as unknown as ProjectTaskItem[]) || [];
 }
 
 /**

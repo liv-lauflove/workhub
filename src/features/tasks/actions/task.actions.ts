@@ -85,6 +85,48 @@ export async function createTaskAction(
       };
     }
 
+    // Verify team permission: user must belong to project's team or have management role
+    if (parsed.data.projectId) {
+      const [{ data: projectData }, { data: userProfile }] = await Promise.all([
+        supabase
+          .from('projects')
+          .select('team_id')
+          .eq('id', parsed.data.projectId)
+          .single(),
+        supabase
+          .from('profiles')
+          .select('role, team_id')
+          .eq('id', user.id)
+          .single(),
+      ]);
+
+      let isManagement = false;
+      if (userProfile?.team_id) {
+        const { data: userTeam } = await supabase
+          .from('teams')
+          .select('name')
+          .eq('id', userProfile.team_id)
+          .single();
+        if (userTeam?.name === 'Management') {
+          isManagement = true;
+        }
+      }
+
+      const isProjectTeamMember =
+        !projectData?.team_id || userProfile?.team_id === projectData?.team_id;
+
+      if (!isManagement && !isProjectTeamMember) {
+        return {
+          success: false,
+          error: {
+            _form: [
+              'Anda tidak memiliki izin untuk menambahkan task pada project milik tim lain.',
+            ],
+          },
+        };
+      }
+    }
+
     const { data: task, error: insertError } = await supabase
       .from('tasks')
       .insert({

@@ -134,7 +134,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
           href={`/projects/${project.id}`}
           className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
         >
-          <span>Papan Kanban</span>
+          <span>Lihat Task</span>
           <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>

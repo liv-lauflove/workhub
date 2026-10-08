@@ -17,12 +17,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { createClient } from '@/lib/supabase/server';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
 import { getProjectById } from '@/features/projects/queries/project.queries';
 import { getProjectBoardColumns } from '@/features/kanban/queries/kanban.queries';
 import { getTeamMembers } from '@/features/team/queries/team.queries';
-import { KanbanBoard } from '@/features/kanban/components/kanban-board';
-import { CreateTaskDialog } from '@/features/tasks/components/create-task-dialog';
+import { ProjectTasksView } from '@/features/projects/components/project-tasks-view';
 import { ROUTES } from '@/config/routes';
 
 interface ProjectDetailPageProps {
@@ -69,10 +69,9 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${project.name} — Kanban Board — Workhub`,
+    title: `${project.name} — Task & Isu Project — Workhub`,
     description:
-      project.description ||
-      `Papan Kanban pelacakan task project ${project.name}.`,
+      project.description || `Pelacakan task dan isu project ${project.name}.`,
   };
 }
 
@@ -100,6 +99,23 @@ export default async function ProjectDetailPage({
   ]);
   const statusCfg = STATUS_CONFIG[project.status] || STATUS_CONFIG.planned;
   const progressPercent = Math.min(Math.max(project.progress, 0), 100);
+
+  // User can only create task if they belong to project's team or belong to Management team
+  let isManagement = false;
+  if (profile.team_id) {
+    const supabase = await createClient();
+    const { data: userTeam } = await supabase
+      .from('teams')
+      .select('name')
+      .eq('id', profile.team_id)
+      .single();
+    if (userTeam?.name === 'Management') {
+      isManagement = true;
+    }
+  }
+
+  const canCreateTask =
+    isManagement || !project.team_id || profile.team_id === project.team_id;
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">
@@ -170,116 +186,91 @@ export default async function ProjectDetailPage({
         </Link>
       </div>
 
-      {/* Project Header Card */}
-      <div className="rounded-xl border bg-card p-6 shadow-xs space-y-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold ${statusCfg.badgeClass}`}
-              >
-                {statusCfg.label}
-              </span>
-
-              {project.team && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-xs font-medium text-primary">
-                  <Shield className="h-3 w-3" />
-                  <span>Tim {project.team.name}</span>
-                </span>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2.5">
-              <FolderKanban className="h-6 w-6 text-primary shrink-0" />
-              <h1 className="text-2xl font-bold tracking-tight text-card-foreground">
+      {/* Project Header Card (Compact & Clean) */}
+      <div className="rounded-xl border bg-card p-4 sm:p-5 shadow-xs space-y-3">
+        {/* Top: Title, Badges, & PIC */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2">
+              <FolderKanban className="h-5 w-5 text-primary shrink-0" />
+              <h1 className="text-lg sm:text-xl font-bold tracking-tight text-card-foreground">
                 {project.name}
               </h1>
             </div>
 
-            {project.description && (
-              <p className="text-sm text-muted-foreground leading-relaxed max-w-3xl">
-                {project.description}
-              </p>
+            <span
+              className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${statusCfg.badgeClass}`}
+            >
+              {statusCfg.label}
+            </span>
+
+            {project.team && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[11px] font-medium text-primary">
+                <Shield className="h-3 w-3" />
+                <span>Tim {project.team.name}</span>
+              </span>
             )}
           </div>
+
+          {/* PIC */}
+          <div className="flex items-center gap-1.5 text-xs text-muted-foreground shrink-0">
+            <User className="h-3.5 w-3.5 text-primary" />
+            <span>
+              PIC:{' '}
+              <strong className="text-foreground font-medium">
+                {project.pic?.full_name || 'Tanpa PIC'}
+              </strong>
+            </span>
+          </div>
         </div>
 
-        {/* Progress & Meta Info */}
-        <div className="space-y-3 border-t pt-4">
-          <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold text-foreground">
-              Progres Task ({project.completedTasks}/{project.totalTasks}{' '}
-              Selesai)
-            </span>
-            <span className="font-semibold text-foreground">
-              {progressPercent}%
-            </span>
-          </div>
+        {project.description && (
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-3xl">
+            {project.description}
+          </p>
+        )}
 
-          <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
-            <div
-              className={`h-full rounded-full transition-all duration-500 ${statusCfg.barClass}`}
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-4 text-xs text-muted-foreground pt-1">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <Users className="h-3.5 w-3.5 text-muted-foreground" />
-                <span>{project.memberCount} Anggota Tim</span>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <CheckSquare className="h-3.5 w-3.5 text-muted-foreground" />
-                <span>{project.totalTasks} Total Task</span>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-1.5">
-              <User className="h-3.5 w-3.5 text-primary" />
+        {/* Compact Progress Bar & Quick Stats */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-6 pt-1 border-t border-border/50">
+          <div className="flex-1 space-y-1">
+            <div className="flex items-center justify-between text-[11px] font-medium text-muted-foreground">
               <span>
-                PIC:{' '}
-                <strong className="text-foreground font-medium">
-                  {project.pic?.full_name || 'Tanpa PIC'}
-                </strong>
+                Progres ({project.completedTasks}/{project.totalTasks} Selesai)
+              </span>
+              <span className="font-bold text-foreground">
+                {progressPercent}%
               </span>
             </div>
+            <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+              <div
+                className={`h-full rounded-full transition-all duration-500 ${statusCfg.barClass}`}
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 text-[11px] text-muted-foreground shrink-0">
+            <div className="flex items-center gap-1">
+              <Users className="h-3 w-3 text-muted-foreground" />
+              <span>{project.memberCount} Anggota</span>
+            </div>
+            <span>·</span>
+            <div className="flex items-center gap-1">
+              <CheckSquare className="h-3 w-3 text-muted-foreground" />
+              <span>{project.totalTasks} Task</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Kanban Board Container */}
-      <div className="space-y-3">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <h2 className="text-base font-semibold tracking-tight">
-              Papan Kanban
-            </h2>
-            <span className="text-xs text-muted-foreground">
-              Geser kartu secara horizontal atau drag-and-drop untuk memperbarui
-              status
-            </span>
-          </div>
-
-          <CreateTaskDialog
-            projectId={project.id}
-            columns={columns.map((c) => ({ id: c.id, name: c.name }))}
-            teamMembers={teamMembers.map((m) => ({
-              id: m.id,
-              full_name: m.full_name,
-              role: m.role,
-              avatar_url: m.avatar_url,
-            }))}
-          />
-        </div>
-
-        <KanbanBoard
-          columns={columns}
-          projectId={project.id}
-          teamMembers={teamMembers}
-        />
-      </div>
+      {/* Project Tasks & Issues Container (GitHub Issues List & Kanban View Switcher) */}
+      <ProjectTasksView
+        projectId={project.id}
+        columns={columns}
+        teamMembers={teamMembers}
+        currentUserId={profile.id}
+        canCreateTask={canCreateTask}
+      />
     </div>
   );
 }
