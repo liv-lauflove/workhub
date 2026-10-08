@@ -87,7 +87,9 @@ export async function getTeamWorkload(
   // 4. Fetch team members (profiles)
   const { data: members, error: membersError } = await supabase
     .from('profiles')
-    .select('id, full_name, avatar_url, role, team_id')
+    .select(
+      'id, full_name, avatar_url, role, team_id, position, capacity_points'
+    )
     .eq('team_id', teamId)
     .order('role', { ascending: true })
     .order('full_name', { ascending: true });
@@ -158,7 +160,7 @@ export async function getTeamWorkload(
     column_name: Array.isArray(t.column) ? t.column[0]?.name : t.column?.name,
   }));
 
-  // 6. Aggregate dynamic workload for each member (Issue #95)
+  // 6. Aggregate dynamic workload for each member (Issue #95 & Issue #106)
   const referenceDate = new Date();
   const membersWorkload: MemberWorkload[] = members.map((member) => {
     const metrics = calculateMemberDynamicWorkload(
@@ -167,9 +169,15 @@ export async function getTeamWorkload(
       referenceDate
     );
 
+    // Individual capacity points determined by Leader (Issue #106), fallback to team baseline
+    const memberCapacity =
+      member.capacity_points && member.capacity_points > 0
+        ? member.capacity_points
+        : baselinePoints;
+
     const capacityPercentage = calculateCapacity(
       metrics.totalWeight,
-      baselinePoints
+      memberCapacity
     );
     const memberIsOverloaded = isOverloaded(capacityPercentage);
 
@@ -178,10 +186,12 @@ export async function getTeamWorkload(
       fullName: member.full_name,
       avatarUrl: member.avatar_url,
       role: member.role,
+      position: member.position ?? null,
+      capacityPoints: memberCapacity,
       teamId: member.team_id ?? teamId,
       activeTaskCount: metrics.activeTaskCount,
       totalWeight: metrics.totalWeight,
-      baselinePoints,
+      baselinePoints: memberCapacity,
       capacityPercentage,
       isOverloaded: memberIsOverloaded,
       tasksSummary: metrics.tasksSummary,
