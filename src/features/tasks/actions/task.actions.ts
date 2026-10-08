@@ -548,11 +548,6 @@ export async function updateTaskDevStatusAction({
       updated_at: new Date().toISOString(),
     };
 
-    // Auto transition to testing when developer finishes work
-    if (devStatus === 'dev_done') {
-      updates.test_status = 'testing';
-    }
-
     const { data: updatedTask, error: updateError } = await supabase
       .from('tasks')
       .update(updates)
@@ -1318,5 +1313,415 @@ export async function getAttachmentSignedUrlAction(
     const message =
       err instanceof Error ? err.message : 'Gagal mendapatkan URL unduhan.';
     return { success: false, error: message };
+  }
+}
+
+export interface OpenPullRequestInput {
+  taskId: string;
+  title?: string;
+  changelog: string;
+  reviewerId?: string | null;
+  githubBranch?: string | null;
+  projectId?: string | null;
+}
+
+/**
+ * Server action to open a Pull Request (submit task for QA testing).
+ * Sets dev_status to 'dev_done', test_status to 'testing', assigns Reviewer (Tester),
+ * saves changelog in test_notes, and optionally moves task to Review column.
+ */
+export async function openPullRequestAction({
+  taskId,
+  title,
+  changelog,
+  reviewerId,
+  githubBranch,
+  projectId,
+}: OpenPullRequestInput): Promise<
+  ActionState<{
+    id: string;
+    devStatus: 'dev_done';
+    testStatus: 'testing';
+    testerId?: string | null;
+    githubBranch?: string | null;
+    columnId?: string;
+  }>
+> {
+  if (!taskId) {
+    return {
+      success: false,
+      error: { _form: ['Task ID harus disediakan.'] },
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return {
+        success: false,
+        error: { _form: ['Sesi login tidak valid atau telah berakhir.'] },
+      };
+    }
+
+    const updates: {
+      dev_status: 'dev_done';
+      test_status: 'testing';
+      test_notes: string | null;
+      updated_at: string;
+      title?: string;
+      tester_id?: string | null;
+      github_branch?: string | null;
+      column_id?: string;
+    } = {
+      dev_status: 'dev_done',
+      test_status: 'testing',
+      test_notes: changelog?.trim() || null,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (title?.trim()) {
+      updates.title = title.trim();
+    }
+
+    if (reviewerId) {
+      updates.tester_id = reviewerId;
+    }
+
+    if (githubBranch !== undefined && githubBranch !== null) {
+      updates.github_branch = githubBranch.trim() || null;
+    }
+
+    // Auto-transition column to Review if column exists in the project
+    if (projectId) {
+      const { data: cols } = await supabase
+        .from('board_columns')
+        .select('id, name')
+        .eq('project_id', projectId);
+
+      if (cols && cols.length > 0) {
+        const reviewCol = cols.find((c) => {
+          const n = c.name.toLowerCase();
+          return (
+            n.includes('review') || n.includes('qa') || n.includes('testing')
+          );
+        });
+        if (reviewCol) {
+          updates.column_id = reviewCol.id;
+        }
+      }
+    }
+
+    const { data: updatedTask, error: updateError } = await supabase
+      .from('tasks')
+      .update(updates)
+      .eq('id', taskId)
+      .select(
+        'id, dev_status, test_status, tester_id, github_branch, column_id'
+      )
+      .single();
+
+    if (updateError) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            updateError.message || 'Gagal membuka Pull Request (Ajukan QA).',
+          ],
+        },
+      };
+    }
+
+    if (projectId) {
+      revalidatePath(`/projects/${projectId}`);
+    }
+    revalidatePath('/tasks');
+    revalidatePath(`/tasks/${taskId}`);
+
+    return {
+      success: true,
+      data: {
+        id: updatedTask.id,
+        devStatus: 'dev_done',
+        testStatus: 'testing',
+        testerId: updatedTask.tester_id,
+        githubBranch: updatedTask.github_branch,
+        columnId: updatedTask.column_id,
+      },
+    };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : 'Terjadi kesalahan sistem saat mengajukan Pull Request.';
+    return {
+      success: false,
+      error: { _form: [message] },
+    };
+  }
+}
+
+export interface RequestChangesInput {
+  taskId: string;
+  notes: string;
+  projectId?: string | null;
+}
+
+/**
+ * Server action for Reviewer (Tester) to request changes from Developer.
+ * Reverts dev_status back to 'in_progress', sets test_status to 'failed',
+ * records revision notes, and optionally moves column back to 'In Progress'.
+ */
+export async function requestChangesAction({
+  taskId,
+  notes,
+  projectId,
+}: RequestChangesInput): Promise<
+  ActionState<{
+    id: string;
+    devStatus: 'in_progress';
+    testStatus: 'failed';
+    testNotes: string | null;
+    columnId?: string;
+  }>
+> {
+  if (!taskId) {
+    return {
+      success: false,
+      error: { _form: ['Task ID harus disediakan.'] },
+    };
+  }
+
+  if (!notes?.trim()) {
+    return {
+      success: false,
+      error: { _form: ['Catatan revisi pengujian wajib diisi.'] },
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return {
+        success: false,
+        error: { _form: ['Sesi login tidak valid atau telah berakhir.'] },
+      };
+    }
+
+    const updates: {
+      dev_status: 'in_progress';
+      test_status: 'failed';
+      test_notes: string;
+      updated_at: string;
+      column_id?: string;
+    } = {
+      dev_status: 'in_progress',
+      test_status: 'failed',
+      test_notes: notes.trim(),
+      updated_at: new Date().toISOString(),
+    };
+
+    // Auto-transition column back to In Progress if column exists in the project
+    if (projectId) {
+      const { data: cols } = await supabase
+        .from('board_columns')
+        .select('id, name')
+        .eq('project_id', projectId);
+
+      if (cols && cols.length > 0) {
+        const inProgressCol = cols.find((c) => {
+          const n = c.name.toLowerCase();
+          return (
+            n.includes('progress') ||
+            n.includes('doing') ||
+            n.includes('in work')
+          );
+        });
+        if (inProgressCol) {
+          updates.column_id = inProgressCol.id;
+        }
+      }
+    }
+
+    const { data: updatedTask, error: updateError } = await supabase
+      .from('tasks')
+      .update(updates)
+      .eq('id', taskId)
+      .select('id, dev_status, test_status, test_notes, column_id')
+      .single();
+
+    if (updateError) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            updateError.message || 'Gagal mengirimkan catatan Request Changes.',
+          ],
+        },
+      };
+    }
+
+    if (projectId) {
+      revalidatePath(`/projects/${projectId}`);
+    }
+    revalidatePath('/tasks');
+    revalidatePath(`/tasks/${taskId}`);
+
+    return {
+      success: true,
+      data: {
+        id: updatedTask.id,
+        devStatus: 'in_progress',
+        testStatus: 'failed',
+        testNotes: updatedTask.test_notes,
+        columnId: updatedTask.column_id,
+      },
+    };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : 'Terjadi kesalahan sistem saat memproses Request Changes.';
+    return {
+      success: false,
+      error: { _form: [message] },
+    };
+  }
+}
+
+export interface MergePullRequestInput {
+  taskId: string;
+  notes?: string | null;
+  projectId?: string | null;
+}
+
+/**
+ * Server action for Reviewer (Tester) to Merge Pull Request.
+ * Verifies testing passed, sets test_status to 'passed', dev_status to 'dev_done',
+ * moves task to 'Done' column in Kanban, and immediately frees workload points.
+ */
+export async function mergePullRequestAction({
+  taskId,
+  notes,
+  projectId,
+}: MergePullRequestInput): Promise<
+  ActionState<{
+    id: string;
+    devStatus: 'dev_done';
+    testStatus: 'passed';
+    columnId?: string;
+  }>
+> {
+  if (!taskId) {
+    return {
+      success: false,
+      error: { _form: ['Task ID harus disediakan.'] },
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return {
+        success: false,
+        error: { _form: ['Sesi login tidak valid atau telah berakhir.'] },
+      };
+    }
+
+    const updates: {
+      dev_status: 'dev_done';
+      test_status: 'passed';
+      updated_at: string;
+      test_notes?: string | null;
+      column_id?: string;
+    } = {
+      dev_status: 'dev_done',
+      test_status: 'passed',
+      updated_at: new Date().toISOString(),
+    };
+
+    if (notes !== undefined && notes !== null) {
+      updates.test_notes = notes.trim() || null;
+    }
+
+    // Auto-transition column to Done / Selesai in the project
+    if (projectId) {
+      const { data: cols } = await supabase
+        .from('board_columns')
+        .select('id, name, position')
+        .eq('project_id', projectId)
+        .order('position', { ascending: false });
+
+      if (cols && cols.length > 0) {
+        const doneCol =
+          cols.find((c) => {
+            const n = c.name.toLowerCase();
+            return (
+              n.includes('done') ||
+              n.includes('selesai') ||
+              n.includes('complete')
+            );
+          }) || cols[0]; // fallback to column with highest position
+
+        if (doneCol) {
+          updates.column_id = doneCol.id;
+        }
+      }
+    }
+
+    const { data: updatedTask, error: updateError } = await supabase
+      .from('tasks')
+      .update(updates)
+      .eq('id', taskId)
+      .select('id, dev_status, test_status, column_id')
+      .single();
+
+    if (updateError) {
+      return {
+        success: false,
+        error: {
+          _form: [updateError.message || 'Gagal melakukan Merge Pull Request.'],
+        },
+      };
+    }
+
+    if (projectId) {
+      revalidatePath(`/projects/${projectId}`);
+    }
+    revalidatePath('/tasks');
+    revalidatePath(`/tasks/${taskId}`);
+
+    return {
+      success: true,
+      data: {
+        id: updatedTask.id,
+        devStatus: 'dev_done',
+        testStatus: 'passed',
+        columnId: updatedTask.column_id,
+      },
+    };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : 'Terjadi kesalahan sistem saat melakukan Merge Pull Request.';
+    return {
+      success: false,
+      error: { _form: [message] },
+    };
   }
 }
