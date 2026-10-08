@@ -42,7 +42,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
   const progressPercent = Math.min(Math.max(project.progress, 0), 100);
 
   return (
-    <div className="group flex flex-col justify-between rounded-xl border bg-card p-5 text-card-foreground shadow-xs transition-all hover:border-primary/50 hover:shadow-md">
+    <Link
+      href={`/projects/${project.id}`}
+      className="group flex flex-col justify-between rounded-xl border bg-card p-5 text-card-foreground shadow-xs transition-all hover:border-primary/50 hover:shadow-md cursor-pointer"
+    >
       <div className="space-y-3.5">
         {/* Top Badges: Status & Team */}
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -130,14 +133,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
           </div>
         </div>
 
-        <Link
-          href={`/projects/${project.id}`}
-          className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
-        >
+        <div className="inline-flex items-center gap-1 text-xs font-semibold text-primary group-hover:underline">
           <span>Lihat Task</span>
           <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" />
-        </Link>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
