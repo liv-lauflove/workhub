@@ -32,10 +32,12 @@ alter table teams add constraint teams_name_check
   check (name in ('Aegis', 'Sentinel', 'Management'));
 
 -- =====================================================================
--- STEP 0.2: Ensure profiles table has phone column
+-- STEP 0.2: Ensure profiles table has phone, position, and capacity_points columns
 -- =====================================================================
 alter table public.profiles
-  add column if not exists phone text;
+  add column if not exists phone text,
+  add column if not exists position text,
+  add column if not exists capacity_points int not null default 100;
 
 -- ---------------------------------------------------------------------
 -- 1. Teams & Capacity Settings
@@ -291,7 +293,7 @@ on conflict (id) do nothing;
 -- ---------------------------------------------------------------------
 -- 3. Profiles (Linked to auth.users and teams)
 -- ---------------------------------------------------------------------
-insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
+insert into profiles (id, full_name, role, team_id, avatar_url, phone, position, capacity_points) values
   -- Management (1 leader)
   (
     'd0000000-0000-0000-0000-000000000001',
@@ -299,7 +301,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'leader',
     'e3333333-3333-3333-3333-333333333333',
     'https://api.dicebear.com/7.x/initials/svg?seed=YS',
-    '+6287860991436'
+    '+6287860991436',
+    'Head of Tech',
+    300
   ),
   -- Aegis Leaders (2)
   (
@@ -308,7 +312,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'leader',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=KAW',
-    '+6281237802297'
+    '+6281237802297',
+    'Tech Principal',
+    250
   ),
   (
     'd0000000-0000-0000-0000-000000000004',
@@ -316,7 +322,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'leader',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=DI',
-    '+6281325201001'
+    '+6281325201001',
+    'Tech Lead',
+    250
   ),
   -- Aegis Members (7)
   (
@@ -325,7 +333,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=WPA',
-    '+6281338057725'
+    '+6281338057725',
+    'Tech Specialist',
+    150
   ),
   (
     'd0000000-0000-0000-0000-000000000005',
@@ -333,7 +343,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=NW',
-    '+6281237768563'
+    '+6281237768563',
+    'Software Engineer',
+    100
   ),
   (
     'd0000000-0000-0000-0000-000000000006',
@@ -341,7 +353,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=JGS',
-    '+6285183231055'
+    '+6285183231055',
+    'Tech Specialist',
+    150
   ),
   (
     'd0000000-0000-0000-0000-000000000007',
@@ -349,7 +363,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=TBP',
-    '+6287862465431'
+    '+6287862465431',
+    'Software Engineer',
+    100
   ),
   (
     'd0000000-0000-0000-0000-000000000008',
@@ -357,7 +373,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=MAP',
-    '+6285739926513'
+    '+6285739926513',
+    'Software Engineer',
+    100
   ),
   (
     'd0000000-0000-0000-0000-000000000009',
@@ -365,7 +383,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=SS',
-    '+6282247370043'
+    '+6282247370043',
+    'Software Engineer',
+    100
   ),
   (
     'd0000000-0000-0000-0000-00000000000a',
@@ -373,7 +393,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e1111111-1111-1111-1111-111111111111',
     'https://api.dicebear.com/7.x/initials/svg?seed=AAS',
-    '+6285225541831'
+    '+6285225541831',
+    'Software Engineer',
+    100
   ),
   -- Sentinel Leaders (2)
   (
@@ -382,7 +404,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'leader',
     'e2222222-2222-2222-2222-222222222222',
     'https://api.dicebear.com/7.x/initials/svg?seed=MEM',
-    '+628113971870'
+    '+628113971870',
+    'Tech-Ops Principal',
+    250
   ),
   (
     'd0000000-0000-0000-0000-00000000000c',
@@ -390,7 +414,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'leader',
     'e2222222-2222-2222-2222-222222222222',
     'https://api.dicebear.com/7.x/initials/svg?seed=GNK',
-    '+6281282041555'
+    '+6281282041555',
+    'Tech-Ops Manager',
+    300
   ),
   -- Sentinel Members (3)
   (
@@ -399,7 +425,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e2222222-2222-2222-2222-222222222222',
     'https://api.dicebear.com/7.x/initials/svg?seed=SIN',
-    '+6281337733883'
+    '+6281337733883',
+    'Tech Ops',
+    100
   ),
   (
     'd0000000-0000-0000-0000-00000000000e',
@@ -407,7 +435,9 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e2222222-2222-2222-2222-222222222222',
     'https://api.dicebear.com/7.x/initials/svg?seed=EJ',
-    '+6287864291484'
+    '+6287864291484',
+    'Tech Ops',
+    100
   ),
   (
     'd0000000-0000-0000-0000-00000000000f',
@@ -415,14 +445,18 @@ insert into profiles (id, full_name, role, team_id, avatar_url, phone) values
     'member',
     'e2222222-2222-2222-2222-222222222222',
     'https://api.dicebear.com/7.x/initials/svg?seed=GMD',
-    '+6287761811177'
+    '+6287761811177',
+    'Tech Ops',
+    100
   )
 on conflict (id) do update set
   full_name = excluded.full_name,
   role = excluded.role,
   team_id = excluded.team_id,
   avatar_url = excluded.avatar_url,
-  phone = excluded.phone;
+  phone = excluded.phone,
+  position = excluded.position,
+  capacity_points = excluded.capacity_points;
 
 -- ===================
 -- STEP 2: Milestones (Q4 2026 & Q1 2027 Strategic Targets)
