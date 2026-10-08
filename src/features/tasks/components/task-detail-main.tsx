@@ -17,6 +17,7 @@ import { TaskActivityTimeline } from './task-activity-timeline';
 import { TaskSubtasksChecklist } from './task-subtasks-checklist';
 import { MarkdownTaskEditor } from './markdown-task-editor';
 import { TaskAttachmentsSection } from './task-attachments-section';
+import { TaskPrReviewerBox } from './task-pr-reviewer-box';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type {
@@ -24,13 +25,14 @@ import type {
   TaskActivityLog,
   TaskAttachmentItem,
 } from '../types/task.types';
+import type { TeamMemberOption } from './task-assignee-selector';
 
 interface TaskDetailMainProps {
   task: TaskDetail;
   activities?: TaskActivityLog[];
   attachments?: TaskAttachmentItem[];
   availableColumns?: { id: string; name: string; position: number }[];
-  teamMembers?: { id: string; full_name: string; avatar_url?: string | null }[];
+  teamMembers?: TeamMemberOption[];
   currentUserId?: string;
   isLeader?: boolean;
 }
@@ -308,7 +310,15 @@ export function TaskDetailMain({
         />
       </div>
 
-      {/* 3. Activity Timeline */}
+      {/* 4. GitHub PR Review Decision Box */}
+      <TaskPrReviewerBox
+        task={task}
+        teamMembers={teamMembers}
+        currentUserId={currentUserId}
+        isLeader={isLeader}
+      />
+
+      {/* 5. Activity Timeline */}
       <div className="pt-2">
         <TaskActivityTimeline
           activities={activities}

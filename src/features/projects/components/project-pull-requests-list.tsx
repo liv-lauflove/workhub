@@ -3,18 +3,14 @@
 import * as React from 'react';
 import Link from 'next/link';
 import {
-  CircleDot,
-  CheckCircle2,
   GitPullRequest,
+  GitMerge,
+  GitBranch,
   Search,
   X,
   ChevronDown,
-  Calendar,
   MessageSquare,
-  Filter,
   Check,
-  User,
-  ShieldAlert,
   ArrowUpDown,
   RotateCcw,
 } from 'lucide-react';
@@ -31,25 +27,30 @@ import {
 import type { TaskWithAssignee } from '@/features/kanban/types/kanban.types';
 import type { TeamMemberOption } from '@/features/tasks/components/task-assignee-selector';
 
-interface ProjectIssuesListProps {
+interface ProjectPullRequestsListProps {
   tasks: TaskWithAssignee[];
   teamMembers: TeamMemberOption[];
-  columns: { id: string; name: string }[];
   currentUserId?: string;
 }
 
-export function isTaskClosed(task: TaskWithAssignee): boolean {
-  const colName = task.column?.name?.toLowerCase() || '';
-  const isColumnDone =
-    colName.includes('done') ||
-    colName.includes('selesai') ||
-    colName.includes('complete');
-  const isDevAndQaDone =
-    task.dev_status === 'dev_done' && task.test_status === 'passed';
-  return isColumnDone || isDevAndQaDone;
+export function isTaskPullRequest(task: TaskWithAssignee): boolean {
+  // A task is only considered a Pull Request once a developer has actually
+  // opened a PR (test_status is testing, passed, or failed)
+  return (
+    task.test_status === 'testing' ||
+    task.test_status === 'passed' ||
+    task.test_status === 'failed'
+  );
 }
 
-function formatRelativeTime(dateStr: string): string {
+export function isPullRequestOpen(task: TaskWithAssignee): boolean {
+  const colName = task.column?.name?.toLowerCase() || '';
+  const isDoneCol = colName.includes('done') || colName.includes('selesai');
+  return task.test_status !== 'passed' && !isDoneCol;
+}
+
+function formatRelativeTime(dateStr?: string | null): string {
+  if (!dateStr) return '';
   try {
     const diffMs = Date.now() - new Date(dateStr).getTime();
     const diffSec = Math.floor(diffMs / 1000);
@@ -69,163 +70,134 @@ function formatRelativeTime(dateStr: string): string {
   }
 }
 
-function formatDueDate(dateStr: string): string {
-  try {
-    return new Date(dateStr).toLocaleDateString('id-ID', {
-      day: 'numeric',
-      month: 'short',
-    });
-  } catch {
-    return dateStr;
-  }
-}
+type SortOption = 'newest' | 'oldest' | 'updated' | 'points' | 'due_date';
 
-function getPriorityBadge(priority?: string) {
-  switch (priority?.toLowerCase()) {
-    case 'critical':
-      return {
-        label: 'Critical',
-        className:
-          'bg-rose-500/15 text-rose-700 dark:text-rose-400 border-rose-500/30',
-      };
-    case 'high':
-      return {
-        label: 'High',
-        className:
-          'bg-amber-500/15 text-amber-700 dark:text-amber-400 border-amber-500/30',
-      };
-    case 'medium':
-      return {
-        label: 'Medium',
-        className:
-          'bg-sky-500/15 text-sky-700 dark:text-sky-400 border-sky-500/30',
-      };
-    case 'low':
-      return {
-        label: 'Low',
-        className:
-          'bg-slate-500/15 text-slate-700 dark:text-slate-400 border-slate-500/30',
-      };
-    default:
-      return null;
-  }
-}
-
-type SortOption = 'newest' | 'oldest' | 'due_date' | 'points' | 'updated';
-
-export function ProjectIssuesList({
+export function ProjectPullRequestsList({
   tasks,
   teamMembers,
-  columns,
   currentUserId,
-}: ProjectIssuesListProps) {
+}: ProjectPullRequestsListProps) {
   const [statusTab, setStatusTab] = React.useState<'open' | 'closed'>('open');
-  const [searchQuery, setSearchQuery] = React.useState<string>('');
+  const [searchQuery, setSearchQuery] = React.useState('');
   const [authorFilter, setAuthorFilter] = React.useState<string | null>(null);
-  const [assigneeFilter, setAssigneeFilter] = React.useState<string | null>(
+  const [reviewerFilter, setReviewerFilter] = React.useState<string | null>(
     null
   );
   const [priorityFilter, setPriorityFilter] = React.useState<string | null>(
     null
   );
-  const [columnFilter, setColumnFilter] = React.useState<string | null>(null);
   const [sortBy, setSortBy] = React.useState<SortOption>('newest');
 
-  const todayStr = React.useMemo(
-    () => new Date().toISOString().split('T')[0],
-    []
-  );
+  // Filter tasks that are in the Pull Request workflow
+  const prTasks = React.useMemo(() => {
+    return tasks.filter(isTaskPullRequest);
+  }, [tasks]);
 
-  // 1. Calculate status counts
   const openCount = React.useMemo(
-    () => tasks.filter((t) => !isTaskClosed(t)).length,
-    [tasks]
+    () => prTasks.filter((t) => isPullRequestOpen(t)).length,
+    [prTasks]
   );
   const closedCount = React.useMemo(
-    () => tasks.filter((t) => isTaskClosed(t)).length,
-    [tasks]
+    () => prTasks.filter((t) => !isPullRequestOpen(t)).length,
+    [prTasks]
   );
 
-  // 2. Extract unique authors
+  // Collect authors (developers / creators)
   const uniqueAuthors = React.useMemo(() => {
     const map = new Map<
       string,
-      { id: string; name: string; avatarUrl: string | null }
+      { id: string; name: string; avatarUrl?: string | null }
     >();
-    for (const t of tasks) {
-      if (t.creator) {
-        map.set(t.creator.id, {
-          id: t.creator.id,
-          name: t.creator.full_name,
-          avatarUrl: t.creator.avatar_url,
+    prTasks.forEach((t) => {
+      const dev = t.developer || t.creator;
+      if (dev && !map.has(dev.id)) {
+        map.set(dev.id, {
+          id: dev.id,
+          name: dev.full_name,
+          avatarUrl: dev.avatar_url,
         });
       }
-    }
+    });
     return Array.from(map.values());
-  }, [tasks]);
+  }, [prTasks]);
 
-  // 3. Reset all active filters
-  const hasActiveFilters = Boolean(
-    searchQuery ||
-    authorFilter ||
-    assigneeFilter ||
-    priorityFilter ||
-    columnFilter ||
-    sortBy !== 'newest'
-  );
+  // Collect reviewers (testers)
+  const uniqueReviewers = React.useMemo(() => {
+    const map = new Map<
+      string,
+      { id: string; name: string; avatarUrl?: string | null }
+    >();
+    prTasks.forEach((t) => {
+      if (t.tester && !map.has(t.tester.id)) {
+        map.set(t.tester.id, {
+          id: t.tester.id,
+          name: t.tester.full_name,
+          avatarUrl: t.tester.avatar_url,
+        });
+      }
+    });
+    // Also include testers from team members
+    teamMembers.forEach((m) => {
+      if (m.role === 'tester' && !map.has(m.id)) {
+        map.set(m.id, {
+          id: m.id,
+          name: m.full_name,
+          avatarUrl: m.avatar_url,
+        });
+      }
+    });
+    return Array.from(map.values());
+  }, [prTasks, teamMembers]);
 
-  const handleResetFilters = () => {
-    setSearchQuery('');
-    setAuthorFilter(null);
-    setAssigneeFilter(null);
-    setPriorityFilter(null);
-    setColumnFilter(null);
-    setSortBy('newest');
-  };
-
-  // 4. Filter tasks
+  // Filter PR tasks
   const filteredTasks = React.useMemo(() => {
-    return tasks.filter((t) => {
-      // Status open / closed
-      const closed = isTaskClosed(t);
-      if (statusTab === 'open' && closed) return false;
-      if (statusTab === 'closed' && !closed) return false;
+    return prTasks.filter((t) => {
+      // 1. Status Open vs Closed
+      const isOpen = isPullRequestOpen(t);
+      if (statusTab === 'open' && !isOpen) return false;
+      if (statusTab === 'closed' && isOpen) return false;
 
-      // Text search
+      // 2. Search query
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
         const matchesTitle = t.title.toLowerCase().includes(query);
-        const matchesDesc = t.description?.toLowerCase().includes(query);
+        const matchesBranch = Boolean(
+          t.github_branch && t.github_branch.toLowerCase().includes(query)
+        );
         const matchesId = t.id.toLowerCase().includes(query);
-        if (!matchesTitle && !matchesDesc && !matchesId) return false;
-      }
-
-      // Author filter
-      if (authorFilter && t.created_by !== authorFilter) {
-        return false;
-      }
-
-      // Assignee filter
-      if (assigneeFilter) {
-        if (assigneeFilter === 'me') {
-          if (!currentUserId) return false;
-          const isMine =
-            t.assignee_id === currentUserId ||
-            t.developer_id === currentUserId ||
-            t.tester_id === currentUserId;
-          if (!isMine) return false;
-        } else if (assigneeFilter === 'unassigned') {
-          if (t.assignee_id || t.developer_id || t.tester_id) return false;
-        } else {
-          const matches =
-            t.assignee_id === assigneeFilter ||
-            t.developer_id === assigneeFilter ||
-            t.tester_id === assigneeFilter;
-          if (!matches) return false;
+        const matchesDev = Boolean(
+          t.developer?.full_name?.toLowerCase().includes(query)
+        );
+        const matchesTester = Boolean(
+          t.tester?.full_name?.toLowerCase().includes(query)
+        );
+        if (
+          !matchesTitle &&
+          !matchesBranch &&
+          !matchesId &&
+          !matchesDev &&
+          !matchesTester
+        ) {
+          return false;
         }
       }
 
-      // Priority filter
+      // 3. Author filter
+      if (authorFilter) {
+        const devId = t.developer_id || t.created_by;
+        if (devId !== authorFilter) return false;
+      }
+
+      // 4. Reviewer filter
+      if (reviewerFilter) {
+        if (reviewerFilter === 'me') {
+          if (!currentUserId || t.tester_id !== currentUserId) return false;
+        } else if (t.tester_id !== reviewerFilter) {
+          return false;
+        }
+      }
+
+      // 5. Priority filter
       if (
         priorityFilter &&
         t.priority?.toLowerCase() !== priorityFilter.toLowerCase()
@@ -233,25 +205,19 @@ export function ProjectIssuesList({
         return false;
       }
 
-      // Column filter
-      if (columnFilter && t.column_id !== columnFilter) {
-        return false;
-      }
-
       return true;
     });
   }, [
-    tasks,
+    prTasks,
     statusTab,
     searchQuery,
     authorFilter,
-    assigneeFilter,
+    reviewerFilter,
     priorityFilter,
-    columnFilter,
     currentUserId,
   ]);
 
-  // 5. Sort filtered tasks
+  // Sort filtered PR tasks
   const sortedTasks = React.useMemo(() => {
     return [...filteredTasks].sort((a, b) => {
       if (sortBy === 'newest') {
@@ -264,23 +230,35 @@ export function ProjectIssuesList({
           new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
         );
       }
+      if (sortBy === 'updated') {
+        return (
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+        );
+      }
+      if (sortBy === 'points') {
+        return (b.base_points || 0) - (a.base_points || 0);
+      }
       if (sortBy === 'due_date') {
         if (!a.due_date && !b.due_date) return 0;
         if (!a.due_date) return 1;
         if (!b.due_date) return -1;
         return a.due_date.localeCompare(b.due_date);
       }
-      if (sortBy === 'points') {
-        return (b.base_points || 0) - (a.base_points || 0);
-      }
-      if (sortBy === 'updated') {
-        return (
-          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-        );
-      }
       return 0;
     });
   }, [filteredTasks, sortBy]);
+
+  const hasActiveFilters = Boolean(
+    searchQuery || authorFilter || reviewerFilter || priorityFilter
+  );
+
+  const handleResetFilters = () => {
+    setSearchQuery('');
+    setAuthorFilter(null);
+    setReviewerFilter(null);
+    setPriorityFilter(null);
+    setSortBy('newest');
+  };
 
   return (
     <div className="space-y-3">
@@ -291,7 +269,7 @@ export function ProjectIssuesList({
           <Input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari task berdasarkan judul, deskripsi, atau ID..."
+            placeholder="Cari pull request berdasarkan judul, branch, author, atau reviewer..."
             className="pl-9 pr-9 text-xs sm:text-sm bg-background"
           />
           {searchQuery && (
@@ -318,7 +296,7 @@ export function ProjectIssuesList({
         )}
       </div>
 
-      {/* GitHub Issues Box Container */}
+      {/* GitHub Pull Requests Box Container */}
       <div className="rounded-xl border border-border bg-card shadow-xs overflow-hidden">
         {/* Table Subheader Bar */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-muted/40 px-4 py-3 text-xs">
@@ -333,7 +311,7 @@ export function ProjectIssuesList({
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <CircleDot className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+              <GitPullRequest className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
               <span>{openCount} Open</span>
             </button>
 
@@ -346,14 +324,14 @@ export function ProjectIssuesList({
                   : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <CheckCircle2 className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+              <GitMerge className="h-4 w-4 text-purple-600 dark:text-purple-400" />
               <span>{closedCount} Closed</span>
             </button>
           </div>
 
           {/* Filter Dropdowns Ala GitHub */}
           <div className="flex flex-wrap items-center gap-3 text-xs">
-            {/* 1. Author Filter */}
+            {/* 1. Author (Developer) Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -372,7 +350,7 @@ export function ProjectIssuesList({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel className="text-xs">
-                  Filter Berdasarkan Pembuat
+                  Filter Berdasarkan Developer
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -414,85 +392,71 @@ export function ProjectIssuesList({
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* 2. Assignee Filter */}
+            {/* 2. Reviewer (Tester) Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
                   <button
                     type="button"
                     className={`flex items-center gap-1 font-medium transition-colors ${
-                      assigneeFilter
+                      reviewerFilter
                         ? 'text-primary font-bold'
                         : 'text-muted-foreground hover:text-foreground'
                     }`}
                   />
                 }
               >
-                <span>Assignee</span>
+                <span>Reviewer</span>
                 <ChevronDown className="h-3 w-3 opacity-60" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel className="text-xs">
-                  Filter Berdasarkan PIC
+                  Filter Berdasarkan Reviewer / QA
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() => setAssigneeFilter(null)}
+                  onClick={() => setReviewerFilter(null)}
                   className="cursor-pointer justify-between"
                 >
-                  <span>Semua Assignee</span>
-                  {!assigneeFilter && (
+                  <span>Semua Reviewer</span>
+                  {!reviewerFilter && (
                     <Check className="h-3.5 w-3.5 text-primary" />
                   )}
                 </DropdownMenuItem>
                 {currentUserId && (
                   <DropdownMenuItem
-                    onClick={() => setAssigneeFilter('me')}
+                    onClick={() => setReviewerFilter('me')}
                     className="cursor-pointer justify-between"
                   >
-                    <div className="flex items-center gap-1.5 font-semibold text-primary">
-                      <User className="h-3.5 w-3.5" />
-                      <span>Ditugaskan ke Saya</span>
-                    </div>
-                    {assigneeFilter === 'me' && (
+                    <span>Ditugaskan kepada Saya</span>
+                    {reviewerFilter === 'me' && (
                       <Check className="h-3.5 w-3.5 text-primary" />
                     )}
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem
-                  onClick={() => setAssigneeFilter('unassigned')}
-                  className="cursor-pointer justify-between"
-                >
-                  <span className="text-muted-foreground">
-                    Belum Ditugaskan
-                  </span>
-                  {assigneeFilter === 'unassigned' && (
-                    <Check className="h-3.5 w-3.5 text-primary" />
-                  )}
-                </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                {teamMembers.map((member) => (
+                {uniqueReviewers.map((rev) => (
                   <DropdownMenuItem
-                    key={member.id}
-                    onClick={() => setAssigneeFilter(member.id)}
+                    key={rev.id}
+                    onClick={() => setReviewerFilter(rev.id)}
                     className="cursor-pointer justify-between"
                   >
                     <div className="flex items-center gap-2 truncate">
-                      {member.avatar_url ? (
+                      {rev.avatarUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img
-                          src={member.avatar_url}
-                          alt={member.full_name}
+                          src={rev.avatarUrl}
+                          alt={rev.name}
                           className="h-4 w-4 rounded-full object-cover"
                         />
                       ) : (
                         <div className="flex h-4 w-4 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary">
-                          {member.full_name.charAt(0).toUpperCase()}
+                          {rev.name.charAt(0).toUpperCase()}
                         </div>
                       )}
-                      <span className="truncate">{member.full_name}</span>
+                      <span className="truncate">{rev.name}</span>
                     </div>
-                    {assigneeFilter === member.id && (
+                    {reviewerFilter === rev.id && (
                       <Check className="h-3.5 w-3.5 text-primary shrink-0" />
                     )}
                   </DropdownMenuItem>
@@ -500,7 +464,7 @@ export function ProjectIssuesList({
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* 3. Priority / Labels Filter */}
+            {/* 3. Priority Filter */}
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -555,54 +519,7 @@ export function ProjectIssuesList({
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* 4. Column / Stage Filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <button
-                    type="button"
-                    className={`flex items-center gap-1 font-medium transition-colors ${
-                      columnFilter
-                        ? 'text-primary font-bold'
-                        : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                  />
-                }
-              >
-                <span>Stage</span>
-                <ChevronDown className="h-3 w-3 opacity-60" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
-                <DropdownMenuLabel className="text-xs">
-                  Filter Kolom / Tahap
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() => setColumnFilter(null)}
-                  className="cursor-pointer justify-between"
-                >
-                  <span>Semua Tahap</span>
-                  {!columnFilter && (
-                    <Check className="h-3.5 w-3.5 text-primary" />
-                  )}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                {columns.map((c) => (
-                  <DropdownMenuItem
-                    key={c.id}
-                    onClick={() => setColumnFilter(c.id)}
-                    className="cursor-pointer justify-between"
-                  >
-                    <span>{c.name}</span>
-                    {columnFilter === c.id && (
-                      <Check className="h-3.5 w-3.5 text-primary" />
-                    )}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* 5. Sort Dropdown */}
+            {/* 4. Sort Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={
@@ -624,9 +541,9 @@ export function ProjectIssuesList({
                 {[
                   { value: 'newest', label: 'Terbaru' },
                   { value: 'oldest', label: 'Terlama' },
-                  { value: 'due_date', label: 'Deadline Terdekat' },
-                  { value: 'points', label: 'Poin Tertinggi' },
                   { value: 'updated', label: 'Baru Diperbarui' },
+                  { value: 'points', label: 'Poin Tertinggi' },
+                  { value: 'due_date', label: 'Deadline Terdekat' },
                 ].map((s) => (
                   <DropdownMenuItem
                     key={s.value}
@@ -644,16 +561,23 @@ export function ProjectIssuesList({
           </div>
         </div>
 
-        {/* Task Items List */}
+        {/* PR Items List */}
         {sortedTasks.length === 0 ? (
           <div className="flex flex-col items-center justify-center min-h-[360px] p-12 text-center">
-            <Filter className="h-10 w-10 text-muted-foreground/40 mb-3" />
+            {statusTab === 'open' ? (
+              <GitPullRequest className="h-10 w-10 text-muted-foreground/40 mb-3" />
+            ) : (
+              <GitMerge className="h-10 w-10 text-muted-foreground/40 mb-3" />
+            )}
             <p className="text-sm font-semibold text-foreground">
-              Tidak ada task yang ditemukan
+              {statusTab === 'open'
+                ? 'Tidak ada pull request terbuka'
+                : 'Tidak ada pull request yang ditutup / di-merge'}
             </p>
-            <p className="text-xs text-muted-foreground mt-1 max-w-sm">
-              Tidak ada tiket yang cocok dengan filter atau kriteria pencarian
-              yang dipilih saat ini.
+            <p className="text-xs text-muted-foreground mt-1 max-w-md">
+              {statusTab === 'open'
+                ? 'Ketika developer menyelesaikan pengerjaan coding dan menekan "Buka PR (Open Pull Request)", task akan otomatis masuk ke daftar ini untuk ditinjau oleh QA / Reviewer.'
+                : 'Pull request yang telah lolos pengujian QA dan di-merge ke kolom Done akan tampil di sini.'}
             </p>
             {hasActiveFilters && (
               <Button
@@ -669,11 +593,9 @@ export function ProjectIssuesList({
         ) : (
           <div className="divide-y divide-border/60">
             {sortedTasks.map((task) => {
-              const closed = isTaskClosed(task);
-              const priority = getPriorityBadge(task.priority);
-              const isOverdue = Boolean(
-                task.due_date && !closed && task.due_date < todayStr
-              );
+              const isOpen = isPullRequestOpen(task);
+              const isMerged = task.test_status === 'passed';
+              const isChangesRequested = task.test_status === 'failed';
               const commentsCount = task.comments?.[0]?.count ?? 0;
 
               return (
@@ -683,15 +605,23 @@ export function ProjectIssuesList({
                 >
                   {/* Left Section: Status Icon + Title & Badges + Subtitle */}
                   <div className="flex items-start gap-3 min-w-0 flex-1">
-                    {/* Status Icon */}
+                    {/* PR Status Icon */}
                     <div
                       className="pt-0.5 shrink-0"
-                      title={closed ? 'Selesai / Closed' : 'Terbuka / Open'}
+                      title={
+                        isMerged
+                          ? 'Pull Request di-merge ke Done'
+                          : isChangesRequested
+                            ? 'Changes Requested (Perlu Revisi)'
+                            : 'Open Pull Request (Menunggu QA)'
+                      }
                     >
-                      {closed ? (
-                        <CheckCircle2 className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                      {isMerged ? (
+                        <GitMerge className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                      ) : isChangesRequested ? (
+                        <GitPullRequest className="h-4 w-4 text-rose-600 dark:text-rose-400" />
                       ) : (
-                        <CircleDot className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                        <GitPullRequest className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                       )}
                     </div>
 
@@ -700,95 +630,74 @@ export function ProjectIssuesList({
                       <div className="flex flex-wrap items-center gap-1.5 leading-snug">
                         <Link
                           href={`/tasks/${task.id}`}
-                          className="font-semibold text-sm text-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors break-words mr-1"
+                          className="font-semibold text-sm text-foreground hover:text-purple-600 dark:hover:text-purple-400 transition-colors break-words mr-1"
                         >
                           {task.title}
                         </Link>
 
-                        {/* Priority Badge */}
-                        {priority && (
-                          <span
-                            className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-semibold ${priority.className}`}
-                          >
-                            {priority.label}
+                        {/* Git Branch Badge */}
+                        {task.github_branch && (
+                          <span className="inline-flex items-center gap-1 rounded-md bg-muted px-2 py-0.5 text-[10px] font-mono font-medium text-foreground border border-border/80">
+                            <GitBranch className="h-3 w-3 text-muted-foreground" />
+                            <span>{task.github_branch}</span>
                           </span>
                         )}
 
-                        {/* Column Badge */}
-                        {task.column && (
-                          <span className="inline-flex items-center rounded-full bg-muted border border-border/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-                            {task.column.name}
+                        {/* Reviewer / QA Status Badge */}
+                        {isMerged && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 text-[10px] font-semibold text-purple-700 dark:text-purple-300">
+                            <GitMerge className="h-2.5 w-2.5" />
+                            <span>Merged</span>
                           </span>
                         )}
 
-                        {/* Dev / QA / PR Status Badges */}
-                        {task.dev_status === 'dev_done' &&
-                          task.test_status !== 'passed' && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 text-[10px] font-semibold text-purple-700 dark:text-purple-300">
-                              <GitPullRequest className="h-2.5 w-2.5" />
-                              <span>PR Open</span>
-                            </span>
-                          )}
-
-                        {task.test_status === 'passed' && (
-                          <span className="inline-flex items-center rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300">
-                            ✓ QA Lolos
-                          </span>
-                        )}
-
-                        {task.test_status === 'failed' && (
+                        {isChangesRequested && (
                           <span className="inline-flex items-center gap-1 rounded-full bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 text-[10px] font-semibold text-rose-700 dark:text-rose-300">
-                            <GitPullRequest className="h-2.5 w-2.5" />
-                            <span>Changes Requested</span>
+                            ✕ Changes requested
                           </span>
                         )}
 
-                        {task.origin === 'cs_complaint' && (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-red-500/10 border border-red-500/20 px-2 py-0.5 text-[10px] font-semibold text-red-700 dark:text-red-400">
-                            <ShieldAlert className="h-2.5 w-2.5" />
-                            <span>CS</span>
+                        {isOpen && !isChangesRequested && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 border border-amber-500/20 px-2 py-0.5 text-[10px] font-semibold text-amber-700 dark:text-amber-300">
+                            ⏳ Review diminta
+                          </span>
+                        )}
+
+                        {/* Priority Badge */}
+                        {task.priority && (
+                          <span className="inline-flex items-center rounded-full bg-muted border border-border/80 px-2 py-0.5 text-[10px] font-medium text-muted-foreground capitalize">
+                            {task.priority}
                           </span>
                         )}
                       </div>
 
-                      {/* Subtitle Metadata */}
+                      {/* Subtitle Metadata Ala GitHub PR */}
                       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
                         <span className="font-mono text-[11px] text-muted-foreground/80">
                           #{task.id.slice(0, 7)}
                         </span>
                         <span>·</span>
                         <span>
-                          dibuka {formatRelativeTime(task.created_at)} oleh{' '}
+                          diajukan{' '}
+                          {formatRelativeTime(
+                            task.updated_at || task.created_at
+                          )}{' '}
+                          oleh{' '}
                           <strong className="font-medium text-foreground">
-                            {task.creator?.full_name || 'Anggota Tim'}
+                            {task.developer?.full_name ||
+                              task.creator?.full_name ||
+                              'Developer'}
                           </strong>
                         </span>
 
-                        {task.due_date && (
+                        {task.tester && (
                           <>
                             <span>·</span>
-                            <span
-                              className={`inline-flex items-center gap-1 ${
-                                isOverdue
-                                  ? 'text-rose-600 dark:text-rose-400 font-semibold'
-                                  : ''
-                              }`}
-                            >
-                              <Calendar className="h-3 w-3" />
-                              <span>
-                                {isOverdue ? 'Terlambat (' : 'Batas '}
-                                {formatDueDate(task.due_date)}
-                                {isOverdue ? ')' : ''}
-                              </span>
-                            </span>
-                          </>
-                        )}
-
-                        {task.base_points > 0 && (
-                          <>
-                            <span>·</span>
-                            <span className="font-semibold text-primary/90">
-                              {task.base_points} pts
+                            <span className="inline-flex items-center gap-1">
+                              <span>Reviewer:</span>
+                              <strong className="font-medium text-foreground">
+                                {task.tester.full_name}
+                              </strong>
                             </span>
                           </>
                         )}
@@ -796,38 +705,31 @@ export function ProjectIssuesList({
                     </div>
                   </div>
 
-                  {/* Right Section: Avatars & Comments */}
-                  <div className="flex items-center gap-3 shrink-0 pt-0.5">
-                    {/* Comments Count */}
-                    {commentsCount > 0 && (
-                      <Link
-                        href={`/tasks/${task.id}#comments`}
-                        className="hidden sm:flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                        title={`${commentsCount} Komentar`}
-                      >
-                        <MessageSquare className="h-3.5 w-3.5" />
-                        <span className="text-[11px] font-medium">
-                          {commentsCount}
-                        </span>
-                      </Link>
+                  {/* Right Section: Avatars, Points, & Comments */}
+                  <div className="flex items-center gap-3 shrink-0 pt-1">
+                    {/* Story Points */}
+                    {task.base_points > 0 && (
+                      <span className="rounded-md bg-muted/80 border border-border/70 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                        {task.base_points} pts
+                      </span>
                     )}
 
-                    {/* Assignee / Dev / Tester Avatars Stack */}
+                    {/* Developer & Reviewer Avatars */}
                     <div className="flex items-center -space-x-1.5">
                       {task.developer && (
                         <div
+                          className="relative"
                           title={`Developer: ${task.developer.full_name}`}
-                          className="relative ring-2 ring-background rounded-full overflow-hidden"
                         >
                           {task.developer.avatar_url ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={task.developer.avatar_url}
                               alt={task.developer.full_name}
-                              className="h-6 w-6 rounded-full object-cover"
+                              className="h-5 w-5 rounded-full object-cover ring-2 ring-background"
                             />
                           ) : (
-                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/15 text-[10px] font-bold text-blue-600 dark:text-blue-400">
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[9px] font-bold text-primary ring-2 ring-background">
                               {task.developer.full_name.charAt(0).toUpperCase()}
                             </div>
                           )}
@@ -836,44 +738,34 @@ export function ProjectIssuesList({
 
                       {task.tester && (
                         <div
-                          title={`Tester: ${task.tester.full_name}`}
-                          className="relative ring-2 ring-background rounded-full overflow-hidden"
+                          className="relative"
+                          title={`Reviewer (QA): ${task.tester.full_name}`}
                         >
                           {task.tester.avatar_url ? (
                             // eslint-disable-next-line @next/next/no-img-element
                             <img
                               src={task.tester.avatar_url}
                               alt={task.tester.full_name}
-                              className="h-6 w-6 rounded-full object-cover"
+                              className="h-5 w-5 rounded-full object-cover ring-2 ring-background border border-amber-500/40"
                             />
                           ) : (
-                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-purple-500/15 text-[10px] font-bold text-purple-600 dark:text-purple-400">
+                            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-500/10 text-[9px] font-bold text-amber-700 dark:text-amber-400 ring-2 ring-background border border-amber-500/40">
                               {task.tester.full_name.charAt(0).toUpperCase()}
                             </div>
                           )}
                         </div>
                       )}
-
-                      {!task.developer && !task.tester && task.assignee && (
-                        <div
-                          title={`PIC: ${task.assignee.full_name}`}
-                          className="relative ring-2 ring-background rounded-full overflow-hidden"
-                        >
-                          {task.assignee.avatar_url ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={task.assignee.avatar_url}
-                              alt={task.assignee.full_name}
-                              className="h-6 w-6 rounded-full object-cover"
-                            />
-                          ) : (
-                            <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
-                              {task.assignee.full_name.charAt(0).toUpperCase()}
-                            </div>
-                          )}
-                        </div>
-                      )}
                     </div>
+
+                    {/* Comments Count */}
+                    {commentsCount > 0 && (
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <MessageSquare className="h-3.5 w-3.5" />
+                        <span className="text-[11px] font-medium">
+                          {commentsCount}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               );

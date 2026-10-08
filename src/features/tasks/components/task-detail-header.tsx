@@ -2,7 +2,16 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Copy, Check, FolderKanban, ArrowLeft, CircleDot } from 'lucide-react';
+import {
+  FolderKanban,
+  ArrowLeft,
+  CircleDot,
+  GitPullRequest,
+  Check,
+  Loader2,
+  Pencil,
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
   Breadcrumb,
@@ -12,12 +21,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { TaskStatusSelector } from './task-status-selector';
+import { TaskPrStatusBadge } from './task-pr-status-badge';
+import { TaskOpenPrDialog } from './task-open-pr-dialog';
+import { updateTaskDevStatusAction } from '../actions/task.actions';
+import type { TeamMemberOption } from './task-assignee-selector';
 import type { TaskDetail } from '../types/task.types';
 
 interface TaskDetailHeaderProps {
   task: TaskDetail;
-  availableColumns: { id: string; name: string; position: number }[];
+  availableColumns?: { id: string; name: string; position: number }[];
+  teamMembers?: TeamMemberOption[];
 }
 
 function formatRelativeTime(dateStr?: string | null): string {
@@ -42,25 +55,62 @@ function formatRelativeTime(dateStr?: string | null): string {
 
 export function TaskDetailHeader({
   task,
-  availableColumns,
+  teamMembers = [],
 }: TaskDetailHeaderProps) {
-  const [copied, setCopied] = React.useState(false);
-
-  const handleCopyLink = () => {
-    if (typeof window !== 'undefined') {
-      navigator.clipboard.writeText(window.location.href);
-      setCopied(true);
-      toast.success('Tautan task berhasil disalin ke clipboard');
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+  const router = useRouter();
+  const [isPrDialogOpen, setIsPrDialogOpen] = React.useState(false);
+  const [isPendingDev, startTransitionDev] = React.useTransition();
 
   const shortId = task.id ? task.id.slice(0, 8) : '';
   const creatorName = task.creator?.full_name || 'Anggota Tim';
   const createdTimeAgo = formatRelativeTime(task.created_at);
 
+  const isDoneColumn =
+    task.column?.name?.toLowerCase().includes('done') ||
+    task.column?.name?.toLowerCase().includes('selesai') ||
+    task.column?.name?.toLowerCase().includes('complete');
+
+  const isMerged = task.test_status === 'passed' || isDoneColumn;
+  const isPrOpen =
+    task.test_status === 'testing' || task.test_status === 'passed';
+  const isDevDone = task.dev_status === 'dev_done';
+
+  const handleToggleDevDone = () => {
+    startTransitionDev(async () => {
+      const nextStatus = isDevDone ? 'in_progress' : 'dev_done';
+      const res = await updateTaskDevStatusAction({
+        taskId: task.id,
+        devStatus: nextStatus,
+        projectId: task.project_id,
+      });
+
+      if (!res.success) {
+        toast.error(
+          res.error?._form?.[0] || 'Gagal memperbarui status development'
+        );
+        return;
+      }
+
+      if (nextStatus === 'dev_done') {
+        toast.success(
+          'Pengerjaan coding selesai! Tombol Open PR sekarang aktif.'
+        );
+      } else {
+        toast.success('Status dikembalikan ke In Progress.');
+      }
+      router.refresh();
+    });
+  };
+
   return (
     <div className="space-y-4 pt-1">
+      <TaskOpenPrDialog
+        task={task}
+        teamMembers={teamMembers}
+        open={isPrDialogOpen}
+        onOpenChange={setIsPrDialogOpen}
+      />
+
       {/* 1. Breadcrumb Navigation */}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Breadcrumb>
@@ -104,6 +154,75 @@ export function TaskDetailHeader({
 
         {/* Back and Action Buttons */}
         <div className="flex items-center gap-2">
+          {!isMerged && !isPrOpen && (
+            <>
+              {/* Tombol 1: Tandai Selesai Development */}
+              <button
+                type="button"
+                onClick={handleToggleDevDone}
+                disabled={isPendingDev}
+                className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all shadow-2xs ${
+                  isDevDone
+                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20'
+                    : 'bg-background text-foreground hover:bg-muted border-border/80'
+                }`}
+                title={
+                  isDevDone
+                    ? 'Development selesai. Klik untuk mengembalikan ke In Progress jika perlu revisi.'
+                    : 'Tandai bahwa pengerjaan coding telah selesai.'
+                }
+              >
+                {isPendingDev ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin text-muted-foreground" />
+                ) : (
+                  <Check
+                    className={`h-3.5 w-3.5 ${
+                      isDevDone
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : 'text-muted-foreground'
+                    }`}
+                  />
+                )}
+                <span>{isDevDone ? '✓ Dev Done' : 'Selesai Dev'}</span>
+              </button>
+
+              {/* Tombol 2: Open PR (Sampingnya) */}
+              {isDevDone ? (
+                <button
+                  type="button"
+                  onClick={() => setIsPrDialogOpen(true)}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors shadow-2xs cursor-pointer"
+                  title="Ajukan pengujian QA dengan membuka Pull Request"
+                >
+                  <GitPullRequest className="h-3.5 w-3.5" />
+                  <span>Open PR</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border/70 bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground opacity-60 cursor-not-allowed shadow-2xs"
+                  title="Selesaikan development (klik Selesai Dev) terlebih dahulu agar tombol Open PR aktif"
+                >
+                  <GitPullRequest className="h-3.5 w-3.5 opacity-60" />
+                  <span>Open PR</span>
+                </button>
+              )}
+            </>
+          )}
+
+          {!isMerged && isPrOpen && (
+            <button
+              type="button"
+              onClick={() => setIsPrDialogOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-lg border bg-card px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors shadow-2xs cursor-pointer"
+              title="Edit judul, branch, reviewer, atau deskripsi Pull Request"
+            >
+              <Pencil className="h-3.5 w-3.5 text-primary" />
+              <span>Edit PR</span>
+            </button>
+          )}
+
           {task.project ? (
             <Link
               href={`/projects/${task.project.id}`}
@@ -121,60 +240,25 @@ export function TaskDetailHeader({
               <span>Kembali ke My Tasks</span>
             </Link>
           )}
-
-          <button
-            type="button"
-            onClick={handleCopyLink}
-            className="inline-flex items-center gap-1.5 rounded-lg border bg-card px-3 py-1.5 text-xs font-semibold text-foreground hover:bg-muted transition-colors shadow-2xs"
-            title="Salin tautan task ini"
-          >
-            {copied ? (
-              <>
-                <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span className="text-emerald-600 dark:text-emerald-400">
-                  Tersalin
-                </span>
-              </>
-            ) : (
-              <>
-                <Copy className="h-3.5 w-3.5 text-muted-foreground" />
-                <span>Salin Tautan</span>
-              </>
-            )}
-          </button>
         </div>
       </div>
 
       {/* 2. Main Title & Status Bar */}
-      <div className="space-y-2 border-b pb-4">
+      <div className="space-y-3 border-b pb-4">
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground flex items-baseline flex-wrap gap-2.5">
+          <h1 className="text-lg sm:text-xl md:text-2xl font-semibold tracking-tight text-foreground flex items-baseline flex-wrap gap-2">
             <span>{task.title}</span>
-            <span className="text-xl sm:text-2xl font-light text-muted-foreground/70">
+            <span className="text-base sm:text-lg font-normal text-muted-foreground/60">
               #{shortId}
             </span>
           </h1>
         </div>
 
-        {/* 3. Status Badge Pill and Author Meta */}
-        <div className="flex flex-wrap items-center gap-3 pt-1 text-xs text-muted-foreground">
-          {/* Quick status selector */}
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground/70 text-[11px] font-medium hidden sm:inline">
-              Status:
-            </span>
-            <TaskStatusSelector
-              taskId={task.id}
-              currentColumnId={task.column_id}
-              currentColumnName={task.column?.name}
-              projectId={task.project_id}
-              availableColumns={availableColumns}
-            />
-          </div>
+        {/* 3. GitHub Pull Request Status Banner & Metadata */}
+        <TaskPrStatusBadge task={task} />
 
-          <span className="text-muted-foreground/40 hidden sm:inline">•</span>
-
-          {/* Author info */}
+        {/* 4. Author Creation & Update Meta */}
+        <div className="flex flex-wrap items-center gap-2.5 pt-1 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <CircleDot className="h-3.5 w-3.5 text-primary" />
             <span>

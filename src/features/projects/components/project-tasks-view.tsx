@@ -1,11 +1,16 @@
 'use client';
 
 import * as React from 'react';
-import { AlignLeft, LayoutGrid, Plus } from 'lucide-react';
+import { CircleDot, GitPullRequest, Kanban, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CreateTaskDialog } from '@/features/tasks/components/create-task-dialog';
 import { KanbanBoard } from '@/features/kanban/components/kanban-board';
 import { ProjectIssuesList, isTaskClosed } from './project-issues-list';
+import {
+  ProjectPullRequestsList,
+  isTaskPullRequest,
+  isPullRequestOpen,
+} from './project-pull-requests-list';
 import type { BoardColumnWithTasks } from '@/features/kanban/types/kanban.types';
 import type { TeamMemberOption } from '@/features/tasks/components/task-assignee-selector';
 
@@ -17,24 +22,27 @@ interface ProjectTasksViewProps {
   canCreateTask?: boolean;
 }
 
-const STORAGE_KEY = 'workhub_project_view_mode';
+const STORAGE_KEY = 'workhub_project_active_tab';
+
+type TabType = 'tasks' | 'pull_requests' | 'kanban';
 
 function subscribe(callback: () => void) {
   window.addEventListener('storage', callback);
   return () => window.removeEventListener('storage', callback);
 }
 
-function getSnapshot(): 'list' | 'board' {
+function getSnapshot(): TabType {
   try {
     const val = localStorage.getItem(STORAGE_KEY);
-    return val === 'board' ? 'board' : 'list';
+    if (val === 'kanban' || val === 'pull_requests') return val;
+    return 'tasks';
   } catch {
-    return 'list';
+    return 'tasks';
   }
 }
 
-function getServerSnapshot(): 'list' | 'board' {
-  return 'list';
+function getServerSnapshot(): TabType {
+  return 'tasks';
 }
 
 export function ProjectTasksView({
@@ -44,20 +52,18 @@ export function ProjectTasksView({
   currentUserId,
   canCreateTask = true,
 }: ProjectTasksViewProps) {
-  const [internalViewMode, setInternalViewMode] = React.useState<
-    'list' | 'board' | null
-  >(null);
-  const storedViewMode = React.useSyncExternalStore(
+  const [internalTab, setInternalTab] = React.useState<TabType | null>(null);
+  const storedTab = React.useSyncExternalStore(
     subscribe,
     getSnapshot,
     getServerSnapshot
   );
-  const viewMode = internalViewMode ?? storedViewMode;
+  const activeTab = internalTab ?? storedTab;
 
-  const handleViewChange = (mode: 'list' | 'board') => {
-    setInternalViewMode(mode);
+  const handleTabChange = (tab: TabType) => {
+    setInternalTab(tab);
     try {
-      localStorage.setItem(STORAGE_KEY, mode);
+      localStorage.setItem(STORAGE_KEY, tab);
     } catch {
       // Ignore storage errors in restricted contexts
     }
@@ -72,62 +78,76 @@ export function ProjectTasksView({
     () => allTasks.filter((t) => !isTaskClosed(t)).length,
     [allTasks]
   );
-  const closedCount = React.useMemo(
-    () => allTasks.filter((t) => isTaskClosed(t)).length,
-    [allTasks]
+
+  // Filter tasks that are in the Pull Request workflow
+  const prTasks = React.useMemo(() => {
+    return allTasks.filter(isTaskPullRequest);
+  }, [allTasks]);
+
+  const openPrCount = React.useMemo(
+    () => prTasks.filter((t) => isPullRequestOpen(t)).length,
+    [prTasks]
   );
 
   return (
     <div className="space-y-4">
-      {/* View Switcher Header Bar */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b pb-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-lg font-bold tracking-tight text-foreground">
-              Task & Isu Project
-            </h2>
+      {/* Top GitHub Navigation Bar: Task vs Pull request vs Kanban */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b pb-1">
+        <div className="flex items-center gap-4 -mb-[5px] overflow-x-auto">
+          {/* GitHub Tab 1: Task */}
+          <button
+            type="button"
+            onClick={() => handleTabChange('tasks')}
+            className={`flex items-center gap-2 pb-3 px-1 text-sm font-semibold border-b-2 transition-all shrink-0 ${
+              activeTab === 'tasks'
+                ? 'border-emerald-600 text-foreground font-bold'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+            }`}
+          >
+            <CircleDot className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+            <span>Task</span>
             <span className="rounded-full bg-muted border px-2 py-0.5 text-xs font-semibold text-muted-foreground">
-              {allTasks.length} Total
+              {openCount}
             </span>
-          </div>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            {openCount} task terbuka · {closedCount} selesai
-          </p>
+          </button>
+
+          {/* GitHub Tab 2: Pull request */}
+          <button
+            type="button"
+            onClick={() => handleTabChange('pull_requests')}
+            className={`flex items-center gap-2 pb-3 px-1 text-sm font-semibold border-b-2 transition-all shrink-0 ${
+              activeTab === 'pull_requests'
+                ? 'border-purple-600 text-foreground font-bold'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+            }`}
+          >
+            <GitPullRequest className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            <span>Pull request</span>
+            <span className="rounded-full bg-muted border px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+              {openPrCount}
+            </span>
+          </button>
+
+          {/* GitHub Tab 3: Kanban */}
+          <button
+            type="button"
+            onClick={() => handleTabChange('kanban')}
+            className={`flex items-center gap-2 pb-3 px-1 text-sm font-semibold border-b-2 transition-all shrink-0 ${
+              activeTab === 'kanban'
+                ? 'border-blue-600 text-foreground font-bold'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border'
+            }`}
+          >
+            <Kanban className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <span>Kanban</span>
+            <span className="rounded-full bg-muted border px-2 py-0.5 text-xs font-semibold text-muted-foreground">
+              {allTasks.length}
+            </span>
+          </button>
         </div>
 
-        <div className="flex items-center gap-2.5">
-          {/* Segmented View Switcher: List View vs Board (Kanban) View */}
-          <div className="flex items-center gap-0.5 rounded-lg border border-border/80 bg-muted/60 p-1">
-            <button
-              type="button"
-              onClick={() => handleViewChange('list')}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                viewMode === 'list'
-                  ? 'bg-background text-foreground shadow-xs'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-              title="Tampilan Daftar Bergaya GitHub Issues"
-            >
-              <AlignLeft className="h-3.5 w-3.5" />
-              <span>List</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleViewChange('board')}
-              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
-                viewMode === 'board'
-                  ? 'bg-background text-foreground shadow-xs'
-                  : 'text-muted-foreground hover:text-foreground'
-              }`}
-              title="Tampilan Papan Kanban Kolom"
-            >
-              <LayoutGrid className="h-3.5 w-3.5" />
-              <span>Board</span>
-            </button>
-          </div>
-
-          {/* New Task Trigger Button (Rendered only for project team members or management) */}
+        {/* Action Controls */}
+        <div className="flex items-center gap-2.5 pb-2">
           {canCreateTask && (
             <CreateTaskDialog
               projectId={projectId}
@@ -153,14 +173,24 @@ export function ProjectTasksView({
       </div>
 
       {/* Main Content Area */}
-      {viewMode === 'list' ? (
+      {activeTab === 'tasks' && (
         <ProjectIssuesList
           tasks={allTasks}
           teamMembers={teamMembers}
           columns={columns.map((c) => ({ id: c.id, name: c.name }))}
           currentUserId={currentUserId}
         />
-      ) : (
+      )}
+
+      {activeTab === 'pull_requests' && (
+        <ProjectPullRequestsList
+          tasks={allTasks}
+          teamMembers={teamMembers}
+          currentUserId={currentUserId}
+        />
+      )}
+
+      {activeTab === 'kanban' && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted-foreground">
