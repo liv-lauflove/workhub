@@ -33,7 +33,11 @@ export function TaskDetailView({
   return (
     <div className="mx-auto max-w-6xl space-y-6 pb-12">
       {/* 1. Header Bar (Breadcrumb, Title, Status, Copy Link) */}
-      <TaskDetailHeader task={task} availableColumns={availableColumns} />
+      <TaskDetailHeader
+        task={task}
+        availableColumns={availableColumns}
+        teamMembers={teamMembers}
+      />
 
       {/* 2. 2-Column Responsive Layout (GitHub Issue Style) */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">

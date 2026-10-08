@@ -11,6 +11,9 @@ import {
   GitBranch,
   Flame,
   ArrowUpRight,
+  Clock,
+  Check,
+  XCircle,
 } from 'lucide-react';
 import { TaskStatusSelector } from './task-status-selector';
 import {
@@ -68,7 +71,13 @@ export function TaskDetailSidebar({
 
   const isDoneColumn =
     task.column?.name?.toLowerCase().includes('done') ||
-    task.column?.name?.toLowerCase().includes('selesai');
+    task.column?.name?.toLowerCase().includes('selesai') ||
+    task.column?.name?.toLowerCase().includes('complete');
+
+  const isMerged = task.test_status === 'passed' || isDoneColumn;
+  const isChangesRequested = task.test_status === 'failed';
+  const isOpenPR =
+    !isMerged && !isChangesRequested && task.dev_status === 'dev_done';
 
   const isOverdue = task.due_date && task.due_date < todayStr && !isDoneColumn;
 
@@ -85,8 +94,8 @@ export function TaskDetailSidebar({
         />
       </div>
 
-      {/* 2. Tester / QA (PIC Pengujian) */}
-      <div className="border-b pb-4">
+      {/* 2. Tester / QA (Reviewer Resmi) */}
+      <div className="border-b pb-4 space-y-1.5">
         <TaskRoleAssigneeSelector
           taskId={task.id}
           projectId={task.project_id}
@@ -94,6 +103,32 @@ export function TaskDetailSidebar({
           currentUser={task.tester}
           teamMembers={teamMembers}
         />
+
+        {task.tester && (
+          <div className="flex items-center gap-1.5 px-1.5 pt-0.5 text-xs">
+            {isMerged ? (
+              <span className="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
+                <Check className="h-3.5 w-3.5" />
+                <span>Approved (Lolos QA)</span>
+              </span>
+            ) : isChangesRequested ? (
+              <span className="inline-flex items-center gap-1 font-semibold text-rose-600 dark:text-rose-400">
+                <XCircle className="h-3.5 w-3.5" />
+                <span>Changes requested</span>
+              </span>
+            ) : isOpenPR ? (
+              <span className="inline-flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400">
+                <Clock className="h-3.5 w-3.5 animate-pulse" />
+                <span>Review requested</span>
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-muted-foreground text-[11px]">
+                <Clock className="h-3 w-3 opacity-60" />
+                <span>Pending development</span>
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 3. Dev & Testing Status Controls */}
