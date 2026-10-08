@@ -295,3 +295,66 @@ export async function updateMemberRole(
   revalidatePath('/team');
   return { success: true };
 }
+
+/**
+ * Update a team member's workload capacity points.
+ * Only leaders of the team can perform this action.
+ */
+export async function updateMemberCapacity(
+  _prevState: ActionState | null,
+  formData: FormData
+): Promise<ActionState> {
+  const userId = formData.get('userId') as string;
+  const teamId = formData.get('teamId') as string;
+  const rawPoints = formData.get('capacityPoints') as string;
+  const capacityPoints = parseInt(rawPoints, 10);
+
+  if (!userId || !teamId || isNaN(capacityPoints)) {
+    return {
+      success: false,
+      error: { _form: ['Data tidak lengkap atau format poin tidak valid.'] },
+    };
+  }
+
+  if (capacityPoints < 10 || capacityPoints > 1000) {
+    return {
+      success: false,
+      error: {
+        capacityPoints: [
+          'Kapasitas poin harus berada di antara 10 hingga 1000 poin.',
+        ],
+      },
+    };
+  }
+
+  const profile = await getUserProfile();
+  if (!profile || profile.role !== 'leader' || profile.team_id !== teamId) {
+    return {
+      success: false,
+      error: {
+        _form: [
+          'Hanya leader tim yang memiliki wewenang mengatur kapasitas poin anggota.',
+        ],
+      },
+    };
+  }
+
+  const { createClient } = await import('@/lib/supabase/server');
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('profiles')
+    .update({ capacity_points: capacityPoints })
+    .eq('id', userId)
+    .eq('team_id', teamId);
+
+  if (error) {
+    return {
+      success: false,
+      error: { _form: [error.message] },
+    };
+  }
+
+  revalidatePath('/team');
+  revalidatePath('/workload');
+  return { success: true };
+}
