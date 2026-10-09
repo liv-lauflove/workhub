@@ -1,4 +1,4 @@
-import * as React from 'react';
+import Link from 'next/link';
 import { MobileNav } from './mobile-nav';
 import { LogOut, User as UserIcon } from 'lucide-react';
 import { signOut } from '@/features/auth/actions/auth.actions';
@@ -46,22 +46,28 @@ export function Header({ user, profile }: HeaderProps) {
           {isLeader ? 'Leader' : 'Member'}
         </span>
 
-        {/* User Info (Desktop) */}
-        <div className="hidden items-center gap-2 md:flex">
+        {/* User Info (Desktop) - Clickable link to /settings */}
+        <Link
+          href="/settings"
+          className="hidden items-center gap-2 rounded-lg p-1.5 transition-colors hover:bg-muted/70 md:flex group"
+          title="Buka Pengaturan Profil"
+        >
           {profile?.avatar_url ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={profile.avatar_url}
               alt={displayName}
-              className="h-7 w-7 rounded-full border object-cover"
+              className="h-7 w-7 rounded-full border object-cover group-hover:border-primary/50 transition-colors"
             />
           ) : (
-            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
               <UserIcon className="h-3.5 w-3.5" />
             </div>
           )}
-          <span className="text-sm font-medium">{displayName}</span>
-        </div>
+          <span className="text-sm font-medium group-hover:text-primary transition-colors">
+            {displayName}
+          </span>
+        </Link>
 
         {/* Logout Action Button */}
         <form action={signOut}>
