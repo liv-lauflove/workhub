@@ -187,9 +187,12 @@ export function isTaskFullyCompleted(task: WorkloadTaskInput): boolean {
 }
 
 /**
- * Determines which role and user is currently bearing the active workload:
- * - Stage 1 (Development): Task assigned to Developer until dev_status === 'dev_done'.
- * - Stage 2 (Testing / QA): Once dev_done, workload shifts to Tester until test_status === 'passed'.
+ * Determines which role and user is currently bearing the active workload.
+ * PR-aware transition (Issue #114):
+ * - Stage 1 (Development): Developer bears workload while coding AND after
+ *   clicking "Selesai Dev" until a PR is opened.
+ * - Stage 2 (Testing / QA): Workload shifts to Tester only after PR is opened
+ *   (test_status === 'testing') or changes are requested (test_status === 'failed').
  * - Stage 3 (Selesai): Workload = 0 (completed).
  */
 export function determineActiveTaskRole(
@@ -202,24 +205,24 @@ export function determineActiveTaskRole(
   const devStatus = task.dev_status || 'todo';
   const testStatus = task.test_status || 'pending';
 
-  // If dev is done, workload moves to QA/Tester
-  if (devStatus === 'dev_done') {
-    if (testStatus !== 'passed') {
-      const testerId =
-        task.tester_id ||
-        task.tester?.id ||
-        task.assignee_id ||
-        task.assignee?.id ||
-        null;
-      if (testerId) {
-        return { activeRole: 'tester', userId: testerId };
-      }
-      return { activeRole: 'unassigned', userId: null };
+  // Workload shifts to Tester ONLY when PR is actively in review or needs re-work
+  if (
+    devStatus === 'dev_done' &&
+    (testStatus === 'testing' || testStatus === 'failed')
+  ) {
+    const testerId =
+      task.tester_id ||
+      task.tester?.id ||
+      task.assignee_id ||
+      task.assignee?.id ||
+      null;
+    if (testerId) {
+      return { activeRole: 'tester', userId: testerId };
     }
-    return { activeRole: 'completed', userId: null };
+    return { activeRole: 'unassigned', userId: null };
   }
 
-  // Still in development stage
+  // Developer still bears workload: actively coding OR dev_done but PR not yet opened
   const devId =
     task.developer_id ||
     task.developer?.id ||
