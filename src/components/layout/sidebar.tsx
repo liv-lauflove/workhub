@@ -131,38 +131,68 @@ export function Sidebar({ user, profile, onClose }: SidebarProps) {
       </nav>
 
       {/* User Footer & Logout */}
-      <div className="border-t p-4">
-        <div className="mb-3 flex items-center gap-3 px-2">
-          {profile?.avatar_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={profile.avatar_url}
-              alt={displayName}
-              className="h-9 w-9 rounded-full border object-cover"
-            />
-          ) : (
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground">
-              <UserIcon className="h-4 w-4" />
+      <div
+        className={cn(
+          'border-t p-3 transition-all duration-300',
+          isCollapsed && 'p-2'
+        )}
+      >
+        {/* Profile Card */}
+        <div
+          className={cn(
+            'mb-2 flex items-center transition-all duration-300',
+            isCollapsed ? 'justify-center' : 'gap-3 px-2 py-1.5'
+          )}
+        >
+          <SidebarTooltip
+            content={`${displayName} (${roleLabel})`}
+            disabled={!isCollapsed}
+          >
+            <div className="flex shrink-0 items-center justify-center">
+              {profile?.avatar_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={profile.avatar_url}
+                  alt={displayName}
+                  className="h-8 w-8 rounded-full border object-cover shadow-2xs"
+                />
+              ) : (
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground shadow-2xs">
+                  <UserIcon className="h-4 w-4" />
+                </div>
+              )}
+            </div>
+          </SidebarTooltip>
+
+          {!isCollapsed && (
+            <div className="flex flex-1 flex-col overflow-hidden text-left">
+              <span className="truncate text-xs font-semibold text-foreground">
+                {displayName}
+              </span>
+              <span className="truncate text-[11px] text-muted-foreground">
+                {roleLabel} {user?.email ? `• ${user.email}` : ''}
+              </span>
             </div>
           )}
-          <div className="flex flex-1 flex-col overflow-hidden text-left">
-            <span className="truncate text-sm font-semibold">
-              {displayName}
-            </span>
-            <span className="truncate text-xs text-muted-foreground">
-              {roleLabel} {user?.email ? `• ${user.email}` : ''}
-            </span>
-          </div>
         </div>
 
-        <form action={signOut}>
-          <button
-            type="submit"
-            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive"
-          >
-            <LogOut className="h-4 w-4 shrink-0" />
-            <span>Keluar</span>
-          </button>
+        {/* Logout Form */}
+        <form action={signOut} className="w-full">
+          <SidebarTooltip content="Keluar" disabled={!isCollapsed}>
+            <button
+              type="submit"
+              className={cn(
+                'flex items-center rounded-lg text-sm font-medium text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive cursor-pointer',
+                isCollapsed
+                  ? 'h-9 w-9 justify-center mx-auto'
+                  : 'w-full gap-2 px-3 py-2'
+              )}
+              title={isCollapsed ? 'Keluar' : undefined}
+            >
+              <LogOut className="h-4 w-4 shrink-0" />
+              {!isCollapsed && <span>Keluar</span>}
+            </button>
+          </SidebarTooltip>
         </form>
       </div>
     </aside>
