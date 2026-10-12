@@ -13,6 +13,8 @@ import {
   Settings,
   LogOut,
   User as UserIcon,
+  PanelLeftClose,
+  PanelLeftOpen,
 } from 'lucide-react';
 import { signOut } from '@/features/auth/actions/auth.actions';
 import { cn } from 'cn';
@@ -51,12 +53,34 @@ interface SidebarProps {
 
 export function Sidebar({ user, profile, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const { isCollapsed: contextCollapsed } = useSidebar();
+  const { isCollapsed: contextCollapsed, toggleSidebar } = useSidebar();
   const isCollapsed = onClose ? false : contextCollapsed;
 
   const displayName =
     profile?.full_name || user?.email?.split('@')[0] || 'Pengguna';
   const roleLabel = profile?.role === 'leader' ? 'Team Lead' : 'Member';
+
+  // Keyboard shortcut listener (Ctrl+B) for toggling sidebar on desktop
+  React.useEffect(() => {
+    if (onClose) return; // Do not register inside mobile drawer
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isInput =
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        (e.target as HTMLElement)?.isContentEditable;
+
+      if (isInput) return;
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+        e.preventDefault();
+        toggleSidebar();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose, toggleSidebar]);
 
   return (
     <aside
@@ -194,6 +218,46 @@ export function Sidebar({ user, profile, onClose }: SidebarProps) {
             </button>
           </SidebarTooltip>
         </form>
+
+        {/* Collapse Sidebar Toggle Action (Desktop Only) */}
+        {!onClose && (
+          <div className="mt-2 pt-2 border-t border-border/60">
+            <SidebarTooltip
+              content={isCollapsed ? 'Perluas sidebar' : 'Ciutkan sidebar'}
+              shortcut="Ctrl+B"
+              disabled={!isCollapsed}
+            >
+              <button
+                type="button"
+                onClick={toggleSidebar}
+                className={cn(
+                  'flex items-center rounded-lg text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer',
+                  isCollapsed
+                    ? 'h-9 w-9 justify-center mx-auto'
+                    : 'w-full justify-between px-3 py-2'
+                )}
+                title={isCollapsed ? 'Perluas sidebar (Ctrl+B)' : undefined}
+                aria-label={isCollapsed ? 'Perluas sidebar' : 'Ciutkan sidebar'}
+              >
+                <div className="flex items-center gap-2">
+                  {isCollapsed ? (
+                    <PanelLeftOpen className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  ) : (
+                    <>
+                      <PanelLeftClose className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <span>Ciutkan sidebar</span>
+                    </>
+                  )}
+                </div>
+                {!isCollapsed && (
+                  <kbd className="rounded border border-border/80 bg-muted px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                    Ctrl+B
+                  </kbd>
+                )}
+              </button>
+            </SidebarTooltip>
+          </div>
+        )}
       </div>
     </aside>
   );
