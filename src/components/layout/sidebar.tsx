@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { signOut } from '@/features/auth/actions/auth.actions';
 import { cn } from 'cn';
+import { useSidebar } from './sidebar-context';
+import { SidebarTooltip } from './sidebar-tooltip';
 
 const ICON_MAP = {
   LayoutDashboard,
@@ -49,25 +51,52 @@ interface SidebarProps {
 
 export function Sidebar({ user, profile, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const { isCollapsed: contextCollapsed } = useSidebar();
+  const isCollapsed = onClose ? false : contextCollapsed;
 
   const displayName =
     profile?.full_name || user?.email?.split('@')[0] || 'Pengguna';
   const roleLabel = profile?.role === 'leader' ? 'Team Lead' : 'Member';
 
   return (
-    <aside className="flex h-full w-full md:w-64 flex-col border-r bg-card text-card-foreground">
+    <aside
+      className={cn(
+        'flex h-full flex-col border-r bg-card text-card-foreground transition-[width] duration-300 ease-in-out',
+        onClose ? 'w-full' : isCollapsed ? 'w-16 md:w-16' : 'w-full md:w-64'
+      )}
+    >
       {/* Brand Header */}
-      <div className="flex h-14 items-center justify-between border-b px-6">
-        <Link href="/" className="flex items-center gap-2" onClick={onClose}>
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg">
-            W
-          </div>
-          <span className="text-lg font-bold tracking-tight">Workhub</span>
-        </Link>
+      <div
+        className={cn(
+          'flex h-14 items-center border-b transition-all duration-300',
+          isCollapsed ? 'justify-center px-2' : 'justify-between px-6'
+        )}
+      >
+        <SidebarTooltip content="Workhub" disabled={!isCollapsed}>
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 overflow-hidden"
+            onClick={onClose}
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground font-bold text-lg shadow-2xs">
+              W
+            </div>
+            {!isCollapsed && (
+              <span className="text-lg font-bold tracking-tight truncate">
+                Workhub
+              </span>
+            )}
+          </Link>
+        </SidebarTooltip>
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 space-y-1.5 overflow-y-auto p-4">
+      <nav
+        className={cn(
+          'flex-1 space-y-1.5 overflow-y-auto p-3',
+          isCollapsed && 'px-2'
+        )}
+      >
         {NAV_ITEMS.map((item) => {
           const Icon = ICON_MAP[item.icon];
           const isActive =
@@ -75,20 +104,28 @@ export function Sidebar({ user, profile, onClose }: SidebarProps) {
             (item.href !== '/' && pathname.startsWith(item.href));
 
           return (
-            <Link
+            <SidebarTooltip
               key={item.href}
-              href={item.href}
-              onClick={onClose}
-              className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                isActive
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
-              )}
+              content={item.label}
+              disabled={!isCollapsed}
             >
-              <Icon className="h-4 w-4 shrink-0" />
-              <span>{item.label}</span>
-            </Link>
+              <Link
+                href={item.href}
+                onClick={onClose}
+                className={cn(
+                  'flex items-center rounded-lg text-sm font-medium transition-colors',
+                  isCollapsed
+                    ? 'h-10 w-10 justify-center mx-auto'
+                    : 'gap-3 px-3 py-2',
+                  isActive
+                    ? 'bg-primary text-primary-foreground shadow-xs'
+                    : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                )}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                {!isCollapsed && <span className="truncate">{item.label}</span>}
+              </Link>
+            </SidebarTooltip>
           );
         })}
       </nav>
