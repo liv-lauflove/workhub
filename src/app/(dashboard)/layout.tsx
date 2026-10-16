@@ -2,10 +2,11 @@ import { SidebarProvider } from '@/components/layout/sidebar-context';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
 import { getUser, getUserProfile } from '@/features/auth/queries/auth.queries';
+import { AiChatbotWidget } from '@/features/ai/components/ai-chatbot-widget';
 
 /**
- * Protected dashboard layout with responsive sidebar and header.
- * Server component that fetches current user & profile for navigation.
+ * Protected dashboard layout with responsive sidebar, header, and floating AI assistant.
+ * Server component that fetches current user & profile for navigation and AI context.
  */
 export default async function DashboardLayout({
   children,
@@ -28,6 +29,9 @@ export default async function DashboardLayout({
           <Header user={user} profile={profile} />
           <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
         </div>
+
+        {/* Floating AI Chatbot Assistant (Issue #44) */}
+        <AiChatbotWidget user={user} profile={profile} />
       </div>
     </SidebarProvider>
   );
