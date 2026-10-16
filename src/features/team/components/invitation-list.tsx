@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useActionState } from 'react';
 import { Clock, XCircle, CheckCircle2, Ban, Copy, Check } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { revokeInvitation } from '@/features/team/actions/team.actions';
 import { cn } from 'cn';
@@ -24,7 +25,7 @@ interface InvitationListProps {
 
 const STATUS_CONFIG = {
   pending: {
-    label: 'Pending',
+    label: 'Menunggu',
     icon: Clock,
     className:
       'text-yellow-600 bg-yellow-50 dark:text-yellow-400 dark:bg-yellow-950/30',
@@ -55,9 +56,10 @@ function CopyLinkButton({ email }: { email: string }) {
       const url = `${window.location.origin}/register?email=${encodeURIComponent(email)}`;
       await navigator.clipboard.writeText(url);
       setCopied(true);
+      toast.success('Tautan registrasi berhasil disalin!');
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Ignore clipboard write failures
+      toast.error('Gagal menyalin tautan ke clipboard.');
     }
   };
 
@@ -91,7 +93,15 @@ function RevokeButton({
   invitationId: string;
   teamId: string;
 }) {
-  const [, formAction, isPending] = useActionState(revokeInvitation, null);
+  const [state, formAction, isPending] = useActionState(revokeInvitation, null);
+
+  React.useEffect(() => {
+    if (state?.success) {
+      toast.success('Undangan berhasil dibatalkan.');
+    } else if (state && !state.success && state.error?._form) {
+      toast.error(state.error._form[0]);
+    }
+  }, [state]);
 
   return (
     <form action={formAction}>
