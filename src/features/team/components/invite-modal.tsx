@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { toast } from 'sonner';
 import { inviteTeamMember } from '@/features/team/actions/team.actions';
 
 interface InviteModalProps {
@@ -43,13 +44,20 @@ export function InviteModal({ teamId }: InviteModalProps) {
 
       if (res.success) {
         setOpen(false);
+        toast.success(
+          'Undangan berhasil dibuat. Silakan salin tautan pendaftaran untuk calon anggota.'
+        );
         router.refresh();
       } else {
         setError(res.error);
+        if (res.error?._form?.[0]) {
+          toast.error(res.error._form[0]);
+        }
       }
     } catch (err) {
       console.error('🚀 [InviteModal] Unhandled error:', err);
       setError({ _form: ['Terjadi kesalahan. Silakan coba lagi.'] });
+      toast.error('Terjadi kesalahan saat membuat undangan.');
     } finally {
       setIsPending(false);
     }
@@ -74,8 +82,9 @@ export function InviteModal({ teamId }: InviteModalProps) {
         <DialogHeader>
           <DialogTitle>Undang Anggota Baru</DialogTitle>
           <DialogDescription>
-            Kirim undangan ke email calon anggota tim. Mereka akan menerima
-            tautan untuk bergabung.
+            Kirim undangan ke email calon anggota tim. Undangan akan berstatus
+            pending dan Anda dapat membagikan tautan registrasi mandiri untuk
+            calon anggota.
           </DialogDescription>
         </DialogHeader>
 

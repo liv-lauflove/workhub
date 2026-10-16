@@ -100,11 +100,10 @@ export async function inviteTeamMember(
 
   const admin = createAdminClient();
 
-  // Check if email is already invited (pending)
+  // Check if email already has a pending invitation
   const { data: existing, error: checkError } = await admin
     .from('team_invitations')
     .select('id')
-    .eq('team_id', parsed.data.teamId)
     .eq('email', parsed.data.email)
     .eq('status', 'pending')
     .maybeSingle();
@@ -124,7 +123,7 @@ export async function inviteTeamMember(
   // Generate a unique invitation token
   const token = crypto.randomUUID();
 
-  // Insert into team_invitations table using admin client
+  // Insert into team_invitations table using admin client with pending status
   const { data: insertedData, error: insertError } = await admin
     .from('team_invitations')
     .insert({
@@ -133,6 +132,7 @@ export async function inviteTeamMember(
       role: parsed.data.role,
       invited_by: profile.id,
       token,
+      status: 'pending',
     })
     .select()
     .single();
@@ -146,38 +146,9 @@ export async function inviteTeamMember(
   }
 
   console.log(
-    '✅ [inviteTeamMember] Successfully inserted into DB:',
+    '✅ [inviteTeamMember] Successfully created pending invitation:',
     insertedData
   );
-
-  // Invite user via Supabase Auth Admin API (sends email magic link via service role)
-  try {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-    const { error: inviteError } = await admin.auth.admin.inviteUserByEmail(
-      parsed.data.email,
-      {
-        redirectTo: `${siteUrl}/auth/callback?next=/team`,
-        data: {
-          full_name: parsed.data.email.split('@')[0],
-          invited_team_id: parsed.data.teamId,
-          invited_role: parsed.data.role,
-        },
-      }
-    );
-
-    if (inviteError) {
-      console.warn(
-        '⚠️ [inviteTeamMember] Auth invite email warning (non-blocking):',
-        inviteError.message
-      );
-    } else {
-      console.log(
-        '📧 [inviteTeamMember] Supabase Auth invite email sent successfully!'
-      );
-    }
-  } catch (err) {
-    console.warn('⚠️ [inviteTeamMember] Failed to call admin invite API:', err);
-  }
 
   revalidatePath('/team');
   return { success: true };
