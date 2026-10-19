@@ -159,17 +159,28 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.error('Error handling /api/ai-chat request:', err);
-    const message =
+    let message =
       err instanceof Error
         ? err.message
         : 'Terjadi kesalahan internal pada layanan AI.';
+
+    const lower = message.toLowerCase();
+    const isTimeout =
+      lower.includes('timeout') ||
+      lower.includes('aborted') ||
+      (err instanceof DOMException && err.name === 'TimeoutError');
+
+    if (isTimeout) {
+      message =
+        'Permintaan ke penyedia AI melebihi batas waktu (timeout). Silakan coba kirim ulang pertanyaan Anda.';
+    }
 
     return NextResponse.json(
       {
         success: false,
         error: message,
       },
-      { status: 500 }
+      { status: isTimeout ? 504 : 500 }
     );
   }
 }

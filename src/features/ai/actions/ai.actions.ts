@@ -119,10 +119,20 @@ export async function sendAiChatMessageAction(
     };
   } catch (error) {
     console.error('Error in sendAiChatMessageAction:', error);
-    const message =
+    let message =
       error instanceof Error
         ? error.message
         : 'An unexpected error occurred while communicating with the AI service.';
+
+    const lower = message.toLowerCase();
+    if (
+      lower.includes('timeout') ||
+      lower.includes('aborted') ||
+      (error instanceof DOMException && error.name === 'TimeoutError')
+    ) {
+      message =
+        'Permintaan ke penyedia AI melebihi batas waktu (timeout). Silakan coba kirim ulang pertanyaan Anda.';
+    }
 
     return {
       success: false,

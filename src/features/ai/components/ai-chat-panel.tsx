@@ -91,7 +91,12 @@ export function AiChatPanel({
             result.error?._form?.[0] ||
             result.error?.prompt?.[0] ||
             'Gagal mendapatkan tanggapan dari asisten AI.';
-          setErrorMessage(formError);
+          const lower = formError.toLowerCase();
+          const friendlyMessage =
+            lower.includes('timeout') || lower.includes('aborted')
+              ? 'Permintaan ke penyedia AI melebihi batas waktu (timeout). Silakan coba kirim ulang pertanyaan Anda.'
+              : formError;
+          setErrorMessage(friendlyMessage);
           setStatus('error');
           return;
         }
@@ -110,11 +115,16 @@ export function AiChatPanel({
         setStatus('idle');
       } catch (err) {
         console.error('Error invoking chat action:', err);
-        setErrorMessage(
+        const rawMessage =
           err instanceof Error
             ? err.message
-            : 'Terjadi gangguan saat menghubungi server AI.'
-        );
+            : 'Terjadi gangguan saat menghubungi server AI.';
+        const lower = rawMessage.toLowerCase();
+        const friendlyMessage =
+          lower.includes('timeout') || lower.includes('aborted')
+            ? 'Permintaan ke penyedia AI melebihi batas waktu (timeout). Silakan coba kirim ulang pertanyaan Anda.'
+            : rawMessage;
+        setErrorMessage(friendlyMessage);
         setStatus('error');
       }
     },
