@@ -280,7 +280,8 @@ export async function invokeLlm(
   }
 
   // Default: Gemini
-  const model = options.model || process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model =
+    options.model || process.env.GEMINI_MODEL || 'gemini-flash-latest';
   return await callGemini(
     apiKey,
     model,

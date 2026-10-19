@@ -30,7 +30,7 @@ export async function GET() {
     model:
       process.env.AI_PROVIDER === 'openai'
         ? process.env.OPENAI_MODEL || 'gpt-4o-mini'
-        : process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+        : process.env.GEMINI_MODEL || 'gemini-flash-latest',
     caching: 'enabled',
   });
 }
