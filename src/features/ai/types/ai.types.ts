@@ -76,3 +76,24 @@ export function createWelcomeMessage(
     createdAt: new Date().toISOString(),
   };
 }
+
+/**
+ * Types for AI Task Auto-Prioritization (Issue #45).
+ */
+export type TaskPriorityLevel = 'low' | 'medium' | 'high' | 'critical';
+
+export interface TaskPriorityPredictionInput {
+  title: string;
+  description?: string;
+  projectId?: string;
+  columnName?: string;
+  isCsComplaint?: boolean;
+}
+
+export interface TaskPriorityPredictionResult {
+  suggestedPriority: TaskPriorityLevel;
+  estimatedDuration: string;
+  reason: string;
+  confidenceScore?: number;
+  isCached?: boolean;
+}

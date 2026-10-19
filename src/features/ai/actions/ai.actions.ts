@@ -11,8 +11,14 @@ import { invokeLlm, type LlmProvider } from '../lib/llm-client';
 import {
   DEFAULT_SYSTEM_PROMPT,
   buildSystemPromptWithContext,
+  TASK_PRIORITY_PREDICTION_SYSTEM_PROMPT,
+  buildTaskPriorityPrompt,
   type ChatContextParams,
 } from '../lib/prompt-templates';
+import type {
+  TaskPriorityPredictionInput,
+  TaskPriorityPredictionResult,
+} from '../types/ai.types';
 
 export interface SendAiChatMessageInput {
   prompt: string;
@@ -137,6 +143,120 @@ export async function sendAiChatMessageAction(
     return {
       success: false,
       error: { _form: [message] },
+    };
+  }
+}
+
+import {
+  parsePredictionOutput,
+  generateFallbackPrediction,
+} from '../lib/task-prioritizing';
+
+export { generateFallbackPrediction };
+
+/**
+ * Server action to predict task priority and duration from title & description (Issue #45).
+ * Queries PostgreSQL cache first, falls back to LLM inference or instant heuristic evaluation.
+ */
+export async function predictTaskPriorityAction(
+  input: TaskPriorityPredictionInput
+): Promise<ActionState<TaskPriorityPredictionResult>> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return {
+        success: false,
+        error: {
+          _form: ['Unauthorized: Silakan masuk untuk menggunakan asisten AI.'],
+        },
+      };
+    }
+
+    const trimmedTitle = input.title?.trim();
+    if (!trimmedTitle || trimmedTitle.length < 3) {
+      return {
+        success: false,
+        error: {
+          title: [
+            'Judul tugas minimal 3 karakter untuk memprediksi prioritas.',
+          ],
+        },
+      };
+    }
+
+    const promptText = buildTaskPriorityPrompt({
+      title: trimmedTitle,
+      description: input.description,
+      columnName: input.columnName,
+      isCsComplaint: input.isCsComplaint,
+    });
+
+    // 1. Check PostgreSQL query cache (hashed with priority-pred prefix)
+    const queryHash = generateQueryHash(promptText, 'priority-pred');
+    const cached = await getCachedAiResponse(queryHash);
+
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached.responseText);
+        if (parsed.suggestedPriority && parsed.estimatedDuration) {
+          return {
+            success: true,
+            data: {
+              ...parsed,
+              isCached: true,
+            },
+          };
+        }
+      } catch {
+        // Cached value wasn't valid JSON, continue to LLM invocation
+      }
+    }
+
+    // 2. Invoke LLM with strict JSON system prompt
+    const llmResult = await invokeLlm({
+      prompt: promptText,
+      systemPrompt: TASK_PRIORITY_PREDICTION_SYSTEM_PROMPT,
+      temperature: 0.2,
+      maxTokens: 300,
+      timeoutMs: 15000,
+    });
+
+    // 3. Parse LLM response JSON safely
+    const prediction = parsePredictionOutput(
+      llmResult.text,
+      trimmedTitle,
+      input.isCsComplaint
+    );
+
+    // 4. Save result in PostgreSQL cache for instant identical queries
+    await saveCachedAiResponse({
+      queryHash,
+      queryText: promptText,
+      responseText: JSON.stringify(prediction),
+    });
+
+    return {
+      success: true,
+      data: {
+        ...prediction,
+        isCached: false,
+      },
+    };
+  } catch (error) {
+    console.error('Error in predictTaskPriorityAction:', error);
+    // Graceful fallback heuristics so user experience in task dialog is never broken
+    const fallback = generateFallbackPrediction(
+      input.title || '',
+      input.isCsComplaint
+    );
+    return {
+      success: true,
+      data: fallback,
     };
   }
 }

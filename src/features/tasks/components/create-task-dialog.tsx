@@ -2,7 +2,15 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Plus, Loader2, Calendar, Flame, User, GitBranch } from 'lucide-react';
+import {
+  Plus,
+  Loader2,
+  Calendar,
+  Flame,
+  User,
+  GitBranch,
+  Sparkles,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -18,6 +26,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { createTaskAction } from '../actions/task.actions';
+import { predictTaskPriorityAction } from '@/features/ai/actions/ai.actions';
+import type {
+  TaskPriorityLevel,
+  TaskPriorityPredictionResult,
+} from '@/features/ai/types/ai.types';
+import { TaskAiPriorityHint } from './task-ai-priority-hint';
 import { toast } from 'sonner';
 
 export interface ColumnOption {
@@ -105,6 +119,17 @@ export function CreateTaskDialog({
 
   const [errors, setErrors] = React.useState<Record<string, string[]>>({});
 
+  // AI Auto-Prioritizing State (Issue #45)
+  const [aiPrediction, setAiPrediction] =
+    React.useState<TaskPriorityPredictionResult | null>(null);
+  const [isAiPredicting, setIsAiPredicting] = React.useState(false);
+  const [isAiHintDismissed, setIsAiHintDismissed] = React.useState(false);
+  const lastPredictedQueryRef = React.useRef<string>('');
+
+  // Derived state to avoid calling setState synchronously in effect
+  const activeAiPrediction = title.trim().length >= 4 ? aiPrediction : null;
+  const activeIsAiPredicting = title.trim().length >= 4 && isAiPredicting;
+
   const resetForm = React.useCallback(() => {
     setTitle('');
     setDescription('');
@@ -116,7 +141,60 @@ export function CreateTaskDialog({
     setAssigneeId('');
     setGithubBranch('');
     setErrors({});
+    setAiPrediction(null);
+    setIsAiPredicting(false);
+    setIsAiHintDismissed(false);
+    lastPredictedQueryRef.current = '';
   }, [defaultColumnId, columns]);
+
+  // Debounced listener to predict task priority when title, description, or CS origin changes
+  React.useEffect(() => {
+    const trimmedTitle = title.trim();
+    if (trimmedTitle.length < 4) {
+      return;
+    }
+
+    const currentQueryKey = `${trimmedTitle}:::${description.trim()}:::${isCsComplaint}`;
+    if (currentQueryKey === lastPredictedQueryRef.current) {
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsAiPredicting(true);
+      setIsAiHintDismissed(false);
+      lastPredictedQueryRef.current = currentQueryKey;
+
+      try {
+        const targetColumnName = columns.find((c) => c.id === columnId)?.name;
+        const res = await predictTaskPriorityAction({
+          title: trimmedTitle,
+          description: description.trim(),
+          columnName: targetColumnName,
+          isCsComplaint,
+        });
+
+        if (res.success && res.data) {
+          setAiPrediction(res.data);
+        }
+      } catch (err) {
+        console.error('Failed to predict task priority:', err);
+      } finally {
+        setIsAiPredicting(false);
+      }
+    }, 700);
+
+    return () => clearTimeout(timer);
+  }, [title, description, isCsComplaint, columnId, columns]);
+
+  const handleApplyAiPriority = React.useCallback(
+    (suggestedPriority: TaskPriorityLevel) => {
+      setPriority(suggestedPriority);
+      toast.success(
+        `Prioritas "${suggestedPriority.toUpperCase()}" berhasil diterapkan dari saran AI!`
+      );
+    },
+    []
+  );
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -343,9 +421,17 @@ export function CreateTaskDialog({
 
               {/* Tingkat Prioritas */}
               <div className="space-y-1.5">
-                <Label className="text-xs font-semibold">
-                  Tingkat Prioritas
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label className="text-xs font-semibold">
+                    Tingkat Prioritas
+                  </Label>
+                  {activeIsAiPredicting && (
+                    <span className="flex items-center gap-1 text-[10px] text-primary animate-pulse">
+                      <Sparkles className="h-3 w-3" />
+                      <span>Analisis AI...</span>
+                    </span>
+                  )}
+                </div>
                 <div className="grid grid-cols-2 gap-2">
                   {PRIORITIES.map((p) => {
                     const isSelected = priority === p.value;
@@ -364,6 +450,20 @@ export function CreateTaskDialog({
                     );
                   })}
                 </div>
+
+                {/* AI Auto-Prioritizing Hint (Issue #45) */}
+                {!isAiHintDismissed &&
+                  (activeIsAiPredicting || activeAiPrediction) && (
+                    <div className="pt-1">
+                      <TaskAiPriorityHint
+                        isLoading={activeIsAiPredicting}
+                        prediction={activeAiPrediction}
+                        currentPriority={priority}
+                        onApply={handleApplyAiPriority}
+                        onDismiss={() => setIsAiHintDismissed(true)}
+                      />
+                    </div>
+                  )}
               </div>
 
               {/* Tenggat Waktu (Due Date) */}
