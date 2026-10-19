@@ -48,7 +48,9 @@ export function DashboardHeader({
               </h1>
               <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 border border-primary/20 px-2.5 py-0.5 text-xs font-semibold text-primary">
                 <Users className="h-3 w-3" />
-                <span>Tim {teamName}</span>
+                <span>
+                  {teamName.startsWith('Semua') ? teamName : `Tim ${teamName}`}
+                </span>
               </span>
               <span className="inline-flex items-center gap-1 rounded-full bg-muted border px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
                 <Calendar className="h-3 w-3" />

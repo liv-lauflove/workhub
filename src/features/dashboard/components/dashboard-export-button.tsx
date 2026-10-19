@@ -26,10 +26,12 @@ export function DashboardExportButton({
     try {
       const q = searchParams.get('q');
       const year = searchParams.get('year');
+      const team = searchParams.get('team') || searchParams.get('teamId');
 
       const params = new URLSearchParams();
       if (q) params.set('q', q);
       if (year) params.set('year', year);
+      if (team) params.set('team', team);
 
       const queryStr = params.toString();
       const exportUrl = queryStr
