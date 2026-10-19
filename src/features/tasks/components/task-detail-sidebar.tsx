@@ -22,6 +22,7 @@ import {
 } from './task-assignee-selector';
 import { TaskRoleAssigneeSelector } from './task-role-assignee-selector';
 import { TaskDevTestControls } from './task-dev-test-controls';
+import { TaskBranchInput } from './task-branch-input';
 import type { TaskDetail } from '../types/task.types';
 
 interface TaskDetailSidebarProps {
@@ -278,7 +279,7 @@ export function TaskDetailSidebar({
         </div>
       </div>
 
-      {/* 6. Development Section (GitHub Issue Style) */}
+      {/* 6. Development Section (GitHub Branch Input - Issue #40) */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
           <div className="flex items-center gap-1.5">
@@ -287,26 +288,11 @@ export function TaskDetailSidebar({
           </div>
         </div>
 
-        {task.github_branch ? (
-          <div className="pt-1 space-y-1.5">
-            <div className="inline-flex items-center gap-1.5 rounded-lg border bg-muted/50 px-2.5 py-1 text-xs font-mono text-foreground max-w-full">
-              <GitBranch className="h-3.5 w-3.5 text-primary shrink-0" />
-              <span className="truncate">{task.github_branch}</span>
-            </div>
-            <p className="text-[11px] text-muted-foreground">
-              Branch aktif untuk pelacakan kode
-            </p>
-          </div>
-        ) : (
-          <div className="pt-1 space-y-1">
-            <p className="text-xs text-muted-foreground italic">
-              Belum ada branch GitHub yang ditautkan.
-            </p>
-            <p className="text-[11px] text-muted-foreground/70">
-              Integrasi sinkronisasi commit otomatis akan aktif di Fase 3.
-            </p>
-          </div>
-        )}
+        <TaskBranchInput
+          taskId={task.id}
+          initialBranch={task.github_branch}
+          projectId={task.project_id}
+        />
       </div>
     </aside>
   );
