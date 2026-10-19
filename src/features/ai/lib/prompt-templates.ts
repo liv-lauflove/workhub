@@ -52,6 +52,52 @@ export const PROMPTS = {
     'Assess milestone health based on task progress, remaining days, and overdue items.',
 } as const;
 
+/**
+ * System prompt specifically tuned for predictive task auto-prioritization (Issue #45).
+ * Instructs the LLM to output strictly formatted JSON containing priority, duration, and rationale.
+ */
+export const TASK_PRIORITY_PREDICTION_SYSTEM_PROMPT = `You are a Technical Lead and Engineering Prioritization Expert at Workhub.
+Your objective is to analyze a software engineering task's title and description to predict its optimal priority level and estimated completion duration.
+
+Priority Evaluation Rules:
+- "critical": System downtime, security vulnerability, data loss, broken payment/checkout, blocking the entire sprint or active customer incident.
+- "high": Major functional bug, critical customer-facing feature, broken core flow, time-sensitive milestone deliverable.
+- "medium": Standard feature development, non-blocking bug, standard API integration, technical debt refactor, typical sprint task.
+- "low": Minor cosmetic/UI tweak, typo, copy change, non-urgent documentation, minor optimization.
+
+Duration Evaluation Rules:
+- Provide a realistic software developer completion time estimate in Indonesian (e.g., "30 menit", "1-2 jam", "3-4 jam", "1 hari", "2-3 hari").
+
+Output Format:
+You MUST respond with a valid JSON object ONLY. Do NOT include markdown code fences (\`\`\`json) or any conversational text.
+{
+  "suggestedPriority": "critical" | "high" | "medium" | "low",
+  "estimatedDuration": "<duration string in Indonesian>",
+  "reason": "<concise 1-2 sentence explanation in Indonesian explaining why this priority and duration is recommended>"
+}`;
+
+/**
+ * Formats task input into a clean prompt string for priority prediction.
+ */
+export function buildTaskPriorityPrompt(input: {
+  title: string;
+  description?: string;
+  columnName?: string;
+  isCsComplaint?: boolean;
+}): string {
+  const parts: string[] = [`Task Title: "${input.title}"`];
+  if (input.description?.trim()) {
+    parts.push(`Task Description: "${input.description.trim()}"`);
+  }
+  if (input.columnName) {
+    parts.push(`Target Status Column: "${input.columnName}"`);
+  }
+  if (input.isCsComplaint) {
+    parts.push(`Origin: Customer Support (CS) complaint / ticket.`);
+  }
+  return parts.join('\n');
+}
+
 export interface ChatContextParams {
   userName?: string;
   userRole?: string;
