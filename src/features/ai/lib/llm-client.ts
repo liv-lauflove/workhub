@@ -32,7 +32,7 @@ export interface InvokeLlmOptions {
   temperature?: number;
   maxTokens?: number;
   /**
-   * Request timeout in milliseconds (default: 30000ms).
+   * Request timeout in milliseconds (default: 60000ms).
    */
   timeoutMs?: number;
 }
@@ -227,7 +227,8 @@ export async function invokeLlm(
     requestedProvider,
     temperature = 0.7,
     maxTokens = 2048,
-    timeoutMs = 30000,
+    timeoutMs = options.timeoutMs ??
+      (Number(process.env.AI_TIMEOUT_MS) || 60000),
   } = {
     ...options,
     requestedProvider: options.provider,
@@ -280,7 +281,8 @@ export async function invokeLlm(
   }
 
   // Default: Gemini
-  const model = options.model || process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+  const model =
+    options.model || process.env.GEMINI_MODEL || 'gemini-flash-latest';
   return await callGemini(
     apiKey,
     model,
