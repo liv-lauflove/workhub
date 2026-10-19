@@ -114,57 +114,96 @@ export function isTaskInQuarter(
 }
 
 /**
+ * Pre-fetched context to skip redundant auth/profile/team queries
+ * when the caller (e.g. page.tsx) already has this data.
+ */
+export interface DashboardContext {
+  userRole: string;
+  teamName: string;
+}
+
+/**
  * Fetches aggregate performance data for the leader's dashboard.
  * Supports team-level scoping, quarter/year filtering, task status breakdown,
  * project metrics, priority distribution, and team capacity integration.
+ *
+ * When `context` is provided, skips internal auth/profile/team queries
+ * to avoid redundant Supabase roundtrips (saves ~4 network calls).
  */
 export async function getDashboardPerformance(
   targetTeamId?: string,
-  filters?: QuarterFilter
+  filters?: QuarterFilter,
+  context?: DashboardContext
 ): Promise<DashboardPerformanceData | null> {
   const supabase = await createClient();
 
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+  let userRole: string;
+  let teamId: string | null;
+  let teamName: string;
 
-  if (authError || !user) {
-    throw new Error('Sesi autentikasi tidak valid atau telah berakhir.');
+  if (context && targetTeamId) {
+    // Fast path: caller already resolved profile & team
+    userRole = context.userRole;
+    teamId = targetTeamId;
+    teamName = context.teamName;
+  } else {
+    // Fallback: resolve auth + profile + team internally
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      throw new Error('Sesi autentikasi tidak valid atau telah berakhir.');
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id, full_name, role, team_id')
+      .eq('id', user.id)
+      .single();
+
+    userRole = profile?.role || 'member';
+    teamId = targetTeamId || profile?.team_id || null;
+
+    if (!teamId) {
+      return null;
+    }
+
+    const isAll = teamId === 'all';
+    if (isAll) {
+      teamName = 'Semua Tim (BSA Tech)';
+    } else {
+      const { data: team } = await supabase
+        .from('teams')
+        .select('id, name')
+        .eq('id', teamId)
+        .single();
+      teamName = team?.name || 'My Team';
+    }
   }
-
-  // 1. Resolve current user profile & team
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('id, full_name, role, team_id')
-    .eq('id', user.id)
-    .single();
-
-  const userRole = profile?.role || 'member';
-  const teamId = targetTeamId || profile?.team_id || null;
 
   if (!teamId) {
     return null;
   }
 
-  // 2. Fetch team info
-  const { data: team } = await supabase
-    .from('teams')
-    .select('id, name')
-    .eq('id', teamId)
-    .single();
+  const isAllTeams = teamId === 'all';
 
-  const teamName = team?.name || 'My Team';
-
-  // 3. Fetch team workload overview
-  const teamWorkload = await getTeamWorkload(teamId);
-
-  // 4. Fetch team projects
-  const { data: projectsData, error: projectsError } = await supabase
+  // Parallel fetch: workload + projects (independent queries)
+  let projectsQuery = supabase
     .from('projects')
     .select('id, name, status, milestone_id')
-    .eq('team_id', teamId)
     .is('archived_at', null);
+
+  if (!isAllTeams) {
+    projectsQuery = projectsQuery.eq('team_id', teamId);
+  }
+
+  const [teamWorkload, { data: projectsData, error: projectsError }] =
+    await Promise.all([
+      getTeamWorkload(isAllTeams ? 'all' : teamId),
+      projectsQuery,
+    ]);
 
   if (projectsError) {
     console.error('Error fetching team projects for dashboard:', projectsError);
@@ -388,12 +427,19 @@ export async function getDashboardExportData(
 
   const supabase = await createClient();
 
+  const isAllTeams = performanceData.teamId === 'all';
+
   // Fetch team projects to map project IDs to project names
-  const { data: projectsData } = await supabase
+  let projectsQuery = supabase
     .from('projects')
     .select('id, name')
-    .eq('team_id', performanceData.teamId)
     .is('archived_at', null);
+
+  if (!isAllTeams) {
+    projectsQuery = projectsQuery.eq('team_id', performanceData.teamId);
+  }
+
+  const { data: projectsData } = await projectsQuery;
 
   const projects = projectsData || [];
   const projectIds = projects.map((p) => p.id);

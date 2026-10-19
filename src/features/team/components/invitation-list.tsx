@@ -8,13 +8,15 @@ import { Button } from '@/components/ui/button';
 import { revokeInvitation } from '@/features/team/actions/team.actions';
 import { cn } from 'cn';
 
-interface Invitation {
+export interface Invitation {
   id: string;
   email: string;
   role: 'leader' | 'member';
   status: 'pending' | 'accepted' | 'expired' | 'revoked';
   created_at: string;
   expires_at: string;
+  team_id?: string;
+  team_name?: string;
 }
 
 interface InvitationListProps {
@@ -145,7 +147,14 @@ export function InvitationList({
             className="flex items-center justify-between gap-4 px-4 py-3"
           >
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{inv.email}</p>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <p className="truncate text-sm font-medium">{inv.email}</p>
+                {inv.team_name && (
+                  <span className="rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[10px] font-medium text-primary">
+                    {inv.team_name}
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-muted-foreground">
                 {inv.role === 'leader' ? 'Leader' : 'Member'} •{' '}
                 {new Date(inv.created_at).toLocaleDateString('id-ID', {
@@ -170,7 +179,10 @@ export function InvitationList({
               {isLeader && inv.status === 'pending' && (
                 <>
                   <CopyLinkButton email={inv.email} />
-                  <RevokeButton invitationId={inv.id} teamId={teamId} />
+                  <RevokeButton
+                    invitationId={inv.id}
+                    teamId={inv.team_id || teamId}
+                  />
                 </>
               )}
             </div>

@@ -60,39 +60,62 @@ export async function getTeamWorkload(
     return null;
   }
 
-  // 2. Fetch team details
-  const { data: team, error: teamError } = await supabase
-    .from('teams')
-    .select('id, name')
-    .eq('id', teamId)
-    .single();
+  const isAllTeams = teamId === 'all';
 
-  if (teamError || !team) {
-    console.error('Error fetching team for workload calculation:', teamError);
-    return null;
-  }
-
-  // 3. Fetch capacity settings for baseline points
-  const { data: capacitySetting } = await supabase
-    .from('capacity_settings')
-    .select('baseline_points')
-    .eq('team_id', teamId)
-    .maybeSingle();
-
-  const baselinePoints =
-    capacitySetting?.baseline_points && capacitySetting.baseline_points > 0
-      ? capacitySetting.baseline_points
-      : DEFAULT_BASELINE_POINTS;
-
-  // 4. Fetch team members (profiles)
-  const { data: members, error: membersError } = await supabase
+  // Parallel fetch: team details + members (independent queries)
+  let membersQuery = supabase
     .from('profiles')
     .select(
       'id, full_name, avatar_url, role, team_id, position, capacity_points'
     )
-    .eq('team_id', teamId)
     .order('role', { ascending: true })
     .order('full_name', { ascending: true });
+
+  if (!isAllTeams) {
+    membersQuery = membersQuery.eq('team_id', teamId);
+  }
+
+  // Build team info promise
+  const teamInfoPromise = (async () => {
+    if (isAllTeams) {
+      return {
+        teamName: 'Semua Tim (BSA Tech)',
+        baselinePoints: DEFAULT_BASELINE_POINTS,
+      };
+    }
+    const [{ data: team, error: teamError }, { data: capacitySetting }] =
+      await Promise.all([
+        supabase.from('teams').select('id, name').eq('id', teamId!).single(),
+        supabase
+          .from('capacity_settings')
+          .select('baseline_points')
+          .eq('team_id', teamId!)
+          .maybeSingle(),
+      ]);
+
+    if (teamError || !team) {
+      console.error('Error fetching team for workload calculation:', teamError);
+      return null;
+    }
+
+    const bp =
+      capacitySetting?.baseline_points && capacitySetting.baseline_points > 0
+        ? capacitySetting.baseline_points
+        : DEFAULT_BASELINE_POINTS;
+
+    return { teamName: team.name, baselinePoints: bp };
+  })();
+
+  const [teamInfo, { data: members, error: membersError }] = await Promise.all([
+    teamInfoPromise,
+    membersQuery,
+  ]);
+
+  if (!teamInfo) {
+    return null;
+  }
+
+  const { teamName, baselinePoints } = teamInfo;
 
   if (membersError || !members) {
     console.error(
@@ -104,8 +127,8 @@ export async function getTeamWorkload(
 
   if (members.length === 0) {
     return {
-      teamId: team.id,
-      teamName: team.name,
+      teamId: isAllTeams ? 'all' : teamId,
+      teamName,
       baselinePoints,
       totalActiveTasks: 0,
       totalTeamWeight: 0,
@@ -219,8 +242,8 @@ export async function getTeamWorkload(
   ).length;
 
   return {
-    teamId: team.id,
-    teamName: team.name,
+    teamId: isAllTeams ? 'all' : teamId,
+    teamName,
     baselinePoints,
     totalActiveTasks,
     totalTeamWeight,
@@ -395,7 +418,7 @@ export async function getTeamCriticalWatchlist(
     .not('due_date', 'is', null)
     .in('priority', ['high', 'critical', 'urgent']);
 
-  if (teamId) {
+  if (teamId && teamId !== 'all') {
     // Filter tasks where project belongs to this team
     const { data: teamProjects } = await supabase
       .from('projects')

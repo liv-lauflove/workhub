@@ -2,6 +2,10 @@ import { type NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getDashboardExportData } from '@/features/dashboard/queries/dashboard.queries';
 import { generateDashboardCsv } from '@/features/dashboard/lib/export.utils';
+import {
+  isManagementTeam,
+  getTeams,
+} from '@/features/team/queries/team.queries';
 import type { QuarterFilter } from '@/features/dashboard/types/dashboard.types';
 
 /**
@@ -70,8 +74,29 @@ export async function GET(request: NextRequest) {
       year,
     };
 
-    // 4. Fetch aggregated performance and itemized tasks
-    const exportData = await getDashboardExportData(profile.team_id, filters);
+    // 4. Resolve target team for export (Management multi-team support)
+    const teamParam = searchParams.get('team') || searchParams.get('teamId');
+    const isManagement = await isManagementTeam(profile.team_id);
+    let targetTeamId = profile.team_id;
+
+    if (isManagement) {
+      if (teamParam === 'all') {
+        targetTeamId = 'all';
+      } else if (teamParam) {
+        const teams = await getTeams();
+        const found = teams.find(
+          (t) =>
+            t.id === teamParam ||
+            t.name.toLowerCase() === teamParam.toLowerCase()
+        );
+        targetTeamId = found ? found.id : 'all';
+      } else {
+        targetTeamId = 'all';
+      }
+    }
+
+    // 5. Fetch aggregated performance and itemized tasks
+    const exportData = await getDashboardExportData(targetTeamId, filters);
 
     if (!exportData) {
       return NextResponse.json(

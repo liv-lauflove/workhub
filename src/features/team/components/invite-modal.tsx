@@ -20,9 +20,15 @@ import { inviteTeamMember } from '@/features/team/actions/team.actions';
 
 interface InviteModalProps {
   teamId: string;
+  teams?: Array<{ id: string; name: string }>;
+  isManagement?: boolean;
 }
 
-export function InviteModal({ teamId }: InviteModalProps) {
+export function InviteModal({
+  teamId,
+  teams = [],
+  isManagement = false,
+}: InviteModalProps) {
   const router = useRouter();
   const [open, setOpen] = React.useState(false);
   const [isPending, setIsPending] = React.useState(false);
@@ -36,10 +42,15 @@ export function InviteModal({ teamId }: InviteModalProps) {
     try {
       const email = (formData.get('email') as string)?.trim();
       const role = (formData.get('role') as 'leader' | 'member') || 'member';
+      const targetTeamId = (formData.get('teamId') as string)?.trim() || teamId;
 
-      console.log('🚀 [InviteModal] Submitting form:', { email, role, teamId });
+      console.log('🚀 [InviteModal] Submitting form:', {
+        email,
+        role,
+        teamId: targetTeamId,
+      });
 
-      const res = await inviteTeamMember({ email, role, teamId });
+      const res = await inviteTeamMember({ email, role, teamId: targetTeamId });
       console.log('🚀 [InviteModal] Response received:', res);
 
       if (res.success) {
@@ -89,7 +100,26 @@ export function InviteModal({ teamId }: InviteModalProps) {
         </DialogHeader>
 
         <form action={handleAction} className="space-y-4">
-          <input type="hidden" name="teamId" value={teamId} />
+          {isManagement && teams.length > 0 ? (
+            <div className="space-y-2">
+              <Label htmlFor="invite-team">Tim Tujuan</Label>
+              <select
+                id="invite-team"
+                name="teamId"
+                defaultValue={teamId}
+                disabled={isPending}
+                className="flex h-8 w-full rounded-lg border border-input bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/50 disabled:opacity-50"
+              >
+                {teams.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    Tim {t.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <input type="hidden" name="teamId" value={teamId} />
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="invite-email">Email</Label>

@@ -3,6 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
+import { isManagementTeam } from '../queries/team.queries';
 import type { ActionState } from '@/types/global';
 import { z } from 'zod';
 
@@ -85,7 +86,8 @@ export async function inviteTeamMember(
     };
   }
 
-  if (profile.team_id !== parsed.data.teamId) {
+  const isManagement = await isManagementTeam(profile.team_id);
+  if (!isManagement && profile.team_id !== parsed.data.teamId) {
     console.error(
       '❌ [inviteTeamMember] Team mismatch:',
       profile.team_id,
@@ -173,10 +175,20 @@ export async function revokeInvitation(
   }
 
   const profile = await getUserProfile();
-  if (!profile || profile.role !== 'leader' || profile.team_id !== teamId) {
+  if (!profile || profile.role !== 'leader') {
     return {
       success: false,
       error: { _form: ['Hanya leader tim yang dapat membatalkan undangan.'] },
+    };
+  }
+
+  const isManagement = await isManagementTeam(profile.team_id);
+  if (!isManagement && profile.team_id !== teamId) {
+    return {
+      success: false,
+      error: {
+        _form: ['Anda tidak memiliki izin untuk membatalkan undangan tim ini.'],
+      },
     };
   }
 
@@ -219,10 +231,18 @@ export async function updateMemberRole(
   }
 
   const profile = await getUserProfile();
-  if (!profile || profile.role !== 'leader' || profile.team_id !== teamId) {
+  if (!profile || profile.role !== 'leader') {
     return {
       success: false,
       error: { _form: ['Hanya leader tim yang dapat mengubah role anggota.'] },
+    };
+  }
+
+  const isManagement = await isManagementTeam(profile.team_id);
+  if (!isManagement && profile.team_id !== teamId) {
+    return {
+      success: false,
+      error: { _form: ['Anda tidak memiliki akses ke tim ini.'] },
     };
   }
 
@@ -299,13 +319,23 @@ export async function updateMemberCapacity(
   }
 
   const profile = await getUserProfile();
-  if (!profile || profile.role !== 'leader' || profile.team_id !== teamId) {
+  if (!profile || profile.role !== 'leader') {
     return {
       success: false,
       error: {
         _form: [
           'Hanya leader tim yang memiliki wewenang mengatur kapasitas poin anggota.',
         ],
+      },
+    };
+  }
+
+  const isManagement = await isManagementTeam(profile.team_id);
+  if (!isManagement && profile.team_id !== teamId) {
+    return {
+      success: false,
+      error: {
+        _form: ['Anda tidak memiliki akses ke tim ini.'],
       },
     };
   }
