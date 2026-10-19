@@ -372,6 +372,92 @@ export async function updateTaskDescriptionAction({
   }
 }
 
+export interface UpdateTaskBranchInput {
+  taskId: string;
+  githubBranch: string | null;
+  projectId?: string | null;
+}
+
+/**
+ * Server action to update a task's GitHub branch name.
+ * Issue #40: [GitHub] UI Input Branch Name
+ */
+export async function updateTaskBranchAction({
+  taskId,
+  githubBranch,
+  projectId,
+}: UpdateTaskBranchInput): Promise<
+  ActionState<{ id: string; githubBranch: string | null }>
+> {
+  if (!taskId) {
+    return {
+      success: false,
+      error: { _form: ['Task ID harus disediakan.'] },
+    };
+  }
+
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError || !user) {
+      return {
+        success: false,
+        error: { _form: ['Sesi login tidak valid atau telah berakhir.'] },
+      };
+    }
+
+    const sanitizedBranch = githubBranch?.trim() || null;
+
+    const { data: updatedTask, error: updateError } = await supabase
+      .from('tasks')
+      .update({
+        github_branch: sanitizedBranch,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', taskId)
+      .select('id, github_branch')
+      .single();
+
+    if (updateError) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            updateError.message || 'Gagal memperbarui nama branch di database.',
+          ],
+        },
+      };
+    }
+
+    if (projectId) {
+      revalidatePath(`/projects/${projectId}`);
+    }
+    revalidatePath('/tasks');
+    revalidatePath(`/tasks/${taskId}`);
+
+    return {
+      success: true,
+      data: {
+        id: updatedTask.id,
+        githubBranch: updatedTask.github_branch,
+      },
+    };
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : 'Terjadi kesalahan sistem saat menyimpan nama branch.';
+    return {
+      success: false,
+      error: { _form: [message] },
+    };
+  }
+}
+
 export interface UpdateTaskRoleAssigneeInput {
   taskId: string;
   role: 'developer' | 'tester';
