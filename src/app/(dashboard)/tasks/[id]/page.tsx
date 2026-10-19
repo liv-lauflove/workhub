@@ -7,7 +7,7 @@ import {
   getTaskActivityLogs,
   getTaskAttachments,
 } from '@/features/tasks/queries/task.queries';
-import { getTeamMembers } from '@/features/team/queries/team.queries';
+import { getAssignableTeamMembers } from '@/features/team/queries/team.queries';
 import { TaskDetailView } from '@/features/tasks/components/task-detail-view';
 import { ROUTES } from '@/config/routes';
 
@@ -58,7 +58,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
   ]);
 
   const teamId = task.project?.team_id || profile.team_id;
-  const rawMembers = teamId ? await getTeamMembers(teamId) : [];
+  const rawMembers = await getAssignableTeamMembers(teamId);
   const teamMembers = (rawMembers || []).map((m) => ({
     id: m.id,
     full_name: m.full_name,

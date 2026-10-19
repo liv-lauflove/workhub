@@ -17,11 +17,13 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { createClient } from '@/lib/supabase/server';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
 import { getProjectById } from '@/features/projects/queries/project.queries';
 import { getProjectBoardColumns } from '@/features/kanban/queries/kanban.queries';
-import { getTeamMembers } from '@/features/team/queries/team.queries';
+import {
+  getAssignableTeamMembers,
+  isManagementTeam,
+} from '@/features/team/queries/team.queries';
 import { ProjectTasksView } from '@/features/projects/components/project-tasks-view';
 import { ROUTES } from '@/config/routes';
 
@@ -93,26 +95,13 @@ export default async function ProjectDetailPage({
     notFound();
   }
 
-  const [columns, teamMembers] = await Promise.all([
+  const [columns, teamMembers, isManagement] = await Promise.all([
     getProjectBoardColumns(id),
-    project.team_id ? getTeamMembers(project.team_id) : Promise.resolve([]),
+    getAssignableTeamMembers(project.team_id),
+    isManagementTeam(profile.team_id),
   ]);
   const statusCfg = STATUS_CONFIG[project.status] || STATUS_CONFIG.planned;
   const progressPercent = Math.min(Math.max(project.progress, 0), 100);
-
-  // User can only create task if they belong to project's team or belong to Management team
-  let isManagement = false;
-  if (profile.team_id) {
-    const supabase = await createClient();
-    const { data: userTeam } = await supabase
-      .from('teams')
-      .select('name')
-      .eq('id', profile.team_id)
-      .single();
-    if (userTeam?.name === 'Management') {
-      isManagement = true;
-    }
-  }
 
   const canCreateTask =
     isManagement || !project.team_id || profile.team_id === project.team_id;

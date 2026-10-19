@@ -1,13 +1,24 @@
 import type { Metadata } from 'next';
-import { Users } from 'lucide-react';
+import Link from 'next/link';
+import { Users, Shield } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
 import {
   getTeamMembers,
   getTeamInvitations,
   getTeams,
+  getAllTeamMembers,
+  getAllTeamInvitations,
+  isManagementTeam,
 } from '@/features/team/queries/team.queries';
-import { TeamMemberList } from '@/features/team/components/team-member-list';
-import { InvitationList } from '@/features/team/components/invitation-list';
+import {
+  TeamMemberList,
+  type TeamMember,
+} from '@/features/team/components/team-member-list';
+import {
+  InvitationList,
+  type Invitation,
+} from '@/features/team/components/invitation-list';
 import { InviteModal } from '@/features/team/components/invite-modal';
 import { redirect } from 'next/navigation';
 import { ROUTES } from '@/config/routes';
@@ -17,7 +28,11 @@ export const metadata: Metadata = {
   description: 'Kelola anggota tim dan undangan.',
 };
 
-export default async function TeamPage() {
+interface TeamPageProps {
+  searchParams?: Promise<{ team?: string }>;
+}
+
+export default async function TeamPage({ searchParams }: TeamPageProps) {
   const profile = await getUserProfile();
 
   if (!profile) {
@@ -58,23 +73,103 @@ export default async function TeamPage() {
     );
   }
 
-  const [members, invitations, teams] = await Promise.all([
-    getTeamMembers(teamId),
-    isLeader ? getTeamInvitations(teamId) : Promise.resolve([]),
-    getTeams(),
-  ]);
+  const teams = await getTeams();
+  const isManagement = await isManagementTeam(teamId);
+  const resolvedParams = searchParams ? await searchParams : {};
+  const currentTab =
+    resolvedParams?.team || (isManagement ? 'all' : teamId) || 'all';
 
-  const teamName = teams.find((t) => t.id === teamId)?.name ?? 'Tim';
+  let members: TeamMember[] = [];
+  let invitations: Invitation[] = [];
+  let displayTitle = '';
+  let activeTargetTeamId = teamId;
+
+  if (isManagement) {
+    if (currentTab === 'all') {
+      [members, invitations] = await Promise.all([
+        getAllTeamMembers(),
+        isLeader ? getAllTeamInvitations() : Promise.resolve([]),
+      ]);
+      displayTitle = 'Semua Tim (BSA Tech)';
+      const defaultSquad =
+        teams.find((t) => t.name !== 'Management') || teams[0];
+      activeTargetTeamId = defaultSquad?.id ?? teamId;
+    } else {
+      const targetTeam = teams.find(
+        (t) =>
+          t.id === currentTab ||
+          t.name.toLowerCase() === currentTab.toLowerCase()
+      );
+      activeTargetTeamId = targetTeam ? targetTeam.id : teamId;
+      const targetTeamName = targetTeam ? targetTeam.name : 'Tim';
+
+      [members, invitations] = await Promise.all([
+        getTeamMembers(activeTargetTeamId),
+        isLeader ? getTeamInvitations(activeTargetTeamId) : Promise.resolve([]),
+      ]);
+      displayTitle = `Tim ${targetTeamName}`;
+    }
+  } else {
+    const userTeam = teams.find((t) => t.id === teamId);
+    const teamName = userTeam?.name ?? 'Tim';
+    [members, invitations] = await Promise.all([
+      getTeamMembers(teamId),
+      isLeader ? getTeamInvitations(teamId) : Promise.resolve([]),
+    ]);
+    displayTitle = `Tim ${teamName}`;
+  }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8">
+    <div className="mx-auto max-w-4xl space-y-8">
+      {/* Executive Team Switcher Tabs for Management */}
+      {isManagement && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <Shield className="h-3.5 w-3.5 text-primary" />
+            <span>Executive Team Switcher</span>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 border-b pb-3">
+            <Link
+              href="/team?team=all"
+              className={cn(
+                'rounded-lg px-3.5 py-1.5 text-xs font-medium transition-colors',
+                currentTab === 'all'
+                  ? 'bg-primary text-primary-foreground shadow-xs'
+                  : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
+              )}
+            >
+              Semua Tim
+            </Link>
+            {teams.map((t) => {
+              const isSelected =
+                currentTab === t.id ||
+                currentTab.toLowerCase() === t.name.toLowerCase();
+              return (
+                <Link
+                  key={t.id}
+                  href={`/team?team=${t.name.toLowerCase()}`}
+                  className={cn(
+                    'rounded-lg px-3.5 py-1.5 text-xs font-medium transition-colors',
+                    isSelected
+                      ? 'bg-primary text-primary-foreground shadow-xs'
+                      : 'bg-muted/70 text-muted-foreground hover:bg-muted hover:text-foreground'
+                  )}
+                >
+                  Tim {t.name}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Users className="h-6 w-6 text-primary" />
           <div>
             <h1 className="text-2xl font-bold tracking-tight">
-              Tim {teamName}
+              {displayTitle}
             </h1>
             <p className="text-sm text-muted-foreground">
               {members.length} anggota
@@ -82,13 +177,23 @@ export default async function TeamPage() {
           </div>
         </div>
 
-        {isLeader && <InviteModal teamId={teamId} />}
+        {isLeader && (
+          <InviteModal
+            teamId={activeTargetTeamId}
+            teams={teams}
+            isManagement={isManagement}
+          />
+        )}
       </div>
 
       {/* Team Members Section */}
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">Anggota</h2>
-        <TeamMemberList members={members} isLeader={isLeader} teamId={teamId} />
+        <TeamMemberList
+          members={members}
+          isLeader={isLeader}
+          teamId={activeTargetTeamId}
+        />
       </section>
 
       {/* Invitations Section (Leader Only) */}
@@ -97,7 +202,7 @@ export default async function TeamPage() {
           <h2 className="text-lg font-semibold">Undangan</h2>
           <InvitationList
             invitations={invitations}
-            teamId={teamId}
+            teamId={activeTargetTeamId}
             isLeader={isLeader}
           />
         </section>

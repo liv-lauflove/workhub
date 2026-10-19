@@ -41,7 +41,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 
-interface TeamMember {
+export interface TeamMember {
   id: string;
   full_name: string;
   role: 'leader' | 'member';
@@ -49,6 +49,7 @@ interface TeamMember {
   github_username: string | null;
   created_at: string;
   team_id?: string | null;
+  team_name?: string | null;
   position?: string | null;
   capacity_points?: number | null;
 }
@@ -185,9 +186,16 @@ export function TeamMemberList({
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">
-                        {member.full_name}
-                      </p>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <p className="truncate text-sm font-medium">
+                          {member.full_name}
+                        </p>
+                        {member.team_name && (
+                          <span className="rounded-full bg-primary/10 border border-primary/20 px-2 py-0.5 text-[10px] font-medium text-primary">
+                            Tim {member.team_name}
+                          </span>
+                        )}
+                      </div>
                       {member.github_username && (
                         <p className="truncate text-xs text-muted-foreground">
                           @{member.github_username}
