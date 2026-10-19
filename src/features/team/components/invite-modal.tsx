@@ -42,8 +42,7 @@ export function InviteModal({
     try {
       const email = (formData.get('email') as string)?.trim();
       const role = (formData.get('role') as 'leader' | 'member') || 'member';
-      const targetTeamId =
-        (formData.get('teamId') as string)?.trim() || teamId;
+      const targetTeamId = (formData.get('teamId') as string)?.trim() || teamId;
 
       console.log('🚀 [InviteModal] Submitting form:', {
         email,
