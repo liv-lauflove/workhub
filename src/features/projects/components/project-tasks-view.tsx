@@ -148,7 +148,7 @@ export function ProjectTasksView({
 
         {/* Action Controls */}
         <div className="flex items-center gap-2.5 pb-2">
-          {canCreateTask && (
+          {canCreateTask ? (
             <CreateTaskDialog
               projectId={projectId}
               columns={columns.map((c) => ({ id: c.id, name: c.name }))}
@@ -164,10 +164,17 @@ export function ProjectTasksView({
                   className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs"
                 >
                   <Plus className="mr-1.5 h-3.5 w-3.5" />
-                  <span>New task</span>
+                  <span>Tambah Task</span>
                 </Button>
               }
             />
+          ) : (
+            <span
+              className="text-[11px] text-muted-foreground bg-muted/60 border border-border/80 rounded-md px-2.5 py-1"
+              title="Hanya anggota tim proyek terkait atau Tim Management yang dapat menambahkan task"
+            >
+              Proyek Tim Lain (Read-only)
+            </span>
           )}
         </div>
       </div>
@@ -192,11 +199,32 @@ export function ProjectTasksView({
 
       {activeTab === 'kanban' && (
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <span className="text-xs text-muted-foreground">
               Geser kartu secara horizontal atau drag-and-drop antar kolom untuk
               memperbarui tahap pengerjaan.
             </span>
+            {canCreateTask && (
+              <CreateTaskDialog
+                projectId={projectId}
+                columns={columns.map((c) => ({ id: c.id, name: c.name }))}
+                teamMembers={teamMembers.map((m) => ({
+                  id: m.id,
+                  full_name: m.full_name,
+                  role: m.role || 'member',
+                  avatar_url: m.avatar_url,
+                }))}
+                triggerButton={
+                  <Button
+                    size="sm"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs shrink-0 self-start sm:self-auto"
+                  >
+                    <Plus className="mr-1.5 h-3.5 w-3.5" />
+                    <span>Tambah Task</span>
+                  </Button>
+                }
+              />
+            )}
           </div>
           <KanbanBoard
             columns={columns}
