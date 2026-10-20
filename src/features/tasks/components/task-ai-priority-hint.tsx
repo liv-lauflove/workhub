@@ -1,7 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { Sparkles, Check, Clock, X, Zap } from 'lucide-react';
+import {
+  Sparkles,
+  Check,
+  Clock,
+  X,
+  Zap,
+  RotateCcw,
+  ShieldCheck,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type {
   TaskPriorityLevel,
@@ -84,11 +92,14 @@ export function TaskAiPriorityHint({
   return (
     <div
       className={cn(
-        'relative rounded-xl border border-primary/20 bg-primary/5 p-3.5 text-xs text-foreground transition-all shadow-2xs',
+        'relative rounded-xl border p-3.5 text-xs transition-all shadow-2xs',
+        isApplied
+          ? 'border-primary/20 bg-primary/5 text-foreground'
+          : 'border-amber-500/30 bg-amber-500/5 text-foreground',
         className
       )}
     >
-      {/* Header bar: AI badge + predicted tags */}
+      {/* Header bar: AI badge + predicted tags + status */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 font-semibold text-primary">
           <Sparkles className="h-3.5 w-3.5 shrink-0" />
@@ -123,6 +134,17 @@ export function TaskAiPriorityHint({
             </span>
           )}
 
+          {/* Override Indicator Tag */}
+          {!isApplied && (
+            <span
+              className="inline-flex items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-medium text-amber-700 dark:text-amber-400"
+              title="Human Override: Anda memilih tingkat prioritas yang berbeda dari rekomendasi AI"
+            >
+              <ShieldCheck className="h-2.5 w-2.5" />
+              <span>Override</span>
+            </span>
+          )}
+
           {/* Dismiss button */}
           {onDismiss && (
             <button
@@ -144,11 +166,16 @@ export function TaskAiPriorityHint({
       </p>
 
       {/* Action footer */}
-      <div className="mt-2.5 flex items-center justify-between pt-2 border-t border-primary/10">
+      <div
+        className={cn(
+          'mt-2.5 flex items-center justify-between pt-2 border-t',
+          isApplied ? 'border-primary/10' : 'border-amber-500/20'
+        )}
+      >
         <span className="text-[10px] text-muted-foreground">
           {isApplied
-            ? '✓ Prioritas yang disarankan AI telah dipilih.'
-            : 'Klik tombol di samping untuk menerapkan rekomendasi AI:'}
+            ? '✓ Prioritas yang disarankan AI telah aktif.'
+            : `Pilihan Anda (${currentPriority.toUpperCase()}) menggantikan rekomendasi AI.`}
         </span>
 
         {isApplied ? (
@@ -161,8 +188,10 @@ export function TaskAiPriorityHint({
             type="button"
             onClick={() => onApply(prediction.suggestedPriority)}
             className="inline-flex items-center gap-1 rounded-lg bg-primary/90 hover:bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground shadow-2xs transition-all cursor-pointer active:scale-95"
+            title={`Gunakan prioritas rekomendasi AI: ${badgeInfo.label}`}
           >
-            <span>Terapkan {badgeInfo.label}</span>
+            <RotateCcw className="h-3 w-3" />
+            <span>Gunakan Rekomendasi AI ({badgeInfo.label})</span>
           </button>
         )}
       </div>

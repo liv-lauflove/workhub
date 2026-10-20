@@ -219,6 +219,8 @@ export function CreateTaskDialog({
         dueDate: dueDate || undefined,
         assigneeId: assigneeId || undefined,
         githubBranch: githubBranch || undefined,
+        aiSuggestedPriority: aiPrediction?.suggestedPriority,
+        aiSuggestedDuration: aiPrediction?.estimatedDuration,
       });
 
       if (!result.success) {
