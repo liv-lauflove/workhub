@@ -120,3 +120,81 @@ export function generateFallbackPrediction(
     confidenceScore: 0.75,
   };
 }
+
+/**
+ * Safely parses human-readable duration strings (Indonesian/English) into numeric hours
+ * for storage in ai_suggestion_overrides.suggested_duration_hours (Issue #46).
+ */
+export function parseDurationToHours(
+  durationStr?: string | null
+): number | null {
+  if (!durationStr || typeof durationStr !== 'string') return null;
+
+  const lower = durationStr.toLowerCase().trim();
+
+  // Range pattern like "1-2 jam", "2 - 4 jam", "2-3 hari"
+  const rangeMatch = lower.match(
+    /^(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*(jam|hari|menit|hours?|days?|mins?)$/
+  );
+  if (rangeMatch) {
+    const min = parseFloat(rangeMatch[1]);
+    const max = parseFloat(rangeMatch[2]);
+    const unit = rangeMatch[3];
+    const avg = (min + max) / 2;
+
+    if (unit.startsWith('menit') || unit.startsWith('min')) {
+      return Math.round((avg / 60) * 100) / 100;
+    }
+    if (unit.startsWith('hari') || unit.startsWith('day')) {
+      return Math.round(avg * 8 * 100) / 100; // 8 hours per workday
+    }
+    return Math.round(avg * 100) / 100; // hours
+  }
+
+  // Single pattern like "30 menit", "2 jam", "1 hari"
+  const singleMatch = lower.match(
+    /^(\d+(?:\.\d+)?)\s*(jam|hari|menit|hours?|days?|mins?)$/
+  );
+  if (singleMatch) {
+    const val = parseFloat(singleMatch[1]);
+    const unit = singleMatch[2];
+
+    if (unit.startsWith('menit') || unit.startsWith('min')) {
+      return Math.round((val / 60) * 100) / 100;
+    }
+    if (unit.startsWith('hari') || unit.startsWith('day')) {
+      return Math.round(val * 8 * 100) / 100;
+    }
+    return Math.round(val * 100) / 100;
+  }
+
+  // Fallback: search for numbers followed by unit
+  if (lower.includes('menit') || lower.includes('min')) {
+    const num = parseFloat(lower);
+    if (!isNaN(num)) return Math.round((num / 60) * 100) / 100;
+  }
+  if (lower.includes('hari') || lower.includes('day')) {
+    const num = parseFloat(lower);
+    if (!isNaN(num)) return Math.round(num * 8 * 100) / 100;
+  }
+  if (lower.includes('jam') || lower.includes('hour')) {
+    const num = parseFloat(lower);
+    if (!isNaN(num)) return Math.round(num * 100) / 100;
+  }
+
+  return null;
+}
+
+/**
+ * Evaluates whether an AI suggestion was overridden by the user (Issue #46).
+ */
+export function detectPriorityOverride(
+  finalPriority: string,
+  suggestedPriority?: string | null
+): boolean {
+  if (!suggestedPriority) return false;
+  const cleanSuggested = suggestedPriority.trim().toLowerCase();
+  const cleanFinal = finalPriority.trim().toLowerCase();
+  if (!cleanSuggested || !cleanFinal) return false;
+  return cleanSuggested !== cleanFinal;
+}

@@ -50,6 +50,17 @@ export const createTaskSchema = z
       .max(100, 'Nama branch maksimal 100 karakter')
       .optional()
       .or(z.literal('')),
+    aiSuggestedPriority: z
+      .enum(['critical', 'high', 'medium', 'low'])
+      .optional()
+      .or(z.literal('')),
+    aiSuggestedDuration: z
+      .string()
+      .trim()
+      .max(100)
+      .optional()
+      .or(z.literal('')),
+    aiSuggestedDurationHours: z.number().nonnegative().optional(),
   })
   .refine(
     (data) => {
