@@ -132,9 +132,9 @@ export function parseDurationToHours(
 
   const lower = durationStr.toLowerCase().trim();
 
-  // Range pattern like "1-2 jam", "2 - 4 jam", "2-3 hari"
+  // Range pattern like "1-2 jam", "2 - 4 jam", "2-3 hari", "1-2 weeks"
   const rangeMatch = lower.match(
-    /^(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*(jam|hari|menit|hours?|days?|mins?)$/
+    /^(\d+(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*(minggu|weeks?|hari|days?|menit|minutes?|mins?|jam|hours?|hrs?|[hdw])$/
   );
   if (rangeMatch) {
     const min = parseFloat(rangeMatch[1]);
@@ -142,28 +142,34 @@ export function parseDurationToHours(
     const unit = rangeMatch[3];
     const avg = (min + max) / 2;
 
+    if (unit === 'minggu' || unit.startsWith('week') || unit === 'w') {
+      return Math.round(avg * 40 * 100) / 100;
+    }
+    if (unit === 'hari' || unit.startsWith('day') || unit === 'd') {
+      return Math.round(avg * 8 * 100) / 100; // 8 hours per workday
+    }
     if (unit.startsWith('menit') || unit.startsWith('min')) {
       return Math.round((avg / 60) * 100) / 100;
     }
-    if (unit.startsWith('hari') || unit.startsWith('day')) {
-      return Math.round(avg * 8 * 100) / 100; // 8 hours per workday
-    }
-    return Math.round(avg * 100) / 100; // hours
+    return Math.round(avg * 100) / 100; // hours (jam, hour, hrs, h)
   }
 
-  // Single pattern like "30 menit", "2 jam", "1 hari"
+  // Single pattern like "30 menit", "2 jam", "8 h", "1 hari", "2 weeks"
   const singleMatch = lower.match(
-    /^(\d+(?:\.\d+)?)\s*(jam|hari|menit|hours?|days?|mins?)$/
+    /^(\d+(?:\.\d+)?)\s*(minggu|weeks?|hari|days?|menit|minutes?|mins?|jam|hours?|hrs?|[hdw])$/
   );
   if (singleMatch) {
     const val = parseFloat(singleMatch[1]);
     const unit = singleMatch[2];
 
+    if (unit === 'minggu' || unit.startsWith('week') || unit === 'w') {
+      return Math.round(val * 40 * 100) / 100;
+    }
+    if (unit === 'hari' || unit.startsWith('day') || unit === 'd') {
+      return Math.round(val * 8 * 100) / 100;
+    }
     if (unit.startsWith('menit') || unit.startsWith('min')) {
       return Math.round((val / 60) * 100) / 100;
-    }
-    if (unit.startsWith('hari') || unit.startsWith('day')) {
-      return Math.round(val * 8 * 100) / 100;
     }
     return Math.round(val * 100) / 100;
   }
@@ -173,11 +179,20 @@ export function parseDurationToHours(
     const num = parseFloat(lower);
     if (!isNaN(num)) return Math.round((num / 60) * 100) / 100;
   }
+  if (lower.includes('minggu') || lower.includes('week')) {
+    const num = parseFloat(lower);
+    if (!isNaN(num)) return Math.round(num * 40 * 100) / 100;
+  }
   if (lower.includes('hari') || lower.includes('day')) {
     const num = parseFloat(lower);
     if (!isNaN(num)) return Math.round(num * 8 * 100) / 100;
   }
-  if (lower.includes('jam') || lower.includes('hour')) {
+  if (
+    lower.includes('jam') ||
+    lower.includes('hour') ||
+    lower.includes('hr') ||
+    /\b\d+\s*h\b/.test(lower)
+  ) {
     const num = parseFloat(lower);
     if (!isNaN(num)) return Math.round(num * 100) / 100;
   }
