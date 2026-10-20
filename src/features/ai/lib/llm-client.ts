@@ -120,19 +120,40 @@ async function callGemini(
     };
   }
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload),
-    signal,
-  });
+  let response: Response | undefined;
+  const maxRetries = 2;
 
-  if (!response.ok) {
-    const errorBody = await response.text().catch(() => '');
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal,
+    });
+
+    if (response.ok) {
+      break;
+    }
+
+    // Auto-retry transient server errors (503 Service Unavailable, 429 Rate Limit)
+    if (
+      (response.status === 503 || response.status === 429) &&
+      attempt < maxRetries &&
+      !signal?.aborted
+    ) {
+      await new Promise((resolve) => setTimeout(resolve, 1500 * (attempt + 1)));
+      continue;
+    }
+
+    break;
+  }
+
+  if (!response || !response.ok) {
+    const errorBody = (await response?.text().catch(() => '')) || '';
     throw new Error(
-      `Gemini API error (${response.status} ${response.statusText}): ${errorBody}`
+      `Gemini API error (${response?.status || 'unknown'} ${response?.statusText || ''}): ${errorBody}`
     );
   }
 
