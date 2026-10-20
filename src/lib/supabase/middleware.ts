@@ -46,9 +46,11 @@ export async function updateSession(request: NextRequest) {
   const isAuthRoute =
     pathname.startsWith('/login') || pathname.startsWith('/register');
   const isCallbackRoute = pathname.startsWith('/auth/callback');
+  const isPublicApiRoute =
+    pathname.startsWith('/api/github-webhook') || pathname === '/api/health';
 
   // Case 1: Unauthenticated user trying to access protected routes -> redirect to /login
-  if (!user && !isAuthRoute && !isCallbackRoute) {
+  if (!user && !isAuthRoute && !isCallbackRoute && !isPublicApiRoute) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     const redirectResponse = NextResponse.redirect(url);
