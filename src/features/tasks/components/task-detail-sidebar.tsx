@@ -9,6 +9,7 @@ import {
   Calendar,
   AlertCircle,
   GitBranch,
+  GitCommit,
   Flame,
   ArrowUpRight,
   Clock,
@@ -29,6 +30,7 @@ interface TaskDetailSidebarProps {
   task: TaskDetail;
   availableColumns: { id: string; name: string; position: number }[];
   teamMembers?: TeamMemberOption[];
+  commitsCount?: number;
 }
 
 function getPriorityBadgeClass(priority?: string): string {
@@ -63,6 +65,7 @@ export function TaskDetailSidebar({
   task,
   availableColumns,
   teamMembers = [],
+  commitsCount = 0,
 }: TaskDetailSidebarProps) {
   const isCsComplaint = task.origin === 'cs_complaint';
   const todayStr = React.useMemo(
@@ -286,6 +289,15 @@ export function TaskDetailSidebar({
             <GitBranch className="h-3.5 w-3.5" />
             <span>Development</span>
           </div>
+          {commitsCount > 0 && (
+            <span
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20"
+              title={`${commitsCount} commit tersinkronisasi`}
+            >
+              <GitCommit className="h-3 w-3" />
+              <span>{commitsCount} commit</span>
+            </span>
+          )}
         </div>
 
         <TaskBranchInput

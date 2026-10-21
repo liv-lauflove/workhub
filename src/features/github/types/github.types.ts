@@ -87,3 +87,13 @@ export interface WebhookProcessResult {
   insertedCommitsCount?: number;
   details?: Record<string, unknown>;
 }
+
+export interface TaskGithubCommit {
+  id: string;
+  task_id: string;
+  commit_sha: string;
+  commit_message: string | null;
+  author_username: string | null;
+  committed_at: string | null;
+  url: string | null;
+}

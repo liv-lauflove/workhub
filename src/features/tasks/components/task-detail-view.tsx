@@ -5,6 +5,7 @@ import { TaskDetailHeader } from './task-detail-header';
 import { TaskDetailMain } from './task-detail-main';
 import { TaskDetailSidebar } from './task-detail-sidebar';
 import type { TeamMemberOption } from './task-assignee-selector';
+import type { TaskGithubCommit } from '@/features/github/types/github.types';
 import type {
   TaskDetail,
   TaskActivityLog,
@@ -17,6 +18,7 @@ interface TaskDetailViewProps {
   teamMembers?: TeamMemberOption[];
   activities?: TaskActivityLog[];
   attachments?: TaskAttachmentItem[];
+  commits?: TaskGithubCommit[];
   currentUserId?: string;
   isLeader?: boolean;
 }
@@ -27,6 +29,7 @@ export function TaskDetailView({
   teamMembers = [],
   activities = [],
   attachments = [],
+  commits = [],
   currentUserId,
   isLeader = false,
 }: TaskDetailViewProps) {
@@ -47,6 +50,7 @@ export function TaskDetailView({
             task={task}
             activities={activities}
             attachments={attachments}
+            commits={commits}
             availableColumns={availableColumns}
             teamMembers={teamMembers}
             currentUserId={currentUserId}
@@ -61,6 +65,7 @@ export function TaskDetailView({
               task={task}
               availableColumns={availableColumns}
               teamMembers={teamMembers}
+              commitsCount={commits.length}
             />
           </div>
         </div>
