@@ -18,6 +18,8 @@ import { TaskSubtasksChecklist } from './task-subtasks-checklist';
 import { MarkdownTaskEditor } from './markdown-task-editor';
 import { TaskAttachmentsSection } from './task-attachments-section';
 import { TaskPrReviewerBox } from './task-pr-reviewer-box';
+import { TaskCommitsSection } from './task-commits-section';
+import type { TaskGithubCommit } from '@/features/github/types/github.types';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type {
@@ -31,6 +33,7 @@ interface TaskDetailMainProps {
   task: TaskDetail;
   activities?: TaskActivityLog[];
   attachments?: TaskAttachmentItem[];
+  commits?: TaskGithubCommit[];
   availableColumns?: { id: string; name: string; position: number }[];
   teamMembers?: TeamMemberOption[];
   currentUserId?: string;
@@ -65,6 +68,7 @@ export function TaskDetailMain({
   task,
   activities = [],
   attachments = [],
+  commits = [],
   availableColumns = [],
   teamMembers = [],
   currentUserId,
@@ -318,7 +322,10 @@ export function TaskDetailMain({
         isLeader={isLeader}
       />
 
-      {/* 5. Activity Timeline */}
+      {/* 5. GitHub Commits History Section (Issue #42) */}
+      <TaskCommitsSection task={task} initialCommits={commits} />
+
+      {/* 6. Activity Timeline */}
       <div className="pt-2">
         <TaskActivityTimeline
           activities={activities}

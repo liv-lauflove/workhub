@@ -9,6 +9,7 @@ import {
 } from '@/features/tasks/queries/task.queries';
 import { getAssignableTeamMembers } from '@/features/team/queries/team.queries';
 import { TaskDetailView } from '@/features/tasks/components/task-detail-view';
+import { getTaskCommits } from '@/features/github/queries/github.queries';
 import { ROUTES } from '@/config/routes';
 
 interface TaskDetailPageProps {
@@ -51,11 +52,15 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
     notFound();
   }
 
-  const [availableColumns, activities, attachments] = await Promise.all([
-    task.project_id ? getProjectColumns(task.project_id) : Promise.resolve([]),
-    getTaskActivityLogs(id),
-    getTaskAttachments(id),
-  ]);
+  const [availableColumns, activities, attachments, commits] =
+    await Promise.all([
+      task.project_id
+        ? getProjectColumns(task.project_id)
+        : Promise.resolve([]),
+      getTaskActivityLogs(id),
+      getTaskAttachments(id),
+      getTaskCommits(id),
+    ]);
 
   const teamId = task.project?.team_id || profile.team_id;
   const rawMembers = await getAssignableTeamMembers(teamId);
@@ -73,6 +78,7 @@ export default async function TaskDetailPage({ params }: TaskDetailPageProps) {
       teamMembers={teamMembers}
       activities={activities}
       attachments={attachments}
+      commits={commits}
       currentUserId={profile.id}
       isLeader={profile.role === 'leader'}
     />
