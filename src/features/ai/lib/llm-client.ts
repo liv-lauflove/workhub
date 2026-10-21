@@ -301,9 +301,9 @@ export async function invokeLlm(
     );
   }
 
-  // Default: Gemini
+  // Default: Gemini (Use ultra-fast gemini-flash-lite-latest to avoid timeouts)
   const model =
-    options.model || process.env.GEMINI_MODEL || 'gemini-flash-latest';
+    options.model || process.env.GEMINI_MODEL || 'gemini-flash-lite-latest';
   return await callGemini(
     apiKey,
     model,
