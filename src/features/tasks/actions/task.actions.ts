@@ -11,6 +11,11 @@ import {
 } from '@/lib/storage';
 import type { ActionState } from '@/types/global';
 import type { TaskAttachmentItem } from '../types/task.types';
+import {
+  detectPriorityOverride,
+  parseDurationToHours,
+} from '@/features/ai/lib/task-prioritizing';
+import { recordAiSuggestionOverride } from '@/features/ai/queries/ai-analytics.queries';
 
 /**
  * Server action to create a new Task on a Kanban Board.
@@ -31,6 +36,9 @@ export async function createTaskAction(
     dueDate?: string;
     assigneeId?: string;
     githubBranch?: string;
+    aiSuggestedPriority?: string | null;
+    aiSuggestedDuration?: string | null;
+    aiSuggestedDurationHours?: number | null;
   };
 
   if (input instanceof FormData) {
@@ -45,6 +53,13 @@ export async function createTaskAction(
       dueDate: (input.get('dueDate') as string)?.trim() || undefined,
       assigneeId: (input.get('assigneeId') as string)?.trim() || undefined,
       githubBranch: (input.get('githubBranch') as string)?.trim() || undefined,
+      aiSuggestedPriority:
+        (input.get('aiSuggestedPriority') as string)?.trim() || undefined,
+      aiSuggestedDuration:
+        (input.get('aiSuggestedDuration') as string)?.trim() || undefined,
+      aiSuggestedDurationHours: input.get('aiSuggestedDurationHours')
+        ? Number(input.get('aiSuggestedDurationHours'))
+        : undefined,
     };
   } else {
     rawData = {
@@ -58,6 +73,9 @@ export async function createTaskAction(
       dueDate: input.dueDate || undefined,
       assigneeId: input.assigneeId || undefined,
       githubBranch: input.githubBranch || undefined,
+      aiSuggestedPriority: input.aiSuggestedPriority || undefined,
+      aiSuggestedDuration: input.aiSuggestedDuration || undefined,
+      aiSuggestedDurationHours: input.aiSuggestedDurationHours ?? undefined,
     };
   }
 
@@ -157,6 +175,29 @@ export async function createTaskAction(
           ],
         },
       };
+    }
+
+    // Log AI Suggestion Override if human leader/manager selected a different priority than AI recommended
+    if (
+      parsed.data.aiSuggestedPriority &&
+      detectPriorityOverride(
+        parsed.data.priority,
+        parsed.data.aiSuggestedPriority
+      )
+    ) {
+      const suggestedHours =
+        parsed.data.aiSuggestedDurationHours ??
+        (parsed.data.aiSuggestedDuration
+          ? parseDurationToHours(parsed.data.aiSuggestedDuration)
+          : null);
+
+      await recordAiSuggestionOverride({
+        taskId: task.id,
+        suggestedPriority: parsed.data.aiSuggestedPriority,
+        finalPriority: parsed.data.priority,
+        suggestedDurationHours: suggestedHours,
+        overriddenBy: user.id,
+      });
     }
 
     // Revalidate paths for real-time Kanban & My Tasks UI update

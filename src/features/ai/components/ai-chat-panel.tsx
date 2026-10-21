@@ -1,7 +1,14 @@
 'use client';
 
 import * as React from 'react';
-import { Send, Trash2, X, Sparkles, AlertCircle } from 'lucide-react';
+import {
+  Send,
+  Trash2,
+  X,
+  Sparkles,
+  AlertCircle,
+  RotateCcw,
+} from 'lucide-react';
 import { cn } from 'cn';
 import { sendAiChatMessageAction } from '../actions/ai.actions';
 import { ChatMessageBubble } from './chat-message-bubble';
@@ -41,6 +48,9 @@ export function AiChatPanel({
   const [input, setInput] = React.useState('');
   const [status, setStatus] = React.useState<ChatStatus>('idle');
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [lastFailedPrompt, setLastFailedPrompt] = React.useState<string | null>(
+    null
+  );
 
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
@@ -75,6 +85,7 @@ export function AiChatPanel({
       setInput('');
       setStatus('loading');
       setErrorMessage(null);
+      setLastFailedPrompt(null);
 
       try {
         const result = await sendAiChatMessageAction({
@@ -92,10 +103,19 @@ export function AiChatPanel({
             result.error?.prompt?.[0] ||
             'Gagal mendapatkan tanggapan dari asisten AI.';
           const lower = formError.toLowerCase();
-          const friendlyMessage =
-            lower.includes('timeout') || lower.includes('aborted')
-              ? 'Permintaan ke penyedia AI melebihi batas waktu (timeout). Silakan coba kirim ulang pertanyaan Anda.'
-              : formError;
+          let friendlyMessage = formError;
+          if (lower.includes('timeout') || lower.includes('aborted')) {
+            friendlyMessage =
+              'Permintaan ke penyedia AI melebihi batas waktu (timeout). Silakan coba kirim ulang pertanyaan Anda.';
+          } else if (
+            lower.includes('503') ||
+            lower.includes('high demand') ||
+            lower.includes('unavailable')
+          ) {
+            friendlyMessage =
+              'Server AI Google sedang mengalami lonjakan beban sesaat (High Demand / 503). Silakan klik "Kirim Ulang" di bawah.';
+          }
+          setLastFailedPrompt(prompt);
           setErrorMessage(friendlyMessage);
           setStatus('error');
           return;
@@ -120,10 +140,19 @@ export function AiChatPanel({
             ? err.message
             : 'Terjadi gangguan saat menghubungi server AI.';
         const lower = rawMessage.toLowerCase();
-        const friendlyMessage =
-          lower.includes('timeout') || lower.includes('aborted')
-            ? 'Permintaan ke penyedia AI melebihi batas waktu (timeout). Silakan coba kirim ulang pertanyaan Anda.'
-            : rawMessage;
+        let friendlyMessage = rawMessage;
+        if (lower.includes('timeout') || lower.includes('aborted')) {
+          friendlyMessage =
+            'Permintaan ke penyedia AI melebihi batas waktu (timeout). Silakan coba kirim ulang pertanyaan Anda.';
+        } else if (
+          lower.includes('503') ||
+          lower.includes('high demand') ||
+          lower.includes('unavailable')
+        ) {
+          friendlyMessage =
+            'Server AI Google sedang mengalami lonjakan beban sesaat (High Demand / 503). Silakan klik "Kirim Ulang" di bawah.';
+        }
+        setLastFailedPrompt(prompt);
         setErrorMessage(friendlyMessage);
         setStatus('error');
       }
@@ -141,6 +170,7 @@ export function AiChatPanel({
   const handleClearChat = () => {
     setMessages([createWelcomeMessage(userName, userRole)]);
     setErrorMessage(null);
+    setLastFailedPrompt(null);
     setStatus('idle');
     setInput('');
     textareaRef.current?.focus();
@@ -210,14 +240,28 @@ export function AiChatPanel({
         {status === 'loading' && <ChatTypingIndicator />}
 
         {errorMessage && (
-          <div className="flex items-start gap-2 rounded-xl border border-destructive/30 bg-destructive/10 p-2.5 text-xs text-destructive">
-            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-            <div className="flex flex-1 flex-col text-left">
-              <span className="font-semibold">Gagal Mengirim Pesan</span>
-              <span className="text-[11px] text-destructive/90">
-                {errorMessage}
-              </span>
+          <div className="flex flex-col gap-2 rounded-xl border border-destructive/30 bg-destructive/10 p-3 text-xs text-destructive">
+            <div className="flex items-start gap-2">
+              <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
+              <div className="flex flex-1 flex-col text-left">
+                <span className="font-semibold">Gagal Mengirim Pesan</span>
+                <span className="text-[11px] leading-relaxed text-destructive/90">
+                  {errorMessage}
+                </span>
+              </div>
             </div>
+            {lastFailedPrompt && status !== 'loading' && (
+              <div className="flex justify-end pt-0.5">
+                <button
+                  type="button"
+                  onClick={() => handleSendMessage(lastFailedPrompt)}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-destructive px-2.5 py-1 text-[11px] font-medium text-destructive-foreground hover:bg-destructive/90 transition-all cursor-pointer shadow-xs active:scale-95"
+                >
+                  <RotateCcw className="h-3 w-3" />
+                  <span>Kirim Ulang</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
 
