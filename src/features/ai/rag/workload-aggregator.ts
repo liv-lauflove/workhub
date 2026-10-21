@@ -1,10 +1,13 @@
 import 'server-only';
 
 import { getTeamWorkload } from '@/features/workload/queries/workload.queries';
-import type {
-  TeamWorkloadSummary,
-  MemberWorkload,
-} from '@/features/workload/types/workload.types';
+import type { TeamWorkloadSummary } from '@/features/workload/types/workload.types';
+import {
+  determineAvailabilityStatus,
+  type AvailabilityStatus,
+} from './workload-status';
+
+export { determineAvailabilityStatus, type AvailabilityStatus };
 
 export interface SanitizedMemberAvailability {
   fullName: string;
@@ -13,7 +16,7 @@ export interface SanitizedMemberAvailability {
   activeTaskCount: number;
   totalPoints: number;
   capacityPercentage: number;
-  status: 'AVAILABLE' | 'NORMAL' | 'OVERLOAD';
+  status: AvailabilityStatus;
   priorityBreakdown: string;
   recommendation: string;
 }
@@ -25,21 +28,6 @@ export interface SanitizedTeamWorkloadContext {
   overloadCount: number;
   members: SanitizedMemberAvailability[];
   formattedContextString: string;
-}
-
-/**
- * Calculates human-readable availability status based on capacity percentage and overload flag.
- */
-export function determineAvailabilityStatus(
-  member: MemberWorkload
-): 'AVAILABLE' | 'NORMAL' | 'OVERLOAD' {
-  if (member.isOverloaded || member.capacityPercentage > 80) {
-    return 'OVERLOAD';
-  }
-  if (member.capacityPercentage < 50 && member.activeTaskCount <= 2) {
-    return 'AVAILABLE';
-  }
-  return 'NORMAL';
 }
 
 /**
