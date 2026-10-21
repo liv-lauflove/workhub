@@ -19,6 +19,11 @@ import type {
   TaskPriorityPredictionInput,
   TaskPriorityPredictionResult,
 } from '../types/ai.types';
+import {
+  classifyRagIntent,
+  buildRagPromptHeader,
+} from '../rag/knowledge-extractor';
+import { getSanitizedTeamWorkloadContext } from '../rag/workload-aggregator';
 
 export interface SendAiChatMessageInput {
   prompt: string;
@@ -77,42 +82,68 @@ export async function sendAiChatMessageAction(
       };
     }
 
-    // Step 1: Check PostgreSQL query cache first (SHA-256 hash)
-    const queryHash = generateQueryHash(trimmedPrompt, 'eng-manager');
-    const cached = await getCachedAiResponse(queryHash);
+    // Step 1: Classify RAG query intent (Schema, Workflow, or Live Workload)
+    const { category, requiresWorkload } = classifyRagIntent(trimmedPrompt);
 
-    if (cached) {
-      return {
-        success: true,
-        data: {
-          reply: cached.responseText,
-          isCached: true,
-          provider: 'cache',
-          model: 'postgres-ai-query-cache',
-          cachedAt: cached.createdAt,
-        },
-      };
+    // Step 2: Check PostgreSQL query cache for static/schema queries (bypass for real-time workload)
+    const queryHash = generateQueryHash(trimmedPrompt, 'eng-manager');
+    if (!requiresWorkload) {
+      const cached = await getCachedAiResponse(queryHash);
+      if (cached) {
+        return {
+          success: true,
+          data: {
+            reply: cached.responseText,
+            isCached: true,
+            provider: 'cache',
+            model: 'postgres-ai-query-cache',
+            cachedAt: cached.createdAt,
+          },
+        };
+      }
     }
 
-    // Step 2: Cache miss — Build system prompt with workspace context
-    const systemPrompt = buildSystemPromptWithContext(
+    // Step 3: Retrieve Knowledge Base & Live Sanitized Workload (Issue #97)
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('team_id')
+      .eq('id', user.id)
+      .single();
+    const targetTeamId = profile?.team_id || undefined;
+
+    const ragKnowledgeHeader = buildRagPromptHeader(trimmedPrompt);
+    let workloadBlock = '';
+
+    if (requiresWorkload || category === 'workload') {
+      const workloadSummary =
+        await getSanitizedTeamWorkloadContext(targetTeamId);
+      if (workloadSummary?.formattedContextString) {
+        workloadBlock = `\n\n${workloadSummary.formattedContextString}`;
+      }
+    }
+
+    const basePromptWithContext = buildSystemPromptWithContext(
       DEFAULT_SYSTEM_PROMPT,
       input.context
     );
 
-    // Step 3: Invoke LLM provider
+    const systemPrompt = `${basePromptWithContext}${ragKnowledgeHeader}${workloadBlock}`;
+
+    // Step 4: Invoke LLM provider
     const llmResult = await invokeLlm({
       prompt: trimmedPrompt,
       systemPrompt,
       provider: input.provider,
     });
 
-    // Step 4: Persist successful response in PostgreSQL cache
-    await saveCachedAiResponse({
-      queryHash,
-      queryText: trimmedPrompt,
-      responseText: llmResult.text,
-    });
+    // Step 5: Persist successful response in PostgreSQL cache if static query
+    if (!requiresWorkload) {
+      await saveCachedAiResponse({
+        queryHash,
+        queryText: trimmedPrompt,
+        responseText: llmResult.text,
+      });
+    }
 
     return {
       success: true,
