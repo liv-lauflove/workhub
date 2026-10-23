@@ -303,6 +303,7 @@ export function TaskDetailSidebar({
         <TaskBranchInput
           taskId={task.id}
           initialBranch={task.github_branch}
+          initialRepo={task.github_repo}
           projectId={task.project_id}
         />
       </div>

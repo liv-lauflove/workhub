@@ -16,6 +16,7 @@ import {
   parseDurationToHours,
 } from '@/features/ai/lib/task-prioritizing';
 import { recordAiSuggestionOverride } from '@/features/ai/queries/ai-analytics.queries';
+import { normalizeGithubRepository } from '@/features/github/lib/webhook-verifier';
 
 /**
  * Server action to create a new Task on a Kanban Board.
@@ -416,6 +417,7 @@ export async function updateTaskDescriptionAction({
 export interface UpdateTaskBranchInput {
   taskId: string;
   githubBranch: string | null;
+  githubRepo?: string | null;
   projectId?: string | null;
 }
 
@@ -427,8 +429,13 @@ export async function updateTaskBranchAction({
   taskId,
   githubBranch,
   projectId,
+  githubRepo,
 }: UpdateTaskBranchInput): Promise<
-  ActionState<{ id: string; githubBranch: string | null }>
+  ActionState<{
+    id: string;
+    githubBranch: string | null;
+    githubRepo: string | null;
+  }>
 > {
   if (!taskId) {
     return {
@@ -452,15 +459,30 @@ export async function updateTaskBranchAction({
     }
 
     const sanitizedBranch = githubBranch?.trim() || null;
+    const sanitizedRepo =
+      githubRepo !== undefined
+        ? normalizeGithubRepository(githubRepo) || null
+        : undefined;
+    const updatePayload: {
+      github_branch: string | null;
+      github_repo?: string | null;
+      updated_at: string;
+    } = {
+      github_branch: sanitizedBranch,
+      updated_at: new Date().toISOString(),
+    };
+    if (sanitizedRepo !== undefined) {
+      updatePayload.github_repo = sanitizedRepo;
+    }
 
     const { data: updatedTask, error: updateError } = await supabase
       .from('tasks')
       .update({
-        github_branch: sanitizedBranch,
+        ...updatePayload,
         updated_at: new Date().toISOString(),
       })
       .eq('id', taskId)
-      .select('id, github_branch')
+      .select('id, github_branch, github_repo')
       .single();
 
     if (updateError) {
@@ -485,6 +507,7 @@ export async function updateTaskBranchAction({
       data: {
         id: updatedTask.id,
         githubBranch: updatedTask.github_branch,
+        githubRepo: updatedTask.github_repo ?? null,
       },
     };
   } catch (err: unknown) {
@@ -1471,6 +1494,7 @@ export async function openPullRequestAction({
     testStatus: 'testing';
     testerId?: string | null;
     githubBranch?: string | null;
+    githubRepo?: string | null;
     columnId?: string;
   }>
 > {
@@ -1548,7 +1572,7 @@ export async function openPullRequestAction({
       .update(updates)
       .eq('id', taskId)
       .select(
-        'id, dev_status, test_status, tester_id, github_branch, column_id'
+        'id, dev_status, test_status, tester_id, github_branch, github_repo, column_id'
       )
       .single();
 
@@ -1577,6 +1601,7 @@ export async function openPullRequestAction({
         testStatus: 'testing',
         testerId: updatedTask.tester_id,
         githubBranch: updatedTask.github_branch,
+        githubRepo: updatedTask.github_repo ?? null,
         columnId: updatedTask.column_id,
       },
     };
