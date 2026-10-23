@@ -1,7 +1,10 @@
 import 'server-only';
 import { revalidatePath } from 'next/cache';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { extractBranchNameFromRef } from './webhook-verifier';
+import {
+  extractBranchNameFromRef,
+  matchesTaskRepository,
+} from './webhook-verifier';
 import type {
   GitHubPushEventPayload,
   WebhookProcessResult,
@@ -13,7 +16,8 @@ type GithubCommitInsert =
 
 /**
  * Handles GitHub "push" webhook events.
- * Matches the pushed branch name against tasks.github_branch in Supabase.
+ * Matches the pushed branch name against tasks.github_branch AND filters by tasks.github_repo
+ * (when configured) to guarantee multi-repository isolation across projects.
  * If matched, persists commits into github_commits table with idempotent upsert.
  *
  * @param payload - Parsed GitHub push event payload
@@ -22,12 +26,15 @@ export async function handleGitHubPushEvent(
   payload: GitHubPushEventPayload
 ): Promise<WebhookProcessResult> {
   const branchName = extractBranchNameFromRef(payload.ref);
+  const repositoryLabel =
+    payload.repository?.full_name || payload.repository?.name || undefined;
 
   if (!branchName) {
     return {
       success: true,
       event: 'push',
       message: 'Empty or unresolvable branch ref. Push event skipped.',
+      repository: repositoryLabel,
     };
   }
 
@@ -38,6 +45,7 @@ export async function handleGitHubPushEvent(
       event: 'push',
       message: `Branch "${branchName}" was deleted. No action needed.`,
       branch: branchName,
+      repository: repositoryLabel,
     };
   }
 
@@ -48,6 +56,7 @@ export async function handleGitHubPushEvent(
       event: 'push',
       message: `Push event on branch "${branchName}" contained no new commits.`,
       branch: branchName,
+      repository: repositoryLabel,
       matchedTasksCount: 0,
       insertedCommitsCount: 0,
     };
@@ -55,10 +64,10 @@ export async function handleGitHubPushEvent(
 
   const supabaseAdmin = createAdminClient();
 
-  // Find all active tasks linked to this branch name
-  const { data: matchedTasks, error: taskQueryError } = await supabaseAdmin
+  // Find candidate tasks linked to this branch name
+  const { data: branchCandidates, error: taskQueryError } = await supabaseAdmin
     .from('tasks')
-    .select('id, title, project_id, github_branch')
+    .select('id, title, project_id, github_branch, github_repo')
     .eq('github_branch', branchName);
 
   if (taskQueryError) {
@@ -72,15 +81,25 @@ export async function handleGitHubPushEvent(
       event: 'push',
       message: `Failed to query tasks for branch "${branchName}": ${taskQueryError.message}`,
       branch: branchName,
+      repository: repositoryLabel,
     };
   }
 
-  if (!matchedTasks || matchedTasks.length === 0) {
+  // Strict multi-repo filtering:
+  // Match tasks where github_repo IS NULL (wildcard) OR matches payload.repository (name / full_name)
+  const matchedTasks = (branchCandidates || []).filter((task) =>
+    matchesTaskRepository(task.github_repo, payload.repository)
+  );
+
+  if (matchedTasks.length === 0) {
     return {
       success: true,
       event: 'push',
-      message: `Push event received for branch "${branchName}". No associated tasks found in Workhub.`,
+      message: `Push event received for branch "${branchName}"${
+        repositoryLabel ? ` on repository "${repositoryLabel}"` : ''
+      }. No matching tasks found in Workhub.`,
       branch: branchName,
+      repository: repositoryLabel,
       matchedTasksCount: 0,
       insertedCommitsCount: 0,
     };
@@ -127,6 +146,7 @@ export async function handleGitHubPushEvent(
       event: 'push',
       message: `Failed to insert commits: ${insertError.message}`,
       branch: branchName,
+      repository: repositoryLabel,
       matchedTasksCount: matchedTasks.length,
     };
   }
@@ -143,8 +163,13 @@ export async function handleGitHubPushEvent(
   return {
     success: true,
     event: 'push',
-    message: `Berhasil mencatat ${commitRecords.length} commit untuk ${matchedTasks.length} task pada branch "${branchName}".`,
+    message: `Berhasil mencatat ${commitRecords.length} commit untuk ${
+      matchedTasks.length
+    } task pada branch "${branchName}"${
+      repositoryLabel ? ` (${repositoryLabel})` : ''
+    }.`,
     branch: branchName,
+    repository: repositoryLabel,
     matchedTasksCount: matchedTasks.length,
     insertedCommitsCount: commitRecords.length,
   };
