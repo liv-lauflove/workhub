@@ -83,6 +83,7 @@ export interface WebhookProcessResult {
   event: string;
   message: string;
   branch?: string;
+  repository?: string;
   matchedTasksCount?: number;
   insertedCommitsCount?: number;
   details?: Record<string, unknown>;

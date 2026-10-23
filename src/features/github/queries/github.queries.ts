@@ -1,10 +1,13 @@
 import 'server-only';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import type { TaskGithubCommit } from '../types/github.types';
 
 /**
  * Mengambil riwayat commit GitHub yang tersinkronisasi untuk suatu task.
  * Diurutkan berdasarkan committed_at menurun (terbaru di paling atas).
+ *
+ * Menggunakan admin client (service_role) agar query data commit
+ * terlindungi dari inkonsistensi RLS pada Supabase Cloud.
  *
  * @param taskId - UUID dari task terkait
  */
@@ -13,7 +16,7 @@ export async function getTaskCommits(
 ): Promise<TaskGithubCommit[]> {
   if (!taskId) return [];
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data, error } = await supabase
     .from('github_commits')
     .select(

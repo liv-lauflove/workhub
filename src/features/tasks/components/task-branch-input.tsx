@@ -3,17 +3,20 @@
 import * as React from 'react';
 import {
   GitBranch,
+  FolderGit2,
   Pencil,
   Check,
   X,
   Loader2,
   Copy,
   Trash2,
+  ExternalLink,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { updateTaskBranchAction } from '../actions/task.actions';
+import { normalizeGithubRepository } from '@/features/github/lib/webhook-verifier';
 
 export function GithubIcon({
   className = 'h-3.5 w-3.5',
@@ -39,6 +42,7 @@ export function GithubIcon({
 interface TaskBranchInputProps {
   taskId: string;
   initialBranch?: string | null;
+  initialRepo?: string | null;
   projectId?: string | null;
   className?: string;
 }
@@ -46,6 +50,7 @@ interface TaskBranchInputProps {
 export function TaskBranchInput({
   taskId,
   initialBranch,
+  initialRepo,
   projectId,
   className = '',
 }: TaskBranchInputProps) {
@@ -53,11 +58,16 @@ export function TaskBranchInput({
   const [prevInitialBranch, setPrevInitialBranch] =
     React.useState(initialBranch);
   const [branchInput, setBranchInput] = React.useState(initialBranch || '');
+
+  const [currentRepo, setCurrentRepo] = React.useState(initialRepo || '');
+  const [prevInitialRepo, setPrevInitialRepo] = React.useState(initialRepo);
+  const [repoInput, setRepoInput] = React.useState(initialRepo || '');
+
   const [isEditing, setIsEditing] = React.useState(false);
   const [isCopied, setIsCopied] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
 
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const branchInputRef = React.useRef<HTMLInputElement>(null);
 
   // Sync state if props change from server revalidation
   if (initialBranch !== prevInitialBranch) {
@@ -68,11 +78,19 @@ export function TaskBranchInput({
     }
   }
 
-  // Auto focus input when entering edit mode
+  if (initialRepo !== prevInitialRepo) {
+    setPrevInitialRepo(initialRepo);
+    setCurrentRepo(initialRepo || '');
+    if (!isEditing) {
+      setRepoInput(initialRepo || '');
+    }
+  }
+
+  // Auto focus branch input when entering edit mode
   React.useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.select();
+    if (isEditing && branchInputRef.current) {
+      branchInputRef.current.focus();
+      branchInputRef.current.select();
     }
   }, [isEditing]);
 
@@ -89,8 +107,10 @@ export function TaskBranchInput({
   };
 
   const handleSave = () => {
-    const trimmed = branchInput.trim();
-    if (trimmed === currentBranch) {
+    const trimmedBranch = branchInput.trim();
+    const normalizedRepo = normalizeGithubRepository(repoInput);
+
+    if (trimmedBranch === currentBranch && normalizedRepo === currentRepo) {
       setIsEditing(false);
       return;
     }
@@ -98,50 +118,63 @@ export function TaskBranchInput({
     startTransition(async () => {
       const result = await updateTaskBranchAction({
         taskId,
-        githubBranch: trimmed || null,
+        githubBranch: trimmedBranch || null,
+        githubRepo: normalizedRepo || null,
         projectId,
       });
 
       if (!result.success) {
         toast.error(
-          result.error?._form?.[0] || 'Gagal menyimpan nama branch GitHub'
+          result.error?._form?.[0] ||
+            'Gagal menyimpan konfigurasi GitHub pada task'
         );
         return;
       }
 
-      setCurrentBranch(trimmed);
-      setBranchInput(trimmed);
+      setCurrentBranch(trimmedBranch);
+      setBranchInput(trimmedBranch);
+      setCurrentRepo(normalizedRepo);
+      setRepoInput(normalizedRepo);
       setIsEditing(false);
 
-      if (trimmed) {
-        toast.success(`Branch GitHub diperbarui: ${trimmed}`);
+      if (trimmedBranch || normalizedRepo) {
+        const summary = [
+          normalizedRepo ? `Repo: ${normalizedRepo}` : null,
+          trimmedBranch ? `Branch: ${trimmedBranch}` : null,
+        ]
+          .filter(Boolean)
+          .join(' • ');
+        toast.success(`Konfigurasi GitHub diperbarui (${summary})`);
       } else {
-        toast.success('Tautan branch GitHub telah dihapus');
+        toast.success('Tautan GitHub telah dihapus');
       }
     });
   };
 
   const handleClear = () => {
-    if (!currentBranch) return;
+    if (!currentBranch && !currentRepo) return;
 
     startTransition(async () => {
       const result = await updateTaskBranchAction({
         taskId,
         githubBranch: null,
+        githubRepo: null,
         projectId,
       });
 
       if (!result.success) {
         toast.error(
-          result.error?._form?.[0] || 'Gagal menghapus branch GitHub'
+          result.error?._form?.[0] || 'Gagal menghapus tautan GitHub'
         );
         return;
       }
 
       setCurrentBranch('');
       setBranchInput('');
+      setCurrentRepo('');
+      setRepoInput('');
       setIsEditing(false);
-      toast.success('Tautan branch GitHub berhasil dihapus');
+      toast.success('Tautan repository & branch GitHub berhasil dihapus');
     });
   };
 
@@ -152,50 +185,90 @@ export function TaskBranchInput({
     } else if (e.key === 'Escape') {
       e.preventDefault();
       setBranchInput(currentBranch);
+      setRepoInput(currentRepo);
       setIsEditing(false);
     }
   };
 
+  const hasLinkedConfig = Boolean(currentBranch || currentRepo);
+  const repoUrl =
+    currentRepo && currentRepo.includes('/')
+      ? `https://github.com/${currentRepo}`
+      : null;
+
   return (
     <div className={`space-y-2 ${className}`}>
-      {/* View Mode (Branch is set and not editing) */}
-      {!isEditing && currentBranch ? (
+      {/* View Mode (Branch or Repo is set and not editing) */}
+      {!isEditing && hasLinkedConfig ? (
         <div className="space-y-2 pt-1">
-          <div className="group relative flex items-center justify-between gap-2 rounded-lg border bg-muted/40 p-2 transition-all hover:bg-muted/60">
-            <div className="flex min-w-0 items-center gap-2">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-background text-foreground shadow-2xs">
+          <div className="group relative flex items-start justify-between gap-2 rounded-lg border bg-muted/40 p-2.5 transition-all hover:bg-muted/60">
+            <div className="flex min-w-0 items-start gap-2.5">
+              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-background text-foreground shadow-2xs">
                 <GithubIcon className="h-3.5 w-3.5" />
               </span>
-              <div className="min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <GitBranch className="h-3 w-3 text-primary shrink-0" />
-                  <span
-                    className="truncate font-mono text-xs font-semibold text-foreground"
-                    title={currentBranch}
-                  >
-                    {currentBranch}
+              <div className="min-w-0 space-y-1">
+                {currentRepo && (
+                  <div className="flex items-center gap-1.5">
+                    <FolderGit2 className="h-3 w-3 text-muted-foreground shrink-0" />
+                    {repoUrl ? (
+                      <a
+                        href={repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 truncate font-mono text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
+                        title={`Repository: ${currentRepo}`}
+                      >
+                        <span className="truncate">{currentRepo}</span>
+                        <ExternalLink className="h-2.5 w-2.5 shrink-0 opacity-70" />
+                      </a>
+                    ) : (
+                      <span
+                        className="truncate font-mono text-[11px] font-medium text-muted-foreground"
+                        title={`Repository: ${currentRepo}`}
+                      >
+                        {currentRepo}
+                      </span>
+                    )}
+                  </div>
+                )}
+
+                {currentBranch ? (
+                  <div className="flex items-center gap-1.5">
+                    <GitBranch className="h-3 w-3 text-primary shrink-0" />
+                    <span
+                      className="truncate font-mono text-xs font-semibold text-foreground"
+                      title={`Branch: ${currentBranch}`}
+                    >
+                      {currentBranch}
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-[11px] italic text-muted-foreground">
+                    Belum ada nama branch
                   </span>
-                </div>
+                )}
               </div>
             </div>
 
             {/* Quick Action Buttons */}
-            <div className="flex shrink-0 items-center gap-1">
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={handleCopyBranch}
-                className="h-7 w-7 text-muted-foreground hover:text-foreground cursor-pointer"
-                title="Salin nama branch"
-              >
-                {isCopied ? (
-                  <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-                ) : (
-                  <Copy className="h-3.5 w-3.5" />
-                )}
-                <span className="sr-only">Salin nama branch</span>
-              </Button>
+            <div className="flex shrink-0 items-center gap-0.5">
+              {currentBranch && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleCopyBranch}
+                  className="h-7 w-7 text-muted-foreground hover:text-foreground cursor-pointer"
+                  title="Salin nama branch"
+                >
+                  {isCopied ? (
+                    <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                  ) : (
+                    <Copy className="h-3.5 w-3.5" />
+                  )}
+                  <span className="sr-only">Salin nama branch</span>
+                </Button>
+              )}
 
               <Button
                 type="button"
@@ -204,10 +277,10 @@ export function TaskBranchInput({
                 onClick={() => setIsEditing(true)}
                 disabled={isPending}
                 className="h-7 w-7 text-muted-foreground hover:text-foreground cursor-pointer"
-                title="Ubah nama branch"
+                title="Ubah repository & branch"
               >
                 <Pencil className="h-3.5 w-3.5" />
-                <span className="sr-only">Ubah nama branch</span>
+                <span className="sr-only">Ubah repository & branch</span>
               </Button>
 
               <Button
@@ -217,48 +290,79 @@ export function TaskBranchInput({
                 onClick={handleClear}
                 disabled={isPending}
                 className="h-7 w-7 text-muted-foreground hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
-                title="Hapus tautan branch"
+                title="Hapus tautan GitHub"
               >
                 {isPending ? (
                   <Loader2 className="h-3.5 w-3.5 animate-spin" />
                 ) : (
                   <Trash2 className="h-3.5 w-3.5" />
                 )}
-                <span className="sr-only">Hapus tautan branch</span>
+                <span className="sr-only">Hapus tautan GitHub</span>
               </Button>
             </div>
           </div>
 
           <p className="text-[11px] text-muted-foreground">
-            Branch aktif untuk pelacakan kode dan sinkronisasi commit otomatis.
+            {currentRepo
+              ? `Sinkronisasi commit difilter khusus untuk repo ${currentRepo}.`
+              : 'Branch aktif untuk pelacakan kode dan sinkronisasi commit otomatis.'}
           </p>
         </div>
       ) : isEditing ? (
         /* Edit Mode */
-        <div className="space-y-2 pt-1">
-          <div className="relative flex items-center">
-            <span className="pointer-events-none absolute left-2.5 text-muted-foreground">
-              <GithubIcon className="h-3.5 w-3.5" />
-            </span>
-            <Input
-              ref={inputRef}
-              type="text"
-              value={branchInput}
-              onChange={(e) => setBranchInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              disabled={isPending}
-              placeholder="misal: feat/issue-40-branch"
-              className="h-8 pl-8 pr-2 text-xs font-mono shadow-2xs"
-            />
+        <div className="space-y-2.5 rounded-lg border bg-muted/20 p-2.5 pt-2">
+          <div className="space-y-1">
+            <label className="flex items-center justify-between text-[11px] font-medium text-muted-foreground">
+              <span>Repository Target</span>
+              <span className="text-[10px] font-normal opacity-75">
+                Opsional (Multi-Repo)
+              </span>
+            </label>
+            <div className="relative flex items-center">
+              <span className="pointer-events-none absolute left-2.5 text-muted-foreground">
+                <FolderGit2 className="h-3.5 w-3.5" />
+              </span>
+              <Input
+                type="text"
+                value={repoInput}
+                onChange={(e) => setRepoInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={isPending}
+                placeholder="misal: liv-lauflove/workhub atau workhub-fe"
+                className="h-8 pl-8 pr-2 text-xs font-mono shadow-2xs"
+              />
+            </div>
           </div>
 
-          <div className="flex items-center justify-end gap-1.5">
+          <div className="space-y-1">
+            <label className="text-[11px] font-medium text-muted-foreground block">
+              Nama Branch
+            </label>
+            <div className="relative flex items-center">
+              <span className="pointer-events-none absolute left-2.5 text-muted-foreground">
+                <GitBranch className="h-3.5 w-3.5" />
+              </span>
+              <Input
+                ref={branchInputRef}
+                type="text"
+                value={branchInput}
+                onChange={(e) => setBranchInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                disabled={isPending}
+                placeholder="misal: feat/issue-133-multi-repo"
+                className="h-8 pl-8 pr-2 text-xs font-mono shadow-2xs"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-1.5 pt-0.5">
             <Button
               type="button"
               variant="outline"
               size="sm"
               onClick={() => {
                 setBranchInput(currentBranch);
+                setRepoInput(currentRepo);
                 setIsEditing(false);
               }}
               disabled={isPending}
@@ -297,7 +401,7 @@ export function TaskBranchInput({
           </p>
         </div>
       ) : (
-        /* Empty State (No branch set, click to add or direct input) */
+        /* Empty State (No branch/repo set, click to add) */
         <div className="space-y-2 pt-1">
           <button
             type="button"
@@ -308,13 +412,13 @@ export function TaskBranchInput({
               <span className="flex h-6 w-6 items-center justify-center rounded-md bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
                 <GithubIcon className="h-3.5 w-3.5" />
               </span>
-              <span>Tautkan branch GitHub...</span>
+              <span>Tautkan repo & branch GitHub...</span>
             </div>
             <Pencil className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
           </button>
           <p className="text-[11px] text-muted-foreground/70">
-            Tautkan branch Git agar riwayat commit dapat terlacak otomatis di
-            task ini.
+            Tautkan repository dan branch Git agar riwayat commit terlacak
+            akurat tanpa bentrok antar-repo.
           </p>
         </div>
       )}

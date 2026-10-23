@@ -8,6 +8,7 @@ import {
   FileText,
   Flag,
   GitBranch,
+  FolderGit2,
   History,
   MoveRight,
   Pencil,
@@ -273,6 +274,21 @@ export function TaskActivityTimeline({
               'bg-zinc-500/10 text-zinc-700 dark:text-zinc-300 border-zinc-500/20',
             actorName,
             lexicalAction: `memperbarui deskripsi task${timeSuffix}`,
+            diff: null,
+          };
+        }
+
+        case 'github_repo': {
+          return {
+            icon: FolderGit2,
+            iconClass:
+              'bg-indigo-500/10 text-indigo-600 border-indigo-500/30 dark:text-indigo-400',
+            badgeClass:
+              'bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/20',
+            actorName,
+            lexicalAction: item.new_value
+              ? `menautkan repository GitHub "${item.new_value}"${timeSuffix}`
+              : `menghapus tautan repository GitHub${timeSuffix}`,
             diff: null,
           };
         }

@@ -2,14 +2,22 @@ import crypto from 'node:crypto';
 import {
   verifyGithubWebhookSignature,
   extractBranchNameFromRef,
+  normalizeGithubRepository,
+  matchesTaskRepository,
+  extractRepositoryFromCommitUrl,
 } from '../src/features/github/lib/webhook-verifier';
 
 /**
- * Verification test for Issue #41: GitHub Webhook Signature Verification and Branch Extraction.
+ * Verification test for Issue #41 & Issue #133:
+ * - GitHub Webhook Signature Verification
+ * - Branch Extraction
+ * - Multi-Repository Normalization & Filtering
  * Run with: npx tsx scripts/test-github-webhook.ts
  */
 async function runTests() {
-  console.log('=== TEST SUITE: ISSUE #41 GITHUB WEBHOOK VERIFIER ===\n');
+  console.log(
+    '=== TEST SUITE: GITHUB WEBHOOK VERIFIER & MULTI-REPO (#41 & #133) ===\n'
+  );
 
   const secret = 'my-super-secret-webhook-key-123';
   const samplePayload = JSON.stringify({
@@ -123,6 +131,84 @@ async function runTests() {
       throw new Error(`Branch extraction mismatch for "${tc.input}"`);
     }
   }
+
+  // 6. Testing Multi-Repo Normalization (#133)
+  console.log('6. Testing Repository Input Normalization (#133):');
+  const repoNormalizationCases = [
+    {
+      input: 'https://github.com/liv-lauflove/workhub.git',
+      expected: 'liv-lauflove/workhub',
+    },
+    {
+      input: 'git@github.com:liv-lauflove/workhub-api.git',
+      expected: 'liv-lauflove/workhub-api',
+    },
+    {
+      input: '  liv-lauflove/workhub-fe/  ',
+      expected: 'liv-lauflove/workhub-fe',
+    },
+    { input: 'workhub-mobile', expected: 'workhub-mobile' },
+    { input: null, expected: '' },
+  ];
+
+  for (const rc of repoNormalizationCases) {
+    const normalized = normalizeGithubRepository(rc.input);
+    const passed = normalized === rc.expected;
+    console.log(
+      `   Input: "${rc.input}" -> "${normalized}" [${passed ? 'OK' : 'MISMATCH'}]`
+    );
+    if (!passed) {
+      throw new Error(`Repo normalization mismatch for "${rc.input}"`);
+    }
+  }
+
+  // 7. Testing Multi-Repo Isolation & Filtering (#133)
+  console.log('7. Testing Multi-Repository Isolation & Filtering (#133):');
+  const frontendPayloadRepo = {
+    name: 'workhub-frontend',
+    full_name: 'liv-lauflove/workhub-frontend',
+    html_url: 'https://github.com/liv-lauflove/workhub-frontend',
+  };
+  const backendPayloadRepo = {
+    name: 'workhub-backend',
+    full_name: 'liv-lauflove/workhub-backend',
+    html_url: 'https://github.com/liv-lauflove/workhub-backend',
+  };
+
+  // Case A: Task with null github_repo matches any repo (backward compatibility)
+  if (!matchesTaskRepository(null, frontendPayloadRepo)) {
+    throw new Error('Null github_repo should match as wildcard!');
+  }
+  // Case B: Task pinned to 'workhub-frontend' matches frontend push
+  if (!matchesTaskRepository('workhub-frontend', frontendPayloadRepo)) {
+    throw new Error('Short repo name should match frontend repo!');
+  }
+  // Case C: Task pinned to 'liv-lauflove/workhub-frontend' matches frontend push
+  if (
+    !matchesTaskRepository(
+      'https://github.com/liv-lauflove/workhub-frontend.git',
+      frontendPayloadRepo
+    )
+  ) {
+    throw new Error('Full URL repo should match frontend repo!');
+  }
+  // Case D: Task pinned to 'workhub-frontend' MUST NOT match backend push on same branch
+  if (matchesTaskRepository('workhub-frontend', backendPayloadRepo)) {
+    throw new Error(
+      'Cross-repo leak! Frontend task matched backend push event!'
+    );
+  }
+  console.log('   Multi-repo isolation checks: PASSED ✅');
+
+  // 8. Testing Commit URL Repo Extraction (#133)
+  console.log('8. Testing Commit URL Repository Extraction (#133):');
+  const extractedRepo = extractRepositoryFromCommitUrl(
+    'https://github.com/liv-lauflove/workhub-backend/commit/9a9a2a6b2c4d6e8f'
+  );
+  if (extractedRepo !== 'liv-lauflove/workhub-backend') {
+    throw new Error(`Unexpected extracted repo: ${extractedRepo}`);
+  }
+  console.log(`   Extracted repo from commit URL: "${extractedRepo}" [OK]`);
 
   console.log('\n=== ALL TESTS PASSED SUCCESSFULLY! ✅ ===');
 }

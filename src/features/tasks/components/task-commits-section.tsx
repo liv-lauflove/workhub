@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import {
   GitCommit,
   GitBranch,
+  FolderGit2,
   ExternalLink,
   Copy,
   Check,
@@ -16,6 +17,7 @@ import {
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { refreshTaskCommitsAction } from '@/features/github/actions/github.actions';
+import { extractRepositoryFromCommitUrl } from '@/features/github/lib/webhook-verifier';
 import type { TaskGithubCommit } from '@/features/github/types/github.types';
 import type { TaskDetail } from '../types/task.types';
 
@@ -135,6 +137,12 @@ export function TaskCommitsSection({
   };
 
   const branchName = task.github_branch?.trim();
+  const configuredRepo = task.github_repo?.trim() || null;
+  const inferredRepo =
+    configuredRepo ||
+    (commits.length > 0
+      ? extractRepositoryFromCommitUrl(commits[0].url)
+      : null);
 
   return (
     <section
@@ -160,7 +168,17 @@ export function TaskCommitsSection({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {inferredRepo && (
+            <div
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-md border bg-background/80 px-2.5 py-1 text-xs font-mono text-muted-foreground shadow-2xs"
+              title={`Repository tertaut: ${inferredRepo}`}
+            >
+              <FolderGit2 className="h-3 w-3 text-muted-foreground shrink-0" />
+              <span className="truncate max-w-[160px]">{inferredRepo}</span>
+            </div>
+          )}
+
           {branchName && (
             <div
               className="hidden sm:inline-flex items-center gap-1.5 rounded-md border bg-background/80 px-2.5 py-1 text-xs font-mono text-muted-foreground shadow-2xs"
@@ -202,6 +220,8 @@ export function TaskCommitsSection({
                 const isExpanded = expandedCommitIds.has(commit.id);
                 const shortSha = commit.commit_sha.slice(0, 7);
                 const isCopied = copiedSha === commit.commit_sha;
+                const commitRepo =
+                  extractRepositoryFromCommitUrl(commit.url) || configuredRepo;
 
                 return (
                   <li
@@ -247,12 +267,24 @@ export function TaskCommitsSection({
                           </div>
                         </div>
 
-                        {/* Meta info: Author & Committed date */}
+                        {/* Meta info: Author, Repository & Committed date */}
                         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pl-6 text-[11px] text-muted-foreground">
                           {commit.author_username && (
                             <span className="font-medium text-foreground">
                               @{commit.author_username}
                             </span>
+                          )}
+                          {commitRepo && (
+                            <>
+                              <span>•</span>
+                              <span
+                                className="inline-flex items-center gap-1 rounded bg-muted/80 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
+                                title={`Repository asal commit: ${commitRepo}`}
+                              >
+                                <FolderGit2 className="h-2.5 w-2.5 shrink-0" />
+                                <span>{commitRepo}</span>
+                              </span>
+                            </>
                           )}
                           <span>•</span>
                           <span
@@ -323,6 +355,15 @@ export function TaskCommitsSection({
                 <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-foreground font-semibold">
                   {branchName}
                 </code>
+                {configuredRepo ? (
+                  <>
+                    {' '}
+                    pada repository{' '}
+                    <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-foreground font-semibold">
+                      {configuredRepo}
+                    </code>
+                  </>
+                ) : null}
                 . Setiap commit yang di-push ke GitHub akan otomatis muncul di
                 sini.
               </p>
@@ -364,7 +405,7 @@ export function TaskCommitsSection({
                 Belum Ada Branch Git Ditautkan
               </h4>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Tautkan nama branch pengerjaan pada seksi{' '}
+                Tautkan nama repository dan branch pengerjaan pada seksi{' '}
                 <strong className="text-foreground font-medium">
                   Development
                 </strong>{' '}

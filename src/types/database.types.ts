@@ -745,6 +745,7 @@ export type Database = {
           developer_id: string | null;
           due_date: string | null;
           github_branch: string | null;
+          github_repo: string | null;
           id: string;
           origin: Database['public']['Enums']['task_origin'];
           origin_note: string | null;
@@ -768,6 +769,7 @@ export type Database = {
           developer_id?: string | null;
           due_date?: string | null;
           github_branch?: string | null;
+          github_repo?: string | null;
           id?: string;
           origin?: Database['public']['Enums']['task_origin'];
           origin_note?: string | null;
@@ -791,6 +793,7 @@ export type Database = {
           developer_id?: string | null;
           due_date?: string | null;
           github_branch?: string | null;
+          github_repo?: string | null;
           id?: string;
           origin?: Database['public']['Enums']['task_origin'];
           origin_note?: string | null;

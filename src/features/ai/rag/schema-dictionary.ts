@@ -156,6 +156,13 @@ export const WORKHUB_SCHEMA_DICTIONARY: TableDoc[] = [
         description: 'Linked Git branch name (e.g. feat/issue-46)',
       },
       {
+        name: 'github_repo',
+        type: 'text',
+        isNullable: true,
+        description:
+          'Target GitHub repository name or owner/repo for multi-repo webhook isolation (e.g. liv-lauflove/workhub)',
+      },
+      {
         name: 'created_by',
         type: 'uuid',
         isNullable: false,
