@@ -3,7 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
-import { isManagementTeam } from '../queries/team.queries';
+import { isManagementTeam, MANAGEMENT_TEAM_ID } from '../queries/team.queries';
 import type { ActionState } from '@/types/global';
 import { z } from 'zod';
 
@@ -23,6 +23,254 @@ export type InviteTeamMemberInput = {
   role: 'leader' | 'member';
   teamId: string;
 };
+
+const createTeamSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, 'Nama tim minimal 2 karakter')
+    .max(50, 'Nama tim maksimal 50 karakter'),
+});
+
+const updateTeamSchema = z.object({
+  teamId: z.string().regex(uuidRegex, 'Team ID tidak valid'),
+  name: z
+    .string()
+    .trim()
+    .min(2, 'Nama tim minimal 2 karakter')
+    .max(50, 'Nama tim maksimal 50 karakter'),
+});
+
+export type CreateTeamInput = {
+  name: string;
+};
+
+export type UpdateTeamInput = {
+  teamId: string;
+  name: string;
+};
+
+/**
+ * Create a new squad / team.
+ * Only members of the Management team are authorized to create teams.
+ */
+export async function createTeamAction(
+  input: CreateTeamInput | FormData
+): Promise<ActionState> {
+  let rawData: { name?: string };
+
+  if (input instanceof FormData) {
+    rawData = {
+      name: (input.get('name') as string)?.trim(),
+    };
+  } else {
+    rawData = {
+      name: input.name?.trim(),
+    };
+  }
+
+  const parsed = createTeamSchema.safeParse(rawData);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  const profile = await getUserProfile();
+  if (!profile) {
+    return {
+      success: false,
+      error: { _form: ['Sesi Anda tidak valid. Silakan login kembali.'] },
+    };
+  }
+
+  const isManagement = await isManagementTeam(profile.team_id);
+  if (!isManagement) {
+    return {
+      success: false,
+      error: {
+        _form: [
+          'Hanya role Management yang memiliki izin untuk membuat tim baru.',
+        ],
+      },
+    };
+  }
+
+  const teamName = parsed.data.name;
+
+  if (teamName.toLowerCase() === 'management') {
+    return {
+      success: false,
+      error: {
+        name: ['Nama tim "Management" sudah digunakan oleh tim sistem.'],
+      },
+    };
+  }
+
+  const admin = createAdminClient();
+
+  // Check duplicate team name (case-insensitive)
+  const { data: existingTeam, error: checkError } = await admin
+    .from('teams')
+    .select('id, name')
+    .ilike('name', teamName)
+    .maybeSingle();
+
+  if (checkError) {
+    console.error('❌ [createTeamAction] Check error:', checkError);
+  }
+
+  if (existingTeam) {
+    return {
+      success: false,
+      error: { name: [`Tim dengan nama "${existingTeam.name}" sudah ada.`] },
+    };
+  }
+
+  const { error: insertError } = await admin
+    .from('teams')
+    .insert({ name: teamName });
+
+  if (insertError) {
+    console.error('❌ [createTeamAction] Insert DB error:', insertError);
+    return {
+      success: false,
+      error: { _form: [insertError.message] },
+    };
+  }
+
+  revalidatePath('/team');
+  revalidatePath('/projects');
+  return { success: true };
+}
+
+/**
+ * Update an existing team's name.
+ * Only members of the Management team are authorized to edit teams.
+ * The default 'Management' system team cannot be modified.
+ */
+export async function updateTeamAction(
+  input: UpdateTeamInput | FormData
+): Promise<ActionState> {
+  let rawData: { teamId?: string; name?: string };
+
+  if (input instanceof FormData) {
+    rawData = {
+      teamId: (input.get('teamId') as string)?.trim(),
+      name: (input.get('name') as string)?.trim(),
+    };
+  } else {
+    rawData = {
+      teamId: input.teamId?.trim(),
+      name: input.name?.trim(),
+    };
+  }
+
+  const parsed = updateTeamSchema.safeParse(rawData);
+  if (!parsed.success) {
+    return {
+      success: false,
+      error: parsed.error.flatten().fieldErrors,
+    };
+  }
+
+  const profile = await getUserProfile();
+  if (!profile) {
+    return {
+      success: false,
+      error: { _form: ['Sesi Anda tidak valid. Silakan login kembali.'] },
+    };
+  }
+
+  const isManagement = await isManagementTeam(profile.team_id);
+  if (!isManagement) {
+    return {
+      success: false,
+      error: {
+        _form: [
+          'Hanya role Management yang memiliki izin untuk mengubah data tim.',
+        ],
+      },
+    };
+  }
+
+  const { teamId: targetId, name: newName } = parsed.data;
+
+  // Protect Management system team by ID or name
+  if (
+    targetId === MANAGEMENT_TEAM_ID ||
+    newName.toLowerCase() === 'management'
+  ) {
+    return {
+      success: false,
+      error: {
+        _form: [
+          "Tim 'Management' merupakan tim sistem bawaan dan tidak dapat diubah namanya.",
+        ],
+      },
+    };
+  }
+
+  const admin = createAdminClient();
+
+  // Fetch target team to verify existence and check its current name
+  const { data: targetTeam, error: fetchError } = await admin
+    .from('teams')
+    .select('id, name')
+    .eq('id', targetId)
+    .maybeSingle();
+
+  if (fetchError || !targetTeam) {
+    return {
+      success: false,
+      error: { _form: ['Tim tidak ditemukan.'] },
+    };
+  }
+
+  if (targetTeam.name.toLowerCase() === 'management') {
+    return {
+      success: false,
+      error: {
+        _form: [
+          "Tim 'Management' merupakan tim sistem bawaan dan tidak dapat diubah namanya.",
+        ],
+      },
+    };
+  }
+
+  // Check duplicate name against other teams
+  const { data: existingTeam } = await admin
+    .from('teams')
+    .select('id, name')
+    .ilike('name', newName)
+    .neq('id', targetId)
+    .maybeSingle();
+
+  if (existingTeam) {
+    return {
+      success: false,
+      error: { name: [`Tim dengan nama "${existingTeam.name}" sudah ada.`] },
+    };
+  }
+
+  const { error: updateError } = await admin
+    .from('teams')
+    .update({ name: newName })
+    .eq('id', targetId);
+
+  if (updateError) {
+    console.error('❌ [updateTeamAction] Update DB error:', updateError);
+    return {
+      success: false,
+      error: { _form: [updateError.message] },
+    };
+  }
+
+  revalidatePath('/team');
+  revalidatePath('/projects');
+  return { success: true };
+}
 
 /**
  * Invite a new member to a team.

@@ -1,11 +1,79 @@
 import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 
+export const MANAGEMENT_TEAM_ID = 'e3333333-3333-3333-3333-333333333333';
+
+export interface TeamWithStats {
+  id: string;
+  name: string;
+  memberCount: number;
+  leaders: string[];
+  isManagement: boolean;
+  createdAt: string;
+}
+
 export async function getTeams() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from('teams').select('*');
+  const { data, error } = await supabase
+    .from('teams')
+    .select('*')
+    .order('created_at', { ascending: true });
   if (error) throw error;
   return data;
+}
+
+/**
+ * Get all teams with aggregate member statistics (member count and leaders).
+ */
+export async function getTeamsWithMemberStats(): Promise<TeamWithStats[]> {
+  const supabase = await createClient();
+
+  // 1. Fetch all teams
+  const { data: teams, error: teamsError } = await supabase
+    .from('teams')
+    .select('id, name, created_at')
+    .order('created_at', { ascending: true });
+
+  if (teamsError) throw teamsError;
+  if (!teams || teams.length === 0) return [];
+
+  // 2. Fetch all profiles to compute counts and leaders
+  const { data: profiles, error: profilesError } = await supabase
+    .from('profiles')
+    .select('id, full_name, role, team_id');
+
+  if (profilesError) throw profilesError;
+
+  const teamStatsMap = new Map<string, { count: number; leaders: string[] }>();
+  for (const team of teams) {
+    teamStatsMap.set(team.id, { count: 0, leaders: [] });
+  }
+
+  for (const profile of profiles || []) {
+    if (profile.team_id && teamStatsMap.has(profile.team_id)) {
+      const stat = teamStatsMap.get(profile.team_id)!;
+      stat.count += 1;
+      if (profile.role === 'leader' && profile.full_name) {
+        stat.leaders.push(profile.full_name);
+      }
+    }
+  }
+
+  return teams.map((team) => {
+    const stat = teamStatsMap.get(team.id) || { count: 0, leaders: [] };
+    const isManagement =
+      team.id === MANAGEMENT_TEAM_ID ||
+      team.name.trim().toLowerCase() === 'management';
+
+    return {
+      id: team.id,
+      name: team.name,
+      memberCount: stat.count,
+      leaders: stat.leaders,
+      isManagement,
+      createdAt: team.created_at,
+    };
+  });
 }
 
 /**
@@ -48,6 +116,7 @@ export async function isManagementTeam(
   teamId?: string | null
 ): Promise<boolean> {
   if (!teamId) return false;
+  if (teamId === MANAGEMENT_TEAM_ID) return true;
   const supabase = await createClient();
   const { data, error } = await supabase
     .from('teams')
