@@ -29,7 +29,7 @@ truncate table teams cascade;
 -- STEP 0.1: Ensure teams constraint allows 'Management'
 alter table teams drop constraint if exists teams_name_check;
 alter table teams add constraint teams_name_check
-  check (name in ('Aegis', 'Sentinel', 'Management'));
+  check (length(trim(name)) >= 2);
 
 -- =====================================================================
 -- STEP 0.2: Ensure profiles table has phone, position, and capacity_points columns
