@@ -291,10 +291,10 @@ export function TaskDetailSidebar({
           </div>
           {commitsCount > 0 && (
             <span
-              className="inline-flex items-center gap-1 text-[11px] font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full border border-primary/20"
+              className="inline-flex items-center gap-1 font-normal tabular-nums"
               title={`${commitsCount} commit tersinkronisasi`}
             >
-              <GitCommit className="h-3 w-3" />
+              <GitCommit className="h-3.5 w-3.5" aria-hidden="true" />
               <span>{commitsCount} commit</span>
             </span>
           )}
