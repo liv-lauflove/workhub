@@ -1,7 +1,8 @@
 import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 
-export const MANAGEMENT_TEAM_ID = 'e3333333-3333-3333-3333-333333333333';
+import { MANAGEMENT_TEAM_ID } from '../constants';
+export { MANAGEMENT_TEAM_ID };
 
 export interface TeamWithStats {
   id: string;
