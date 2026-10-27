@@ -1,40 +1,49 @@
 -- =====================================================================
--- Task & Performance Dashboard — Database Schema (Postgres / Supabase)
--- FINAL v2 — includes notifications, activity log, attachments,
--- task dependencies, team invitations, AI override log, archiving
+-- Workhub (Task & Performance Dashboard) — Database Schema (Supabase Postgres)
 -- =====================================================================
--- Assumes Supabase Auth (auth.users) handles login/OAuth (Google/GitHub).
--- If you switch to NextAuth + adapter instead, swap the FK target on
--- profiles.id from auth.users(id) to the adapter's users table.
+-- Referensi skema lengkap yang mencakup seluruh 17 migrasi aktif:
+-- - Dynamic Teams (Management role governance)
+-- - Extended Profiles (phone, position, capacity_points)
+-- - Milestones, Projects, Custom Kanban Board Columns
+-- - Tasks dengan Dual-Assignee (Developer & Tester/QA), Multi-Repo GitHub,
+--   Base Points, CS Complaint Origin, Subtasks, Dependencies, Attachments,
+--   Comments, dan Automatic Activity Log Trigger
+-- - Notifications, GitHub Webhook Commits, & AI Layer (Cache, Warnings, Overrides)
 -- =====================================================================
 
 create extension if not exists "pgcrypto";
 
 -- ---------------------------------------------------------------------
--- Teams
+-- 1. Teams (Dynamic Teams — dikelola oleh Leader dengan posisi Management)
 -- ---------------------------------------------------------------------
 create table teams (
   id          uuid primary key default gen_random_uuid(),
-  name        text not null unique check (name in ('Aegis', 'Sentinel')),
+  name        text not null unique check (length(trim(name)) >= 2),
   created_at  timestamptz not null default now()
 );
 
 -- ---------------------------------------------------------------------
--- Profiles (extends Supabase auth.users with app-specific fields)
+-- 2. Profiles (extends Supabase auth.users)
 -- ---------------------------------------------------------------------
 create type user_role as enum ('leader', 'member');
 
 create table profiles (
   id               uuid primary key references auth.users(id) on delete cascade,
   full_name        text not null,
+  email            text,
   role             user_role not null default 'member',
   team_id          uuid references teams(id) on delete set null,
+  phone            text,
+  position         text,                        -- Contoh: 'Management', 'Frontend Developer', 'QA Engineer'
+  capacity_points  int not null default 20,     -- Kapasitas poin individu per anggota
   github_username  text,
   avatar_url       text,
   created_at       timestamptz not null default now()
 );
 
--- Team invitations — leader invites new members by email
+-- ---------------------------------------------------------------------
+-- 3. Team Invitations (Leader mengundang anggota baru via email)
+-- ---------------------------------------------------------------------
 create type invitation_status as enum ('pending', 'accepted', 'expired', 'revoked');
 
 create table team_invitations (
@@ -49,19 +58,20 @@ create table team_invitations (
   expires_at   timestamptz not null default (now() + interval '7 days')
 );
 
--- Long-lived GitHub access token for background jobs (commit polling)
--- outside an active user session. Only populate if genuinely needed.
+-- ---------------------------------------------------------------------
+-- 4. GitHub Integrations (Token terenkripsi opsional untuk background sync)
+-- ---------------------------------------------------------------------
 create table github_integrations (
   id             uuid primary key default gen_random_uuid(),
   user_id        uuid not null references profiles(id) on delete cascade unique,
   github_user_id text not null,
-  access_token   text not null, -- store encrypted (pgsodium / KMS), never expose via API
+  access_token   text not null,
   scope          text,
   connected_at   timestamptz not null default now()
 );
 
 -- ---------------------------------------------------------------------
--- Priority levels (configurable weights, used for workload capacity)
+-- 5. Priority Levels & Team Capacity Settings
 -- ---------------------------------------------------------------------
 create table priority_levels (
   level      text primary key,      -- 'critical' | 'high' | 'medium' | 'low'
@@ -73,9 +83,9 @@ insert into priority_levels (level, weight, sort_order) values
   ('critical', 4, 1),
   ('high',     3, 2),
   ('medium',   2, 3),
-  ('low',      1, 4);
+  ('low',      1, 4)
+on conflict (level) do nothing;
 
--- Per-team baseline capacity, used to compute workload %.
 create table capacity_settings (
   team_id         uuid primary key references teams(id) on delete cascade,
   baseline_points int not null default 20,
@@ -83,7 +93,7 @@ create table capacity_settings (
 );
 
 -- ---------------------------------------------------------------------
--- Milestones (top level — strategic target, not team-scoped)
+-- 6. Milestones (Target strategis tingkat atas, lintas tim)
 -- ---------------------------------------------------------------------
 create type milestone_status as enum ('planned', 'in_progress', 'completed', 'at_risk');
 
@@ -95,14 +105,14 @@ create table milestones (
   start_date     date not null,
   target_date    date not null,
   status         milestone_status not null default 'planned',
-  archived_at    timestamptz,           -- null = active, set = archived
+  archived_at    timestamptz,
   created_by     uuid not null references profiles(id),
   created_at     timestamptz not null default now(),
   updated_at     timestamptz not null default now()
 );
 
 -- ---------------------------------------------------------------------
--- Projects (mid level — belongs to one team, contributes to a milestone)
+-- 7. Projects (Level menengah — terikat ke satu Milestone dan satu Tim)
 -- ---------------------------------------------------------------------
 create type project_status as enum ('planned', 'in_progress', 'completed', 'blocked');
 
@@ -113,52 +123,82 @@ create table projects (
   name          text not null,
   description   text,
   pic_id        uuid references profiles(id) on delete set null,
+  start_date    date,
+  end_date      date,
   status        project_status not null default 'planned',
-  archived_at   timestamptz,           -- null = active, set = archived
+  archived_at   timestamptz,
   created_by    uuid not null references profiles(id),
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
 
 -- ---------------------------------------------------------------------
--- Kanban board columns — custom per project, like GitHub Projects
+-- 8. Board Columns (Kolom Kanban kustom per Project)
 -- ---------------------------------------------------------------------
 create table board_columns (
   id          uuid primary key default gen_random_uuid(),
   project_id  uuid not null references projects(id) on delete cascade,
-  name        text not null,          -- e.g. 'To Do', 'In Progress', 'Review', 'Done', or custom
-  position    int not null,           -- display order, drag-and-drop reorders this
+  name        text not null,          -- Default: 'To Do', 'In Progress', 'Review', 'Done'
+  position    int not null,
   is_default  boolean not null default false,
   unique (project_id, position)
 );
 
 -- ---------------------------------------------------------------------
--- Tasks (smallest unit — kanban card)
+-- 9. Tasks (Unit kerja terkecil — mendukung Dual-Assignee Dev & QA + Multi-Repo)
 -- ---------------------------------------------------------------------
 create type task_origin as enum ('normal', 'cs_complaint');
 
 create table tasks (
   id              uuid primary key default gen_random_uuid(),
-  project_id      uuid references projects(id) on delete cascade, -- nullable: task may be unassigned to a project initially
+  project_id      uuid references projects(id) on delete cascade,
   column_id       uuid not null references board_columns(id),
   title           text not null,
   description     text,
   assignee_id     uuid references profiles(id) on delete set null,
+  developer_id    uuid references profiles(id) on delete set null,
+  tester_id       uuid references profiles(id) on delete set null,
+  dev_status      text default 'pending',
+  test_status     text default 'pending',
   priority        text not null references priority_levels(level) default 'medium',
+  base_points     int not null default 1,
   origin          task_origin not null default 'normal',
-  origin_note     text,             -- free text if origin = 'cs_complaint'
+  origin_note     text,
   github_branch   text,
+  github_repo     text check (github_repo is null or github_repo ~ '^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$'),
+  start_date      date,
   due_date        date,
-  created_by      uuid not null references profiles(id), -- must be a 'leader' (enforce in app/RLS)
+  position        int not null default 0,
+  created_by      uuid not null references profiles(id),
   created_at      timestamptz not null default now(),
   updated_at      timestamptz not null default now()
 );
 
 create index idx_tasks_assignee on tasks(assignee_id);
+create index idx_tasks_developer on tasks(developer_id);
+create index idx_tasks_tester on tasks(tester_id);
 create index idx_tasks_project on tasks(project_id);
 create index idx_tasks_column on tasks(column_id);
+create index idx_tasks_github_branch_repo on tasks(github_branch, github_repo) where github_branch is not null;
 
--- Discussion thread on each task card
+-- ---------------------------------------------------------------------
+-- 10. Task Subtasks (Checklist pekerjaan di dalam sebuah Task)
+-- ---------------------------------------------------------------------
+create table task_subtasks (
+  id           uuid primary key default gen_random_uuid(),
+  task_id      uuid not null references tasks(id) on delete cascade,
+  title        text not null,
+  is_completed boolean not null default false,
+  position     int not null default 0,
+  created_at   timestamptz not null default now(),
+  updated_at   timestamptz not null default now()
+);
+
+create index idx_task_subtasks_task on task_subtasks(task_id);
+
+-- ---------------------------------------------------------------------
+-- 11. Task Comments, Attachments, Dependencies, Activity Log, & Commits
+-- ---------------------------------------------------------------------
 create table task_comments (
   id          uuid primary key default gen_random_uuid(),
   task_id     uuid not null references tasks(id) on delete cascade,
@@ -167,19 +207,17 @@ create table task_comments (
   created_at  timestamptz not null default now()
 );
 
--- File attachments on a task (screenshots, documents)
 create table task_attachments (
   id           uuid primary key default gen_random_uuid(),
   task_id      uuid not null references tasks(id) on delete cascade,
   uploaded_by  uuid not null references profiles(id),
-  file_url     text not null,       -- Supabase Storage path/URL
+  file_url     text not null,
   file_name    text not null,
   file_type    text,
-  file_size    int,                 -- bytes; enforce max size in app layer
+  file_size    int,
   created_at   timestamptz not null default now()
 );
 
--- Task dependencies — self-referencing "blocked by" relation
 create table task_dependencies (
   id                 uuid primary key default gen_random_uuid(),
   task_id            uuid not null references tasks(id) on delete cascade,
@@ -189,12 +227,11 @@ create table task_dependencies (
   unique (task_id, depends_on_task_id)
 );
 
--- Generic audit trail for task field changes
 create table activity_log (
   id           uuid primary key default gen_random_uuid(),
   task_id      uuid not null references tasks(id) on delete cascade,
   actor_id     uuid not null references profiles(id),
-  field_name   text not null,       -- e.g. 'assignee_id', 'priority', 'column_id', 'due_date'
+  field_name   text not null,
   old_value    text,
   new_value    text,
   created_at   timestamptz not null default now()
@@ -202,7 +239,6 @@ create table activity_log (
 
 create index idx_activity_log_task on activity_log(task_id);
 
--- Cached GitHub commits linked to a task (populated via webhook/poll)
 create table github_commits (
   id               uuid primary key default gen_random_uuid(),
   task_id          uuid not null references tasks(id) on delete cascade,
@@ -215,7 +251,7 @@ create table github_commits (
 );
 
 -- ---------------------------------------------------------------------
--- Notifications (in-app)
+-- 12. Notifications (In-App)
 -- ---------------------------------------------------------------------
 create type notification_type as enum (
   'task_assigned', 'task_mentioned', 'task_status_changed', 'member_overload'
@@ -235,55 +271,33 @@ create table notifications (
 create index idx_notifications_user on notifications(user_id, is_read);
 
 -- ---------------------------------------------------------------------
--- AI features
+-- 13. AI Features (Query Cache, Warnings, & Guardrail Overrides)
 -- ---------------------------------------------------------------------
--- Cache for chatbot queries to save LLM API cost on repeated/similar asks
 create table ai_query_cache (
   id            uuid primary key default gen_random_uuid(),
-  query_hash    text not null unique, -- hash of normalized query text
+  query_hash    text not null unique,
   query_text    text not null,
   response_text text not null,
   created_at    timestamptz not null default now(),
   expires_at    timestamptz
 );
 
--- Log of AI warnings issued (e.g. quarterly unfinished-task warnings)
 create table ai_warnings (
   id           uuid primary key default gen_random_uuid(),
   user_id      uuid references profiles(id) on delete cascade,
   team_id      uuid references teams(id) on delete cascade,
-  quarter      text not null, -- e.g. '2026-Q3'
+  quarter      text not null,
   message      text not null,
   created_at   timestamptz not null default now()
 );
 
--- AI guardrail log — records suggested vs final value when leader
--- overrides an AI suggestion, for later accuracy evaluation
 create table ai_suggestion_overrides (
-  id                 uuid primary key default gen_random_uuid(),
-  task_id            uuid not null references tasks(id) on delete cascade,
-  suggested_priority text references priority_levels(level),
+  id                       uuid primary key default gen_random_uuid(),
+  task_id                  uuid not null references tasks(id) on delete cascade,
+  suggested_priority       text references priority_levels(level),
   suggested_duration_hours numeric,
-  final_priority     text references priority_levels(level),
-  final_duration_hours numeric,
-  overridden_by      uuid references profiles(id),
-  created_at         timestamptz not null default now()
+  final_priority           text references priority_levels(level),
+  final_duration_hours     numeric,
+  overridden_by            uuid references profiles(id),
+  created_at               timestamptz not null default now()
 );
-
--- =====================================================================
--- Notes / next steps:
--- 1. Row Level Security (RLS) — since Supabase Auth is used, add RLS
---    policies keyed on auth.uid() = profiles.id, scoping reads/writes
---    by team_id and role ('leader' can create milestones/projects/tasks
---    tied to CS complaints and manage invitations/dependencies/archiving;
---    'member' can only update own tasks' status, comments, attachments).
--- 2. Workload % is computed on the fly:
---      sum(priority_levels.weight) for a user's open tasks
---      / capacity_settings.baseline_points  -> flag if > 0.8
---    No snapshot table yet — add one later only if historical trend
---    charts need point-in-time data the live query can't reconstruct.
--- 3. github_integrations.access_token must be encrypted at rest
---    (e.g. Supabase Vault / pgsodium) — never return it through any API.
--- 4. task_dependencies enforcement (hard block vs soft warning on
---    moving to "Done") is an open product decision — see PRD §19.
--- =====================================================================

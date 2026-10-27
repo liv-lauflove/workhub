@@ -1,177 +1,144 @@
-# Folder Structure & Clean Architecture
+# Folder Structure & Architecture
 
-Aplikasi Workhub (Task & Performance Dashboard) dibangun menggunakan kerangka kerja **Next.js (App Router)** dan **Supabase Cloud**. Arsitektur ini dirancang menggunakan prinsip **Clean Architecture & Feature-Driven Modular Design** agar dapat terus dikembangkan secara bertahap (40+ GitHub issues across 4 phases) tanpa membutuhkan refactoring besar-besaran di masa mendatang.
-
----
-
-## 1. Prinsip Utama Arsitektur
-
-| Prinsip                                      | Implementasi                                                                                                                                                                                              |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Feature-based Modules**                    | Seluruh logika bisnis, actions, queries, types, dan komponen fitur dikelompokkan dalam domain modul di `src/features/`.                                                                                   |
-| **Server-First (RSC)**                       | Komponen secara _default_ adalah Server Component. Direktif `"use client"` hanya ditempatkan pada komponen interaktif paling bawah (leaf level: form submission, drag-and-drop Kanban, chart interaktif). |
-| **Colocation**                               | Komponen dan utilitas yang hanya dipakai oleh satu fitur ditaruh di dalam folder fitur tersebut.                                                                                                          |
-| **Separation of Concerns**                   | Routing (`src/app/`), UI murni (`src/components/`), Business Domain (`src/features/`), dan Core Utilities/Infra (`src/lib/`, `src/config/`) terpisah tegas.                                               |
-| **Strict Type Safety & Boundary Validation** | Menggunakan tipe database hasil _generate_ Supabase CLI (`src/types/database.types.ts`) dan validasi _runtime_ menggunakan schema **Zod** sebelum mutasi database.                                        |
+Dokumen ini menjelaskan struktur direktori dan arsitektur aplikasi **Workhub (Task & Performance Dashboard)** yang dibangun di atas **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS v4**, dan **Supabase**.
 
 ---
 
-## 2. Struktur Direktori Lengkap (`src/`)
+## 1. Filosofi Arsitektur: Feature-Sliced Design (Lite)
 
-```
-src/
-├── app/                              # Next.js App Router (Hanya untuk Routing & Layouts)
-│   ├── (auth)/                       # Route Group: Autentikasi (Layout terisolasi tanpa sidebar)
-│   │   ├── login/page.tsx            # Halaman Login
-│   │   ├── register/page.tsx         # Halaman Registrasi
-│   │   ├── auth/callback/route.ts    # OAuth Code Exchange handler
-│   │   └── layout.tsx                # Auth layout (centered card)
+Untuk menjaga skalabilitas codebase yang memiliki 12 domain bisnis berbeda, Workhub menggunakan pola **Feature-Sliced Design (Lite)**:
+
+1. **`src/app/` (Routing & Presentation Shell):** Hanya berisi konfigurasi routing App Router (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, dan `route.ts`). File `page.tsx` bertugas mengambil data awal di sisi server (Server Component) lalu meneruskannya ke komponen fitur di `src/features/`.
+2. **`src/features/` (Domain Modules):** Setiap fitur bisnis memiliki folder mandiri yang berisi `components/`, `actions/`, `queries/` (atau `lib/`), `hooks/`, dan `schemas/`.
+3. **`src/components/` (Shared UI):** Komponen UI generik yang dapat dipakai lintas fitur (Shadcn UI primitives di `ui/`, layout navigasi di `layout/`, dan provider global di `providers/`).
+4. **`src/lib/` (Core Infrastructure):** Inisialisasi client Supabase (`client.ts`, `server.ts`, `admin.ts`, `middleware.ts`), helper umum, dan konstanta sistem.
+
+---
+
+## 2. Pohon Direktori Lengkap (`src/`)
+
+```text
+workhub/
+├── docs/                                  # Dokumentasi teknis, PRD, ERD, dan standar engineering
+├── scripts/                               # Skrip utilitas verifikasi & E2E testing (tsx)
+├── supabase/
+│   └── migrations/                        # 17 file migrasi SQL berurutan (DDL, Triggers, RLS, Storage)
+├── src/
+│   ├── app/                               # Next.js 16 App Router
+│   │   ├── (auth)/                        # Route group publik (tanpa Sidebar)
+│   │   │   ├── login/page.tsx             # Halaman masuk (Email/Password + OAuth Google/GitHub)
+│   │   │   ├── register/page.tsx          # Halaman pendaftaran akun baru
+│   │   │   └── auth/callback/route.ts     # Endpoint pertukaran kode OAuth Supabase
+│   │   ├── (dashboard)/                   # Route group terproteksi (dilengkapi Sidebar, Header, & AI Widget)
+│   │   │   ├── page.tsx                   # Executive Performance Dashboard (KPI, Charts, AI Warning, Export)
+│   │   │   ├── milestones/
+│   │   │   │   ├── page.tsx               # Daftar Milestone lintas tim + filter status & arsip
+│   │   │   │   └── [id]/
+│   │   │   │       ├── page.tsx           # Detail Milestone
+│   │   │   │       └── projects/page.tsx  # Daftar Project di bawah Milestone tertentu
+│   │   │   ├── projects/
+│   │   │   │   ├── page.tsx               # Direktori seluruh Project lintas tim
+│   │   │   │   └── [id]/page.tsx          # Detail Project + Interactive Kanban Board
+│   │   │   ├── tasks/
+│   │   │   │   ├── page.tsx               # Global Task Directory (pencarian & filter lintas project)
+│   │   │   │   └── [id]/page.tsx          # Halaman penuh Detail Task
+│   │   │   ├── team/page.tsx              # Direktori Member & Tim (menu "Member": Grid Tim + Tabel Member)
+│   │   │   ├── workload/page.tsx          # Analisis beban kerja & kapasitas anggota tim
+│   │   │   └── settings/page.tsx          # Pengaturan profil pengguna & informasi akun
+│   │   ├── api/                           # Route Handlers (REST Endpoints & Webhooks)
+│   │   │   ├── ai/chat/route.ts           # Endpoint utama AI Assistant (RAG + Gemini + Query Cache)
+│   │   │   ├── ai-chat/route.ts           # Endpoint kompatibilitas AI Chat
+│   │   │   ├── auth/session/route.ts      # Pemeriksaan sesi aktif
+│   │   │   ├── dashboard/export/route.ts  # Generator laporan performa CSV / HTML Print-to-PDF
+│   │   │   ├── github-webhook/route.ts    # Receiver webhook push GitHub (HMAC SHA-256 + Multi-Repo filter)
+│   │   │   └── health/route.ts            # Endpoint health check infrastruktur
+│   │   ├── layout.tsx                     # Root Layout (Font Geist, TooltipProvider, Toaster Sonner)
+│   │   └── globals.css                    # Konfigurasi Tailwind CSS v4 & variabel tema
 │   │
-│   ├── (dashboard)/                  # Route Group: Dashboard Utama (Layout dengan Sidebar & Header)
-│   │   ├── layout.tsx                # Dashboard persistent layout
-│   │   ├── page.tsx                  # Dashboard Home (/)
-│   │   ├── milestones/
-│   │   │   ├── page.tsx              # Listing Milestones
-│   │   │   └── [id]/page.tsx         # Milestone Detail & Project List
-│   │   ├── projects/
-│   │   │   └── [id]/page.tsx         # Project Detail & Kanban Board
-│   │   ├── tasks/
-│   │   │   └── [id]/page.tsx         # Task Detail, Comments, Git History
-│   │   ├── team/page.tsx             # Manajemen Tim & Anggota
-│   │   ├── workload/page.tsx         # Perhitungan Beban & Kapasitas Tim
-│   │   ├── settings/page.tsx         # Profil & Integrasi Pengguna
-│   │   ├── notifications/page.tsx    # Pusat Notifikasi
-│   │   └── archive/page.tsx          # Arsip Milestone & Project
+│   ├── components/                        # Shared Components lintas fitur
+│   │   ├── ui/                            # Shadcn UI Primitives (Button, Dialog, Sheet, Select, Tabs, dll.)
+│   │   ├── layout/                        # AppSidebar, Header, Breadcrumb, NotificationBell
+│   │   └── providers/                     # Context Providers
 │   │
-│   ├── api/                          # Route Handlers (Webhook luar, e.g., GitHub webhooks)
-│   ├── layout.tsx                    # Root Layout aplikasi (HTML, Body, Theme, Global Fonts)
-│   ├── not-found.tsx                 # Global 404 handler
-│   ├── error.tsx                     # Global error boundary
-│   └── globals.css                   # Tailwind v4 & OKLCH Theme Variables
-│
-├── components/                       # Komponen UI Global / Shared
-│   ├── layout/                       # Komponen struktural layout (Header, Sidebar, MobileNav)
-│   ├── ui/                           # Atom UI (Button, Card, Dialog, Input - shadcn/ui)
-│   ├── forms/                        # Komponen form pembantu (SubmitButton dengan status pending)
-│   └── providers/                    # React Context Providers (Theme, Toast, dll)
-│
-├── features/                         # 🔑 Domain Business Modules
-│   ├── auth/                         # Modul Autentikasi & Profil (US-01, US-02)
-│   │   ├── actions/auth.actions.ts   # Server Actions ('use server')
-│   │   ├── queries/auth.queries.ts   # Server Queries ('server-only')
-│   │   └── lib/auth.utils.ts         # requireAuth helper
+│   ├── features/                          # 12 Modul Domain Bisnis
+│   │   ├── ai/                            # AI Assistant, Auto-Prioritization, Quarterly Warning, & RAG
+│   │   │   ├── actions/                   # Server Actions saran prioritas & pencatatan override leader
+│   │   │   ├── components/                # Floating AI Chat Widget & Quarterly Warning Banner
+│   │   │   ├── lib/                       # Klien Gemini & helper AI
+│   │   │   └── rag/                       # Pipeline Retrieval-Augmented Generation (Context Builder)
+│   │   ├── auth/                          # Autentikasi & Otorisasi
+│   │   │   ├── actions/                   # Login, Register, Logout Server Actions
+│   │   │   └── components/                # LoginForm, RegisterForm, OAuth Buttons
+│   │   ├── dashboard/                     # Executive Performance Dashboard
+│   │   │   ├── components/                # SummaryCards, MonthlyTrendChart, TeamBreakdown, ExportButton
+│   │   │   └── queries/                   # Agregasi KPI kuartalan, bulanan, dan distribusi status
+│   │   ├── github/                        # Integrasi GitHub & Webhook Processing
+│   │   │   ├── actions/                   # Tautkan branch & repository (`owner/repo`) ke Task
+│   │   │   ├── components/                # GithubBranchSection, GithubCommitsList
+│   │   │   └── lib/                       # Webhook signature verifier, parser, & handler multi-repo
+│   │   ├── kanban/                        # Papan Kanban Interaktif (@dnd-kit)
+│   │   │   ├── actions/                   # Reorder kolom, pindah kartu Task, CRUD kolom custom
+│   │   │   └── components/                # KanbanBoard, KanbanColumn, KanbanCard
+│   │   ├── milestones/                    # Manajemen Milestone Strategis
+│   │   │   ├── actions/                   # Create, Update, Archive/Restore, Delete Milestone
+│   │   │   ├── components/                # MilestoneCard, CreateMilestoneModal, MilestoneFilter
+│   │   │   └── schemas/                   # Validasi Zod Milestone
+│   │   ├── notifications/                 # Sistem Notifikasi In-App
+│   │   │   ├── actions/                   # Mark as read, mark all as read, trigger overload notification
+│   │   │   └── components/                # NotificationPopover, NotificationItem
+│   │   ├── profile/                       # Pengaturan Profil Pengguna
+│   │   │   ├── actions/                   # Update nama, nomor telepon, jabatan, avatar, & GitHub username
+│   │   │   └── components/                # ProfileSettingsForm
+│   │   ├── projects/                      # Manajemen Project Tim
+│   │   │   ├── actions/                   # Create (beserta 4 kolom default), Update, Archive Project
+│   │   │   ├── components/                # ProjectCard, CreateProjectModal
+│   │   │   └── schemas/                   # Validasi Zod Project
+│   │   ├── tasks/                         # Manajemen Task, Dual-Assignee QA, Subtasks, & Kolaborasi
+│   │   │   ├── actions/                   # CRUD Task, Subtasks, Comments, Attachments, Dependencies
+│   │   │   ├── components/                # TaskDetailSheet, SubtasksList, CommentsThread, ActivityTimeline
+│   │   │   └── schemas/                   # Validasi Zod Task & Dual-Assignee (`developer_id`, `tester_id`)
+│   │   ├── team/                          # Direktori Member & Manajemen Tim Dinamis
+│   │   │   ├── actions/                   # Buat/Edit/Hapus Tim (khusus Management), Invite Member, Ubah Role
+│   │   │   └── components/                # TeamDirectoryView (Grid Tim + Drill-down), TeamFormDialog
+│   │   └── workload/                      # Kalkulasi Kapasitas & Beban Kerja
+│   │       ├── actions/                   # Update baseline capacity tim & poin kapasitas individu
+│   │       ├── components/                # WorkloadTable, CapacityProgressBar, OverloadBadge
+│   │       └── queries/                   # Perhitungan bobot task aktif (Dev 100% + QA 50%)
 │   │
-│   ├── milestones/                   # Modul Milestone (US-03, US-04)
-│   │   ├── actions/milestone.actions.ts
-│   │   ├── queries/milestone.queries.ts
-│   │   └── types/milestone.types.ts
+│   ├── lib/                               # Infrastruktur Inti & Utilitas Global
+│   │   ├── supabase/
+│   │   │   ├── client.ts                  # Browser client (@supabase/ssr createBrowserClient)
+│   │   │   ├── server.ts                  # Server Component & Server Action client (createServerClient)
+│   │   │   ├── admin.ts                   # Service Role client (khusus Webhook & operasi admin terverifikasi)
+│   │   │   └── middleware.ts              # Penyegaran sesi otomatis & proteksi rute
+│   │   └── utils.ts                       # Helper classNames (`cn`) dan formatter tanggal/angka
 │   │
-│   ├── projects/                     # Modul Project (US-05)
-│   │   ├── actions/project.actions.ts
-│   │   ├── queries/project.queries.ts
-│   │   └── types/project.types.ts
+│   ├── types/                             # Definisi Tipe TypeScript Global
+│   │   └── database.types.ts              # Tipe representasi tabel, view, dan enum Supabase Postgres
 │   │
-│   ├── tasks/                        # Modul Task, Komentar, & Dependency (US-06, US-09, US-26)
-│   │   ├── actions/task.actions.ts
-│   │   ├── queries/task.queries.ts
-│   │   └── types/task.types.ts
-│   │
-│   ├── kanban/                       # Modul Kanban Board Drag-and-Drop (US-07, US-08)
-│   │   ├── actions/kanban.actions.ts
-│   │   └── types/kanban.types.ts
-│   │
-│   ├── dashboard/                    # Modul Analitik & Laporan Kuartalan (US-10, US-11, US-27)
-│   │   ├── queries/dashboard.queries.ts
-│   │   └── types/dashboard.types.ts
-│   │
-│   ├── workload/                     # Modul Pelacakan Kapasitas & Overload (US-12)
-│   │   ├── queries/workload.queries.ts
-│   │   └── lib/capacity.utils.ts     # Formula kalkulasi kapasitas
-│   │
-│   ├── team/                         # Modul Tim & Undangan (US-22, US-23)
-│   │   ├── actions/team.actions.ts
-│   │   └── queries/team.queries.ts
-│   │
-│   ├── notifications/                # Modul Notifikasi In-App & Activity Log (US-19, US-20, US-21)
-│   │   ├── actions/notification.actions.ts
-│   │   └── queries/notification.queries.ts
-│   │
-│   ├── github/                       # Modul Integrasi GitHub API & Commits (Phase 3: US-13, US-14)
-│   │   ├── actions/github.actions.ts
-│   │   ├── queries/github.queries.ts
-│   │   └── lib/github-api.ts
-│   │
-│   └── ai/                           # Modul AI Chatbot & Caching (Phase 4: US-15, US-16, US-18, US-28)
-│       ├── actions/ai.actions.ts
-│       ├── queries/ai-cache.queries.ts
-│       └── lib/
-│           ├── llm-client.ts
-│           └── prompt-templates.ts
-│
-├── config/                           # Konfigurasi Aplikasi & Konstanta
-│   ├── site.ts                       # Metadatata aplikasi & Nav Items
-│   ├── routes.ts                     # Type-safe routing dictionary (ROUTES)
-│   └── feature-flags.ts              # Feature flags untuk rilis bertahap (AI, GitHub)
-│
-├── hooks/                            # Custom React Hooks
-│   ├── use-user.ts                   # Hook pembaca sesi auth client-side
-│   ├── use-debounce.ts               # Hook debounce input pencarian
-│   └── use-media-query.ts            # Hook responsif breakpoint
-│
-├── lib/                              # Utilitas Dasar & Klien Eksternal
-│   ├── supabase/                     # Setup Supabase Cloud SSR
-│   │   ├── client.ts                 # Browser client (createBrowserClient)
-│   │   ├── server.ts                 # Server client (createServerClient via cookies())
-│   │   └── middleware.ts             # Session refresh helper
-│   ├── validations/                  # Skema validasi Zod bersama
-│   │   └── common.ts                 # Pagination, UUID, dateRange schema
-│   ├── constants.ts                  # Konstanta aplikasi (Thresholds, File Limits)
-│   └── utils.ts                      # Utilitas umum (cn)
-│
-├── types/                            # Type Definitions Global
-│   ├── database.types.ts             # Auto-generated Supabase database types (17 tables)
-│   └── global.d.ts                   # Type umum (ActionState, PaginationParams)
-│
-└── middleware.ts                     # Next.js Edge Middleware untuk session refresh Supabase
+│   └── middleware.ts                      # Entrypoint Next.js Middleware
 ```
 
 ---
 
-## 3. Pola Komponen & Pemisahan Boundaries
+## 3. Alur Data & Pemisahan Tanggung Jawab
 
-### Server Components vs Client Components
+### 3.1 Pembacaan Data (Queries)
 
-- Halaman (`page.tsx`) dan tata letak (`layout.tsx`) **wajib menjadi Server Components** secara default.
-- Data di-fetch langsung di sisi server menggunakan _query functions_ dari `src/features/[feature]/queries/`.
-- Jangan menandai seluruh `page.tsx` dengan `"use client"`. Gunakan pola komposisi:
-  ```tsx
-  // src/app/(dashboard)/milestones/page.tsx (Server Component)
-  import { getMilestones } from '@/features/milestones/queries/milestone.queries';
-  import { MilestoneList } from '@/features/milestones/components/milestone-list';
+- Seluruh halaman di `src/app/(dashboard)/**/page.tsx` adalah **React Server Components (RSC)**.
+- Data diambil langsung di server menggunakan `createClient()` dari [`src/lib/supabase/server.ts`](file:///D:/Project/workhub/src/lib/supabase/server.ts) yang meneruskan cookie sesi pengguna sehingga **Row Level Security (RLS)** dieksekusi langsung oleh PostgreSQL.
+- Untuk halaman yang membutuhkan filter dinamis (seperti Dashboard Performa per Tim/Kuartal atau Direktori Task), state filter disimpan di URL Search Params (`?team=...&quarter=...`) atau dikelola oleh Client Component interaktif di `src/features/<feature>/components/`.
 
-  export default async function MilestonesPage() {
-    const milestones = await getMilestones();
-    return <MilestoneList milestones={milestones} />;
-  }
-  ```
+### 3.2 Mutasi Data (Server Actions)
 
-### Isolasi Server Code (`server-only`)
+- Semua operasi tulis (Create, Update, Archive, Delete) menggunakan **Next.js Server Actions** (`'use server'`) yang berada di `src/features/<feature>/actions/`.
+- Setiap Server Action wajib:
+  1. Memvalidasi payload menggunakan schema **Zod**.
+  2. Memverifikasi sesi pengguna (`supabase.auth.getUser()`).
+  3. Mengeksekusi query Supabase dan memanggil `revalidatePath()` agar UI Server Component langsung tersinkronisasi tanpa reload manual.
+  4. Mengembalikan objek terstruktur `{ success?: boolean, data?: T, error?: string }`.
 
-- Semua file query database di `queries/` wajib mengimpor `import 'server-only'`. Ini memastikan kode query dan kredensial database tidak sengaja ter-bundle atau bocor ke client-side.
+### 3.3 Integrasi Eksternal (API Routes)
 
-### Mutasi Data via Server Actions
-
-- Mutasi dilakukan melalui fungsi di `actions/*.actions.ts` dengan direktif `'use server'`.
-- Validasi input di sisi server selalu dijalankan menggunakan **Zod schema** sebelum query dieksekusi.
-- Setelah mutasi berhasil, perbarui cache via `revalidatePath()` dan arahkan halaman dengan `redirect()`.
-
----
-
-## 4. Keamanan & Proteksi Sesi
-
-1. **Middleware (`src/middleware.ts`)**:
-   - Menjalankan `updateSession` dari `@/lib/supabase/middleware` pada setiap request rute dinamis untuk menyegarkan token autentikasi yang kedaluwarsa sebelum halaman dirender.
-2. **Row Level Security (RLS)**:
-   - Database Supabase menerapkan RLS ketat berdasarkan `role` di tabel `profiles`. Hak akses Leader vs Member di-enforce di level basis data, bukan hanya disembunyikan di antarmuka (UI).
-3. **Feature Flags (`src/config/feature-flags.ts`)**:
-   - Fitur-fitur eksperimental atau integrasi eksternal (AI LLM, GitHub OAuth) dilindungi oleh flag sehingga dapat dimatikan seketika tanpa perlu deploy ulang jika terjadi kendala rate limit atau anomali biaya.
+- **GitHub Webhook (`/api/github-webhook`):** Menerima payload push event dari GitHub, memverifikasi signature HMAC SHA-256 (`X-Hub-Signature-256`), mencocokkan nama branch serta `repository.full_name` (`tasks.github_repo`), dan menyimpan riwayat commit ke tabel `github_commits` menggunakan Admin Client.
+- **AI Assistant (`/api/ai/chat`):** Mengambil konteks beban kerja, proyek, dan task terkini melalui modul RAG (`src/features/ai/rag/`), memeriksa `ai_query_cache` berbasis SHA-256, dan memanggil model Google Gemini jika belum ada cache yang valid.
