@@ -2,18 +2,16 @@
 
 import * as React from 'react';
 import {
-  GitBranch,
-  FolderGit2,
-  Pencil,
   Check,
-  X,
-  Loader2,
   Copy,
-  Trash2,
   ExternalLink,
+  Loader2,
+  Pencil,
+  Unlink,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { updateTaskBranchAction } from '../actions/task.actions';
 import { normalizeGithubRepository } from '@/features/github/lib/webhook-verifier';
@@ -47,6 +45,10 @@ interface TaskBranchInputProps {
   className?: string;
 }
 
+// Touch devices get a 44px hit area; desktop keeps the compact sidebar density.
+const TOUCH_SM = 'pointer-coarse:h-11 pointer-coarse:px-3';
+const TOUCH_ICON = 'pointer-coarse:size-11';
+
 export function TaskBranchInput({
   taskId,
   initialBranch,
@@ -54,6 +56,10 @@ export function TaskBranchInput({
   projectId,
   className = '',
 }: TaskBranchInputProps) {
+  const repoFieldId = React.useId();
+  const repoHintId = React.useId();
+  const branchFieldId = React.useId();
+
   const [currentBranch, setCurrentBranch] = React.useState(initialBranch || '');
   const [prevInitialBranch, setPrevInitialBranch] =
     React.useState(initialBranch);
@@ -86,7 +92,6 @@ export function TaskBranchInput({
     }
   }
 
-  // Auto focus branch input when entering edit mode
   React.useEffect(() => {
     if (isEditing && branchInputRef.current) {
       branchInputRef.current.focus();
@@ -94,12 +99,18 @@ export function TaskBranchInput({
     }
   }, [isEditing]);
 
+  const cancelEdit = () => {
+    setBranchInput(currentBranch);
+    setRepoInput(currentRepo);
+    setIsEditing(false);
+  };
+
   const handleCopyBranch = async () => {
     if (!currentBranch) return;
     try {
       await navigator.clipboard.writeText(currentBranch);
       setIsCopied(true);
-      toast.success('Nama branch disalin ke clipboard');
+      toast.success('Nama branch disalin');
       setTimeout(() => setIsCopied(false), 2000);
     } catch {
       toast.error('Gagal menyalin ke clipboard');
@@ -125,8 +136,7 @@ export function TaskBranchInput({
 
       if (!result.success) {
         toast.error(
-          result.error?._form?.[0] ||
-            'Gagal menyimpan konfigurasi GitHub pada task'
+          result.error?._form?.[0] || 'Gagal menyimpan tautan GitHub'
         );
         return;
       }
@@ -137,17 +147,11 @@ export function TaskBranchInput({
       setRepoInput(normalizedRepo);
       setIsEditing(false);
 
-      if (trimmedBranch || normalizedRepo) {
-        const summary = [
-          normalizedRepo ? `Repo: ${normalizedRepo}` : null,
-          trimmedBranch ? `Branch: ${trimmedBranch}` : null,
-        ]
-          .filter(Boolean)
-          .join(' • ');
-        toast.success(`Konfigurasi GitHub diperbarui (${summary})`);
-      } else {
-        toast.success('Tautan GitHub telah dihapus');
-      }
+      toast.success(
+        trimmedBranch || normalizedRepo
+          ? 'Tautan GitHub disimpan'
+          : 'Tautan GitHub dilepas'
+      );
     });
   };
 
@@ -163,9 +167,7 @@ export function TaskBranchInput({
       });
 
       if (!result.success) {
-        toast.error(
-          result.error?._form?.[0] || 'Gagal menghapus tautan GitHub'
-        );
+        toast.error(result.error?._form?.[0] || 'Gagal melepas tautan GitHub');
         return;
       }
 
@@ -174,254 +176,225 @@ export function TaskBranchInput({
       setCurrentRepo('');
       setRepoInput('');
       setIsEditing(false);
-      toast.success('Tautan repository & branch GitHub berhasil dihapus');
+      toast.success('Tautan GitHub dilepas');
     });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSave();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      setBranchInput(currentBranch);
-      setRepoInput(currentRepo);
-      setIsEditing(false);
-    }
-  };
-
   const hasLinkedConfig = Boolean(currentBranch || currentRepo);
-  const repoUrl =
-    currentRepo && currentRepo.includes('/')
-      ? `https://github.com/${currentRepo}`
-      : null;
+  const repoUrl = currentRepo.includes('/')
+    ? `https://github.com/${currentRepo}`
+    : null;
+
+  if (isEditing) {
+    return (
+      <form
+        className={`space-y-3 pt-1 ${className}`}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSave();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            cancelEdit();
+          }
+        }}
+      >
+        <div className="space-y-1.5">
+          <Label htmlFor={repoFieldId} className="text-xs">
+            Repository{' '}
+            <span className="font-normal text-muted-foreground">
+              (opsional)
+            </span>
+          </Label>
+          <Input
+            id={repoFieldId}
+            type="text"
+            value={repoInput}
+            onChange={(e) => setRepoInput(e.target.value)}
+            disabled={isPending}
+            placeholder="owner/repo"
+            autoComplete="off"
+            spellCheck={false}
+            aria-describedby={repoHintId}
+            className="font-mono"
+          />
+          <p id={repoHintId} className="text-xs text-muted-foreground">
+            Isi jika project punya lebih dari satu repo. URL GitHub juga
+            diterima.
+          </p>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor={branchFieldId} className="text-xs">
+            Branch
+          </Label>
+          <Input
+            id={branchFieldId}
+            ref={branchInputRef}
+            type="text"
+            value={branchInput}
+            onChange={(e) => setBranchInput(e.target.value)}
+            disabled={isPending}
+            placeholder="feat/issue-123-nama-fitur"
+            autoComplete="off"
+            spellCheck={false}
+            className="font-mono"
+          />
+        </div>
+
+        <div className="flex items-center justify-end gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={cancelEdit}
+            disabled={isPending}
+            className={TOUCH_SM}
+          >
+            Batal
+          </Button>
+          <Button
+            type="submit"
+            size="sm"
+            disabled={isPending}
+            className={TOUCH_SM}
+          >
+            {isPending ? (
+              <>
+                <Loader2 className="animate-spin" aria-hidden="true" />
+                Menyimpan
+              </>
+            ) : (
+              'Simpan'
+            )}
+          </Button>
+        </div>
+      </form>
+    );
+  }
+
+  if (!hasLinkedConfig) {
+    return (
+      <div className={`space-y-2.5 pt-1 ${className}`}>
+        <p className="text-xs leading-relaxed text-muted-foreground">
+          Belum tertaut ke GitHub. Tautkan branch agar setiap commit tercatat
+          otomatis di task ini.
+        </p>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => setIsEditing(true)}
+          className={TOUCH_SM}
+        >
+          <GithubIcon className="size-3.5" />
+          Tautkan branch
+        </Button>
+      </div>
+    );
+  }
 
   return (
-    <div className={`space-y-2 ${className}`}>
-      {/* View Mode (Branch or Repo is set and not editing) */}
-      {!isEditing && hasLinkedConfig ? (
-        <div className="space-y-2 pt-1">
-          <div className="group relative flex items-start justify-between gap-2 rounded-lg border bg-muted/40 p-2.5 transition-all hover:bg-muted/60">
-            <div className="flex min-w-0 items-start gap-2.5">
-              <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-background text-foreground shadow-2xs">
-                <GithubIcon className="h-3.5 w-3.5" />
+    <div className={`space-y-3 pt-1 ${className}`}>
+      <dl className="space-y-2 text-xs">
+        <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-2">
+          <dt className="text-muted-foreground">Repository</dt>
+          <dd className="min-w-0">
+            {currentRepo ? (
+              repoUrl ? (
+                <a
+                  href={repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex max-w-full items-center gap-1 rounded-sm font-mono text-foreground underline-offset-2 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+                  title={`Buka ${currentRepo} di GitHub`}
+                >
+                  <span className="truncate">{currentRepo}</span>
+                  <ExternalLink
+                    className="size-3 shrink-0 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                  <span className="sr-only">(tab baru)</span>
+                </a>
+              ) : (
+                <span className="block truncate font-mono text-foreground">
+                  {currentRepo}
+                </span>
+              )
+            ) : (
+              <span
+                className="text-muted-foreground"
+                title="Commit dari repo mana pun dengan nama branch ini akan masuk ke task"
+              >
+                Semua repo
               </span>
-              <div className="min-w-0 space-y-1">
-                {currentRepo && (
-                  <div className="flex items-center gap-1.5">
-                    <FolderGit2 className="h-3 w-3 text-muted-foreground shrink-0" />
-                    {repoUrl ? (
-                      <a
-                        href={repoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 truncate font-mono text-[11px] font-medium text-muted-foreground hover:text-primary transition-colors"
-                        title={`Repository: ${currentRepo}`}
-                      >
-                        <span className="truncate">{currentRepo}</span>
-                        <ExternalLink className="h-2.5 w-2.5 shrink-0 opacity-70" />
-                      </a>
-                    ) : (
-                      <span
-                        className="truncate font-mono text-[11px] font-medium text-muted-foreground"
-                        title={`Repository: ${currentRepo}`}
-                      >
-                        {currentRepo}
-                      </span>
-                    )}
-                  </div>
-                )}
+            )}
+          </dd>
+        </div>
 
-                {currentBranch ? (
-                  <div className="flex items-center gap-1.5">
-                    <GitBranch className="h-3 w-3 text-primary shrink-0" />
-                    <span
-                      className="truncate font-mono text-xs font-semibold text-foreground"
-                      title={`Branch: ${currentBranch}`}
-                    >
-                      {currentBranch}
-                    </span>
-                  </div>
-                ) : (
-                  <span className="text-[11px] italic text-muted-foreground">
-                    Belum ada nama branch
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Quick Action Buttons */}
-            <div className="flex shrink-0 items-center gap-0.5">
-              {currentBranch && (
+        <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] items-center gap-2">
+          <dt className="text-muted-foreground">Branch</dt>
+          <dd className="flex min-w-0 items-center gap-1">
+            {currentBranch ? (
+              <>
+                <code
+                  className="truncate rounded-md bg-muted px-1.5 py-0.5 font-mono text-foreground"
+                  title={currentBranch}
+                >
+                  {currentBranch}
+                </code>
                 <Button
                   type="button"
                   variant="ghost"
-                  size="icon"
+                  size="icon-xs"
                   onClick={handleCopyBranch}
-                  className="h-7 w-7 text-muted-foreground hover:text-foreground cursor-pointer"
+                  className={`text-muted-foreground ${TOUCH_ICON}`}
+                  aria-label="Salin nama branch"
                   title="Salin nama branch"
                 >
                   {isCopied ? (
-                    <Check className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <Check className="text-emerald-700 dark:text-emerald-400" />
                   ) : (
-                    <Copy className="h-3.5 w-3.5" />
+                    <Copy />
                   )}
-                  <span className="sr-only">Salin nama branch</span>
                 </Button>
-              )}
-
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsEditing(true)}
-                disabled={isPending}
-                className="h-7 w-7 text-muted-foreground hover:text-foreground cursor-pointer"
-                title="Ubah repository & branch"
-              >
-                <Pencil className="h-3.5 w-3.5" />
-                <span className="sr-only">Ubah repository & branch</span>
-              </Button>
-
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={handleClear}
-                disabled={isPending}
-                className="h-7 w-7 text-muted-foreground hover:text-rose-600 dark:hover:text-rose-400 cursor-pointer"
-                title="Hapus tautan GitHub"
-              >
-                {isPending ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                ) : (
-                  <Trash2 className="h-3.5 w-3.5" />
-                )}
-                <span className="sr-only">Hapus tautan GitHub</span>
-              </Button>
-            </div>
-          </div>
-
-          <p className="text-[11px] text-muted-foreground">
-            {currentRepo
-              ? `Sinkronisasi commit difilter khusus untuk repo ${currentRepo}.`
-              : 'Branch aktif untuk pelacakan kode dan sinkronisasi commit otomatis.'}
-          </p>
+              </>
+            ) : (
+              <span className="text-muted-foreground">Belum diisi</span>
+            )}
+          </dd>
         </div>
-      ) : isEditing ? (
-        /* Edit Mode */
-        <div className="space-y-2.5 rounded-lg border bg-muted/20 p-2.5 pt-2">
-          <div className="space-y-1">
-            <label className="flex items-center justify-between text-[11px] font-medium text-muted-foreground">
-              <span>Repository Target</span>
-              <span className="text-[10px] font-normal opacity-75">
-                Opsional (Multi-Repo)
-              </span>
-            </label>
-            <div className="relative flex items-center">
-              <span className="pointer-events-none absolute left-2.5 text-muted-foreground">
-                <FolderGit2 className="h-3.5 w-3.5" />
-              </span>
-              <Input
-                type="text"
-                value={repoInput}
-                onChange={(e) => setRepoInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={isPending}
-                placeholder="misal: liv-lauflove/workhub atau workhub-fe"
-                className="h-8 pl-8 pr-2 text-xs font-mono shadow-2xs"
-              />
-            </div>
-          </div>
+      </dl>
 
-          <div className="space-y-1">
-            <label className="text-[11px] font-medium text-muted-foreground block">
-              Nama Branch
-            </label>
-            <div className="relative flex items-center">
-              <span className="pointer-events-none absolute left-2.5 text-muted-foreground">
-                <GitBranch className="h-3.5 w-3.5" />
-              </span>
-              <Input
-                ref={branchInputRef}
-                type="text"
-                value={branchInput}
-                onChange={(e) => setBranchInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={isPending}
-                placeholder="misal: feat/issue-133-multi-repo"
-                className="h-8 pl-8 pr-2 text-xs font-mono shadow-2xs"
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-1.5 pt-0.5">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setBranchInput(currentBranch);
-                setRepoInput(currentRepo);
-                setIsEditing(false);
-              }}
-              disabled={isPending}
-              className="h-7 px-2.5 text-xs cursor-pointer"
-            >
-              <X className="mr-1 h-3 w-3" />
-              <span>Batal</span>
-            </Button>
-
-            <Button
-              type="button"
-              size="sm"
-              onClick={handleSave}
-              disabled={isPending}
-              className="h-7 px-2.5 text-xs bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer"
-            >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                  <span>Menyimpan...</span>
-                </>
-              ) : (
-                <>
-                  <Check className="mr-1 h-3 w-3" />
-                  <span>Simpan</span>
-                </>
-              )}
-            </Button>
-          </div>
-          <p className="text-[10px] text-muted-foreground">
-            Tekan{' '}
-            <kbd className="rounded bg-muted px-1 py-0.5 font-mono">Enter</kbd>{' '}
-            untuk menyimpan,{' '}
-            <kbd className="rounded bg-muted px-1 py-0.5 font-mono">Esc</kbd>{' '}
-            untuk membatalkan.
-          </p>
-        </div>
-      ) : (
-        /* Empty State (No branch/repo set, click to add) */
-        <div className="space-y-2 pt-1">
-          <button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className="group flex w-full items-center justify-between rounded-lg border border-dashed border-border/80 bg-muted/20 p-2.5 text-left text-xs text-muted-foreground hover:border-primary/50 hover:bg-muted/40 hover:text-foreground transition-all cursor-pointer"
-          >
-            <div className="flex items-center gap-2">
-              <span className="flex h-6 w-6 items-center justify-center rounded-md bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary transition-colors">
-                <GithubIcon className="h-3.5 w-3.5" />
-              </span>
-              <span>Tautkan repo & branch GitHub...</span>
-            </div>
-            <Pencil className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
-          </button>
-          <p className="text-[11px] text-muted-foreground/70">
-            Tautkan repository dan branch Git agar riwayat commit terlacak
-            akurat tanpa bentrok antar-repo.
-          </p>
-        </div>
-      )}
+      <div className="flex flex-wrap items-center gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          onClick={() => setIsEditing(true)}
+          disabled={isPending}
+          className={TOUCH_SM}
+        >
+          <Pencil aria-hidden="true" />
+          Ubah
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={handleClear}
+          disabled={isPending}
+          className={`text-muted-foreground hover:text-destructive ${TOUCH_SM}`}
+        >
+          {isPending ? (
+            <Loader2 className="animate-spin" aria-hidden="true" />
+          ) : (
+            <Unlink aria-hidden="true" />
+          )}
+          Lepas tautan
+        </Button>
+      </div>
     </div>
   );
 }
