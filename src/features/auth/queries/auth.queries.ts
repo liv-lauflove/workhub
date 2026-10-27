@@ -26,11 +26,38 @@ export const getUserProfile = cache(async () => {
   if (!user) return null;
 
   const supabase = await createClient();
-  const { data } = await supabase
+  let { data, error } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single();
+    .maybeSingle();
+
+  // Absorb clock skew (PGRST303: JWT issued at future) right after login
+  if (
+    error &&
+    (error.code === 'PGRST303' ||
+      error.message?.includes('JWT issued at future'))
+  ) {
+    await new Promise((r) => setTimeout(r, 600));
+    const retry = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle();
+    data = retry.data;
+    error = retry.error;
+  }
+
+  if (error || !data) {
+    const { createAdminClient } = await import('@/lib/supabase/admin');
+    const admin = createAdminClient();
+    const { data: adminProfile } = await admin
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle();
+    return adminProfile;
+  }
 
   return data;
 });

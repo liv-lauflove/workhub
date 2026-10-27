@@ -3,7 +3,9 @@
 import * as React from 'react';
 import { AlertTriangle, RefreshCw, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 export default function DashboardError({
   error,
@@ -12,10 +14,15 @@ export default function DashboardError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const router = useRouter();
+
   React.useEffect(() => {
-    // Log the error to console or error reporting service
     console.error('Dashboard Error Boundary Caught:', error);
   }, [error]);
+
+  const isJwtSkew =
+    error.message?.includes('PGRST303') ||
+    error.message?.includes('JWT issued at future');
 
   return (
     <div className="mx-auto flex max-w-xl flex-col items-center justify-center py-16 text-center space-y-5">
@@ -28,14 +35,19 @@ export default function DashboardError({
           Terjadi Kesalahan Saat Memuat Halaman
         </h2>
         <p className="text-sm text-muted-foreground max-w-md">
-          {error.message ||
-            'Gagal mengambil data dari server. Silakan coba muat ulang atau kembali ke halaman sebelumnya.'}
+          {isJwtSkew
+            ? 'Terjadi sinkronisasi waktu sesi login. Silakan klik tombol di bawah untuk memuat ulang.'
+            : error.message ||
+              'Gagal mengambil data dari server. Silakan coba muat ulang atau kembali ke halaman sebelumnya.'}
         </p>
       </div>
 
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
         <Button
-          onClick={() => reset()}
+          onClick={() => {
+            reset();
+            router.refresh();
+          }}
           variant="default"
           className="flex items-center gap-2"
         >
@@ -43,10 +55,16 @@ export default function DashboardError({
           <span>Coba Lagi</span>
         </Button>
 
-        <Button variant="outline" render={<Link href="/" />}>
+        <Link
+          href="/"
+          className={cn(
+            buttonVariants({ variant: 'outline' }),
+            'flex items-center gap-1.5'
+          )}
+        >
           <ArrowLeft className="h-4 w-4 mr-1.5" />
           <span>Kembali ke Dashboard</span>
-        </Button>
+        </Link>
       </div>
     </div>
   );

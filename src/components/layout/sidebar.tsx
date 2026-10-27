@@ -36,7 +36,7 @@ const NAV_ITEMS = [
   { label: 'Dashboard', href: '/', icon: 'LayoutDashboard' as const },
   { label: 'My Tasks', href: '/tasks', icon: 'ListTodo' as const },
   { label: 'Milestones', href: '/milestones', icon: 'Target' as const },
-  { label: 'Team', href: '/team', icon: 'Users' as const },
+  { label: 'Member', href: '/team', icon: 'Users' as const },
   { label: 'Workload', href: '/workload', icon: 'BarChart3' as const },
   { label: 'Archive', href: '/archive', icon: 'Archive' as const },
   { label: 'Settings', href: '/settings', icon: 'Settings' as const },

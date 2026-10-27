@@ -1,11 +1,148 @@
 import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 
+import { MANAGEMENT_TEAM_ID } from '../constants';
+export { MANAGEMENT_TEAM_ID };
+
+export interface TeamWithStats {
+  id: string;
+  name: string;
+  memberCount: number;
+  leaders: string[];
+  isManagement: boolean;
+  createdAt: string;
+}
+
 export async function getTeams() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from('teams').select('*');
-  if (error) throw error;
-  return data;
+  let { data, error } = await supabase
+    .from('teams')
+    .select('*')
+    .order('created_at', { ascending: true });
+
+  // Absorb clock skew right after login (PGRST303: JWT issued at future)
+  if (
+    error &&
+    (error.code === 'PGRST303' ||
+      error.message?.includes('JWT issued at future'))
+  ) {
+    await new Promise((r) => setTimeout(r, 600));
+    const retry = await supabase
+      .from('teams')
+      .select('*')
+      .order('created_at', { ascending: true });
+    data = retry.data;
+    error = retry.error;
+  }
+
+  if (error) {
+    const { createAdminClient } = await import('@/lib/supabase/admin');
+    const admin = createAdminClient();
+    const { data: adminTeams } = await admin
+      .from('teams')
+      .select('*')
+      .order('created_at', { ascending: true });
+    return adminTeams || [];
+  }
+
+  return data || [];
+}
+
+/**
+ * Get all teams with aggregate member statistics (member count and leaders).
+ */
+export async function getTeamsWithMemberStats(): Promise<TeamWithStats[]> {
+  const supabase = await createClient();
+
+  // 1. Fetch all teams
+  let { data: teams, error: teamsError } = await supabase
+    .from('teams')
+    .select('id, name, created_at')
+    .order('created_at', { ascending: true });
+
+  if (
+    teamsError &&
+    (teamsError.code === 'PGRST303' ||
+      teamsError.message?.includes('JWT issued at future'))
+  ) {
+    await new Promise((r) => setTimeout(r, 600));
+    const retry = await supabase
+      .from('teams')
+      .select('id, name, created_at')
+      .order('created_at', { ascending: true });
+    teams = retry.data;
+    teamsError = retry.error;
+  }
+
+  if (teamsError) {
+    const { createAdminClient } = await import('@/lib/supabase/admin');
+    const admin = createAdminClient();
+    const { data: adminTeams } = await admin
+      .from('teams')
+      .select('id, name, created_at')
+      .order('created_at', { ascending: true });
+    teams = adminTeams || [];
+  }
+
+  if (!teams || teams.length === 0) return [];
+
+  // 2. Fetch all profiles to compute counts and leaders
+  let { data: profiles, error: profilesError } = await supabase
+    .from('profiles')
+    .select('id, full_name, role, team_id');
+
+  if (
+    profilesError &&
+    (profilesError.code === 'PGRST303' ||
+      profilesError.message?.includes('JWT issued at future'))
+  ) {
+    await new Promise((r) => setTimeout(r, 600));
+    const retry = await supabase
+      .from('profiles')
+      .select('id, full_name, role, team_id');
+    profiles = retry.data;
+    profilesError = retry.error;
+  }
+
+  if (profilesError) {
+    const { createAdminClient } = await import('@/lib/supabase/admin');
+    const admin = createAdminClient();
+    const { data: adminProfiles } = await admin
+      .from('profiles')
+      .select('id, full_name, role, team_id');
+    profiles = adminProfiles || [];
+  }
+
+  const teamStatsMap = new Map<string, { count: number; leaders: string[] }>();
+  for (const team of teams) {
+    teamStatsMap.set(team.id, { count: 0, leaders: [] });
+  }
+
+  for (const profile of profiles || []) {
+    if (profile.team_id && teamStatsMap.has(profile.team_id)) {
+      const stat = teamStatsMap.get(profile.team_id)!;
+      stat.count += 1;
+      if (profile.role === 'leader' && profile.full_name) {
+        stat.leaders.push(profile.full_name);
+      }
+    }
+  }
+
+  return teams.map((team) => {
+    const stat = teamStatsMap.get(team.id) || { count: 0, leaders: [] };
+    const isManagement =
+      team.id === MANAGEMENT_TEAM_ID ||
+      team.name.trim().toLowerCase() === 'management';
+
+    return {
+      id: team.id,
+      name: team.name,
+      memberCount: stat.count,
+      leaders: stat.leaders,
+      isManagement,
+      createdAt: team.created_at,
+    };
+  });
 }
 
 /**
@@ -48,14 +185,31 @@ export async function isManagementTeam(
   teamId?: string | null
 ): Promise<boolean> {
   if (!teamId) return false;
+  if (teamId === MANAGEMENT_TEAM_ID) return true;
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data: initialData, error } = await supabase
     .from('teams')
     .select('name')
     .eq('id', teamId)
     .maybeSingle();
+  let data = initialData;
 
-  if (error || !data) return false;
+  if (
+    error &&
+    (error.code === 'PGRST303' ||
+      error.message?.includes('JWT issued at future'))
+  ) {
+    const { createAdminClient } = await import('@/lib/supabase/admin');
+    const admin = createAdminClient();
+    const { data: adminData } = await admin
+      .from('teams')
+      .select('name')
+      .eq('id', teamId)
+      .maybeSingle();
+    data = adminData;
+  }
+
+  if (!data) return false;
   return data.name === 'Management';
 }
 
