@@ -59,7 +59,7 @@ export function calculateWeeklyTrends(
     const weekIndex = numberOfWeeks - i;
     intervals.push({
       period: `Mgg ${weekIndex}`,
-      fullLabel: `Minggu ${weekIndex} (${formatDateShort(start)} – ${formatDateShort(end)})`,
+      fullLabel: `Minggu ${weekIndex} (${formatDateShort(start)} - ${formatDateShort(end)})`,
       startDate: start,
       endDate: end,
     });

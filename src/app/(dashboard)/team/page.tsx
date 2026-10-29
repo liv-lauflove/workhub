@@ -23,7 +23,7 @@ import { redirect } from 'next/navigation';
 import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
-  title: 'Member & Tim — Workhub',
+  title: 'Member & Tim | Workhub',
   description: 'Kelola anggota tim, squad, dan undangan.',
 };
 

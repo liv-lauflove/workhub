@@ -33,10 +33,10 @@ export async function generateMetadata({
   const { id } = await params;
   const milestone = await getMilestoneById(id);
   if (!milestone) {
-    return { title: 'Milestone Tidak Ditemukan — Workhub' };
+    return { title: 'Milestone Tidak Ditemukan | Workhub' };
   }
   return {
-    title: `${milestone.title} — Workhub`,
+    title: `${milestone.title} | Workhub`,
     description: milestone.description || 'Detail target strategis milestone.',
   };
 }

@@ -363,8 +363,8 @@ export function TaskDetailMain({
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 pt-1">
               <p className="text-[11px] text-muted-foreground">
-                💡 Komentar akan langsung terhubung ke timeline aktivitas di
-                Fase 2.
+                Komentar akan langsung terhubung ke timeline aktivitas di Fase
+                2.
               </p>
 
               <button

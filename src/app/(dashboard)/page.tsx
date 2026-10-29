@@ -12,7 +12,7 @@ import { DashboardView } from '@/features/dashboard/components/dashboard-view';
 import type { QuarterFilter } from '@/features/dashboard/types/dashboard.types';
 
 export const metadata: Metadata = {
-  title: 'Dashboard Performa — Workhub',
+  title: 'Dashboard Performa | Workhub',
   description:
     'Pemantauan performa kuartalan, progres tugas, dan kapasitas kerja tim.',
 };

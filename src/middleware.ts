@@ -52,7 +52,7 @@ export async function middleware(request: NextRequest) {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>429 - Terlalu Banyak Permintaan — Workhub</title>
+  <title>429 - Terlalu Banyak Permintaan | Workhub</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #0f172a; color: #f8fafc; text-align: center; padding: 1.5rem; }
     .card { background: #1e293b; border: 1px solid #334155; border-radius: 1rem; padding: 2.5rem; max-width: 440px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); }
