@@ -307,7 +307,7 @@ export function TaskBranchInput({
                   href={repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex max-w-full items-center gap-1 rounded-sm font-mono text-foreground underline-offset-2 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+                  className="relative inline-flex max-w-full items-center gap-1 rounded-sm font-mono text-foreground underline-offset-2 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
                   title={`Buka ${currentRepo} di GitHub`}
                 >
                   <span className="truncate">{currentRepo}</span>

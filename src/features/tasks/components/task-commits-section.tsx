@@ -172,7 +172,7 @@ export function TaskCommitsSection({
   return (
     <section
       aria-labelledby="github-commits-heading"
-      className="overflow-hidden rounded-xl border bg-card shadow-xs"
+      className="relative overflow-hidden rounded-xl border bg-card shadow-xs"
     >
       <header className="flex flex-wrap items-start justify-between gap-3 border-b px-5 py-4">
         <div className="min-w-0 flex-1 space-y-1.5">
@@ -189,7 +189,7 @@ export function TaskCommitsSection({
           {(headerRepo || branchName) && (
             <p className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
               {headerRepo && (
-                <span className="inline-flex min-w-0 items-center gap-1">
+                <span className="relative inline-flex min-w-0 items-center gap-1">
                   <FolderGit2
                     className="size-3.5 shrink-0"
                     aria-hidden="true"
@@ -200,7 +200,7 @@ export function TaskCommitsSection({
               )}
               {headerRepo && branchName && <Separator />}
               {branchName && (
-                <span className="inline-flex min-w-0 items-center gap-1">
+                <span className="relative inline-flex min-w-0 items-center gap-1">
                   <GitBranch
                     className="size-3.5 shrink-0 text-primary"
                     aria-hidden="true"
@@ -266,7 +266,7 @@ export function TaskCommitsSection({
                           href={commit.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 rounded-sm font-mono text-foreground underline-offset-2 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
+                          className="relative inline-flex items-center gap-1 rounded-sm font-mono text-foreground underline-offset-2 outline-none hover:underline focus-visible:ring-3 focus-visible:ring-ring/50"
                           title="Buka commit di GitHub"
                         >
                           {shortSha}
@@ -304,7 +304,7 @@ export function TaskCommitsSection({
                       {showRowRepo && (
                         <>
                           <Separator />
-                          <span className="inline-flex min-w-0 items-center gap-1">
+                          <span className="relative inline-flex min-w-0 items-center gap-1">
                             <FolderGit2
                               className="size-3 shrink-0"
                               aria-hidden="true"
