@@ -6,8 +6,8 @@ Dokumen ini menjelaskan arsitektur infrastruktur cloud, konfigurasi lingkungan, 
 
 ## 1. Basis Data & Autentikasi (Supabase Cloud)
 
-- **Single Source of Truth**: Workhub menggunakan **Supabase Cloud** sebagai penyedia basis data PostgreSQL, autentikasi sesi (`@supabase/ssr`), dan penyimpanan objek (_Supabase Storage_) tanpa ketergantungan pada kontainer Docker lokal.
-- **Klien Supabase (`src/lib/supabase/`)**:
+- Workhub menggunakan **Supabase Cloud** sebagai penyedia basis data PostgreSQL, autentikasi sesi (`@supabase/ssr`), dan penyimpanan objek (_Supabase Storage_) tanpa ketergantungan pada kontainer Docker lokal.
+- Empat modul klien di `src/lib/supabase/` memisahkan konteks eksekusi:
   - `client.ts`: Klien peramban (`createBrowserClient`) untuk interaksi _client-side_.
   - `server.ts`: Klien server (`createServerClient` terikat pada `cookies()` Next.js) yang menghormati penuh kebijakan Row Level Security (RLS) pengguna aktif.
   - `admin.ts`: Klien administratif (`service_role`) khusus untuk operasi belakang layar yang telah memverifikasi otorisasi secara mandiri (seperti pencatatan commit dari webhook GitHub atau klaim undangan tim).
@@ -66,6 +66,6 @@ Setiap kali pengembang menjalankan `git commit`, hook `.husky/pre-commit` secara
 
 Sebelum menggabungkan Pull Request ke `dev` atau `master`, wajib lulus pemeriksaan berikut:
 
-1. **Linting**: `pnpm lint` (0 errors).
-2. **Typecheck & Production Build**: `pnpm build` (memastikan seluruh halaman statis, rute dinamis, dan Server Actions terkompilasi bersih dengan Next.js Turbopack).
-3. **Health Check Endpoint**: `/api/health` tersedia untuk memantau ketersediaan layanan aplikasi setelah _deployment_.
+1. Jalankan `pnpm lint` dan pastikan 0 errors.
+2. Jalankan `pnpm build` untuk memastikan seluruh halaman statis, rute dinamis, dan Server Actions terkompilasi bersih dengan Next.js Turbopack.
+3. Gunakan endpoint `/api/health` untuk memantau ketersediaan layanan aplikasi setelah _deployment_.
