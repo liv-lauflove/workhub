@@ -1,7 +1,10 @@
 /**
  * Workload and capacity types and constants.
- * Implements PRD §9.6, Issue #28, and Issue #95 (Dual-Track Progress & Dynamic Workload Engine).
+ * Implements PRD §9.6, Issue #28, Issue #95 (Dual-Track Progress & Dynamic Workload Engine),
+ * and Issue #142 (2-Month Member Activity Pulse).
  */
+
+import type { ActivityPulseSummary } from '@/lib/activity-pulse.utils';
 
 /**
  * Static weight mapping for task priorities (Issue #28 fallback).
@@ -81,6 +84,8 @@ export interface MemberWorkload {
   tasksSummary: MemberWorkloadTaskSummary;
   /** Detailed dynamic breakdown per task (Issue #95) */
   dynamicTasks?: DynamicTaskScore[];
+  /** 2-Month (8-week) member activity pulse wave metrics (Issue #142) */
+  activityPulse?: ActivityPulseSummary;
 }
 
 /** Aggregate team workload and capacity overview */
