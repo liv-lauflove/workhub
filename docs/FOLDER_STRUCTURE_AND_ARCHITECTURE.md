@@ -8,10 +8,10 @@ Dokumen ini menjelaskan struktur direktori dan arsitektur aplikasi **Workhub (Ta
 
 Untuk menjaga skalabilitas codebase yang memiliki 12 domain bisnis berbeda, Workhub menggunakan pola **Feature-Sliced Design (Lite)**:
 
-1. **`src/app/` (Routing & Presentation Shell):** Hanya berisi konfigurasi routing App Router (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, dan `route.ts`). File `page.tsx` bertugas mengambil data awal di sisi server (Server Component) lalu meneruskannya ke komponen fitur di `src/features/`.
-2. **`src/features/` (Domain Modules):** Setiap fitur bisnis memiliki folder mandiri yang berisi `components/`, `actions/`, `queries/` (atau `lib/`), `hooks/`, dan `schemas/`.
-3. **`src/components/` (Shared UI):** Komponen UI generik yang dapat dipakai lintas fitur (Shadcn UI primitives di `ui/`, layout navigasi di `layout/`, dan provider global di `providers/`).
-4. **`src/lib/` (Core Infrastructure):** Inisialisasi client Supabase (`client.ts`, `server.ts`, `admin.ts`, `middleware.ts`), helper umum, dan konstanta sistem.
+1. `src/app/` hanya berisi konfigurasi routing App Router (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, dan `route.ts`). File `page.tsx` mengambil data awal di sisi server (Server Component) lalu meneruskannya ke komponen fitur di `src/features/`.
+2. `src/features/` menampung 12 modul bisnis yang masing-masing memiliki folder `components/`, `actions/`, `queries/` (atau `lib/`), `hooks/`, dan `schemas/`.
+3. `src/components/` menyimpan komponen UI generik lintas fitur (Shadcn UI primitives di `ui/`, layout navigasi di `layout/`, dan provider global di `providers/`).
+4. `src/lib/` menyediakan inisialisasi client Supabase (`client.ts`, `server.ts`, `admin.ts`, `middleware.ts`), helper umum, dan konstanta sistem.
 
 ---
 
@@ -140,5 +140,5 @@ workhub/
 
 ### 3.3 Integrasi Eksternal (API Routes)
 
-- **GitHub Webhook (`/api/github-webhook`):** Menerima payload push event dari GitHub, memverifikasi signature HMAC SHA-256 (`X-Hub-Signature-256`), mencocokkan nama branch serta `repository.full_name` (`tasks.github_repo`), dan menyimpan riwayat commit ke tabel `github_commits` menggunakan Admin Client.
-- **AI Assistant (`/api/ai/chat`):** Mengambil konteks beban kerja, proyek, dan task terkini melalui modul RAG (`src/features/ai/rag/`), memeriksa `ai_query_cache` berbasis SHA-256, dan memanggil model Google Gemini jika belum ada cache yang valid.
+- Endpoint `/api/github-webhook` menerima payload push event dari GitHub, memverifikasi signature HMAC SHA-256 (`X-Hub-Signature-256`), mencocokkan nama branch serta `repository.full_name` (`tasks.github_repo`), dan menyimpan riwayat commit ke tabel `github_commits` menggunakan Admin Client.
+- Endpoint `/api/ai/chat` mengambil konteks beban kerja, proyek, dan task terkini melalui modul RAG (`src/features/ai/rag/`), memeriksa `ai_query_cache` berbasis SHA-256, dan memanggil model Google Gemini jika belum ada cache yang valid.

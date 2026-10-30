@@ -22,6 +22,6 @@ Selamat datang di pusat dokumentasi teknis **Workhub (Task & Performance Dashboa
 
 ## Ringkasan Alur Kerja Cepat
 
-1. **Sinkronisasi Cabang**: Selalu buat cabang fitur atau perbaikan baru dari `dev` (`git checkout dev && git pull origin dev && git checkout -b feat/issue-xx-deskripsi`).
-2. **Perubahan Basis Data**: Setiap perubahan struktur tabel wajib dituangkan ke berkas migrasi baru di `supabase/migrations/`, diterapkan dengan `npx supabase db push`, dan disinkronkan ke `src/types/database.types.ts`.
-3. **Verifikasi Kualitas**: Jalankan `pnpm lint` dan `pnpm build` hingga bebas dari galat sebelum membuka Pull Request ke `dev`.
+1. Buat cabang fitur atau perbaikan baru dari `dev` (`git checkout dev && git pull origin dev && git checkout -b feat/issue-xx-deskripsi`).
+2. Tuangkan setiap perubahan struktur tabel ke berkas migrasi baru di `supabase/migrations/`, terapkan dengan `npx supabase db push`, dan sinkronkan ke `src/types/database.types.ts`.
+3. Jalankan `pnpm lint` dan `pnpm build` hingga bebas dari galat sebelum membuka Pull Request ke `dev`.

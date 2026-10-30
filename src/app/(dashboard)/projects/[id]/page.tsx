@@ -67,11 +67,11 @@ export async function generateMetadata({
   const project = await getProjectById(id);
 
   if (!project) {
-    return { title: 'Project Tidak Ditemukan — Workhub' };
+    return { title: 'Project Tidak Ditemukan | Workhub' };
   }
 
   return {
-    title: `${project.name} — Task & Isu Project — Workhub`,
+    title: `${project.name} - Task & Isu Project | Workhub`,
     description:
       project.description || `Pelacakan task dan isu project ${project.name}.`,
   };

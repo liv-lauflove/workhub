@@ -38,7 +38,7 @@ const NAV_ITEMS = [
   { label: 'Milestones', href: '/milestones', icon: 'Target' as const },
   { label: 'Member', href: '/team', icon: 'Users' as const },
   { label: 'Workload', href: '/workload', icon: 'BarChart3' as const },
-  { label: 'Archive', href: '/archive', icon: 'Archive' as const },
+  { label: 'Archive (Segera)', href: '/archive', icon: 'Archive' as const },
   { label: 'Settings', href: '/settings', icon: 'Settings' as const },
 ];
 

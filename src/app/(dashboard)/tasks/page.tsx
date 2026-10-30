@@ -16,7 +16,7 @@ import { MyTasksList } from '@/features/tasks/components/my-tasks-list';
 import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
-  title: 'My Tasks — Workhub',
+  title: 'My Tasks | Workhub',
   description: 'Daftar tugas yang ditugaskan kepada Anda untuk fokus eksekusi.',
 };
 

@@ -12,10 +12,10 @@ interface DashboardFilterProps {
 }
 
 const QUARTER_OPTIONS = [
-  { value: 1, label: 'Q1 (Jan – Mar)' },
-  { value: 2, label: 'Q2 (Apr – Jun)' },
-  { value: 3, label: 'Q3 (Jul – Sep)' },
-  { value: 4, label: 'Q4 (Okt – Des)' },
+  { value: 1, label: 'Q1 (Jan - Mar)' },
+  { value: 2, label: 'Q2 (Apr - Jun)' },
+  { value: 3, label: 'Q3 (Jul - Sep)' },
+  { value: 4, label: 'Q4 (Okt - Des)' },
 ] as const;
 
 export function DashboardFilter({

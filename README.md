@@ -14,9 +14,9 @@
 
 ### 1. Hierarki Kerja Terstruktur (Milestone -> Project -> Task)
 
-- **Milestones**: Target strategis lintas tim dengan penanggung jawab (PIC), rentang tanggal mulai/target, indikator risiko, dan pengarsipan (_archive_).
-- **Projects**: Proyek per tim (_squad_) yang berkontribusi pada satu Milestone, dilengkapi pengaturan kolom Kanban khusus per proyek.
-- **Tasks**: Unit kerja terkecil dengan prioritas (`critical`, `high`, `medium`, `low`), pelacakan asal tugas (`normal` atau `cs_complaint` dari keluhan Customer Service), lampiran berkas, komentar diskusi, dan ketergantungan (_blocking dependencies_).
+- Milestones mencatat target strategis lintas tim dengan penanggung jawab (PIC), rentang tanggal mulai/target, indikator risiko, dan pengarsipan (_archive_).
+- Projects mengelompokkan pekerjaan per tim (_squad_) yang berkontribusi pada satu Milestone, dilengkapi pengaturan kolom Kanban khusus per proyek.
+- Tasks menjadi unit kerja terkecil dengan prioritas (`critical`, `high`, `medium`, `low`), pelacakan asal tugas (`normal` atau `cs_complaint` dari keluhan Customer Service), lampiran berkas, komentar diskusi, dan ketergantungan (_blocking dependencies_).
 
 ### 2. Alur Kerja Developer & QA (Dual-Assignee)
 
@@ -150,16 +150,16 @@ npx tsx scripts/test-ai-rag.ts
 
 Seluruh dokumentasi arsitektur, basis data, dan alur kerja tersedia di direktori [`docs/`](./docs/README.md):
 
-- **[Indeks Dokumentasi (`docs/README.md`)](./docs/README.md)**: Peta navigasi seluruh dokumen teknis.
-- **[Arsitektur & Struktur Folder (`docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md`)](./docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md)**: Prinsip _Feature-Driven Modular Design_, batasan Server vs Client Component, dan struktur rute.
-- **[Skema Basis Data & RLS (`docs/DATABASE_SCHEMA.md`)](./docs/DATABASE_SCHEMA.md)**: Dokumentasi lengkap seluruh tabel PostgreSQL, relasi, _trigger_, dan kebijakan Row Level Security.
-- **[Diagram Sistem (`docs/diagram.md`)](./docs/diagram.md)**: Diagram ERD, Activity Diagram (Task, CS Complaint, QA, Town Hall), dan Use Case Diagram dalam format Mermaid.
-- **[Spesifikasi DDL SQL (`docs/schema.sql`)](./docs/schema.sql)**: Definisi lengkap tabel, _enum_, _index_, dan _trigger_ PostgreSQL.
-- **[Product Requirements Document (`docs/prd.md`)](./docs/prd.md)**: Spesifikasi kebutuhan fungsional, _user stories_, matriks hak akses, dan metrik keberhasilan.
-- **[Infrastruktur & CI/CD (`docs/INFRASTRUCTURE_AND_CICD.md`)](./docs/INFRASTRUCTURE_AND_CICD.md)**: Konfigurasi Supabase Cloud, Storage, GitHub Webhook, dan alur _deployment_.
-- **[GitFlow & Konvensi Kode (`docs/GITFLOW_AND_CONVENTIONS.md`)](./docs/GITFLOW_AND_CONVENTIONS.md)**: Standar percabangan Git, _Conventional Commits_, dan format Pull Request.
-- **[Panduan Agen AI (`docs/AI_AGENT_GUIDELINES.md`)](./docs/AI_AGENT_GUIDELINES.md)**: Aturan kerja pasangan pemrograman AI, keamanan RLS, dan protokol QA.
-- **[Daftar Periksa Proyek (`docs/PROJECT_SETUP_CHECKLIST.md`)](./docs/PROJECT_SETUP_CHECKLIST.md)**: Status kesiapan infrastruktur dan fitur aplikasi.
+- [`docs/README.md`](./docs/README.md) memuat peta navigasi seluruh dokumen teknis.
+- [`docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md`](./docs/FOLDER_STRUCTURE_AND_ARCHITECTURE.md) menjelaskan prinsip _Feature-Driven Modular Design_, batasan Server vs Client Component, dan struktur rute.
+- [`docs/DATABASE_SCHEMA.md`](./docs/DATABASE_SCHEMA.md) merinci 18 tabel PostgreSQL, relasi, _trigger_, dan kebijakan Row Level Security.
+- [`docs/diagram.md`](./docs/diagram.md) menyajikan Diagram ERD, Activity Diagram (Task, CS Complaint, QA, Town Hall), dan Use Case Diagram dalam format Mermaid.
+- [`docs/schema.sql`](./docs/schema.sql) berisi definisi DDL lengkap tabel, _enum_, _index_, dan _trigger_ PostgreSQL.
+- [`docs/prd.md`](./docs/prd.md) memuat spesifikasi kebutuhan fungsional, _user stories_, matriks hak akses, dan metrik keberhasilan.
+- [`docs/INFRASTRUCTURE_AND_CICD.md`](./docs/INFRASTRUCTURE_AND_CICD.md) merangkum konfigurasi Supabase Cloud, Storage, GitHub Webhook, dan alur _deployment_.
+- [`docs/GITFLOW_AND_CONVENTIONS.md`](./docs/GITFLOW_AND_CONVENTIONS.md) menetapkan standar percabangan Git, _Conventional Commits_, dan format Pull Request.
+- [`docs/AI_AGENT_GUIDELINES.md`](./docs/AI_AGENT_GUIDELINES.md) mengatur kerja pasangan pemrograman AI, keamanan RLS, dan protokol QA.
+- [`docs/PROJECT_SETUP_CHECKLIST.md`](./docs/PROJECT_SETUP_CHECKLIST.md) mencatat status kesiapan infrastruktur dan fitur aplikasi.
 
 ---
 
