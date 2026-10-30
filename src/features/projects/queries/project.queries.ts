@@ -1,6 +1,7 @@
 import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 import { DEFAULT_PAGE_SIZE } from '@/lib/constants';
+import { buildActivityPulse } from '@/lib/activity-pulse.utils';
 import type { PaginationParams, PaginatedResult } from '@/types/global';
 import type { ProjectWithProgress } from '../types/project.types';
 
@@ -38,9 +39,18 @@ interface RawProjectQueryResult {
   }> | null;
   tasks?: Array<{
     id: string;
+    created_at?: string | null;
+    updated_at?: string | null;
     dev_status?: string | null;
     test_status?: string | null;
     column?: { id: string; name: string } | null;
+    github_commits?: Array<{ committed_at?: string | null }> | null;
+    activity_log?: Array<{ created_at?: string | null }> | null;
+    task_subtasks?: Array<{
+      created_at?: string | null;
+      tested_at?: string | null;
+      is_completed?: boolean | null;
+    }> | null;
   }> | null;
 }
 
@@ -56,11 +66,24 @@ const PROJECT_SELECT_QUERY = `
   total_tasks:tasks(count),
   tasks(
     id,
+    created_at,
+    updated_at,
     dev_status,
     test_status,
     column:board_columns(
       id,
       name
+    ),
+    github_commits(
+      committed_at
+    ),
+    activity_log(
+      created_at
+    ),
+    task_subtasks(
+      created_at,
+      tested_at,
+      is_completed
     )
   ),
   board_columns(
@@ -75,6 +98,10 @@ function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
   let completedTasks = 0;
   let devDoneTasks = 0;
   let testPassedTasks = 0;
+
+  const commitTimestamps: string[] = [];
+  const taskCreatedTimestamps: string[] = [];
+  const taskMovementTimestamps: string[] = [];
 
   if (p.tasks && p.tasks.length > 0) {
     totalTasks = p.tasks.length;
@@ -97,6 +124,53 @@ function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
       if ((isDevDone && isTestPassed) || isColumnDone) {
         completedTasks++;
       }
+
+      if (t.created_at) {
+        taskCreatedTimestamps.push(t.created_at);
+      }
+
+      if (t.github_commits && t.github_commits.length > 0) {
+        for (const c of t.github_commits) {
+          if (c.committed_at) {
+            commitTimestamps.push(c.committed_at);
+          }
+        }
+      }
+
+      const hasActivityLogs = Boolean(
+        t.activity_log && t.activity_log.length > 0
+      );
+      if (t.activity_log && t.activity_log.length > 0) {
+        for (const log of t.activity_log) {
+          if (log.created_at) {
+            taskMovementTimestamps.push(log.created_at);
+          }
+        }
+      } else if (
+        t.updated_at &&
+        t.created_at &&
+        Math.abs(
+          new Date(t.updated_at).getTime() - new Date(t.created_at).getTime()
+        ) > 60_000
+      ) {
+        taskMovementTimestamps.push(t.updated_at);
+      } else if (
+        !hasActivityLogs &&
+        t.updated_at &&
+        (isDevDone || isTestPassed || isColumnDone)
+      ) {
+        taskMovementTimestamps.push(t.updated_at);
+      }
+
+      if (t.task_subtasks && t.task_subtasks.length > 0) {
+        for (const sub of t.task_subtasks) {
+          if (sub.tested_at) {
+            taskMovementTimestamps.push(sub.tested_at);
+          } else if (sub.is_completed && sub.created_at) {
+            taskMovementTimestamps.push(sub.created_at);
+          }
+        }
+      }
     }
   } else if (p.total_tasks && p.total_tasks.length > 0) {
     totalTasks = p.total_tasks[0]?.count || 0;
@@ -115,6 +189,14 @@ function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
   const testProgress =
     totalTasks > 0 ? Math.round((testPassedTasks / totalTasks) * 100) : 0;
   const memberCount = p.team?.members?.length || 0;
+
+  const activityPulse = buildActivityPulse({
+    commitTimestamps,
+    taskCreatedTimestamps,
+    taskMovementTimestamps,
+    activeTaskCount: Math.max(totalTasks - completedTasks, 0),
+    mode: 'project',
+  });
 
   return {
     id: p.id,
@@ -142,6 +224,7 @@ function mapProjectWithProgress(p: RawProjectQueryResult): ProjectWithProgress {
     devProgress,
     testProgress,
     memberCount,
+    activityPulse,
   };
 }
 
