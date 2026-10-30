@@ -17,6 +17,7 @@ import type {
 
 interface ProjectActivityPulseProps {
   pulse: ActivityPulseSummary;
+  variant?: 'card' | 'detail';
 }
 
 const emptySubscribe = () => () => {};
@@ -108,15 +109,21 @@ function ProjectPulseTooltip({
   );
 }
 
-export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
+export function ProjectActivityPulse({
+  pulse,
+  variant = 'card',
+}: ProjectActivityPulseProps) {
   const isMounted = useIsMounted();
   const rawId = React.useId();
   const gradientId = `project-pulse-${rawId.replace(/:/g, '')}`;
   const cfg = PULSE_STATUS_STYLE[pulse.status] || PULSE_STATUS_STYLE.idle;
+  const isDetail = variant === 'detail';
 
   return (
     <div
-      className="rounded-lg border border-border/70 bg-muted/25 p-2.5 space-y-2"
+      className={`rounded-lg border border-border/70 bg-muted/25 ${
+        isDetail ? 'p-3.5 space-y-2.5' : 'p-2.5 space-y-2'
+      }`}
       onClick={(e) => {
         // Allow hovering/interacting with tooltip without accidental text selection issues
         e.stopPropagation();
@@ -126,12 +133,16 @@ export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 text-[11px] font-medium text-foreground">
           <Activity className="h-3.5 w-3.5 text-primary shrink-0" />
-          <span>Detak Aktivitas (8 Mgg)</span>
+          <span>
+            {isDetail
+              ? 'Detak Aktivitas Project (8 Minggu / 2 Bulan Terakhir)'
+              : 'Detak Aktivitas (8 Mgg)'}
+          </span>
         </div>
 
         <div className="flex items-center gap-1.5">
           <span className="text-[10px] font-medium text-muted-foreground tabular-nums">
-            {pulse.totalEvents} aksi
+            {pulse.totalEvents} aksi total
           </span>
           <span
             className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.2 text-[10px] font-semibold ${cfg.badgeClass}`}
@@ -143,7 +154,7 @@ export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
       </div>
 
       {/* Wave Chart Area */}
-      <div className="h-14 w-full">
+      <div className={isDetail ? 'h-20 w-full' : 'h-14 w-full'}>
         {!isMounted ? (
           <div className="flex h-full w-full items-center justify-center rounded bg-muted/30 text-[10px] text-muted-foreground">
             Memuat detak...
@@ -152,7 +163,11 @@ export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={pulse.points}
-              margin={{ top: 4, right: 4, left: 4, bottom: 0 }}
+              margin={
+                isDetail
+                  ? { top: 6, right: 8, left: 8, bottom: 0 }
+                  : { top: 4, right: 4, left: 4, bottom: 0 }
+              }
             >
               <defs>
                 <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
@@ -164,7 +179,14 @@ export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
                   />
                 </linearGradient>
               </defs>
-              <XAxis dataKey="period" hide />
+              <XAxis
+                dataKey="period"
+                hide={!isDetail}
+                axisLine={false}
+                tickLine={false}
+                tick={{ fontSize: 10, fill: 'var(--color-muted-foreground)' }}
+                dy={4}
+              />
               <YAxis hide domain={[0, 'dataMax + 1']} />
               <Tooltip
                 cursor={{
@@ -185,8 +207,12 @@ export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
                 stroke={cfg.stroke}
                 strokeWidth={2}
                 fill={`url(#${gradientId})`}
-                dot={{ r: 2, fill: cfg.stroke, strokeWidth: 0 }}
-                activeDot={{ r: 3.5, strokeWidth: 1.5, fill: cfg.stroke }}
+                dot={{
+                  r: isDetail ? 2.5 : 2,
+                  fill: cfg.stroke,
+                  strokeWidth: 0,
+                }}
+                activeDot={{ r: 4, strokeWidth: 1.5, fill: cfg.stroke }}
                 isAnimationActive={false}
               />
             </AreaChart>
@@ -201,7 +227,9 @@ export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
           title="Total commit GitHub (2 bulan terakhir)"
         >
           <GitCommit className="h-3 w-3 text-emerald-500 shrink-0" />
-          <span className="tabular-nums">{pulse.totalCommits} commit</span>
+          <span className="tabular-nums">
+            {pulse.totalCommits} {isDetail ? 'Commit GitHub' : 'commit'}
+          </span>
         </div>
 
         <div
@@ -209,7 +237,9 @@ export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
           title="Total pembuatan issue/task baru (2 bulan terakhir)"
         >
           <PlusCircle className="h-3 w-3 text-sky-500 shrink-0" />
-          <span className="tabular-nums">{pulse.totalTasksCreated} issue</span>
+          <span className="tabular-nums">
+            {pulse.totalTasksCreated} {isDetail ? 'Issue / Task Baru' : 'issue'}
+          </span>
         </div>
 
         <div
@@ -217,7 +247,9 @@ export function ProjectActivityPulse({ pulse }: ProjectActivityPulseProps) {
           title="Total pergerakan kolom, status, & checklist task (2 bulan terakhir)"
         >
           <ArrowRightLeft className="h-3 w-3 text-amber-500 shrink-0" />
-          <span className="tabular-nums">{pulse.totalTaskMovements} gerak</span>
+          <span className="tabular-nums">
+            {pulse.totalTaskMovements} {isDetail ? 'Pergerakan Task' : 'gerak'}
+          </span>
         </div>
       </div>
     </div>

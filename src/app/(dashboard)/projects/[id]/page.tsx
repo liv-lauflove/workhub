@@ -25,6 +25,7 @@ import {
   isManagementTeam,
 } from '@/features/team/queries/team.queries';
 import { ProjectTasksView } from '@/features/projects/components/project-tasks-view';
+import { ProjectActivityPulse } from '@/features/projects/components/project-activity-pulse';
 import { ROUTES } from '@/config/routes';
 
 interface ProjectDetailPageProps {
@@ -250,6 +251,14 @@ export default async function ProjectDetailPage({
             </div>
           </div>
         </div>
+
+        {/* 2-Month Project Activity Pulse Chart */}
+        {project.activityPulse && (
+          <ProjectActivityPulse
+            pulse={project.activityPulse}
+            variant="detail"
+          />
+        )}
       </div>
 
       {/* Project Tasks & Issues Container (GitHub Issues List & Kanban View Switcher) */}
