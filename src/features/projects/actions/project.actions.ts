@@ -151,3 +151,143 @@ export async function createProject(
     data: { id: data.id },
   };
 }
+
+/**
+ * Server action to archive a Project.
+ * Only team leaders can archive projects.
+ */
+export async function archiveProject(projectId: string): Promise<ActionState> {
+  if (!projectId) {
+    return {
+      success: false,
+      error: { _form: ['ID Project tidak valid.'] },
+    };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return {
+      success: false,
+      error: { _form: ['Sesi Anda tidak valid. Silakan login kembali.'] },
+    };
+  }
+
+  // Verify leader role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (profile?.role !== 'leader') {
+    return {
+      success: false,
+      error: {
+        _form: ['Hanya Leader yang memiliki izin untuk mengarsipkan project.'],
+      },
+    };
+  }
+
+  const { data: project, error } = await supabase
+    .from('projects')
+    .update({ archived_at: new Date().toISOString() })
+    .eq('id', projectId)
+    .select('id, milestone_id')
+    .single();
+
+  if (error) {
+    console.error('Error archiving project:', error);
+    return {
+      success: false,
+      error: { _form: [error.message] },
+    };
+  }
+
+  revalidatePath('/projects');
+  revalidatePath(`/projects/${projectId}`);
+  if (project?.milestone_id) {
+    revalidatePath(`/milestones/${project.milestone_id}`);
+  }
+  revalidatePath('/milestones');
+  revalidatePath('/archive');
+  revalidatePath('/');
+
+  return {
+    success: true,
+  };
+}
+
+/**
+ * Server action to restore an archived Project.
+ * Only team leaders can restore projects.
+ */
+export async function restoreProject(projectId: string): Promise<ActionState> {
+  if (!projectId) {
+    return {
+      success: false,
+      error: { _form: ['ID Project tidak valid.'] },
+    };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return {
+      success: false,
+      error: { _form: ['Sesi Anda tidak valid. Silakan login kembali.'] },
+    };
+  }
+
+  // Verify leader role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (profile?.role !== 'leader') {
+    return {
+      success: false,
+      error: {
+        _form: ['Hanya Leader yang memiliki izin untuk memulihkan project.'],
+      },
+    };
+  }
+
+  const { data: project, error } = await supabase
+    .from('projects')
+    .update({ archived_at: null })
+    .eq('id', projectId)
+    .select('id, milestone_id')
+    .single();
+
+  if (error) {
+    console.error('Error restoring project:', error);
+    return {
+      success: false,
+      error: { _form: [error.message] },
+    };
+  }
+
+  revalidatePath('/projects');
+  revalidatePath(`/projects/${projectId}`);
+  if (project?.milestone_id) {
+    revalidatePath(`/milestones/${project.milestone_id}`);
+  }
+  revalidatePath('/milestones');
+  revalidatePath('/archive');
+  revalidatePath('/');
+
+  return {
+    success: true,
+  };
+}

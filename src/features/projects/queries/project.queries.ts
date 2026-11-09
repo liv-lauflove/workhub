@@ -187,6 +187,27 @@ export async function getProjects(
   };
 }
 
+/**
+ * Get all archived projects ordered by archived_at descending.
+ */
+export async function getArchivedProjects(): Promise<ProjectWithProgress[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('projects')
+    .select(PROJECT_SELECT_QUERY)
+    .not('archived_at', 'is', null)
+    .order('archived_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching archived projects:', error);
+    return [];
+  }
+
+  return (data || []).map((p) =>
+    mapProjectWithProgress(p as unknown as RawProjectQueryResult)
+  );
+}
+
 export async function getProjectById(
   id: string
 ): Promise<ProjectWithProgress | null> {
