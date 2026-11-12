@@ -140,11 +140,12 @@ erDiagram
 
 ## 3. Database Triggers Otomatis
 
-| Nama Trigger               | Tabel Target   | Fungsi & Perilaku                                                                                                                                                                                                                                                                                                                                                                                 |
-| :------------------------- | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `on_auth_user_created`     | `auth.users`   | Menjalankan `public.handle_new_user()` untuk membuat baris `profiles` secara otomatis saat pengguna baru mendaftar, serta mencocokkan undangan pending di `team_invitations`.                                                                                                                                                                                                                     |
-| `before_task_write_guards` | `public.tasks` | Menjalankan `public.enforce_task_write_guards()` (`BEFORE INSERT OR UPDATE`) untuk menegakkan konsistensi kolom Kanban dengan project, memvalidasi keanggotaan tim assignee/developer/tester, membatasi perubahan field sensitif berdasarkan peran (Leader, Developer, Tester QA), serta memblokir kelulusan QA (`passed` / kolom `Done`) jika masih ada item `task_subtasks` yang belum selesai. |
-| `on_task_activity_updated` | `public.tasks` | Menjalankan `public.log_task_activity()` (`AFTER UPDATE`) untuk membandingkan nilai lama (`OLD`) dan nilai baru (`NEW`) pada 9 kolom utama task dan menyisipkan riwayat perubahan ke `public.activity_log`.                                                                                                                                                                                       |
+| Nama Trigger                        | Tabel Target              | Fungsi & Perilaku                                                                                                                                                                                                                                                                                                                                                                                 |
+| :---------------------------------- | :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `on_auth_user_created`              | `auth.users`              | Menjalankan `public.handle_new_user()` untuk membuat baris `profiles` secara otomatis saat pengguna baru mendaftar, serta mencocokkan undangan pending di `team_invitations`.                                                                                                                                                                                                                     |
+| `before_task_write_guards`          | `public.tasks`            | Menjalankan `public.enforce_task_write_guards()` (`BEFORE INSERT OR UPDATE`) untuk menegakkan konsistensi kolom Kanban dengan project, memvalidasi keanggotaan tim assignee/developer/tester, membatasi perubahan field sensitif berdasarkan peran (Leader, Developer, Tester QA), serta memblokir kelulusan QA (`passed` / kolom `Done`) jika masih ada item `task_subtasks` yang belum selesai. |
+| `trg_task_attachments_write_guards` | `public.task_attachments` | Menjalankan `public.before_task_attachment_write_guards()` (`BEFORE INSERT OR UPDATE OR DELETE`) untuk memvalidasi hak akses upload/delete lampiran, membatasi ukuran maksimal 5 MB, mencegah manipulasi path penyimpanan storage, dan menjaga sifat _immutable_ metadata berkas.                                                                                                                 |
+| `on_task_activity_updated`          | `public.tasks`            | Menjalankan `public.log_task_activity()` (`AFTER UPDATE`) untuk membandingkan nilai lama (`OLD`) dan nilai baru (`NEW`) pada 9 kolom utama task dan menyisipkan riwayat perubahan ke `public.activity_log`.                                                                                                                                                                                       |
 
 ---
 
@@ -197,4 +198,27 @@ Regresi Server Action dijalankan dengan `pnpm run test:task-kanban-checklist`, s
 
 ```powershell
 pnpm exec supabase db query --linked --file supabase/tests/member-task-creation-and-done-rules.test.sql
+```
+
+### Otorisasi lampiran task dan objek storage (Issue #147)
+
+- Fungsi helper otorisasi `public.can_view_task_attachment(target_task_id uuid)`, `public.can_upload_task_attachment(target_task_id uuid)`, dan `public.can_delete_task_attachment(target_attachment_id uuid)` berjalan sebagai `SECURITY DEFINER` dengan `search_path = public`.
+- **`public.task_attachments`**:
+  - `SELECT`: Diizinkan untuk anggota tim project, Tim Management, pihak yang ditugaskan pada task (`assignee_id`, `developer_id`, `tester_id`), atau pengunggah lampiran (`uploaded_by = (select auth.uid())`). Anggota lintas-squad dilarang melihat daftar lampiran task privat.
+  - `INSERT`: Diizinkan bagi anggota tim project, Tim Management, atau pihak yang ditugaskan pada task, dengan kewajiban `uploaded_by = (select auth.uid())`.
+  - `UPDATE`: Dibatasi oleh trigger `trg_task_attachments_write_guards` yang menegakkan sifat _immutable_ (field `task_id`, `file_url`, dan `uploaded_by` dilarang diubah setelah dicatat).
+  - `DELETE`: Hanya diizinkan bagi pengunggah asli (`uploaded_by = (select auth.uid())`), Leader tim pemilik project, atau Tim Management. Anggota tim lain yang bukan pengunggah dilarang menghapus berkas.
+  - Trigger `trg_task_attachments_write_guards` (`public.before_task_attachment_write_guards()`):
+    - Memvalidasi keberadaan task dan hak akses actor.
+    - Menegakkan batas ukuran maksimum berkas sebesar 5 MB (`file_size <= 5242880`).
+    - Menegakkan isolasi path penyimpanan agar selalu berformat `tasks/<task_id>/<file>` dan mencegah manipulasi path lintas-task.
+- **`storage.objects` (Bucket `attachments`)**:
+  - Akses baca dan download dibatasi hanya bagi pemilik berkas atau pengguna yang terotorisasi melihat task terkait melalui keterkaitan metadata `task_attachments`.
+  - Penghapusan objek storage pada Server Action `deleteTaskAttachmentAction` mengambil path langsung dari database (_single source of truth_) dan mengabaikan manipulasi path yang dikirimkan oleh client.
+  - Pembuatan signed URL pada `getAttachmentSignedUrlAction` mewajibkan lookup record database dan otorisasi hak baca task sebelum menghasilkan URL bertanda tangan.
+
+Regresi Server Action dijalankan dengan `pnpm run test:task-attachments`, sedangkan verifikasi langsung di database dilakukan melalui:
+
+```powershell
+pnpm exec supabase db query --linked --file supabase/tests/task-attachments-authorization.test.sql
 ```
