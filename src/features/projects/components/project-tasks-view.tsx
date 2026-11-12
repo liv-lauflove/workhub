@@ -171,9 +171,9 @@ export function ProjectTasksView({
           ) : (
             <span
               className="text-[11px] text-muted-foreground bg-muted/60 border border-border/80 rounded-md px-2.5 py-1"
-              title="Hanya Leader tim proyek terkait atau Leader Tim Management yang dapat menambahkan task"
+              title="Hanya anggota tim proyek terkait atau Tim Management yang dapat menambahkan task"
             >
-              Khusus Leader Proyek
+              Proyek Tim Lain (Read-only)
             </span>
           )}
         </div>
