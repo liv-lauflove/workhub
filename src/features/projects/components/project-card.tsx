@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Users, CheckSquare, User, ArrowRight, Shield } from 'lucide-react';
+import { ProjectActivityPulse } from './project-activity-pulse';
 import type { ProjectWithProgress } from '../types/project.types';
 
 interface ProjectCardProps {
@@ -101,6 +102,11 @@ export function ProjectCard({ project }: ProjectCardProps) {
             />
           </div>
         </div>
+
+        {/* 2-Month (8-Week) Project Activity Pulse Wave Chart (Issue #142) */}
+        {project.activityPulse && (
+          <ProjectActivityPulse pulse={project.activityPulse} />
+        )}
       </div>
 
       {/* Footer Info: PIC & Team Member Count */}
