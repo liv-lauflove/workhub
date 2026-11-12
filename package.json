@@ -11,6 +11,7 @@
     "test:profile-permissions": "node scripts/test-profile-permissions.mjs",
     "test:task-kanban-checklist": "node scripts/test-task-kanban-checklist.mjs",
     "test:task-attachments": "node scripts/test-task-attachments-authorization.mjs",
+    "test:atomic-invitation-claim": "node scripts/test-atomic-invitation-claim.mjs",
     "db:seed": "node scripts/seed.mjs",
     "prepare": "husky"
   },
