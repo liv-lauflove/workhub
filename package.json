@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "echo \"No tests specified yet\" && exit 0",
     "test:profile-permissions": "node scripts/test-profile-permissions.mjs",
+    "test:task-kanban-checklist": "node scripts/test-task-kanban-checklist.mjs",
     "db:seed": "node scripts/seed.mjs",
     "prepare": "husky"
   },
