@@ -932,7 +932,15 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      update_team_member: {
+        Args: {
+          p_user_id: string;
+          p_team_id: string;
+          p_role?: Database['public']['Enums']['user_role'];
+          p_capacity_points?: number;
+        };
+        Returns: string;
+      };
     };
     Enums: {
       invitation_status: 'pending' | 'accepted' | 'expired' | 'revoked';
