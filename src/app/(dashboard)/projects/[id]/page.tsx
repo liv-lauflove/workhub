@@ -26,6 +26,7 @@ import {
 } from '@/features/team/queries/team.queries';
 import { ProjectTasksView } from '@/features/projects/components/project-tasks-view';
 import { ArchiveProjectDialog } from '@/features/projects/components/archive-project-dialog';
+import { ProjectActivityPulse } from '@/features/projects/components/project-activity-pulse';
 import { ROUTES } from '@/config/routes';
 
 interface ProjectDetailPageProps {
@@ -68,11 +69,11 @@ export async function generateMetadata({
   const project = await getProjectById(id);
 
   if (!project) {
-    return { title: 'Project Tidak Ditemukan — Workhub' };
+    return { title: 'Project Tidak Ditemukan | Workhub' };
   }
 
   return {
-    title: `${project.name} — Task & Isu Project — Workhub`,
+    title: `${project.name} - Task & Isu Project | Workhub`,
     description:
       project.description || `Pelacakan task dan isu project ${project.name}.`,
   };
@@ -262,6 +263,14 @@ export default async function ProjectDetailPage({
             </div>
           </div>
         </div>
+
+        {/* 2-Month Project Activity Pulse Chart */}
+        {project.activityPulse && (
+          <ProjectActivityPulse
+            pulse={project.activityPulse}
+            variant="detail"
+          />
+        )}
       </div>
 
       {/* Project Tasks & Issues Container (GitHub Issues List & Kanban View Switcher) */}

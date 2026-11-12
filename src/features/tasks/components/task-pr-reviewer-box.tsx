@@ -156,8 +156,7 @@ export function TaskPrReviewerBox({
                 Pull request successfully merged and closed
               </h3>
               <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                You&apos;re all set — seluruh checklist pengujian telah
-                diverifikasi lolos oleh{' '}
+                Seluruh checklist pengujian telah diverifikasi lolos oleh{' '}
                 <strong className="text-foreground">{testerName}</strong>. Tugas
                 telah dipindahkan ke kolom{' '}
                 <span className="font-semibold text-purple-600 dark:text-purple-400">

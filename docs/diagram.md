@@ -1,10 +1,10 @@
-# Diagram Sistem — Workhub (Task & Performance Dashboard)
+# Diagram Sistem: Workhub (Task & Performance Dashboard)
 
 Dokumen ini berisi 3 diagram utama dalam format Mermaid:
 
-1. **ERD (Entity Relationship Diagram)** — 18 tabel database beserta relasi, PK, dan FK.
-2. **Activity Diagram** — 6 alur proses utama aplikasi (Perencanaan Target & Dual-Assignee QA, Komplain CS, Integrasi GitHub Multi-Repo, Chatbot AI & Guardrails, Laporan Town Hall, serta Manajemen Tim Dinamis).
-3. **Use Case Diagram** — hak akses antara aktor **Management Leader**, **Team Leader**, **Member (Developer / QA)**, serta **Sistem Eksternal (GitHub & Gemini LLM)**.
+1. ERD (Entity Relationship Diagram) untuk 18 tabel database beserta relasi, PK, dan FK.
+2. Activity Diagram untuk 5 alur proses utama aplikasi (Perencanaan Target & Dual-Assignee QA, Komplain CS, Integrasi GitHub Multi-Repo, Chatbot AI & Guardrails, serta Manajemen Tim Dinamis).
+3. Use Case Diagram untuk hak akses antara aktor Management Leader, Team Leader, Member (Developer / QA), serta Sistem Eksternal (GitHub & Gemini LLM).
 
 ---
 
@@ -380,17 +380,17 @@ flowchart TD
 ```mermaid
 flowchart LR
     subgraph Actors["Aktor Pengguna"]
-        Mgmt["👔 Management Leader\n(role: leader, position: Management)"]
-        Leader["👨‍💼 Team Leader\n(role: leader)"]
-        Member["👩‍💻 Team Member\n(Developer / QA)"]
+        Mgmt["Management Leader\n(role: leader, position: Management)"]
+        Leader["Team Leader\n(role: leader)"]
+        Member["Team Member\n(Developer / QA)"]
     end
 
     subgraph External["Sistem Eksternal"]
-        GitHub["🐙 GitHub API & Webhook"]
-        LLM["🤖 Google Gemini LLM"]
+        GitHub["GitHub API & Webhook"]
+        LLM["Google Gemini LLM"]
     end
 
-    subgraph System["Workhub — Task & Performance Dashboard"]
+    subgraph System["Workhub: Task & Performance Dashboard"]
         subgraph AuthTeam["1. Auth, Member & Dynamic Team"]
             UC_Login(["Login / Register (Email & OAuth)"])
             UC_ManageTeams(["Buat, Edit, & Hapus Tim"])

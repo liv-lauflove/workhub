@@ -11,7 +11,7 @@ import { redirect } from 'next/navigation';
 import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
-  title: 'Milestones — Workhub',
+  title: 'Milestones | Workhub',
   description: 'Target strategis kuartalan dan payung proyek kerja.',
 };
 

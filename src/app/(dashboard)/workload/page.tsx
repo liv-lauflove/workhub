@@ -13,7 +13,7 @@ import {
 import { WorkloadView } from '@/features/workload/components/workload-view';
 
 export const metadata: Metadata = {
-  title: 'Workload & Kapasitas — Workhub',
+  title: 'Workload & Kapasitas | Workhub',
   description:
     'Pantau beban kerja dan kapasitas tim berdasarkan bobot prioritas task aktif.',
 };

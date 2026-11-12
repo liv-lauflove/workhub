@@ -151,10 +151,10 @@ erDiagram
 
 Seluruh tabel di skema `public` mengaktifkan **Row Level Security (`ENABLE ROW LEVEL SECURITY`)** dengan prinsip berikut:
 
-1. **Optimasi Performa Subquery**: Seluruh kebijakan RLS menggunakan `(select auth.uid())` alih-alih `auth.uid()` langsung agar PostgreSQL mengevaluasi sesi satu kali per query (_initPlan_), bukan per baris.
-2. **Akses Baca Terautentikasi (`SELECT`)**: Pengguna dengan peran `authenticated` dapat membaca direktori profil, tim, milestone, project, dan task untuk kebutuhan kolaborasi lintas fungsi, sementara `notifications` dan `github_integrations` dibatasi ketat hanya untuk pemilik data (`user_id = (select auth.uid())`).
-3. **Otorisasi Mutasi Berjenjang (`INSERT / UPDATE / DELETE`)**:
+1. Seluruh kebijakan RLS menggunakan `(select auth.uid())` alih-alih `auth.uid()` langsung agar PostgreSQL mengevaluasi sesi satu kali per query (_initPlan_), bukan per baris.
+2. Pengguna dengan peran `authenticated` dapat membaca direktori profil, tim, milestone, project, dan task untuk kebutuhan kolaborasi lintas fungsi, sementara `notifications` dan `github_integrations` dibatasi ketat hanya untuk pemilik data (`user_id = (select auth.uid())`).
+3. Otorisasi mutasi (`INSERT / UPDATE / DELETE`) dibagi menjadi tiga tingkatan:
    - **Management Team**: Memiliki hak akses lintas-squad untuk membuat/mengedit tim baru, mengelola proyek, dan menugaskan anggota.
    - **Leader Squad**: Memiliki hak membuat/mengubah Milestone, Project pada timnya, mengundang anggota ke timnya, serta mengatur kolom Kanban.
    - **Member Squad**: Memiliki hak memperbarui status pengerjaan task, menambahkan komentar, mengunggah lampiran, mencentang subtask pengujian, dan menautkan branch/repository GitHub.
-4. **Operasi Sistem & Webhook (`service_role`)**: Endpoint mesin-ke-mesin seperti `/api/github-webhook` menggunakan `createAdminClient()` setelah memverifikasi tanda tangan kriptografis HMAC-SHA256.
+4. Endpoint mesin-ke-mesin seperti `/api/github-webhook` menggunakan `createAdminClient()` setelah memverifikasi tanda tangan kriptografis HMAC-SHA256.

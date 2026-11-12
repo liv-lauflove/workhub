@@ -1,5 +1,5 @@
 -- =====================================================================
--- Workhub (Task & Performance Dashboard) — Database Schema (Supabase Postgres)
+-- Workhub (Task & Performance Dashboard): Database Schema (Supabase Postgres)
 -- =====================================================================
 -- Referensi skema lengkap yang mencakup seluruh 17 migrasi aktif:
 -- - Dynamic Teams (Management role governance)
@@ -14,7 +14,7 @@
 create extension if not exists "pgcrypto";
 
 -- ---------------------------------------------------------------------
--- 1. Teams (Dynamic Teams — dikelola oleh Leader dengan posisi Management)
+-- 1. Teams (Dynamic Teams, dikelola oleh Leader dengan posisi Management)
 -- ---------------------------------------------------------------------
 create table teams (
   id          uuid primary key default gen_random_uuid(),
@@ -112,7 +112,7 @@ create table milestones (
 );
 
 -- ---------------------------------------------------------------------
--- 7. Projects (Level menengah — terikat ke satu Milestone dan satu Tim)
+-- 7. Projects (Level menengah, terikat ke satu Milestone dan satu Tim)
 -- ---------------------------------------------------------------------
 create type project_status as enum ('planned', 'in_progress', 'completed', 'blocked');
 
@@ -145,7 +145,7 @@ create table board_columns (
 );
 
 -- ---------------------------------------------------------------------
--- 9. Tasks (Unit kerja terkecil — mendukung Dual-Assignee Dev & QA + Multi-Repo)
+-- 9. Tasks (Unit kerja terkecil, mendukung Dual-Assignee Dev & QA + Multi-Repo)
 -- ---------------------------------------------------------------------
 create type task_origin as enum ('normal', 'cs_complaint');
 

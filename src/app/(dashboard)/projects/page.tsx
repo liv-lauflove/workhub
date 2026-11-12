@@ -37,13 +37,13 @@ export async function generateMetadata({
     const milestone = await getMilestoneById(milestone_id);
     if (milestone) {
       return {
-        title: `Project: ${milestone.title} — Workhub`,
+        title: `Project: ${milestone.title} | Workhub`,
         description: `Daftar project di bawah milestone ${milestone.title}.`,
       };
     }
   }
   return {
-    title: 'Daftar Project — Workhub',
+    title: 'Daftar Project | Workhub',
     description: 'Daftar seluruh project kerja tim di bawah target milestone.',
   };
 }

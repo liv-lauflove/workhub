@@ -1,6 +1,7 @@
 import 'server-only';
 
 import { createClient } from '@/lib/supabase/server';
+import { buildActivityPulse } from '@/lib/activity-pulse.utils';
 import {
   calculateCapacity,
   isOverloaded,
@@ -17,18 +18,129 @@ import {
   type DualTrackProgress,
 } from '../types/workload.types';
 
+interface RawMemberTaskForPulse {
+  id: string;
+  title: string;
+  priority: string;
+  due_date: string | null;
+  created_by: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+  assignee_id: string | null;
+  developer_id: string | null;
+  tester_id: string | null;
+  dev_status: string | null;
+  test_status: string | null;
+  column?: { id: string; name: string } | { id: string; name: string }[] | null;
+  github_commits?: Array<{
+    committed_at?: string | null;
+    author_username?: string | null;
+  }> | null;
+  task_subtasks?: Array<{
+    created_at?: string | null;
+    tested_at?: string | null;
+    tested_by?: string | null;
+    is_completed?: boolean | null;
+  }> | null;
+}
+
+function computeMemberActivityPulse(
+  member: { id: string; github_username?: string | null },
+  rawTasks: RawMemberTaskForPulse[],
+  activityLogs: Array<{
+    actor_id: string;
+    task_id: string;
+    created_at: string;
+  }>,
+  activeTaskCount: number,
+  referenceDate: Date
+) {
+  const commitTimestamps: string[] = [];
+  const taskCreatedTimestamps: string[] = [];
+  const taskMovementTimestamps: string[] = [];
+
+  const memberGithub = member.github_username?.toLowerCase().trim() || null;
+
+  const memberLogs = activityLogs.filter((l) => l.actor_id === member.id);
+  const loggedTaskIds = new Set<string>();
+  for (const log of memberLogs) {
+    if (log.created_at) {
+      taskMovementTimestamps.push(log.created_at);
+      loggedTaskIds.add(log.task_id);
+    }
+  }
+
+  for (const t of rawTasks) {
+    const isDevOrAssignee =
+      t.developer_id === member.id || t.assignee_id === member.id;
+    const isTester = t.tester_id === member.id;
+
+    if (t.created_by === member.id && t.created_at) {
+      taskCreatedTimestamps.push(t.created_at);
+    }
+
+    if (t.github_commits && t.github_commits.length > 0) {
+      for (const c of t.github_commits) {
+        if (!c.committed_at) continue;
+        const commitAuthor = c.author_username?.toLowerCase().trim() || null;
+        if (
+          (memberGithub && commitAuthor === memberGithub) ||
+          (!commitAuthor && isDevOrAssignee) ||
+          isDevOrAssignee
+        ) {
+          commitTimestamps.push(c.committed_at);
+        }
+      }
+    }
+
+    if (t.task_subtasks && t.task_subtasks.length > 0) {
+      for (const sub of t.task_subtasks) {
+        if (sub.tested_by === member.id && sub.tested_at) {
+          taskMovementTimestamps.push(sub.tested_at);
+        } else if (
+          !sub.tested_by &&
+          sub.is_completed &&
+          isDevOrAssignee &&
+          (sub.tested_at || sub.created_at)
+        ) {
+          taskMovementTimestamps.push((sub.tested_at || sub.created_at)!);
+        }
+      }
+    }
+
+    // Fallback for progressed tasks without explicit activity_log entries by this member
+    if (!loggedTaskIds.has(t.id) && t.updated_at) {
+      const progressedByDev =
+        isDevOrAssignee &&
+        (t.dev_status === 'in_progress' || t.dev_status === 'dev_done');
+      const progressedByTester =
+        isTester &&
+        (t.test_status === 'testing' ||
+          t.test_status === 'passed' ||
+          t.test_status === 'failed');
+
+      if (progressedByDev || progressedByTester) {
+        taskMovementTimestamps.push(t.updated_at);
+      }
+    }
+  }
+
+  return buildActivityPulse({
+    commitTimestamps,
+    taskCreatedTimestamps,
+    taskMovementTimestamps,
+    activeTaskCount,
+    mode: 'member',
+    referenceDate,
+  });
+}
+
 /**
  * Fetches the team workload summary and individual capacity metrics
  * for all members of the specified team (or the current user's team if omitted).
  *
- * Implements PRD §9.6 and Issue #95 (Dynamic Workload Score & Dual-Track Role Allocation):
- * - Aggregates active tasks per member taking into account Developer and Tester roles
- * - Dynamic Urgency Multiplier (Critical 2.0x, High 1.5x, Medium 1.0x, Low 0.5x)
- * - Dynamic Deadline Multiplier (Overdue 2.0x, <=72h 1.5x, 4-7d 1.0x, >7d 0.7x)
- * - Shift workload: Dev bears load until dev_done, Tester bears load during testing until passed
- * - Completed tasks yield 0 points, liberating capacity
- * - Calculates capacity % against team baseline points (from capacity_settings or default 20)
- * - Flags members with > 80% capacity as overloaded
+ * Implements PRD §9.6, Issue #95 (Dynamic Workload Score & Dual-Track Role Allocation),
+ * and Issue #142 (2-Month Member Activity Pulse).
  */
 export async function getTeamWorkload(
   targetTeamId?: string
@@ -66,7 +178,7 @@ export async function getTeamWorkload(
   let membersQuery = supabase
     .from('profiles')
     .select(
-      'id, full_name, avatar_url, role, team_id, position, capacity_points'
+      'id, full_name, avatar_url, role, team_id, position, capacity_points, github_username'
     )
     .order('role', { ascending: true })
     .order('full_name', { ascending: true });
@@ -138,30 +250,59 @@ export async function getTeamWorkload(
     };
   }
 
-  // 5. Fetch all tasks where these members are either assignee, developer, or tester
+  // 5. Fetch all tasks where these members are assignee, developer, tester, or creator
+  // AND fetch 60-day activity logs in parallel
   const memberIds = members.map((m) => m.id);
-  const { data: tasks, error: tasksError } = await supabase
-    .from('tasks')
-    .select(
-      `
-      id,
-      title,
-      priority,
-      due_date,
-      assignee_id,
-      developer_id,
-      tester_id,
-      dev_status,
-      test_status,
-      column:board_columns(
+  const referenceDate = new Date();
+  const sixtyDaysAgo = new Date(referenceDate);
+  sixtyDaysAgo.setDate(referenceDate.getDate() - 60);
+  const sixtyDaysAgoIso = sixtyDaysAgo.toISOString();
+
+  const [
+    { data: tasks, error: tasksError },
+    { data: activityLogsData, error: logsError },
+  ] = await Promise.all([
+    supabase
+      .from('tasks')
+      .select(
+        `
         id,
-        name
+        title,
+        priority,
+        due_date,
+        created_by,
+        created_at,
+        updated_at,
+        assignee_id,
+        developer_id,
+        tester_id,
+        dev_status,
+        test_status,
+        column:board_columns(
+          id,
+          name
+        ),
+        github_commits(
+          committed_at,
+          author_username
+        ),
+        task_subtasks(
+          created_at,
+          tested_at,
+          tested_by,
+          is_completed
+        )
+      `
       )
-    `
-    )
-    .or(
-      `assignee_id.in.(${memberIds.join(',')}),developer_id.in.(${memberIds.join(',')}),tester_id.in.(${memberIds.join(',')})`
-    );
+      .or(
+        `assignee_id.in.(${memberIds.join(',')}),developer_id.in.(${memberIds.join(',')}),tester_id.in.(${memberIds.join(',')}),created_by.in.(${memberIds.join(',')})`
+      ),
+    supabase
+      .from('activity_log')
+      .select('actor_id, task_id, created_at')
+      .in('actor_id', memberIds)
+      .gte('created_at', sixtyDaysAgoIso),
+  ]);
 
   if (tasksError) {
     console.error(
@@ -169,8 +310,17 @@ export async function getTeamWorkload(
       tasksError
     );
   }
+  if (logsError) {
+    console.error(
+      'Error fetching member activity logs for pulse calculation:',
+      logsError
+    );
+  }
 
-  const allTasks: TaskLike[] = (tasks || []).map((t) => ({
+  const rawTasks = (tasks || []) as unknown as RawMemberTaskForPulse[];
+  const activityLogs = activityLogsData || [];
+
+  const allTasks: TaskLike[] = rawTasks.map((t) => ({
     id: t.id,
     title: t.title,
     priority: t.priority,
@@ -183,8 +333,7 @@ export async function getTeamWorkload(
     column_name: Array.isArray(t.column) ? t.column[0]?.name : t.column?.name,
   }));
 
-  // 6. Aggregate dynamic workload for each member (Issue #95 & Issue #106)
-  const referenceDate = new Date();
+  // 6. Aggregate dynamic workload + 2-month activity pulse for each member
   const membersWorkload: MemberWorkload[] = members.map((member) => {
     const metrics = calculateMemberDynamicWorkload(
       member.id,
@@ -204,6 +353,14 @@ export async function getTeamWorkload(
     );
     const memberIsOverloaded = isOverloaded(capacityPercentage);
 
+    const activityPulse = computeMemberActivityPulse(
+      member,
+      rawTasks,
+      activityLogs,
+      metrics.activeTaskCount,
+      referenceDate
+    );
+
     return {
       userId: member.id,
       fullName: member.full_name,
@@ -219,6 +376,7 @@ export async function getTeamWorkload(
       isOverloaded: memberIsOverloaded,
       tasksSummary: metrics.tasksSummary,
       dynamicTasks: metrics.dynamicTasks,
+      activityPulse,
     };
   });
 
@@ -264,7 +422,7 @@ export async function getMemberWorkload(
   // 1. Fetch user profile
   const { data: member, error: profileError } = await supabase
     .from('profiles')
-    .select('id, full_name, avatar_url, role, team_id')
+    .select('id, full_name, avatar_url, role, team_id, github_username')
     .eq('id', userId)
     .single();
 
@@ -286,29 +444,56 @@ export async function getMemberWorkload(
     }
   }
 
-  // 3. Fetch active tasks where user is assignee, developer, or tester
-  const { data: tasks, error: tasksError } = await supabase
-    .from('tasks')
-    .select(
-      `
-      id,
-      title,
-      priority,
-      due_date,
-      assignee_id,
-      developer_id,
-      tester_id,
-      dev_status,
-      test_status,
-      column:board_columns(
+  // 3. Fetch active tasks and 60-day activity logs in parallel
+  const referenceDate = new Date();
+  const sixtyDaysAgo = new Date(referenceDate);
+  sixtyDaysAgo.setDate(referenceDate.getDate() - 60);
+
+  const [
+    { data: tasks, error: tasksError },
+    { data: activityLogsData, error: logsError },
+  ] = await Promise.all([
+    supabase
+      .from('tasks')
+      .select(
+        `
         id,
-        name
+        title,
+        priority,
+        due_date,
+        created_by,
+        created_at,
+        updated_at,
+        assignee_id,
+        developer_id,
+        tester_id,
+        dev_status,
+        test_status,
+        column:board_columns(
+          id,
+          name
+        ),
+        github_commits(
+          committed_at,
+          author_username
+        ),
+        task_subtasks(
+          created_at,
+          tested_at,
+          tested_by,
+          is_completed
+        )
+      `
       )
-    `
-    )
-    .or(
-      `assignee_id.eq.${userId},developer_id.eq.${userId},tester_id.eq.${userId}`
-    );
+      .or(
+        `assignee_id.eq.${userId},developer_id.eq.${userId},tester_id.eq.${userId},created_by.eq.${userId}`
+      ),
+    supabase
+      .from('activity_log')
+      .select('actor_id, task_id, created_at')
+      .eq('actor_id', userId)
+      .gte('created_at', sixtyDaysAgo.toISOString()),
+  ]);
 
   if (tasksError) {
     console.error(
@@ -316,8 +501,15 @@ export async function getMemberWorkload(
       tasksError
     );
   }
+  if (logsError) {
+    console.error(
+      'Error fetching member activity logs for pulse calculation:',
+      logsError
+    );
+  }
 
-  const allTasks: TaskLike[] = (tasks || []).map((t) => ({
+  const rawTasks = (tasks || []) as unknown as RawMemberTaskForPulse[];
+  const allTasks: TaskLike[] = rawTasks.map((t) => ({
     id: t.id,
     title: t.title,
     priority: t.priority,
@@ -330,13 +522,25 @@ export async function getMemberWorkload(
     column_name: Array.isArray(t.column) ? t.column[0]?.name : t.column?.name,
   }));
 
-  const metrics = calculateMemberDynamicWorkload(userId, allTasks, new Date());
+  const metrics = calculateMemberDynamicWorkload(
+    userId,
+    allTasks,
+    referenceDate
+  );
 
   const capacityPercentage = calculateCapacity(
     metrics.totalWeight,
     baselinePoints
   );
   const memberIsOverloaded = isOverloaded(capacityPercentage);
+
+  const activityPulse = computeMemberActivityPulse(
+    member,
+    rawTasks,
+    activityLogsData || [],
+    metrics.activeTaskCount,
+    referenceDate
+  );
 
   return {
     userId: member.id,
@@ -351,6 +555,7 @@ export async function getMemberWorkload(
     isOverloaded: memberIsOverloaded,
     tasksSummary: metrics.tasksSummary,
     dynamicTasks: metrics.dynamicTasks,
+    activityPulse,
   };
 }
 

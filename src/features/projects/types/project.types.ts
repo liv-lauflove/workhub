@@ -1,4 +1,5 @@
 import type { Database } from '@/types/database.types';
+import type { ActivityPulseSummary } from '@/lib/activity-pulse.utils';
 
 export type Project = Database['public']['Tables']['projects']['Row'];
 export type ProjectInsert = Database['public']['Tables']['projects']['Insert'];
@@ -30,4 +31,6 @@ export type ProjectWithProgress = ProjectWithDetails & {
   devProgress?: number;
   /** Dual-Track QA/testing progress percentage (0 - 100%) (Issue #95) */
   testProgress?: number;
+  /** 2-Month (8-week) project activity pulse metrics (Issue #142) */
+  activityPulse?: ActivityPulseSummary;
 };

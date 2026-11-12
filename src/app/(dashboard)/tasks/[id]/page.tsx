@@ -26,13 +26,13 @@ export async function generateMetadata({
 
   if (!task) {
     return {
-      title: 'Task Tidak Ditemukan — Workhub',
+      title: 'Task Tidak Ditemukan | Workhub',
     };
   }
 
   const shortId = id.slice(0, 8);
   return {
-    title: `${task.title} #${shortId} — Workhub`,
+    title: `${task.title} #${shortId} | Workhub`,
     description:
       task.description || 'Detail informasi dan pelacakan task pada Workhub.',
   };
