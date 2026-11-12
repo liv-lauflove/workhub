@@ -199,33 +199,10 @@ export function ProjectTasksView({
 
       {activeTab === 'kanban' && (
         <div className="space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <span className="text-xs text-muted-foreground">
-              Geser kartu secara horizontal atau drag-and-drop antar kolom untuk
-              memperbarui tahap pengerjaan.
-            </span>
-            {canCreateTask && (
-              <CreateTaskDialog
-                projectId={projectId}
-                columns={columns.map((c) => ({ id: c.id, name: c.name }))}
-                teamMembers={teamMembers.map((m) => ({
-                  id: m.id,
-                  full_name: m.full_name,
-                  role: m.role || 'member',
-                  avatar_url: m.avatar_url,
-                }))}
-                triggerButton={
-                  <Button
-                    size="sm"
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs shadow-xs shrink-0 self-start sm:self-auto"
-                  >
-                    <Plus className="mr-1.5 h-3.5 w-3.5" />
-                    <span>Tambah Task</span>
-                  </Button>
-                }
-              />
-            )}
-          </div>
+          <p className="text-xs text-muted-foreground">
+            Geser kartu secara horizontal atau drag-and-drop antar kolom untuk
+            memperbarui tahap pengerjaan.
+          </p>
           <KanbanBoard
             columns={columns}
             projectId={projectId}
