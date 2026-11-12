@@ -968,6 +968,13 @@ export type Database = {
         };
         Returns: boolean;
       };
+      claim_team_invitation: {
+        Args: {
+          p_user_id: string;
+          p_email: string;
+        };
+        Returns: boolean;
+      };
       is_project_leader: {
         Args: {
           p_project_id: string;
