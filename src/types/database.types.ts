@@ -944,6 +944,24 @@ export type Database = {
         };
         Returns: boolean;
       };
+      can_delete_task_attachment: {
+        Args: {
+          target_attachment_id: string;
+        };
+        Returns: boolean;
+      };
+      can_upload_task_attachment: {
+        Args: {
+          target_task_id: string;
+        };
+        Returns: boolean;
+      };
+      can_view_task_attachment: {
+        Args: {
+          target_task_id: string;
+        };
+        Returns: boolean;
+      };
       can_verify_task_checklist: {
         Args: {
           p_task_id: string;

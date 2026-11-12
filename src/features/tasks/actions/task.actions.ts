@@ -8,6 +8,9 @@ import {
   ATTACHMENTS_BUCKET,
   generateAttachmentStoragePath,
   validateTaskAttachmentFile,
+  isAllowedTaskAttachmentFileSize,
+  isAllowedAttachmentMimeType,
+  MAX_TASK_ATTACHMENT_SIZE_LABEL,
 } from '@/lib/storage';
 import type { ActionState } from '@/types/global';
 import type { TaskAttachmentItem } from '../types/task.types';
@@ -1221,6 +1224,20 @@ export interface RecordAttachmentInput {
   projectId?: string | null;
 }
 
+export interface DeleteTaskAttachmentInput {
+  attachmentId: string;
+  taskId?: string;
+  fileUrl?: string;
+  projectId?: string | null;
+}
+
+export type GetAttachmentSignedUrlInput =
+  | string
+  | {
+      attachmentId?: string;
+      fileUrl?: string;
+    };
+
 /**
  * Upload an attachment file directly via Server Action.
  * Handles storage upload and database record creation atomically on the server
@@ -1274,9 +1291,65 @@ export async function uploadTaskAttachmentAction(
     }
 
     const adminSupabase = createAdminClient();
-    const storagePath = generateAttachmentStoragePath(taskId, file.name);
 
-    // 2. Upload file to Supabase Storage via elevated server client to guarantee success
+    // 2. Authorize actor access to the target task
+    const { data: task, error: taskError } = await adminSupabase
+      .from('tasks')
+      .select(
+        `
+        id,
+        project_id,
+        assignee_id,
+        developer_id,
+        tester_id,
+        projects(
+          id,
+          team_id
+        )
+      `
+      )
+      .eq('id', taskId)
+      .maybeSingle();
+
+    if (taskError || !task) {
+      return {
+        success: false,
+        error: {
+          _form: ['Task tidak ditemukan atau Anda tidak memiliki akses.'],
+        },
+      };
+    }
+
+    const { data: actorProfile } = await adminSupabase
+      .from('profiles')
+      .select('id, role, team_id, teams(name)')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    const isManagement = actorProfile?.teams?.name === 'Management';
+    const isTaskAssignee = [
+      task.assignee_id,
+      task.developer_id,
+      task.tester_id,
+    ].includes(user.id);
+    const isProjectTeamMember =
+      !task.projects?.team_id ||
+      actorProfile?.team_id === task.projects?.team_id;
+
+    if (!isManagement && !isTaskAssignee && !isProjectTeamMember) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Anda tidak memiliki izin untuk mengunggah lampiran pada task ini.',
+          ],
+        },
+      };
+    }
+
+    const storagePath = generateAttachmentStoragePath(task.id, file.name);
+
+    // 3. Upload file to Supabase Storage via elevated server client to guarantee success
     const { error: storageError } = await adminSupabase.storage
       .from(ATTACHMENTS_BUCKET)
       .upload(storagePath, file, {
@@ -1296,11 +1369,11 @@ export async function uploadTaskAttachmentAction(
       };
     }
 
-    // 3. Record metadata in public.task_attachments table
+    // 4. Record metadata in public.task_attachments table
     const { data: attachment, error: insertError } = await adminSupabase
       .from('task_attachments')
       .insert({
-        task_id: taskId,
+        task_id: task.id,
         uploaded_by: user.id,
         file_name: file.name,
         file_url: storagePath,
@@ -1342,10 +1415,10 @@ export async function uploadTaskAttachmentAction(
       };
     }
 
-    if (projectId) {
-      revalidatePath(`/projects/${projectId}`);
+    if (projectId || task.project_id) {
+      revalidatePath(`/projects/${projectId || task.project_id}`);
     }
-    revalidatePath(`/tasks/${taskId}`);
+    revalidatePath(`/tasks/${task.id}`);
 
     return {
       success: true,
@@ -1383,11 +1456,111 @@ export async function recordTaskAttachmentAction(
       };
     }
 
+    if (!input.taskId || !input.fileName || !input.fileUrl) {
+      return {
+        success: false,
+        error: {
+          _form: ['Task ID, nama berkas, dan path berkas wajib diisi.'],
+        },
+      };
+    }
+
+    // 1. File size enforcement (5MB limit)
+    if (
+      input.fileSize !== null &&
+      input.fileSize !== undefined &&
+      !isAllowedTaskAttachmentFileSize(input.fileSize)
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            `Ukuran berkas melebihi batas maksimum ${MAX_TASK_ATTACHMENT_SIZE_LABEL}.`,
+          ],
+        },
+      };
+    }
+
+    // 2. Allowed MIME type verification if provided
+    if (input.fileType && !isAllowedAttachmentMimeType(input.fileType)) {
+      return {
+        success: false,
+        error: { _form: ['Format berkas tidak diizinkan.'] },
+      };
+    }
+
     const adminSupabase = createAdminClient();
+
+    // 3. Authorize actor access to target task
+    const { data: task, error: taskError } = await adminSupabase
+      .from('tasks')
+      .select(
+        `
+        id,
+        project_id,
+        assignee_id,
+        developer_id,
+        tester_id,
+        projects(
+          id,
+          team_id
+        )
+      `
+      )
+      .eq('id', input.taskId)
+      .maybeSingle();
+
+    if (taskError || !task) {
+      return {
+        success: false,
+        error: {
+          _form: ['Task tidak ditemukan atau Anda tidak memiliki akses.'],
+        },
+      };
+    }
+
+    // 4. Storage path binding validation (must match target task ID)
+    const expectedPrefix = `tasks/${task.id}/`;
+    if (!input.fileUrl.startsWith(expectedPrefix)) {
+      return {
+        success: false,
+        error: {
+          _form: ['Path berkas lampiran tidak sesuai dengan ID task tujuan.'],
+        },
+      };
+    }
+
+    const { data: actorProfile } = await adminSupabase
+      .from('profiles')
+      .select('id, role, team_id, teams(name)')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    const isManagement = actorProfile?.teams?.name === 'Management';
+    const isTaskAssignee = [
+      task.assignee_id,
+      task.developer_id,
+      task.tester_id,
+    ].includes(user.id);
+    const isProjectTeamMember =
+      !task.projects?.team_id ||
+      actorProfile?.team_id === task.projects?.team_id;
+
+    if (!isManagement && !isTaskAssignee && !isProjectTeamMember) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Anda tidak memiliki izin untuk mencatat lampiran pada task ini.',
+          ],
+        },
+      };
+    }
+
     const { data: attachment, error: insertError } = await adminSupabase
       .from('task_attachments')
       .insert({
-        task_id: input.taskId,
+        task_id: task.id,
         uploaded_by: user.id,
         file_name: input.fileName,
         file_url: input.fileUrl,
@@ -1424,10 +1597,10 @@ export async function recordTaskAttachmentAction(
       };
     }
 
-    if (input.projectId) {
-      revalidatePath(`/projects/${input.projectId}`);
+    if (input.projectId || task.project_id) {
+      revalidatePath(`/projects/${input.projectId || task.project_id}`);
     }
-    revalidatePath(`/tasks/${input.taskId}`);
+    revalidatePath(`/tasks/${task.id}`);
 
     return {
       success: true,
@@ -1447,13 +1620,11 @@ export async function recordTaskAttachmentAction(
 
 /**
  * Delete an attachment record and remove the file from storage.
+ * Single source of truth: resolves attachment and storage path from database.
  */
-export async function deleteTaskAttachmentAction(input: {
-  attachmentId: string;
-  taskId: string;
-  fileUrl: string;
-  projectId?: string | null;
-}): Promise<ActionState<{ id: string }>> {
+export async function deleteTaskAttachmentAction(
+  input: DeleteTaskAttachmentInput
+): Promise<ActionState<{ id: string }>> {
   try {
     const supabase = await createClient();
     const {
@@ -1468,12 +1639,87 @@ export async function deleteTaskAttachmentAction(input: {
       };
     }
 
+    if (!input.attachmentId) {
+      return {
+        success: false,
+        error: { _form: ['Attachment ID wajib disertakan.'] },
+      };
+    }
+
     const adminSupabase = createAdminClient();
 
-    // 1. Remove object from Supabase Storage
+    // 1. Authoritative lookup of the attachment and its associated task from database
+    const { data: attachment, error: fetchError } = await adminSupabase
+      .from('task_attachments')
+      .select(
+        `
+        id,
+        task_id,
+        file_url,
+        uploaded_by,
+        tasks!inner(
+          id,
+          project_id,
+          assignee_id,
+          developer_id,
+          tester_id,
+          projects(
+            id,
+            team_id
+          )
+        )
+      `
+      )
+      .eq('id', input.attachmentId)
+      .maybeSingle();
+
+    if (fetchError || !attachment) {
+      return {
+        success: false,
+        error: {
+          _form: ['Lampiran tidak ditemukan atau telah dihapus.'],
+        },
+      };
+    }
+
+    // 2. Validate task binding consistency if taskId is provided
+    if (input.taskId && attachment.task_id !== input.taskId) {
+      return {
+        success: false,
+        error: {
+          _form: ['Data task tidak sesuai dengan lampiran yang dituju.'],
+        },
+      };
+    }
+
+    // 3. Verify actor authorization (uploader, project leader, or Management)
+    const { data: actorProfile } = await adminSupabase
+      .from('profiles')
+      .select('id, role, team_id, teams(name)')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    const isUploader = attachment.uploaded_by === user.id;
+    const isManagement = actorProfile?.teams?.name === 'Management';
+    const isProjectLeader =
+      actorProfile?.role === 'leader' &&
+      (!attachment.tasks?.projects?.team_id ||
+        actorProfile?.team_id === attachment.tasks?.projects?.team_id);
+
+    if (!isUploader && !isManagement && !isProjectLeader) {
+      return {
+        success: false,
+        error: {
+          _form: ['Anda tidak memiliki izin untuk menghapus lampiran ini.'],
+        },
+      };
+    }
+
+    // 4. Remove object from Supabase Storage using canonical database path
+    const storagePath = attachment.file_url;
     const { error: storageError } = await adminSupabase.storage
       .from(ATTACHMENTS_BUCKET)
-      .remove([input.fileUrl]);
+      .remove([storagePath]);
 
     if (storageError) {
       console.warn(
@@ -1482,11 +1728,11 @@ export async function deleteTaskAttachmentAction(input: {
       );
     }
 
-    // 2. Delete database record
+    // 5. Delete database record
     const { error: dbError } = await adminSupabase
       .from('task_attachments')
       .delete()
-      .eq('id', input.attachmentId);
+      .eq('id', attachment.id);
 
     if (dbError) {
       return {
@@ -1499,14 +1745,16 @@ export async function deleteTaskAttachmentAction(input: {
       };
     }
 
-    if (input.projectId) {
-      revalidatePath(`/projects/${input.projectId}`);
+    if (input.projectId || attachment.tasks?.project_id) {
+      revalidatePath(
+        `/projects/${input.projectId || attachment.tasks?.project_id}`
+      );
     }
-    revalidatePath(`/tasks/${input.taskId}`);
+    revalidatePath(`/tasks/${attachment.task_id}`);
 
     return {
       success: true,
-      data: { id: input.attachmentId },
+      data: { id: attachment.id },
     };
   } catch (err: unknown) {
     const message =
@@ -1520,11 +1768,15 @@ export async function deleteTaskAttachmentAction(input: {
   }
 }
 
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /**
- * Generate a temporary signed download/preview URL for a private attachment.
+ * Generate a temporary signed download/preview URL for an authorized attachment.
+ * Accepts an attachment UUID or structured input, resolving canonical storage path from DB.
  */
 export async function getAttachmentSignedUrlAction(
-  fileUrl: string
+  input: GetAttachmentSignedUrlInput
 ): Promise<{ success: boolean; signedUrl?: string; error?: string }> {
   try {
     const supabase = await createClient();
@@ -1537,10 +1789,91 @@ export async function getAttachmentSignedUrlAction(
       return { success: false, error: 'Sesi login tidak valid.' };
     }
 
+    let targetId: string | null = null;
+    let targetFileUrl: string | null = null;
+
+    if (typeof input === 'string') {
+      if (UUID_REGEX.test(input)) {
+        targetId = input;
+      } else {
+        targetFileUrl = input;
+      }
+    } else if (input && typeof input === 'object') {
+      targetId = input.attachmentId || null;
+      targetFileUrl = input.fileUrl || null;
+    }
+
+    if (!targetId && !targetFileUrl) {
+      return { success: false, error: 'Identitas lampiran tidak disediakan.' };
+    }
+
     const adminSupabase = createAdminClient();
+
+    // 1. Authoritative lookup of the attachment record from database
+    let query = adminSupabase.from('task_attachments').select(
+      `
+        id,
+        task_id,
+        file_url,
+        uploaded_by,
+        tasks!inner(
+          id,
+          project_id,
+          assignee_id,
+          developer_id,
+          tester_id,
+          projects(
+            id,
+            team_id
+          )
+        )
+      `
+    );
+
+    if (targetId) {
+      query = query.eq('id', targetId);
+    } else if (targetFileUrl) {
+      query = query.eq('file_url', targetFileUrl);
+    }
+
+    const { data: attachment, error: fetchError } = await query.maybeSingle();
+
+    if (fetchError || !attachment) {
+      return {
+        success: false,
+        error: 'Lampiran tidak ditemukan atau Anda tidak memiliki akses.',
+      };
+    }
+
+    // 2. Authorize viewer access to the task/attachment
+    const { data: actorProfile } = await adminSupabase
+      .from('profiles')
+      .select('id, role, team_id, teams(name)')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    const isManagement = actorProfile?.teams?.name === 'Management';
+    const isUploader = attachment.uploaded_by === user.id;
+    const isAssigned = [
+      attachment.tasks?.assignee_id,
+      attachment.tasks?.developer_id,
+      attachment.tasks?.tester_id,
+    ].includes(user.id);
+    const isProjectTeamMember =
+      !attachment.tasks?.projects?.team_id ||
+      actorProfile?.team_id === attachment.tasks?.projects?.team_id;
+
+    if (!isManagement && !isUploader && !isAssigned && !isProjectTeamMember) {
+      return {
+        success: false,
+        error: 'Anda tidak memiliki izin untuk mengunduh lampiran ini.',
+      };
+    }
+
+    // 3. Generate signed URL strictly from canonical storage path in database
     const { data, error } = await adminSupabase.storage
       .from(ATTACHMENTS_BUCKET)
-      .createSignedUrl(fileUrl, 3600); // 1 hour expiration
+      .createSignedUrl(attachment.file_url, 3600); // 1 hour expiration
 
     if (error || !data?.signedUrl) {
       return {
