@@ -46,14 +46,15 @@ export async function updateTaskColumnAction({
       })
       .eq('id', taskId)
       .select('id, column_id')
-      .single();
+      .maybeSingle();
 
-    if (updateError) {
+    if (updateError || !data) {
       return {
         success: false,
         error: {
           _form: [
-            updateError.message || 'Gagal memperbarui status task di database.',
+            updateError?.message ||
+              'Anda hanya dapat menggeser task yang ditugaskan ke diri Anda sendiri.',
           ],
         },
       };

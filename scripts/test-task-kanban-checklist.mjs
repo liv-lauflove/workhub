@@ -232,8 +232,14 @@ function createTaskFixture({
 
 let checks = 0;
 
-// 1. Unauthorized actors cannot create tasks
-for (const actor of [null, memberA, managementMember, leaderB]) {
+const crossTeamMember = {
+  id: 'a1460000-0000-4000-8000-000000000009',
+  role: 'member',
+  team_id: teamB,
+};
+
+// 1. Unauthorized actors (unauthenticated, other team leader, other team member) cannot create tasks in Project A
+for (const actor of [null, leaderB, crossTeamMember]) {
   const f = createTaskFixture({ actor });
   const res = await f.actions.createTaskAction(null, {
     title: 'Unauthorized Task',
@@ -248,10 +254,10 @@ for (const actor of [null, memberA, managementMember, leaderB]) {
   checks++;
 }
 
-// 2. Leader cannot create task with a Kanban column belonging to another project
+// 2. Member or leader cannot create task with a Kanban column belonging to another project
 {
   const f = createTaskFixture({
-    actor: leaderA,
+    actor: memberA,
     columnRow: { id: colB, project_id: projectB },
   });
   const res = await f.actions.createTaskAction(null, {
@@ -267,8 +273,8 @@ for (const actor of [null, memberA, managementMember, leaderB]) {
   checks++;
 }
 
-// 3. Project Leader and Management Leader can create valid tasks
-for (const actor of [leaderA, managementLeader]) {
+// 3. Project Team Member, Project Leader, and Management can create valid tasks
+for (const actor of [leaderA, memberA, managementLeader, managementMember]) {
   const f = createTaskFixture({ actor });
   const res = await f.actions.createTaskAction(null, {
     title: 'Valid Task',
@@ -401,8 +407,8 @@ for (const actor of [leaderA, managementLeader]) {
   );
   assert.match(
     projectPageSource,
-    /const\s+canCreateTask\s*=\s*isLeader\s*&&/,
-    'Project page must gate canCreateTask on isLeader'
+    /const\s+canCreateTask\s*=\s*isManagement\s*\|\|\s*!project\.team_id\s*\|\|\s*profile\.team_id\s*===\s*project\.team_id;/,
+    'Project page must allow team members and Management to create tasks'
   );
   checks++;
 }

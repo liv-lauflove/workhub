@@ -107,8 +107,7 @@ export default async function ProjectDetailPage({
 
   const isLeader = profile.role === 'leader';
   const canCreateTask =
-    isLeader &&
-    (isManagement || !project.team_id || profile.team_id === project.team_id);
+    isManagement || !project.team_id || profile.team_id === project.team_id;
 
   return (
     <div className="mx-auto max-w-7xl space-y-6">

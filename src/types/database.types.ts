@@ -938,6 +938,12 @@ export type Database = {
         };
         Returns: boolean;
       };
+      can_create_project_task: {
+        Args: {
+          p_project_id: string;
+        };
+        Returns: boolean;
+      };
       can_verify_task_checklist: {
         Args: {
           p_task_id: string;
