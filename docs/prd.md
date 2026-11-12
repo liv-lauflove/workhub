@@ -108,10 +108,10 @@ Bertanggung jawab menyusun target kuartalan, membagi task ke anggota, dan melapo
 **Member (mis. "Bima", Software Engineer di Sentinel)**
 Mengerjakan task yang di-assign, update status via drag-and-drop, menautkan branch kerja ke task, dan diskusi lewat comment thread di kartu task.
 
-| Role       | Kewenangan Inti                                                                                            |
-| ---------- | ---------------------------------------------------------------------------------------------------------- |
-| **Leader** | Membuat Milestone, Project, Task (termasuk dari komplain CS), melihat dashboard tim, mengatur kolom Kanban |
-| **Member** | Mengerjakan & update status Task miliknya, komentar, menautkan branch GitHub                               |
+| Role       | Kewenangan Inti                                                                                                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Leader** | Membuat Milestone, Project, Task (termasuk dari komplain CS), melihat dashboard tim, mengatur kolom Kanban                                                                           |
+| **Member** | Membuat Task untuk project timnya sendiri, mengerjakan & menggeser progress Task yang ditugaskan ke dirinya (masuk ke Done wajib lulus review QA), komentar, menautkan branch GitHub |
 
 ## 7. Arsitektur Sistem
 
@@ -140,11 +140,11 @@ Mengerjakan task yang di-assign, update status via drag-and-drop, menautkan bran
 
 ## 8. Hierarki Struktur Kerja
 
-| Level         | Field Utama                                                                        | Dibuat oleh                                                                                          | Catatan                                 |
-| ------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| **Milestone** | judul, deskripsi, PIC, tanggal mulai, tanggal target, status                       | Leader                                                                                               | Tidak terikat satu tim, bisa lintas tim |
-| **Project**   | nama, deskripsi, milestone terkait, tim (Aegis/Sentinel), PIC, status              | Leader                                                                                               | Satu Milestone → banyak Project         |
-| **Task**      | judul, deskripsi, project, kolom kanban, assignee, priority, origin, branch GitHub | Leader (task dari CS **wajib** leader; task normal juga dibuat/di-assign leader per desain saat ini) | Satu Project → banyak Task              |
+| Level         | Field Utama                                                                        | Dibuat oleh                                                                                         | Catatan                                 |
+| ------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------- |
+| **Milestone** | judul, deskripsi, PIC, tanggal mulai, tanggal target, status                       | Leader                                                                                              | Tidak terikat satu tim, bisa lintas tim |
+| **Project**   | nama, deskripsi, milestone terkait, tim (Aegis/Sentinel), PIC, status              | Leader                                                                                              | Satu Milestone → banyak Project         |
+| **Task**      | judul, deskripsi, project, kolom kanban, assignee, priority, origin, branch GitHub | Anggota tim project terkait atau Leader (dan Tim Management). Khusus komplain CS diutamakan Leader. | Satu Project → banyak Task              |
 
 ## 9. Functional Requirements
 
@@ -168,10 +168,12 @@ Mengerjakan task yang di-assign, update status via drag-and-drop, menautkan bran
 
 ### 9.4 Task & Kanban Board
 
-- **US-06:** Sebagai leader, saya ingin membuat Task baru (termasuk dari komplain CS) dan meng-assign ke anggota, supaya pekerjaan terdistribusi.
+- **US-06:** Sebagai anggota tim atau leader, saya ingin membuat Task baru di project tim saya, supaya pekerjaan terdistribusi dan tercatat dengan cepat.
+  - AC: Anggota tim pemilik project dan Tim Management dapat membuat Task baru. User dari tim lain diblokir via RLS.
   - AC: Jika `origin = cs_complaint`, field `origin_note` wajib diisi.
-  - AC: Hanya user dengan role `leader` yang bisa membuat Task (di-enforce via RLS, bukan cuma UI).
-- **US-07:** Sebagai member, saya ingin drag-and-drop kartu Task antar kolom, supaya update status cepat tanpa buka form.
+- **US-07:** Sebagai member, saya ingin drag-and-drop kartu Task milik saya antar kolom, supaya update status cepat tanpa buka form.
+  - AC: Member hanya dapat menggeser kartu task yang ditugaskan kepada dirinya sendiri (Assignee/PIC, Developer, Tester).
+  - AC: Perpindahan ke kolom "Done" wajib memvalidasi bahwa pengerjaan developer sudah tuntas (`dev_status = 'dev_done'`) dan telah lulus review pengujian QA (`test_status = 'passed'`) beserta checklist subtask tuntas.
 - **US-08:** Sebagai leader, saya ingin mengatur/mengurutkan kolom Kanban per Project, supaya alur kerja bisa disesuaikan (tidak melulu To Do/In Progress/Review/Done).
 - **US-09:** Sebagai anggota tim, saya ingin berdiskusi di thread komentar tiap kartu Task, supaya konteks pekerjaan tidak hilang.
 
@@ -239,24 +241,24 @@ Mengerjakan task yang di-assign, update status via drag-and-drop, menautkan bran
 
 ## 10. Matriks Hak Akses
 
-| Aksi                               |      Leader      |             Member              |
-| ---------------------------------- | :--------------: | :-----------------------------: |
-| Buat/edit Milestone                |        Ya        |              Tidak              |
-| Buat/edit Project                  |        Ya        |              Tidak              |
-| Buat Task (normal)                 |        Ya        |              Tidak              |
-| Buat Task (dari komplain CS)       |        Ya        |              Tidak              |
-| Update status Task (drag-and-drop) |        Ya        |     Ya (task milik sendiri)     |
-| Atur kolom Kanban                  |        Ya        |              Tidak              |
-| Komentar di Task                   |        Ya        |               Ya                |
-| Tautkan branch GitHub ke Task      |        Ya        |     Ya (task milik sendiri)     |
-| Lihat dashboard performa tim       |        Ya        |         Ya (view-only)          |
-| Pakai chatbot AI                   |        Ya        | _(belum diputuskan, lihat §19)_ |
-| Undang/atur role anggota tim       | Ya (tim sendiri) |              Tidak              |
-| Upload attachment ke Task          |        Ya        |     Ya (task milik sendiri)     |
-| Tandai Task dependency             |        Ya        |              Tidak              |
-| Export laporan dashboard           |        Ya        |              Tidak              |
-| Arsipkan Milestone/Project         |        Ya        |              Tidak              |
-| Override saran AI                  |        Ya        |              Tidak              |
+| Aksi                               |      Leader      |                           Member                           |
+| ---------------------------------- | :--------------: | :--------------------------------------------------------: |
+| Buat/edit Milestone                |        Ya        |                           Tidak                            |
+| Buat/edit Project                  |        Ya        |                           Tidak                            |
+| Buat Task (normal)                 |        Ya        |                  Ya (project tim sendiri)                  |
+| Buat Task (dari komplain CS)       |        Ya        |                  Ya (project tim sendiri)                  |
+| Update status Task (drag-and-drop) |        Ya        | Ya (task ditugaskan ke sendiri; masuk Done wajib lulus QA) |
+| Atur kolom Kanban                  |        Ya        |                           Tidak                            |
+| Komentar di Task                   |        Ya        |                             Ya                             |
+| Tautkan branch GitHub ke Task      |        Ya        |                  Ya (task milik sendiri)                   |
+| Lihat dashboard performa tim       |        Ya        |                       Ya (view-only)                       |
+| Pakai chatbot AI                   |        Ya        |              _(belum diputuskan, lihat §19)_               |
+| Undang/atur role anggota tim       | Ya (tim sendiri) |                           Tidak                            |
+| Upload attachment ke Task          |        Ya        |                  Ya (task milik sendiri)                   |
+| Tandai Task dependency             |        Ya        |                           Tidak                            |
+| Export laporan dashboard           |        Ya        |                           Tidak                            |
+| Arsipkan Milestone/Project         |        Ya        |                           Tidak                            |
+| Override saran AI                  |        Ya        |                           Tidak                            |
 
 ## 11. Non-Functional Requirements
 
@@ -349,8 +351,8 @@ Total durasi adalah 4 bulan dengan evaluasi via demo mingguan tiap Senin. Pembag
 
 ## 17. Dependensi & Asumsi
 
-- Auth memakai Supabase Auth secara langsung (bukan NextAuth), menunggu konfirmasi final dari leader/supervisor.
-- Semua Task (bukan cuma dari CS) tetap dibuat/di-assign oleh Leader; member tidak bisa membuat Task sendiri.
+- Auth memakai Supabase Auth secara langsung (bukan NextAuth).
+- Pembuatan Task dibatasi dalam lingkup tim project (anggota tim project dan Tim Management berhak membuat task; anggota tim lain diblokir).
 - Ketersediaan API key LLM provider dibutuhkan untuk fitur AI (chatbot, auto-prioritizing).
 - Akses GitHub App/OAuth App perlu didaftarkan di level organisasi GitHub perusahaan.
 
@@ -362,7 +364,7 @@ Total durasi adalah 4 bulan dengan evaluasi via demo mingguan tiap Senin. Pembag
 - [x] Workload capacity terhitung otomatis dan menandai overload
 - [x] Task engineering ter-link ke branch & commit GitHub
 - [x] Chatbot AI bisa menjawab query beban kerja dasar
-- [x] RLS aktif, member tidak bisa membuat Milestone/Project/Task
+- [x] RLS aktif: member hanya bisa membuat Task di project timnya, hanya bisa menggeser Task miliknya, dan perpindahan ke Done wajib lulus QA
 - [x] Notifikasi in-app aktif untuk assignment, mention, dan overload warning
 - [x] Leader bisa invite anggota & atur role dalam timnya
 - [x] Attachment bisa diunggah ke Task, dan Task bisa dicari berdasarkan judul/assignee/priority
