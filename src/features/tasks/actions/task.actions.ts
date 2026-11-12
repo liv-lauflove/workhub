@@ -157,7 +157,7 @@ export async function createTaskAction(
       };
     }
 
-    // Verify leader role, team ownership, and Kanban column membership
+    // Verify team ownership: user must belong to project's team or have management role
     const [{ data: projectData }, { data: userProfile }, { data: columnData }] =
       await Promise.all([
         supabase
@@ -186,22 +186,11 @@ export async function createTaskAction(
       };
     }
 
-    if (userProfile?.role !== 'leader') {
-      return {
-        success: false,
-        error: {
-          _form: [
-            'Hanya Leader tim proyek terkait atau Leader Tim Management yang dapat membuat task baru.',
-          ],
-        },
-      };
-    }
+    const isManagement = await isManagementTeam(userProfile?.team_id);
+    const isProjectTeamMember =
+      isManagement || userProfile?.team_id === projectData.team_id;
 
-    const isManagement = await isManagementTeam(userProfile.team_id);
-    const isProjectTeamLeader =
-      isManagement || userProfile.team_id === projectData.team_id;
-
-    if (!isProjectTeamLeader) {
+    if (!isProjectTeamMember) {
       return {
         success: false,
         error: {
