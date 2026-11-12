@@ -140,10 +140,11 @@ erDiagram
 
 ## 3. Database Triggers Otomatis
 
-| Nama Trigger               | Tabel Target   | Fungsi & Perilaku                                                                                                                                                                                           |
-| :------------------------- | :------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `on_auth_user_created`     | `auth.users`   | Menjalankan `public.handle_new_user()` untuk membuat baris `profiles` secara otomatis saat pengguna baru mendaftar, serta mencocokkan undangan pending di `team_invitations`.                               |
-| `on_task_activity_updated` | `public.tasks` | Menjalankan `public.log_task_activity()` (`AFTER UPDATE`) untuk membandingkan nilai lama (`OLD`) dan nilai baru (`NEW`) pada 9 kolom utama task dan menyisipkan riwayat perubahan ke `public.activity_log`. |
+| Nama Trigger               | Tabel Target   | Fungsi & Perilaku                                                                                                                                                                                                                                                                                                                                                                                 |
+| :------------------------- | :------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `on_auth_user_created`     | `auth.users`   | Menjalankan `public.handle_new_user()` untuk membuat baris `profiles` secara otomatis saat pengguna baru mendaftar, serta mencocokkan undangan pending di `team_invitations`.                                                                                                                                                                                                                     |
+| `before_task_write_guards` | `public.tasks` | Menjalankan `public.enforce_task_write_guards()` (`BEFORE INSERT OR UPDATE`) untuk menegakkan konsistensi kolom Kanban dengan project, memvalidasi keanggotaan tim assignee/developer/tester, membatasi perubahan field sensitif berdasarkan peran (Leader, Developer, Tester QA), serta memblokir kelulusan QA (`passed` / kolom `Done`) jika masih ada item `task_subtasks` yang belum selesai. |
+| `on_task_activity_updated` | `public.tasks` | Menjalankan `public.log_task_activity()` (`AFTER UPDATE`) untuk membandingkan nilai lama (`OLD`) dan nilai baru (`NEW`) pada 9 kolom utama task dan menyisipkan riwayat perubahan ke `public.activity_log`.                                                                                                                                                                                       |
 
 ---
 
@@ -174,3 +175,21 @@ pnpm exec supabase db query --linked --file supabase/tests/profile-permissions.t
 ```
 
 Tes database memakai identitas sintetis dan melakukan rollback terhadap seluruh fixture/helper. Kesalahan assertion menghasilkan error SQL, bukan status sukses tanpa pengujian.
+
+### Mutasi task, kolom Kanban, dan checklist pengujian
+
+- Fungsi helper otorisasi `public.is_project_leader(p_project_id uuid)`, `public.can_access_task_checklist(p_task_id uuid)`, dan `public.can_verify_task_checklist(p_task_id uuid)` berjalan sebagai `SECURITY DEFINER` dengan `search_path` kosong dan hanya dapat dieksekusi oleh `authenticated` serta `service_role`.
+- **`public.board_columns`**: Hak `SELECT` tetap terbuka bagi `authenticated` untuk visibilitas lintas tim, sedangkan `INSERT`, `UPDATE (name, position, is_default)`, dan `DELETE` dibatasi hanya untuk Leader tim pemilik project atau Leader Tim Management (`public.is_project_leader(project_id)`).
+- **`public.tasks`**:
+  - `INSERT` dan `DELETE` hanya diizinkan untuk Leader project (`public.is_project_leader(project_id)`), dengan kewajiban `created_by = (select auth.uid())` dan `column_id` milik `project_id` yang sama.
+  - `UPDATE` hanya diizinkan untuk Leader project atau pihak yang ditugaskan pada task (`assignee_id`, `developer_id`, `tester_id`), tanpa hak mengubah kolom identitas (`id`, `project_id`, `created_by`, `created_at`).
+  - Trigger `before_task_write_guards` (`public.enforce_task_write_guards()`) memastikan `assignee_id`, `developer_id`, dan `tester_id` berasal dari tim project atau Tim Management, melarang non-leader mengubah `assignee_id`, `developer_id`, `priority`, `base_points`, `origin`, `due_date`, dan `purpose`, melarang Developer menetapkan `test_status = 'passed'` atau memindahkan task ke kolom `Done` sebelum lulus QA, serta mewajibkan seluruh item `task_subtasks` selesai (`is_completed = true`) sebelum task dinyatakan `passed`.
+- **`public.task_subtasks`**:
+  - Penambahan item baru (`is_completed = false`) dan penghapusan item yang belum dicentang dapat dilakukan oleh Leader project, Developer, atau Tester yang ditugaskan (`public.can_access_task_checklist(task_id)`).
+  - Verifikasi/pencetakan checklist (`UPDATE` `is_completed`, `tested_by`, `tested_at`) dan penghapusan item yang sudah terverifikasi hanya dapat dilakukan oleh Tester QA yang ditugaskan atau Leader project (`public.can_verify_task_checklist(task_id)`), dengan validasi `tested_by = (select auth.uid())`.
+
+Regresi Server Action dijalankan dengan `pnpm run test:task-kanban-checklist`, sedangkan verifikasi langsung di database dilakukan melalui:
+
+```powershell
+pnpm exec supabase db query --linked --file supabase/tests/task-kanban-checklist-rls.test.sql
+```
