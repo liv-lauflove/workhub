@@ -194,7 +194,10 @@ export function TaskAttachmentsSection({
   const handleDownload = async (attachment: TaskAttachmentItem) => {
     try {
       setDownloadingId(attachment.id);
-      const res = await getAttachmentSignedUrlAction(attachment.file_url);
+      const res = await getAttachmentSignedUrlAction({
+        attachmentId: attachment.id,
+        fileUrl: attachment.file_url,
+      });
 
       if (!res.success || !res.signedUrl) {
         toast.error(res.error || 'Gagal mendapatkan tautan berkas.');
