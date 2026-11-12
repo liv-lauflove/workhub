@@ -25,3 +25,4 @@ jobs:
     - run: pnpm run test:profile-permissions
     - run: pnpm run test:task-kanban-checklist
     - run: pnpm run test:task-attachments
+    - run: pnpm run test:atomic-invitation-claim
