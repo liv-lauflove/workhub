@@ -932,6 +932,24 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      can_access_task_checklist: {
+        Args: {
+          p_task_id: string;
+        };
+        Returns: boolean;
+      };
+      can_verify_task_checklist: {
+        Args: {
+          p_task_id: string;
+        };
+        Returns: boolean;
+      };
+      is_project_leader: {
+        Args: {
+          p_project_id: string;
+        };
+        Returns: boolean;
+      };
       update_team_member: {
         Args: {
           p_user_id: string;
