@@ -178,12 +178,17 @@ Tes database memakai identitas sintetis dan melakukan rollback terhadap seluruh 
 
 ### Mutasi task, kolom Kanban, dan checklist pengujian
 
-- Fungsi helper otorisasi `public.is_project_leader(p_project_id uuid)`, `public.can_access_task_checklist(p_task_id uuid)`, dan `public.can_verify_task_checklist(p_task_id uuid)` berjalan sebagai `SECURITY DEFINER` dengan `search_path` kosong dan hanya dapat dieksekusi oleh `authenticated` serta `service_role`.
+- Fungsi helper otorisasi `public.is_project_leader(p_project_id uuid)`, `public.can_create_project_task(p_project_id uuid)`, `public.can_access_task_checklist(p_task_id uuid)`, dan `public.can_verify_task_checklist(p_task_id uuid)` berjalan sebagai `SECURITY DEFINER` dengan `search_path` kosong dan hanya dapat dieksekusi oleh `authenticated` serta `service_role`.
 - **`public.board_columns`**: Hak `SELECT` tetap terbuka bagi `authenticated` untuk visibilitas lintas tim, sedangkan `INSERT`, `UPDATE (name, position, is_default)`, dan `DELETE` dibatasi hanya untuk Leader tim pemilik project atau Leader Tim Management (`public.is_project_leader(project_id)`).
 - **`public.tasks`**:
-  - `INSERT` dan `DELETE` hanya diizinkan untuk Leader project (`public.is_project_leader(project_id)`), dengan kewajiban `created_by = (select auth.uid())` dan `column_id` milik `project_id` yang sama.
-  - `UPDATE` hanya diizinkan untuk Leader project atau pihak yang ditugaskan pada task (`assignee_id`, `developer_id`, `tester_id`), tanpa hak mengubah kolom identitas (`id`, `project_id`, `created_by`, `created_at`).
-  - Trigger `before_task_write_guards` (`public.enforce_task_write_guards()`) memastikan `assignee_id`, `developer_id`, dan `tester_id` berasal dari tim project atau Tim Management, melarang non-leader mengubah `assignee_id`, `developer_id`, `priority`, `base_points`, `origin`, `due_date`, dan `purpose`, melarang Developer menetapkan `test_status = 'passed'` atau memindahkan task ke kolom `Done` sebelum lulus QA, serta mewajibkan seluruh item `task_subtasks` selesai (`is_completed = true`) sebelum task dinyatakan `passed`.
+  - `INSERT` diizinkan untuk anggota tim pemilik project atau Tim Management (`public.can_create_project_task(project_id)`), dengan kewajiban `created_by = (select auth.uid())` dan `column_id` milik `project_id` yang sama. Anggota lintas tim tetap diblokir.
+  - `DELETE` hanya diizinkan untuk Leader project (`public.is_project_leader(project_id)`).
+  - `UPDATE` (termasuk drag-and-drop antar kolom Kanban) diizinkan untuk Leader project atau pihak yang ditugaskan pada task tersebut (`assignee_id`, `developer_id`, `tester_id`). Anggota tim lain yang tidak ditugaskan dilarang memindahkan atau mengedit task. Kolom identitas (`id`, `project_id`, `created_by`, `created_at`) tidak dapat diubah oleh client.
+  - Trigger `before_task_write_guards` (`public.enforce_task_write_guards()`):
+    - Memastikan `assignee_id`, `developer_id`, dan `tester_id` berasal dari tim project atau Tim Management.
+    - Melarang non-leader mengubah penugasan utama atau metadata prioritas (`assignee_id`, `developer_id`, `priority`, `base_points`, `origin`, `due_date`, `purpose`).
+    - Melarang siapa pun memindahkan task ke kolom **Done / Selesai** sebelum pengerjaan development tuntas (`dev_status = 'dev_done'`) dan lulus review pengujian QA (`test_status = 'passed'`).
+    - Mewajibkan seluruh item `task_subtasks` selesai (`is_completed = true`) sebelum task dinyatakan `passed` atau dipindahkan ke kolom Done.
 - **`public.task_subtasks`**:
   - Penambahan item baru (`is_completed = false`) dan penghapusan item yang belum dicentang dapat dilakukan oleh Leader project, Developer, atau Tester yang ditugaskan (`public.can_access_task_checklist(task_id)`).
   - Verifikasi/pencetakan checklist (`UPDATE` `is_completed`, `tested_by`, `tested_at`) dan penghapusan item yang sudah terverifikasi hanya dapat dilakukan oleh Tester QA yang ditugaskan atau Leader project (`public.can_verify_task_checklist(task_id)`), dengan validasi `tested_by = (select auth.uid())`.
@@ -191,5 +196,5 @@ Tes database memakai identitas sintetis dan melakukan rollback terhadap seluruh 
 Regresi Server Action dijalankan dengan `pnpm run test:task-kanban-checklist`, sedangkan verifikasi langsung di database dilakukan melalui:
 
 ```powershell
-pnpm exec supabase db query --linked --file supabase/tests/task-kanban-checklist-rls.test.sql
+pnpm exec supabase db query --linked --file supabase/tests/member-task-creation-and-done-rules.test.sql
 ```
