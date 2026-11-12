@@ -50,7 +50,7 @@ export function ProjectTasksView({
   columns,
   teamMembers,
   currentUserId,
-  canCreateTask = true,
+  canCreateTask = false,
 }: ProjectTasksViewProps) {
   const [internalTab, setInternalTab] = React.useState<TabType | null>(null);
   const storedTab = React.useSyncExternalStore(
@@ -171,9 +171,9 @@ export function ProjectTasksView({
           ) : (
             <span
               className="text-[11px] text-muted-foreground bg-muted/60 border border-border/80 rounded-md px-2.5 py-1"
-              title="Hanya anggota tim proyek terkait atau Tim Management yang dapat menambahkan task"
+              title="Hanya Leader tim proyek terkait atau Leader Tim Management yang dapat menambahkan task"
             >
-              Proyek Tim Lain (Read-only)
+              Khusus Leader Proyek
             </span>
           )}
         </div>
