@@ -24,3 +24,4 @@ jobs:
     - run: pnpm run test
     - run: pnpm run test:profile-permissions
     - run: pnpm run test:task-kanban-checklist
+    - run: pnpm run test:task-attachments
