@@ -17,6 +17,59 @@ import {
 } from '@/features/ai/lib/task-prioritizing';
 import { recordAiSuggestionOverride } from '@/features/ai/queries/ai-analytics.queries';
 import { normalizeGithubRepository } from '@/features/github/lib/webhook-verifier';
+import { isManagementTeam } from '@/features/team/queries/team.queries';
+
+async function verifyProjectLeaderForTask(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  taskId: string
+): Promise<
+  | { authorized: true; projectId: string }
+  | { authorized: false; message: string }
+> {
+  const [{ data: taskRow }, { data: userProfile }] = await Promise.all([
+    supabase
+      .from('tasks')
+      .select('id, project_id, project:projects!tasks_project_id_fkey(team_id)')
+      .eq('id', taskId)
+      .maybeSingle(),
+    supabase
+      .from('profiles')
+      .select('role, team_id')
+      .eq('id', userId)
+      .maybeSingle(),
+  ]);
+
+  const projectTeamId = (
+    taskRow?.project as unknown as { team_id?: string | null } | null
+  )?.team_id;
+
+  if (!taskRow?.project_id || !projectTeamId) {
+    return {
+      authorized: false,
+      message: 'Task atau project terkait tidak ditemukan.',
+    };
+  }
+
+  if (userProfile?.role !== 'leader') {
+    return {
+      authorized: false,
+      message:
+        'Hanya Leader tim proyek terkait atau Leader Tim Management yang dapat mengubah penugasan task.',
+    };
+  }
+
+  const isManagement = await isManagementTeam(userProfile.team_id);
+  if (!isManagement && userProfile.team_id !== projectTeamId) {
+    return {
+      authorized: false,
+      message:
+        'Anda tidak memiliki izin untuk mengubah penugasan task pada project milik tim lain.',
+    };
+  }
+
+  return { authorized: true, projectId: taskRow.project_id };
+}
 
 /**
  * Server action to create a new Task on a Kanban Board.
@@ -104,46 +157,68 @@ export async function createTaskAction(
       };
     }
 
-    // Verify team permission: user must belong to project's team or have management role
-    if (parsed.data.projectId) {
-      const [{ data: projectData }, { data: userProfile }] = await Promise.all([
+    // Verify leader role, team ownership, and Kanban column membership
+    const [{ data: projectData }, { data: userProfile }, { data: columnData }] =
+      await Promise.all([
         supabase
           .from('projects')
-          .select('team_id')
+          .select('id, team_id')
           .eq('id', parsed.data.projectId)
-          .single(),
+          .maybeSingle(),
         supabase
           .from('profiles')
           .select('role, team_id')
           .eq('id', user.id)
-          .single(),
+          .maybeSingle(),
+        supabase
+          .from('board_columns')
+          .select('id, project_id')
+          .eq('id', parsed.data.columnId)
+          .maybeSingle(),
       ]);
 
-      let isManagement = false;
-      if (userProfile?.team_id) {
-        const { data: userTeam } = await supabase
-          .from('teams')
-          .select('name')
-          .eq('id', userProfile.team_id)
-          .single();
-        if (userTeam?.name === 'Management') {
-          isManagement = true;
-        }
-      }
+    if (!projectData?.team_id) {
+      return {
+        success: false,
+        error: {
+          _form: ['Project tidak ditemukan atau tidak valid.'],
+        },
+      };
+    }
 
-      const isProjectTeamMember =
-        !projectData?.team_id || userProfile?.team_id === projectData?.team_id;
+    if (userProfile?.role !== 'leader') {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Hanya Leader tim proyek terkait atau Leader Tim Management yang dapat membuat task baru.',
+          ],
+        },
+      };
+    }
 
-      if (!isManagement && !isProjectTeamMember) {
-        return {
-          success: false,
-          error: {
-            _form: [
-              'Anda tidak memiliki izin untuk menambahkan task pada project milik tim lain.',
-            ],
-          },
-        };
-      }
+    const isManagement = await isManagementTeam(userProfile.team_id);
+    const isProjectTeamLeader =
+      isManagement || userProfile.team_id === projectData.team_id;
+
+    if (!isProjectTeamLeader) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Anda tidak memiliki izin untuk menambahkan task pada project milik tim lain.',
+          ],
+        },
+      };
+    }
+
+    if (!columnData || columnData.project_id !== parsed.data.projectId) {
+      return {
+        success: false,
+        error: {
+          _form: ['Kolom Kanban tidak sesuai dengan project task.'],
+        },
+      };
     }
 
     const { data: task, error: insertError } = await supabase
@@ -271,6 +346,18 @@ export async function updateTaskAssigneeAction({
       return {
         success: false,
         error: { _form: ['Sesi login tidak valid atau telah berakhir.'] },
+      };
+    }
+
+    const permission = await verifyProjectLeaderForTask(
+      supabase,
+      user.id,
+      taskId
+    );
+    if (!permission.authorized) {
+      return {
+        success: false,
+        error: { _form: [permission.message] },
       };
     }
 
@@ -567,6 +654,18 @@ export async function updateTaskRoleAssigneeAction({
       return {
         success: false,
         error: { _form: ['Sesi login tidak valid atau telah berakhir.'] },
+      };
+    }
+
+    const permission = await verifyProjectLeaderForTask(
+      supabase,
+      currentUser.id,
+      taskId
+    );
+    if (!permission.authorized) {
+      return {
+        success: false,
+        error: { _form: [permission.message] },
       };
     }
 
@@ -1083,18 +1182,21 @@ export async function deleteTaskSubtaskAction({
       };
     }
 
-    const { error: deleteError } = await supabase
+    const { data: deletedSubtask, error: deleteError } = await supabase
       .from('task_subtasks')
       .delete()
       .eq('id', subtaskId)
-      .eq('task_id', taskId);
+      .eq('task_id', taskId)
+      .select('id')
+      .maybeSingle();
 
-    if (deleteError) {
+    if (deleteError || !deletedSubtask) {
       return {
         success: false,
         error: {
           _form: [
-            deleteError.message || 'Gagal menghapus subtask dari database.',
+            deleteError?.message ||
+              'Anda tidak memiliki izin atau subtask tidak ditemukan untuk dihapus.',
           ],
         },
       };
