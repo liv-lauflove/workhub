@@ -25,6 +25,7 @@ import {
   isManagementTeam,
 } from '@/features/team/queries/team.queries';
 import { ProjectTasksView } from '@/features/projects/components/project-tasks-view';
+import { ArchiveProjectDialog } from '@/features/projects/components/archive-project-dialog';
 import { ProjectActivityPulse } from '@/features/projects/components/project-activity-pulse';
 import { ROUTES } from '@/config/routes';
 
@@ -104,6 +105,7 @@ export default async function ProjectDetailPage({
   const statusCfg = STATUS_CONFIG[project.status] || STATUS_CONFIG.planned;
   const progressPercent = Math.min(Math.max(project.progress, 0), 100);
 
+  const isLeader = profile.role === 'leader';
   const canCreateTask =
     isManagement || !project.team_id || profile.team_id === project.team_id;
 
@@ -178,7 +180,7 @@ export default async function ProjectDetailPage({
 
       {/* Project Header Card (Compact & Clean) */}
       <div className="rounded-xl border bg-card p-4 sm:p-5 shadow-xs space-y-3">
-        {/* Top: Title, Badges, & PIC */}
+        {/* Top: Title, Badges, PIC, & Actions */}
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-2">
@@ -202,15 +204,25 @@ export default async function ProjectDetailPage({
             )}
           </div>
 
-          {/* PIC */}
-          <div className="flex items-center gap-1.5 text-xs text-muted-foreground shrink-0">
-            <User className="h-3.5 w-3.5 text-primary" />
-            <span>
-              PIC:{' '}
-              <strong className="text-foreground font-medium">
-                {project.pic?.full_name || 'Tanpa PIC'}
-              </strong>
-            </span>
+          {/* PIC & Archive Action */}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <User className="h-3.5 w-3.5 text-primary" />
+              <span>
+                PIC:{' '}
+                <strong className="text-foreground font-medium">
+                  {project.pic?.full_name || 'Tanpa PIC'}
+                </strong>
+              </span>
+            </div>
+            {isLeader && (
+              <ArchiveProjectDialog
+                projectId={project.id}
+                projectName={project.name}
+                milestoneId={project.milestone_id}
+                isLeader={isLeader}
+              />
+            )}
           </div>
         </div>
 

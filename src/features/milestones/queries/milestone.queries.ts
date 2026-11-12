@@ -18,6 +18,26 @@ export async function getMilestones(): Promise<MilestoneWithDetails[]> {
   return (data as unknown as MilestoneWithDetails[]) || [];
 }
 
+/**
+ * Get all archived milestones ordered by archived_at descending.
+ */
+export async function getArchivedMilestones(): Promise<MilestoneWithDetails[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('milestones')
+    .select(
+      '*, pic:profiles!milestones_pic_id_fkey(id, full_name, avatar_url), projects(count)'
+    )
+    .not('archived_at', 'is', null)
+    .order('archived_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching archived milestones:', error);
+    return [];
+  }
+  return (data as unknown as MilestoneWithDetails[]) || [];
+}
+
 export async function getMilestoneById(
   id: string
 ): Promise<MilestoneWithDetails | null> {

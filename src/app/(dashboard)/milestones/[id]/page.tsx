@@ -21,6 +21,7 @@ import { getTeams } from '@/features/team/queries/team.queries';
 import { getProjectsByMilestoneId } from '@/features/projects/queries/project.queries';
 import { CreateProjectDialog } from '@/features/projects/components/create-project-dialog';
 import { ProjectList } from '@/features/projects/components/project-list';
+import { ArchiveMilestoneDialog } from '@/features/milestones/components/archive-milestone-dialog';
 import { ROUTES } from '@/config/routes';
 
 interface MilestoneDetailPageProps {
@@ -145,6 +146,16 @@ export default async function MilestoneDetailPage({
               </p>
             )}
           </div>
+
+          {isLeader && (
+            <div className="shrink-0">
+              <ArchiveMilestoneDialog
+                milestoneId={milestone.id}
+                milestoneTitle={milestone.title}
+                isLeader={isLeader}
+              />
+            </div>
+          )}
         </div>
 
         {/* Timeline & Schedule Bar */}

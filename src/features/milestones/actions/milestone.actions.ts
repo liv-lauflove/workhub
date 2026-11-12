@@ -108,3 +108,137 @@ export async function createMilestone(
     data: { id: data.id },
   };
 }
+
+/**
+ * Server action to archive a Milestone.
+ * Only team leaders can archive milestones.
+ */
+export async function archiveMilestone(
+  milestoneId: string
+): Promise<ActionState> {
+  if (!milestoneId) {
+    return {
+      success: false,
+      error: { _form: ['ID Milestone tidak valid.'] },
+    };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return {
+      success: false,
+      error: { _form: ['Sesi Anda tidak valid. Silakan login kembali.'] },
+    };
+  }
+
+  // Verify leader role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (profile?.role !== 'leader') {
+    return {
+      success: false,
+      error: {
+        _form: [
+          'Hanya Leader yang memiliki izin untuk mengarsipkan milestone.',
+        ],
+      },
+    };
+  }
+
+  const { error } = await supabase
+    .from('milestones')
+    .update({ archived_at: new Date().toISOString() })
+    .eq('id', milestoneId);
+
+  if (error) {
+    console.error('Error archiving milestone:', error);
+    return {
+      success: false,
+      error: { _form: [error.message] },
+    };
+  }
+
+  revalidatePath('/milestones');
+  revalidatePath(`/milestones/${milestoneId}`);
+  revalidatePath('/archive');
+  revalidatePath('/');
+
+  return {
+    success: true,
+  };
+}
+
+/**
+ * Server action to restore an archived Milestone.
+ * Only team leaders can restore milestones.
+ */
+export async function restoreMilestone(
+  milestoneId: string
+): Promise<ActionState> {
+  if (!milestoneId) {
+    return {
+      success: false,
+      error: { _form: ['ID Milestone tidak valid.'] },
+    };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError || !user) {
+    return {
+      success: false,
+      error: { _form: ['Sesi Anda tidak valid. Silakan login kembali.'] },
+    };
+  }
+
+  // Verify leader role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('role')
+    .eq('id', user.id)
+    .single();
+
+  if (profile?.role !== 'leader') {
+    return {
+      success: false,
+      error: {
+        _form: ['Hanya Leader yang memiliki izin untuk memulihkan milestone.'],
+      },
+    };
+  }
+
+  const { error } = await supabase
+    .from('milestones')
+    .update({ archived_at: null })
+    .eq('id', milestoneId);
+
+  if (error) {
+    console.error('Error restoring milestone:', error);
+    return {
+      success: false,
+      error: { _form: [error.message] },
+    };
+  }
+
+  revalidatePath('/milestones');
+  revalidatePath(`/milestones/${milestoneId}`);
+  revalidatePath('/archive');
+  revalidatePath('/');
+
+  return {
+    success: true,
+  };
+}
