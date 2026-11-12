@@ -1,6 +1,7 @@
 'use server';
 
 import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
 import { isManagementTeam, MANAGEMENT_TEAM_ID } from '../queries/team.queries';
@@ -9,6 +10,22 @@ import { z } from 'zod';
 
 const uuidRegex =
   /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+
+const memberRoleSchema = z.object({
+  userId: z.string().regex(uuidRegex, 'Anggota tidak valid').toLowerCase(),
+  teamId: z.string().regex(uuidRegex, 'Tim tidak valid').toLowerCase(),
+  role: z.enum(['leader', 'member']),
+});
+
+const memberCapacitySchema = z.object({
+  userId: z.string().regex(uuidRegex, 'Anggota tidak valid').toLowerCase(),
+  teamId: z.string().regex(uuidRegex, 'Tim tidak valid').toLowerCase(),
+  capacityPoints: z.coerce
+    .number()
+    .int('Kapasitas poin harus berupa bilangan bulat')
+    .min(10, 'Kapasitas poin minimal 10')
+    .max(1000, 'Kapasitas poin maksimal 1000'),
+});
 
 const inviteSchema = z.object({
   email: z.string().email('Format email tidak valid'),
@@ -467,16 +484,18 @@ export async function updateMemberRole(
   _prevState: ActionState | null,
   formData: FormData
 ): Promise<ActionState> {
-  const userId = formData.get('userId') as string;
-  const newRole = formData.get('role') as 'leader' | 'member';
-  const teamId = formData.get('teamId') as string;
-
-  if (!userId || !newRole || !teamId) {
+  const parsed = memberRoleSchema.safeParse({
+    userId: formData.get('userId'),
+    teamId: formData.get('teamId'),
+    role: formData.get('role'),
+  });
+  if (!parsed.success) {
     return {
       success: false,
-      error: { _form: ['Data tidak lengkap.'] },
+      error: { _form: ['Data anggota, tim, atau role tidak valid.'] },
     };
   }
+  const { userId, teamId, role: newRole } = parsed.data;
 
   const profile = await getUserProfile();
   if (!profile || profile.role !== 'leader') {
@@ -494,40 +513,19 @@ export async function updateMemberRole(
     };
   }
 
-  // Prevent leader from demoting themselves if they are the only leader
-  if (profile.id === userId && newRole === 'member') {
-    const { createClient } = await import('@/lib/supabase/server');
-    const supabase = await createClient();
-    const { count } = await supabase
-      .from('profiles')
-      .select('*', { count: 'exact', head: true })
-      .eq('team_id', teamId)
-      .eq('role', 'leader');
-
-    if (count && count <= 1) {
-      return {
-        success: false,
-        error: {
-          _form: [
-            'Anda adalah leader terakhir. Promosikan anggota lain sebelum turun jabatan.',
-          ],
-        },
-      };
-    }
-  }
-
-  const { createClient } = await import('@/lib/supabase/server');
   const supabase = await createClient();
-  const { error } = await supabase
-    .from('profiles')
-    .update({ role: newRole })
-    .eq('id', userId)
-    .eq('team_id', teamId);
+  const { data, error } = await supabase.rpc('update_team_member', {
+    p_user_id: userId,
+    p_team_id: teamId,
+    p_role: newRole,
+  });
 
-  if (error) {
+  if (error || data !== userId) {
     return {
       success: false,
-      error: { _form: [error.message] },
+      error: {
+        _form: [error?.message || 'Perubahan role anggota tidak berhasil.'],
+      },
     };
   }
 
@@ -543,28 +541,18 @@ export async function updateMemberCapacity(
   _prevState: ActionState | null,
   formData: FormData
 ): Promise<ActionState> {
-  const userId = formData.get('userId') as string;
-  const teamId = formData.get('teamId') as string;
-  const rawPoints = formData.get('capacityPoints') as string;
-  const capacityPoints = parseInt(rawPoints, 10);
-
-  if (!userId || !teamId || isNaN(capacityPoints)) {
+  const parsed = memberCapacitySchema.safeParse({
+    userId: formData.get('userId'),
+    teamId: formData.get('teamId'),
+    capacityPoints: formData.get('capacityPoints'),
+  });
+  if (!parsed.success) {
     return {
       success: false,
-      error: { _form: ['Data tidak lengkap atau format poin tidak valid.'] },
+      error: { _form: ['Data anggota, tim, atau kapasitas poin tidak valid.'] },
     };
   }
-
-  if (capacityPoints < 10 || capacityPoints > 1000) {
-    return {
-      success: false,
-      error: {
-        capacityPoints: [
-          'Kapasitas poin harus berada di antara 10 hingga 1000 poin.',
-        ],
-      },
-    };
-  }
+  const { userId, teamId, capacityPoints } = parsed.data;
 
   const profile = await getUserProfile();
   if (!profile || profile.role !== 'leader') {
@@ -588,18 +576,21 @@ export async function updateMemberCapacity(
     };
   }
 
-  const { createClient } = await import('@/lib/supabase/server');
   const supabase = await createClient();
-  const { error } = await supabase
-    .from('profiles')
-    .update({ capacity_points: capacityPoints })
-    .eq('id', userId)
-    .eq('team_id', teamId);
+  const { data, error } = await supabase.rpc('update_team_member', {
+    p_user_id: userId,
+    p_team_id: teamId,
+    p_capacity_points: capacityPoints,
+  });
 
-  if (error) {
+  if (error || data !== userId) {
     return {
       success: false,
-      error: { _form: [error.message] },
+      error: {
+        _form: [
+          error?.message || 'Perubahan kapasitas anggota tidak berhasil.',
+        ],
+      },
     };
   }
 
