@@ -184,33 +184,7 @@ export async function getTeamInvitations(teamId: string) {
 export async function isManagementTeam(
   teamId?: string | null
 ): Promise<boolean> {
-  if (!teamId) return false;
-  if (teamId === MANAGEMENT_TEAM_ID) return true;
-  const supabase = await createClient();
-  const { data: initialData, error } = await supabase
-    .from('teams')
-    .select('name')
-    .eq('id', teamId)
-    .maybeSingle();
-  let data = initialData;
-
-  if (
-    error &&
-    (error.code === 'PGRST303' ||
-      error.message?.includes('JWT issued at future'))
-  ) {
-    const { createAdminClient } = await import('@/lib/supabase/admin');
-    const admin = createAdminClient();
-    const { data: adminData } = await admin
-      .from('teams')
-      .select('name')
-      .eq('id', teamId)
-      .maybeSingle();
-    data = adminData;
-  }
-
-  if (!data) return false;
-  return data.name === 'Management';
+  return teamId === MANAGEMENT_TEAM_ID;
 }
 
 /**

@@ -158,3 +158,19 @@ Seluruh tabel di skema `public` mengaktifkan **Row Level Security (`ENABLE ROW L
    - **Leader Squad**: Memiliki hak membuat/mengubah Milestone, Project pada timnya, mengundang anggota ke timnya, serta mengatur kolom Kanban.
    - **Member Squad**: Memiliki hak memperbarui status pengerjaan task, menambahkan komentar, mengunggah lampiran, mencentang subtask pengujian, dan menautkan branch/repository GitHub.
 4. Endpoint mesin-ke-mesin seperti `/api/github-webhook` menggunakan `createAdminClient()` setelah memverifikasi tanda tangan kriptografis HMAC-SHA256.
+
+### Mutasi profil dan pengelolaan anggota
+
+- Self-service `profiles` memakai policy baris milik sendiri dan grant UPDATE hanya untuk `full_name`, `avatar_url`, `github_username`, `phone`, serta `position`. Client tidak memiliki hak INSERT profil atau UPDATE langsung pada `id`, `role`, `team_id`, `capacity_points`, dan `created_at`.
+- Trigger Auth tetap membuat profil; penetapan `team_id` dilakukan oleh operasi server yang terotorisasi. Verifikasi email pada klaim undangan dilacak terpisah pada issue #148.
+- `public.update_team_member(p_user_id uuid, p_team_id uuid, p_role user_role default null, p_capacity_points integer default null)` mengembalikan UUID anggota yang diperbarui. RPC ini memakai `auth.uid()`, memeriksa role leader dan tim target, serta mengizinkan leader Management berdasarkan ID tim sistem untuk mengelola lintas tim. Tidak ada parameter actor atau pemindahan tim pada RPC ini.
+- RPC menolak target yang tidak ditemukan, kapasitas di luar 10–1000, dan perubahan kosong. Pemeriksaan leader terakhir saat menurunkan role sendiri dilakukan dalam transaksi yang mengunci tim.
+- Pengenalan Management untuk otorisasi memakai `MANAGEMENT_TEAM_ID`, bukan nama tim yang dapat berubah. Function berjalan sebagai `SECURITY DEFINER` dengan `search_path` kosong dan hanya dapat dipanggil role `authenticated` setelah pemeriksaan izin di dalam function.
+
+Regresi Server Action dijalankan dengan `pnpm run test:profile-permissions`. Matriks izin database terdapat pada `supabase/tests/profile-permissions.test.sql` dan dapat dijalankan pada project Supabase development/test yang sudah menerima migrasi:
+
+```powershell
+pnpm exec supabase db query --linked --file supabase/tests/profile-permissions.test.sql
+```
+
+Tes database memakai identitas sintetis dan melakukan rollback terhadap seluruh fixture/helper. Kesalahan assertion menghasilkan error SQL, bukan status sukses tanpa pengujian.
