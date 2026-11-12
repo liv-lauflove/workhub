@@ -28,7 +28,7 @@ const memberCapacitySchema = z.object({
 });
 
 const inviteSchema = z.object({
-  email: z.string().email('Format email tidak valid'),
+  email: z.string().trim().email('Format email tidak valid'),
   role: z.enum(['leader', 'member'], {
     message: 'Role harus dipilih',
   }),
@@ -300,13 +300,13 @@ export async function inviteTeamMember(
 
   if (input instanceof FormData) {
     rawData = {
-      email: (input.get('email') as string)?.trim(),
+      email: (input.get('email') as string)?.trim().toLowerCase(),
       role: (input.get('role') as string)?.trim(),
       teamId: (input.get('teamId') as string)?.trim(),
     };
   } else {
     rawData = {
-      email: input.email?.trim(),
+      email: input.email?.trim().toLowerCase(),
       role: input.role,
       teamId: input.teamId?.trim(),
     };
@@ -365,21 +365,41 @@ export async function inviteTeamMember(
     };
   }
 
+  const normalizedEmail = parsed.data.email.trim().toLowerCase();
   const admin = createAdminClient();
 
   // Check if email already has a pending invitation
-  const { data: existing, error: checkError } = await admin
+  const { data: existingList, error: checkError } = await admin
     .from('team_invitations')
-    .select('id')
-    .eq('email', parsed.data.email)
-    .eq('status', 'pending')
-    .maybeSingle();
+    .select('id, expires_at')
+    .ilike('email', normalizedEmail)
+    .eq('status', 'pending');
 
   if (checkError) {
     console.error('❌ [inviteTeamMember] Check existing error:', checkError);
   }
 
-  if (existing) {
+  const records = Array.isArray(existingList)
+    ? existingList
+    : existingList
+      ? [existingList]
+      : [];
+
+  let hasActivePending = false;
+  const now = new Date();
+  for (const inv of records) {
+    const isExpired = inv.expires_at && new Date(inv.expires_at) <= now;
+    if (isExpired) {
+      await admin
+        .from('team_invitations')
+        .update({ status: 'expired' })
+        .eq('id', inv.id);
+    } else {
+      hasActivePending = true;
+    }
+  }
+
+  if (hasActivePending) {
     console.warn('⚠️ [inviteTeamMember] Email already has pending invitation');
     return {
       success: false,
@@ -395,7 +415,7 @@ export async function inviteTeamMember(
     .from('team_invitations')
     .insert({
       team_id: parsed.data.teamId,
-      email: parsed.data.email,
+      email: normalizedEmail,
       role: parsed.data.role,
       invited_by: profile.id,
       token,
