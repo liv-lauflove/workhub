@@ -48,6 +48,12 @@ export interface InvokeLlmResult {
   };
 }
 
+export interface ResolvedLlmTarget {
+  provider: LlmProvider;
+  model: string;
+  isSimulation: boolean;
+}
+
 /**
  * Resolves which provider and API key to use based on configuration and availability.
  */
@@ -80,6 +86,41 @@ function resolveProvider(requestedProvider?: LlmProvider): {
 
   // No active API key found
   return { provider: targetProvider, apiKey: '' };
+}
+
+/**
+ * Resolves the effective provider and model identifier for cache-key isolation
+ * without exposing secret API credentials.
+ */
+export function resolveLlmTarget(options?: {
+  provider?: LlmProvider;
+  model?: string;
+}): ResolvedLlmTarget {
+  const { provider, apiKey } = resolveProvider(options?.provider);
+
+  if (!apiKey) {
+    return {
+      provider,
+      model:
+        process.env.NODE_ENV !== 'production'
+          ? 'simulation-mode'
+          : 'unconfigured',
+      isSimulation: true,
+    };
+  }
+
+  const model =
+    provider === 'openai'
+      ? options?.model || process.env.OPENAI_MODEL || 'gpt-4o-mini'
+      : options?.model ||
+        process.env.GEMINI_MODEL ||
+        'gemini-flash-lite-latest';
+
+  return {
+    provider,
+    model,
+    isSimulation: false,
+  };
 }
 
 /**
