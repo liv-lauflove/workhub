@@ -194,10 +194,15 @@ function createTaskFixture({
   };
 
   const server = { createClient: async () => client };
+  const invitationUtils = loadSource(
+    'src/features/team/invitation-utils.ts',
+    {}
+  );
   const teamQueries = loadSource('src/features/team/queries/team.queries.ts', {
     'server-only': {},
     '@/lib/supabase/server': server,
     '../constants': { MANAGEMENT_TEAM_ID },
+    '../invitation-utils': invitationUtils,
   });
 
   const actions = loadSource('src/features/tasks/actions/task.actions.ts', {

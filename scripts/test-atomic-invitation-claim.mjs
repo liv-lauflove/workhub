@@ -80,6 +80,26 @@ function createTeamActionsFixture(actor, dbState = { invitations: [] }) {
             filters: {},
             updates: null,
           };
+          const executeSelect = () => {
+            dbCalls.push({ type: 'select', ...query });
+            return dbState.invitations.filter((row) => {
+              for (const [col, condition] of Object.entries(query.filters)) {
+                if (condition.op === 'ilike') {
+                  if (
+                    !row[col] ||
+                    row[col].toLowerCase() !== condition.val.toLowerCase()
+                  ) {
+                    return false;
+                  }
+                } else if (condition.op === 'eq') {
+                  if (row[col] !== condition.val) {
+                    return false;
+                  }
+                }
+              }
+              return true;
+            });
+          };
           const builder = {
             ilike(col, val) {
               query.filters[col] = { op: 'ilike', val };
@@ -89,36 +109,30 @@ function createTeamActionsFixture(actor, dbState = { invitations: [] }) {
               query.filters[col] = { op: 'eq', val };
               return builder;
             },
+            maybeSingle: async () => {
+              const matched = executeSelect();
+              return { data: matched[0] ?? null, error: null };
+            },
             then(resolve) {
-              dbCalls.push({ type: 'select', ...query });
-              // Filter dbState.invitations
-              const matched = dbState.invitations.filter((row) => {
-                for (const [col, condition] of Object.entries(query.filters)) {
-                  if (condition.op === 'ilike') {
-                    if (
-                      !row[col] ||
-                      row[col].toLowerCase() !== condition.val.toLowerCase()
-                    ) {
-                      return false;
-                    }
-                  } else if (condition.op === 'eq') {
-                    if (row[col] !== condition.val) {
-                      return false;
-                    }
-                  }
-                }
-                return true;
-              });
-              resolve({ data: matched, error: null });
+              resolve({ data: executeSelect(), error: null });
             },
           };
           return builder;
         },
         update(values) {
-          const query = { table: tableName, values, filters: {} };
+          const query = {
+            table: tableName,
+            values,
+            filters: {},
+            gtFilters: {},
+          };
           const builder = {
             eq(col, val) {
               query.filters[col] = val;
+              return builder;
+            },
+            gt(col, val) {
+              query.gtFilters[col] = val;
               return builder;
             },
             then(resolve) {
@@ -127,6 +141,14 @@ function createTeamActionsFixture(actor, dbState = { invitations: [] }) {
                 let match = true;
                 for (const [col, val] of Object.entries(query.filters)) {
                   if (row[col] !== val) match = false;
+                }
+                for (const [col, val] of Object.entries(query.gtFilters)) {
+                  if (
+                    !row[col] ||
+                    new Date(row[col]).getTime() <= new Date(val).getTime()
+                  ) {
+                    match = false;
+                  }
                 }
                 if (match) {
                   Object.assign(row, values);
@@ -838,6 +860,262 @@ function simulateClaimTeamInvitation({
   });
 
   assert.equal(secondClaim, false, 'Repeated claim must be idempotent and return false');
+  checks += 2;
+}
+
+// =============================================================================
+// TEST SUITE 4: Expired Invitation Resolution, Query Sync & Revoke Guard
+// =============================================================================
+
+const invitationUtils = loadSource('src/features/team/invitation-utils.ts');
+
+// Test 4.1: Pure status/expiry helpers
+{
+  const now = new Date('2026-11-13T12:00:00.000Z');
+  assert.equal(invitationUtils.isInvitationExpired('2026-11-11T12:00:00.000Z', now), true);
+  assert.equal(invitationUtils.isInvitationExpired('2026-11-13T12:00:00.000Z', now), true);
+  assert.equal(invitationUtils.isInvitationExpired('2026-11-20T12:00:00.000Z', now), false);
+  assert.equal(invitationUtils.isInvitationExpired(null, now), false);
+  assert.equal(invitationUtils.isInvitationExpired('not-a-date', now), false);
+
+  assert.equal(
+    invitationUtils.resolveInvitationStatus('pending', '2026-11-11T12:00:00.000Z', now),
+    'expired'
+  );
+  assert.equal(
+    invitationUtils.resolveInvitationStatus('pending', '2026-11-20T12:00:00.000Z', now),
+    'pending'
+  );
+  assert.equal(
+    invitationUtils.resolveInvitationStatus('accepted', '2026-11-11T12:00:00.000Z', now),
+    'accepted'
+  );
+  assert.equal(
+    invitationUtils.resolveInvitationStatus('revoked', '2026-11-11T12:00:00.000Z', now),
+    'revoked'
+  );
+  checks++;
+}
+
+function createTeamQueriesFixture(rows = [], { failAdminSync = false } = {}) {
+  const adminUpdates = [];
+  const clonedRows = rows.map((row) => ({ ...row }));
+
+  const supabaseClient = {
+    from(tableName) {
+      if (tableName !== 'team_invitations') {
+        throw new Error(`Unexpected select table: ${tableName}`);
+      }
+      const filters = {};
+      const builder = {
+        select() {
+          return builder;
+        },
+        eq(col, val) {
+          filters[col] = val;
+          return builder;
+        },
+        order() {
+          return builder;
+        },
+        then(resolve) {
+          const matched = clonedRows
+            .filter((row) =>
+              Object.entries(filters).every(([col, val]) => row[col] === val)
+            )
+            .map((row) => ({ ...row }));
+          resolve({ data: matched, error: null });
+        },
+      };
+      return builder;
+    },
+  };
+
+  const adminClient = {
+    from(tableName) {
+      if (tableName !== 'team_invitations') {
+        throw new Error(`Unexpected admin sync table: ${tableName}`);
+      }
+      return {
+        update(values) {
+          const state = { values, inFilter: null, eqFilters: {} };
+          const builder = {
+            in(col, vals) {
+              state.inFilter = { col, vals };
+              return builder;
+            },
+            eq(col, val) {
+              state.eqFilters[col] = val;
+              return builder;
+            },
+            then(resolve, reject) {
+              if (failAdminSync) {
+                if (reject) {
+                  reject(new Error('Simulated DB error'));
+                } else {
+                  resolve({ data: null, error: { message: 'Simulated DB error' } });
+                }
+                return;
+              }
+              adminUpdates.push(state);
+              for (const row of clonedRows) {
+                const matchesIn =
+                  !state.inFilter ||
+                  state.inFilter.vals.includes(row[state.inFilter.col]);
+                const matchesEq = Object.entries(state.eqFilters).every(
+                  ([col, val]) => row[col] === val
+                );
+                if (matchesIn && matchesEq) {
+                  Object.assign(row, values);
+                }
+              }
+              resolve({ data: null, error: null });
+            },
+          };
+          return builder;
+        },
+      };
+    },
+  };
+
+  const queries = loadSource('src/features/team/queries/team.queries.ts', {
+    'server-only': {},
+    '@/lib/supabase/server': {
+      createClient: async () => supabaseClient,
+    },
+    '@/lib/supabase/admin': {
+      createAdminClient: () => adminClient,
+    },
+  });
+
+  return { queries, clonedRows, adminUpdates };
+}
+
+// Test 4.2: getTeamInvitations syncs overdue pending rows and resolves UI statuses
+{
+  const past = new Date(Date.now() - 2 * 86400000).toISOString();
+  const future = new Date(Date.now() + 5 * 86400000).toISOString();
+  const fixture = createTeamQueriesFixture([
+    {
+      id: 'q-exp',
+      team_id: teamA,
+      email: 'expired@example.com',
+      role: 'member',
+      status: 'pending',
+      created_at: past,
+      expires_at: past,
+    },
+    {
+      id: 'q-act',
+      team_id: teamA,
+      email: 'active@example.com',
+      role: 'member',
+      status: 'pending',
+      created_at: new Date().toISOString(),
+      expires_at: future,
+    },
+    {
+      id: 'q-acc',
+      team_id: teamA,
+      email: 'accepted@example.com',
+      role: 'member',
+      status: 'accepted',
+      created_at: past,
+      expires_at: past,
+    },
+  ]);
+
+  const result = await fixture.queries.getTeamInvitations(teamA);
+  assert.equal(result.find((r) => r.id === 'q-exp').status, 'expired');
+  assert.equal(result.find((r) => r.id === 'q-act').status, 'pending');
+  assert.equal(result.find((r) => r.id === 'q-acc').status, 'accepted');
+  assert.equal(fixture.adminUpdates.length, 1);
+  assert.deepEqual(fixture.adminUpdates[0].inFilter.vals, ['q-exp']);
+  assert.equal(
+    fixture.clonedRows.find((r) => r.id === 'q-exp').status,
+    'expired',
+    'DB row must also be updated to expired'
+  );
+  checks++;
+}
+
+// Test 4.3: getTeamInvitations skips admin update when nothing is overdue, and tolerates sync error
+{
+  const future = new Date(Date.now() + 86400000).toISOString();
+  const past = new Date(Date.now() - 86400000).toISOString();
+  const noUpdateFixture = createTeamQueriesFixture([
+    {
+      id: 'q-fresh',
+      team_id: teamA,
+      email: 'fresh@example.com',
+      role: 'member',
+      status: 'pending',
+      created_at: new Date().toISOString(),
+      expires_at: future,
+    },
+  ]);
+  const freshResult = await noUpdateFixture.queries.getTeamInvitations(teamA);
+  assert.equal(freshResult[0].status, 'pending');
+  assert.equal(noUpdateFixture.adminUpdates.length, 0);
+
+  const failingSyncFixture = createTeamQueriesFixture(
+    [
+      {
+        id: 'q-all-exp',
+        team_id: teamA,
+        email: 'all@example.com',
+        role: 'member',
+        status: 'pending',
+        created_at: past,
+        expires_at: past,
+        team: { id: teamA, name: 'Aegis' },
+      },
+    ],
+    { failAdminSync: true }
+  );
+  const allResult = await failingSyncFixture.queries.getAllTeamInvitations();
+  assert.equal(allResult[0].status, 'expired');
+  assert.equal(allResult[0].team_name, 'Aegis');
+  checks += 2;
+}
+
+// Test 4.4: revokeInvitation rejects overdue invitations (syncs to expired) and revokes active ones
+{
+  const past = new Date(Date.now() - 2 * 86400000).toISOString();
+  const future = new Date(Date.now() + 5 * 86400000).toISOString();
+  const fixture = createTeamActionsFixture(leaderProfile, {
+    invitations: [
+      {
+        id: 'rev-exp',
+        team_id: teamA,
+        email: 'expired-revoke@example.com',
+        status: 'pending',
+        expires_at: past,
+      },
+      {
+        id: 'rev-act',
+        team_id: teamA,
+        email: 'active-revoke@example.com',
+        status: 'pending',
+        expires_at: future,
+      },
+    ],
+  });
+
+  const expiredRes = await fixture.actions.revokeInvitation(
+    null,
+    form({ invitationId: 'rev-exp', teamId: teamA })
+  );
+  assert.equal(expiredRes.success, false);
+  assert.equal(fixture.dbState.invitations[0].status, 'expired');
+  assert.deepEqual(fixture.revalidated, ['/team']);
+
+  const activeRes = await fixture.actions.revokeInvitation(
+    null,
+    form({ invitationId: 'rev-act', teamId: teamA })
+  );
+  assert.equal(activeRes.success, true);
+  assert.equal(fixture.dbState.invitations[1].status, 'revoked');
   checks += 2;
 }
 

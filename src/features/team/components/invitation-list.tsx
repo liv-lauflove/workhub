@@ -6,17 +6,29 @@ import { Clock, XCircle, CheckCircle2, Ban, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { revokeInvitation } from '@/features/team/actions/team.actions';
+import {
+  resolveInvitationStatus,
+  type InvitationStatus,
+} from '@/features/team/invitation-utils';
 import { cn } from 'cn';
 
 export interface Invitation {
   id: string;
   email: string;
   role: 'leader' | 'member';
-  status: 'pending' | 'accepted' | 'expired' | 'revoked';
+  status: InvitationStatus;
   created_at: string;
   expires_at: string;
   team_id?: string;
   team_name?: string;
+}
+
+function formatInvitationDate(dateValue: string) {
+  return new Date(dateValue).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
 }
 
 interface InvitationListProps {
@@ -138,7 +150,11 @@ export function InvitationList({
   return (
     <div className="divide-y rounded-lg border">
       {invitations.map((inv) => {
-        const config = STATUS_CONFIG[inv.status];
+        const effectiveStatus = resolveInvitationStatus(
+          inv.status,
+          inv.expires_at
+        );
+        const config = STATUS_CONFIG[effectiveStatus];
         const StatusIcon = config.icon;
 
         return (
@@ -157,11 +173,12 @@ export function InvitationList({
               </div>
               <p className="text-xs text-muted-foreground">
                 {inv.role === 'leader' ? 'Leader' : 'Member'} •{' '}
-                {new Date(inv.created_at).toLocaleDateString('id-ID', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })}
+                {formatInvitationDate(inv.created_at)}
+                {(effectiveStatus === 'pending' ||
+                  effectiveStatus === 'expired') &&
+                  inv.expires_at && (
+                    <> • Berlaku s/d {formatInvitationDate(inv.expires_at)}</>
+                  )}
               </p>
             </div>
 
@@ -176,7 +193,7 @@ export function InvitationList({
                 {config.label}
               </span>
 
-              {isLeader && inv.status === 'pending' && (
+              {isLeader && effectiveStatus === 'pending' && (
                 <>
                   <CopyLinkButton email={inv.email} />
                   <RevokeButton

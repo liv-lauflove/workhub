@@ -2,6 +2,10 @@ import 'server-only';
 import { createClient } from '@/lib/supabase/server';
 
 import { MANAGEMENT_TEAM_ID } from '../constants';
+import {
+  resolveInvitationStatus,
+  type InvitationStatus,
+} from '../invitation-utils';
 export { MANAGEMENT_TEAM_ID };
 
 export interface TeamWithStats {
@@ -164,6 +168,56 @@ export async function getTeamMembers(teamId: string) {
 }
 
 /**
+ * Mark overdue pending invitations as expired in PostgreSQL and return resolved statuses.
+ */
+async function syncAndResolveExpiredInvitations<
+  T extends { id: string; status: InvitationStatus; expires_at: string },
+>(rows: T[]): Promise<T[]> {
+  const now = new Date();
+  const expiredPendingIds: string[] = [];
+
+  const resolvedRows = rows.map((row) => {
+    const effectiveStatus = resolveInvitationStatus(
+      row.status,
+      row.expires_at,
+      now
+    );
+    if (row.status === 'pending' && effectiveStatus === 'expired') {
+      expiredPendingIds.push(row.id);
+    }
+    return effectiveStatus === row.status
+      ? row
+      : { ...row, status: effectiveStatus };
+  });
+
+  if (expiredPendingIds.length > 0) {
+    try {
+      const { createAdminClient } = await import('@/lib/supabase/admin');
+      const admin = createAdminClient();
+      const { error: syncError } = await admin
+        .from('team_invitations')
+        .update({ status: 'expired' })
+        .in('id', expiredPendingIds)
+        .eq('status', 'pending');
+
+      if (syncError) {
+        console.error(
+          '⚠️ [syncAndResolveExpiredInvitations] Failed to sync expired invitations:',
+          syncError
+        );
+      }
+    } catch (err) {
+      console.error(
+        '⚠️ [syncAndResolveExpiredInvitations] Unexpected sync error:',
+        err
+      );
+    }
+  }
+
+  return resolvedRows;
+}
+
+/**
  * Get pending/accepted invitations for a specific team.
  */
 export async function getTeamInvitations(teamId: string) {
@@ -175,7 +229,7 @@ export async function getTeamInvitations(teamId: string) {
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return data;
+  return syncAndResolveExpiredInvitations(data || []);
 }
 
 /**
@@ -271,11 +325,13 @@ export async function getAllTeamInvitations() {
 
   if (error) throw error;
 
-  return (data || []).map((inv) => {
+  const normalized = (data || []).map((inv) => {
     const teamObj = Array.isArray(inv.team) ? inv.team[0] : inv.team;
     return {
       ...inv,
       team_name: teamObj?.name ?? 'Tim',
     };
   });
+
+  return syncAndResolveExpiredInvitations(normalized);
 }
