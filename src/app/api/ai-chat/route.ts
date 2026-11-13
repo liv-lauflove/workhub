@@ -1,20 +1,16 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import type { LlmProvider } from '@/features/ai/lib/llm-client';
+import type { ChatContextParams } from '@/features/ai/lib/prompt-templates';
 import {
-  generateQueryHash,
-  getCachedAiResponse,
-  saveCachedAiResponse,
-} from '@/features/ai/queries/ai-cache.queries';
-import { invokeLlm, type LlmProvider } from '@/features/ai/lib/llm-client';
-import {
-  DEFAULT_SYSTEM_PROMPT,
-  buildSystemPromptWithContext,
-  type ChatContextParams,
-} from '@/features/ai/lib/prompt-templates';
+  AiServiceError,
+  executeAiChatTurn,
+} from '@/features/ai/lib/ai-chat-service';
 
 interface AiChatRequestBody {
   prompt?: string;
   context?: ChatContextParams;
+  teamId?: string;
   provider?: LlmProvider;
 }
 
@@ -30,7 +26,7 @@ export async function GET() {
     model:
       process.env.AI_PROVIDER === 'openai'
         ? process.env.OPENAI_MODEL || 'gpt-4o-mini'
-        : process.env.GEMINI_MODEL || 'gemini-flash-latest',
+        : process.env.GEMINI_MODEL || 'gemini-flash-lite-latest',
     caching: 'enabled',
   });
 }
@@ -38,9 +34,7 @@ export async function GET() {
 /**
  * POST /api/ai-chat
  *
- * Core endpoint for the AI Chatbot assistant (Issue #43).
- * Accepts user prompt, verifies authentication, checks the PostgreSQL query cache
- * for repeated questions, and queries LLM provider (Gemini/OpenAI) on cache miss.
+ * Legacy alias route aligned with unified AI chat & cache isolation rules (Issue #43 / #149).
  */
 export async function POST(request: NextRequest) {
   try {
@@ -62,7 +56,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 2. Parse & validate request payload
+    // 2. Parse request payload
     let body: AiChatRequestBody;
     try {
       body = await request.json();
@@ -73,91 +67,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const trimmedPrompt = body.prompt?.trim();
-    if (!trimmedPrompt) {
-      return NextResponse.json(
-        {
-          error:
-            'Bad Request: Kolom prompt wajib diisi dan tidak boleh kosong.',
-        },
-        { status: 400 }
-      );
-    }
-
-    if (trimmedPrompt.length > 4000) {
-      return NextResponse.json(
-        {
-          error:
-            'Bad Request: Panjang prompt tidak boleh melebihi 4000 karakter.',
-        },
-        { status: 400 }
-      );
-    }
-
-    // 3. Step 1: Check PostgreSQL query cache first (SHA-256 hash)
-    const queryHash = generateQueryHash(trimmedPrompt, 'eng-manager');
-    const cached = await getCachedAiResponse(queryHash);
-
-    if (cached) {
-      return NextResponse.json({
-        success: true,
-        reply: cached.responseText,
-        isCached: true,
-        queryHash: cached.queryHash,
-        provider: 'cache',
-        model: 'postgres-ai-query-cache',
-        cachedAt: cached.createdAt,
-      });
-    }
-
-    // 4. Fetch optional profile data if not fully passed in context
-    let context = body.context;
-    if (!context?.userName || !context?.userRole) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('full_name, role')
-        .eq('id', user.id)
-        .maybeSingle();
-
-      if (profile) {
-        context = {
-          ...context,
-          userName: context?.userName || profile.full_name || undefined,
-          userRole: context?.userRole || profile.role || undefined,
-        };
-      }
-    }
-
-    // 5. Build contextual system prompt
-    const systemPrompt = buildSystemPromptWithContext(
-      DEFAULT_SYSTEM_PROMPT,
-      context
-    );
-
-    // 6. Invoke LLM provider
-    const llmResult = await invokeLlm({
-      prompt: trimmedPrompt,
-      systemPrompt,
+    // 3. Execute unified chat turn with server-derived context & isolated cache
+    const result = await executeAiChatTurn({
+      supabase,
+      user,
+      prompt: body.prompt ?? '',
+      clientContext: body.context,
+      requestedTeamId: body.teamId,
       provider: body.provider,
     });
 
-    // 7. Store response in PostgreSQL cache for future identical queries
-    await saveCachedAiResponse({
-      queryHash,
-      queryText: trimmedPrompt,
-      responseText: llmResult.text,
-    });
+    if (result.isCached) {
+      return NextResponse.json({
+        success: true,
+        reply: result.reply,
+        isCached: true,
+        queryHash: result.queryHash,
+        provider: result.provider,
+        model: result.model,
+        cachedAt: result.cachedAt,
+      });
+    }
 
     return NextResponse.json({
       success: true,
-      reply: llmResult.text,
+      reply: result.reply,
       isCached: false,
-      queryHash,
-      provider: llmResult.provider,
-      model: llmResult.model,
-      usage: llmResult.usage,
+      queryHash: result.queryHash,
+      provider: result.provider,
+      model: result.model,
+      usage: result.usage,
     });
   } catch (err) {
+    if (err instanceof AiServiceError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: err.message,
+        },
+        { status: err.status }
+      );
+    }
+
     console.error('Error handling /api/ai-chat request:', err);
     let message =
       err instanceof Error

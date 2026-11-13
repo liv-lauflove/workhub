@@ -3,31 +3,40 @@
 import { createClient } from '@/lib/supabase/server';
 import type { ActionState } from '@/types/global';
 import {
+  computeTextDigest,
   generateQueryHash,
   getCachedAiResponse,
   saveCachedAiResponse,
 } from '../queries/ai-cache.queries';
-import { invokeLlm, type LlmProvider } from '../lib/llm-client';
 import {
-  DEFAULT_SYSTEM_PROMPT,
-  buildSystemPromptWithContext,
+  invokeLlm,
+  resolveLlmTarget,
+  type LlmProvider,
+} from '../lib/llm-client';
+import {
+  PROMPT_VERSIONS,
   TASK_PRIORITY_PREDICTION_SYSTEM_PROMPT,
   buildTaskPriorityPrompt,
   type ChatContextParams,
 } from '../lib/prompt-templates';
+import {
+  AiServiceError,
+  executeAiChatTurn,
+  resolveServerAiIdentityContext,
+} from '../lib/ai-chat-service';
 import type {
   TaskPriorityPredictionInput,
   TaskPriorityPredictionResult,
 } from '../types/ai.types';
 import {
-  classifyRagIntent,
-  buildRagPromptHeader,
-} from '../rag/knowledge-extractor';
-import { getSanitizedTeamWorkloadContext } from '../rag/workload-aggregator';
+  parsePredictionOutput,
+  generateFallbackPrediction,
+} from '../lib/task-prioritizing';
 
 export interface SendAiChatMessageInput {
   prompt: string;
   context?: ChatContextParams;
+  teamId?: string;
   provider?: LlmProvider;
 }
 
@@ -41,8 +50,7 @@ export interface SendAiChatMessageOutput {
 
 /**
  * Server action to handle user chat messages sent to the AI assistant.
- * Performs user authentication, cache-first lookup to save LLM billing,
- * and calls the configured LLM provider when cache misses (Issue #43).
+ * Uses unified server-derived identity context, cache-first lookup, and owner isolation (Issue #43 / #149).
  */
 export async function sendAiChatMessageAction(
   input: SendAiChatMessageInput
@@ -65,96 +73,36 @@ export async function sendAiChatMessageAction(
       };
     }
 
-    const trimmedPrompt = input.prompt?.trim();
-    if (!trimmedPrompt) {
-      return {
-        success: false,
-        error: { prompt: ['Prompt cannot be empty.'] },
-      };
-    }
-
-    if (trimmedPrompt.length > 4000) {
-      return {
-        success: false,
-        error: {
-          prompt: ['Prompt exceeds maximum allowed length of 4000 characters.'],
-        },
-      };
-    }
-
-    // Step 1: Classify RAG query intent (Schema, Workflow, or Live Workload)
-    const { category, requiresWorkload } = classifyRagIntent(trimmedPrompt);
-
-    // Step 2: Check PostgreSQL query cache for static/schema queries (bypass for real-time workload)
-    const queryHash = generateQueryHash(trimmedPrompt, 'eng-manager');
-    if (!requiresWorkload) {
-      const cached = await getCachedAiResponse(queryHash);
-      if (cached) {
-        return {
-          success: true,
-          data: {
-            reply: cached.responseText,
-            isCached: true,
-            provider: 'cache',
-            model: 'postgres-ai-query-cache',
-            cachedAt: cached.createdAt,
-          },
-        };
-      }
-    }
-
-    // Step 3: Retrieve Knowledge Base & Live Sanitized Workload (Issue #97)
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('team_id')
-      .eq('id', user.id)
-      .single();
-    const targetTeamId = profile?.team_id || undefined;
-
-    const ragKnowledgeHeader = buildRagPromptHeader(trimmedPrompt);
-    let workloadBlock = '';
-
-    if (requiresWorkload || category === 'workload') {
-      const workloadSummary =
-        await getSanitizedTeamWorkloadContext(targetTeamId);
-      if (workloadSummary?.formattedContextString) {
-        workloadBlock = `\n\n${workloadSummary.formattedContextString}`;
-      }
-    }
-
-    const basePromptWithContext = buildSystemPromptWithContext(
-      DEFAULT_SYSTEM_PROMPT,
-      input.context
-    );
-
-    const systemPrompt = `${basePromptWithContext}${ragKnowledgeHeader}${workloadBlock}`;
-
-    // Step 4: Invoke LLM provider
-    const llmResult = await invokeLlm({
-      prompt: trimmedPrompt,
-      systemPrompt,
+    const result = await executeAiChatTurn({
+      supabase,
+      user,
+      prompt: input.prompt,
+      clientContext: input.context,
+      requestedTeamId: input.teamId,
       provider: input.provider,
     });
-
-    // Step 5: Persist successful response in PostgreSQL cache if static query
-    if (!requiresWorkload) {
-      await saveCachedAiResponse({
-        queryHash,
-        queryText: trimmedPrompt,
-        responseText: llmResult.text,
-      });
-    }
 
     return {
       success: true,
       data: {
-        reply: llmResult.text,
-        isCached: false,
-        provider: llmResult.provider,
-        model: llmResult.model,
+        reply: result.reply,
+        isCached: result.isCached,
+        provider: result.provider,
+        model: result.model,
+        ...(result.cachedAt ? { cachedAt: result.cachedAt } : {}),
       },
     };
   } catch (error) {
+    if (error instanceof AiServiceError) {
+      return {
+        success: false,
+        error:
+          error.status === 400
+            ? { prompt: [error.message] }
+            : { _form: [error.message] },
+      };
+    }
+
     console.error('Error in sendAiChatMessageAction:', error);
     let message =
       error instanceof Error
@@ -178,16 +126,11 @@ export async function sendAiChatMessageAction(
   }
 }
 
-import {
-  parsePredictionOutput,
-  generateFallbackPrediction,
-} from '../lib/task-prioritizing';
-
 export { generateFallbackPrediction };
 
 /**
- * Server action to predict task priority and duration from title & description (Issue #45).
- * Queries PostgreSQL cache first, falls back to LLM inference or instant heuristic evaluation.
+ * Server action to predict task priority and duration from title & description (Issue #45 / #149).
+ * Enforces owner/team/model/prompt-version isolated caching in PostgreSQL.
  */
 export async function predictTaskPriorityAction(
   input: TaskPriorityPredictionInput
@@ -227,9 +170,34 @@ export async function predictTaskPriorityAction(
       isCsComplaint: input.isCsComplaint,
     });
 
-    // 1. Check PostgreSQL query cache (hashed with priority-pred prefix)
-    const queryHash = generateQueryHash(promptText, 'priority-pred');
-    const cached = await getCachedAiResponse(queryHash);
+    const serverIdentity = await resolveServerAiIdentityContext(supabase, user);
+    const llmTarget = resolveLlmTarget();
+    const promptVersion = PROMPT_VERSIONS.taskPriority;
+    const scopeTeamKey = serverIdentity.effectiveTeamId ?? 'no-team';
+    const contextDigest = computeTextDigest(
+      JSON.stringify({
+        promptVersion,
+        systemPrompt: TASK_PRIORITY_PREDICTION_SYSTEM_PROMPT,
+        teamId: scopeTeamKey,
+        role: serverIdentity.context.userRole,
+      })
+    );
+
+    // 1. Check owner-isolated PostgreSQL query cache
+    const queryHash = generateQueryHash(promptText, {
+      userId: user.id,
+      teamId: scopeTeamKey,
+      scope: 'priority-pred',
+      provider: llmTarget.provider,
+      model: llmTarget.model,
+      promptVersion,
+      contextDigest,
+    });
+
+    const cached = await getCachedAiResponse({
+      userId: user.id,
+      queryHash,
+    });
 
     if (cached) {
       try {
@@ -252,6 +220,8 @@ export async function predictTaskPriorityAction(
     const llmResult = await invokeLlm({
       prompt: promptText,
       systemPrompt: TASK_PRIORITY_PREDICTION_SYSTEM_PROMPT,
+      provider: llmTarget.provider,
+      model: llmTarget.isSimulation ? undefined : llmTarget.model,
       temperature: 0.2,
       maxTokens: 300,
       timeoutMs: 15000,
@@ -264,8 +234,14 @@ export async function predictTaskPriorityAction(
       input.isCsComplaint
     );
 
-    // 4. Save result in PostgreSQL cache for instant identical queries
+    // 4. Save result in owner-isolated PostgreSQL cache
     await saveCachedAiResponse({
+      userId: user.id,
+      teamId: serverIdentity.effectiveTeamId,
+      cacheScope: `priority-pred:${scopeTeamKey}`,
+      provider: llmResult.provider,
+      model: llmResult.model,
+      promptVersion,
       queryHash,
       queryText: promptText,
       responseText: JSON.stringify(prediction),

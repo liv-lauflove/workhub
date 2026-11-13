@@ -61,30 +61,63 @@ export type Database = {
       };
       ai_query_cache: {
         Row: {
+          cache_scope: string;
           created_at: string;
-          expires_at: string | null;
+          expires_at: string;
           id: string;
+          model: string;
+          prompt_version: string;
+          provider: string;
           query_hash: string;
           query_text: string;
           response_text: string;
+          team_id: string | null;
+          user_id: string;
         };
         Insert: {
+          cache_scope?: string;
           created_at?: string;
-          expires_at?: string | null;
+          expires_at?: string;
           id?: string;
+          model?: string;
+          prompt_version?: string;
+          provider?: string;
           query_hash: string;
           query_text: string;
           response_text: string;
+          team_id?: string | null;
+          user_id: string;
         };
         Update: {
+          cache_scope?: string;
           created_at?: string;
-          expires_at?: string | null;
+          expires_at?: string;
           id?: string;
+          model?: string;
+          prompt_version?: string;
+          provider?: string;
           query_hash?: string;
           query_text?: string;
           response_text?: string;
+          team_id?: string | null;
+          user_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'ai_query_cache_team_id_fkey';
+            columns: ['team_id'];
+            isOneToOne: false;
+            referencedRelation: 'teams';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'ai_query_cache_user_id_fkey';
+            columns: ['user_id'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       ai_suggestion_overrides: {
         Row: {

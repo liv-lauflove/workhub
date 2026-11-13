@@ -3,74 +3,161 @@ import { createHash } from 'node:crypto';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 
-const DEFAULT_TTL_SECONDS = Number(process.env.AI_CACHE_TTL_SECONDS) || 86400; // 24 hours
+const CACHE_KEY_VERSION = 'v2';
+const MIN_TTL_SECONDS = 60;
+const MAX_TTL_SECONDS = 86400; // 24 hours max retention per active entry
+const DEFAULT_TTL_SECONDS = Math.min(
+  Math.max(
+    Number(process.env.AI_CACHE_TTL_SECONDS) || MAX_TTL_SECONDS,
+    MIN_TTL_SECONDS
+  ),
+  MAX_TTL_SECONDS
+);
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export interface CachedAiResponse {
   id: string;
+  userId: string;
+  teamId: string | null;
+  cacheScope: string;
+  provider: string;
+  model: string;
+  promptVersion: string;
   queryHash: string;
   queryText: string;
   responseText: string;
   createdAt: string;
-  expiresAt: string | null;
+  expiresAt: string;
   isCached: true;
 }
 
-/**
- * Normalizes user prompt text for semantic uniformity:
- * - Trims whitespace
- * - Converts to lowercase
- * - Strips superfluous punctuation
- * - Collapses repeated whitespace
- */
-export function normalizeQueryText(query: string): string {
-  return query
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}\s]/gu, '')
-    .replace(/\s+/g, ' ');
+export interface GenerateQueryHashOptions {
+  userId?: string | null;
+  teamId?: string | null;
+  scope?: string;
+  provider?: string;
+  model?: string;
+  promptVersion?: string;
+  contextDigest?: string;
+}
+
+export interface GetCachedAiResponseParams {
+  userId: string;
+  queryHash: string;
+}
+
+export interface SaveCachedAiResponseParams {
+  userId: string;
+  teamId?: string | null;
+  cacheScope: string;
+  provider: string;
+  model: string;
+  promptVersion: string;
+  queryHash: string;
+  queryText: string;
+  responseText: string;
+  ttlSeconds?: number;
 }
 
 /**
- * Computes a SHA-256 hash of a normalized query and optional scope/persona.
+ * Normalizes user prompt text while preserving semantic operators and punctuation:
+ * - Normalizes Unicode compatibility composition (NFKC)
+ * - Trims outer whitespace
+ * - Collapses repeated internal whitespace into single spaces
+ * - Converts to lowercase without stripping arithmetic operators, symbols, or punctuation
+ */
+export function normalizeQueryText(query: string): string {
+  return query.normalize('NFKC').trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+/**
+ * Produces a deterministic SHA-256 hex digest for structured prompt or context text.
+ */
+export function computeTextDigest(text: string): string {
+  return createHash('sha256').update(text.normalize('NFKC')).digest('hex');
+}
+
+/**
+ * Computes an isolated SHA-256 cache key combining normalized prompt, owner identity,
+ * team scope, AI provider/model, prompt version, and effective system context digest.
  */
 export function generateQueryHash(
   query: string,
-  scope: string = 'eng-manager'
+  scopeOrOptions: string | GenerateQueryHashOptions = {}
 ): string {
+  const options: GenerateQueryHashOptions =
+    typeof scopeOrOptions === 'string'
+      ? { scope: scopeOrOptions }
+      : scopeOrOptions;
+
   const normalized = normalizeQueryText(query);
-  return createHash('sha256').update(`${scope}:${normalized}`).digest('hex');
+  const canonicalPayload = JSON.stringify([
+    CACHE_KEY_VERSION,
+    options.userId ?? '',
+    options.teamId ?? '',
+    options.scope ?? 'eng-manager',
+    options.provider ?? 'default',
+    options.model ?? 'default',
+    options.promptVersion ?? 'v1',
+    options.contextDigest ?? '',
+    normalized,
+  ]);
+
+  return createHash('sha256').update(canonicalPayload).digest('hex');
 }
 
 /**
- * Retrieves a cached AI response from PostgreSQL by query hash.
- * Returns null if not found or if the cache entry has expired.
+ * Retrieves an active, owner-isolated cached AI response for the authenticated user.
+ * Enforces explicit user ownership and TTL checks in addition to PostgreSQL RLS.
  */
 export async function getCachedAiResponse(
-  queryHash: string
+  params: GetCachedAiResponseParams
 ): Promise<CachedAiResponse | null> {
   try {
+    if (
+      !params ||
+      typeof params !== 'object' ||
+      !params.userId?.trim() ||
+      !params.queryHash?.trim()
+    ) {
+      return null;
+    }
+
     const supabase = await createClient();
     const nowIso = new Date().toISOString();
 
     const { data, error } = await supabase
       .from('ai_query_cache')
       .select(
-        'id, query_hash, query_text, response_text, created_at, expires_at'
+        'id, user_id, team_id, cache_scope, provider, model, prompt_version, query_hash, query_text, response_text, created_at, expires_at'
       )
-      .eq('query_hash', queryHash)
+      .eq('query_hash', params.queryHash)
+      .eq('user_id', params.userId)
+      .gt('expires_at', nowIso)
       .maybeSingle();
 
     if (error || !data) {
       return null;
     }
 
-    // Check expiration if expires_at is set
-    if (data.expires_at && data.expires_at < nowIso) {
+    // Defense-in-depth verification against permissive or misconfigured query adapters
+    if (data.user_id !== params.userId) {
+      return null;
+    }
+
+    if (!data.expires_at || data.expires_at <= nowIso) {
       return null;
     }
 
     return {
       id: data.id,
+      userId: data.user_id,
+      teamId: data.team_id,
+      cacheScope: data.cache_scope,
+      provider: data.provider,
+      model: data.model,
+      promptVersion: data.prompt_version,
       queryHash: data.query_hash,
       queryText: data.query_text,
       responseText: data.response_text,
@@ -85,25 +172,56 @@ export async function getCachedAiResponse(
 }
 
 /**
- * Saves or refreshes an AI response in PostgreSQL cache.
- * Uses elevated admin client (service_role) to comply with RLS security policies.
+ * Persists an owner-isolated AI response in PostgreSQL cache with bounded TTL.
+ * Uses elevated admin client (service_role) because authenticated clients are read-only.
  */
-export async function saveCachedAiResponse(params: {
-  queryHash: string;
-  queryText: string;
-  responseText: string;
-  ttlSeconds?: number;
-}): Promise<boolean> {
+export async function saveCachedAiResponse(
+  params: SaveCachedAiResponseParams
+): Promise<boolean> {
   try {
+    if (!params.userId?.trim() || !params.queryHash?.trim()) {
+      return false;
+    }
+
     const admin = createAdminClient();
-    const ttl = params.ttlSeconds ?? DEFAULT_TTL_SECONDS;
-    const expiresAt = new Date(Date.now() + ttl * 1000).toISOString();
+    const rawTtl = params.ttlSeconds ?? DEFAULT_TTL_SECONDS;
+    const ttl = Math.min(
+      Math.max(
+        Number.isFinite(rawTtl) ? rawTtl : DEFAULT_TTL_SECONDS,
+        MIN_TTL_SECONDS
+      ),
+      MAX_TTL_SECONDS
+    );
+
+    const nowMs = Date.now();
+    const nowIso = new Date(nowMs).toISOString();
+    const expiresAt = new Date(nowMs + ttl * 1000).toISOString();
+    const sanitizedTeamId =
+      params.teamId && UUID_REGEX.test(params.teamId) ? params.teamId : null;
+
+    // Opportunistically clean expired records for this user to keep prompt retention bounded
+    try {
+      await admin
+        .from('ai_query_cache')
+        .delete()
+        .eq('user_id', params.userId)
+        .lt('expires_at', nowIso);
+    } catch {
+      // Non-fatal cleanup failure must not block persisting fresh response
+    }
 
     const { error } = await admin.from('ai_query_cache').upsert(
       {
+        user_id: params.userId,
+        team_id: sanitizedTeamId,
+        cache_scope: params.cacheScope,
+        provider: params.provider,
+        model: params.model,
+        prompt_version: params.promptVersion,
         query_hash: params.queryHash,
         query_text: params.queryText,
         response_text: params.responseText,
+        created_at: nowIso,
         expires_at: expiresAt,
       },
       { onConflict: 'query_hash' }
@@ -122,17 +240,23 @@ export async function saveCachedAiResponse(params: {
 }
 
 /**
- * Purges expired cache records to keep database clean.
+ * Purges expired cache records to keep retention bounded and database clean.
  */
-export async function purgeExpiredAiCache(): Promise<number> {
+export async function purgeExpiredAiCache(userId?: string): Promise<number> {
   try {
     const admin = createAdminClient();
     const nowIso = new Date().toISOString();
 
-    const { error, count } = await admin
+    let query = admin
       .from('ai_query_cache')
       .delete({ count: 'exact' })
       .lt('expires_at', nowIso);
+
+    if (userId?.trim()) {
+      query = query.eq('user_id', userId.trim());
+    }
+
+    const { error, count } = await query;
 
     if (error) {
       console.error('Error purging expired AI cache:', error.message);

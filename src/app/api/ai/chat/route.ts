@@ -1,39 +1,24 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { invokeLlm } from '@/features/ai/lib/llm-client';
+import type { LlmProvider } from '@/features/ai/lib/llm-client';
+import type { ChatContextParams } from '@/features/ai/lib/prompt-templates';
 import {
-  DEFAULT_SYSTEM_PROMPT,
-  buildSystemPromptWithContext,
-} from '@/features/ai/lib/prompt-templates';
-import {
-  classifyRagIntent,
-  buildRagPromptHeader,
-} from '@/features/ai/rag/knowledge-extractor';
-import { getSanitizedTeamWorkloadContext } from '@/features/ai/rag/workload-aggregator';
-import {
-  generateQueryHash,
-  getCachedAiResponse,
-  saveCachedAiResponse,
-} from '@/features/ai/queries/ai-cache.queries';
+  AiServiceError,
+  executeAiChatTurn,
+} from '@/features/ai/lib/ai-chat-service';
 
 export interface ApiAiChatRequestBody {
   prompt: string;
-  context?: {
-    userName?: string;
-    userRole?: string;
-    teamName?: string;
-    currentQuarter?: string;
-  };
+  context?: ChatContextParams;
   teamId?: string;
-  provider?: 'gemini' | 'openai';
+  provider?: LlmProvider;
 }
 
 /**
- * Route Handler for Workhub AI RAG Chatbot (Issue #97).
+ * Route Handler for Workhub AI RAG Chatbot (Issue #97 / #149).
  * Endpoint: POST /api/ai/chat
  *
- * Implements schema-only RAG knowledge retrieval and sanitized team workload aggregation.
- * Zero direct raw database access by LLM.
+ * Enforces server-derived identity context and owner-isolated query cache.
  */
 export async function POST(request: Request) {
   try {
@@ -50,96 +35,51 @@ export async function POST(request: Request) {
       );
     }
 
-    const body: ApiAiChatRequestBody = await request.json();
-    const prompt = body.prompt?.trim();
-
-    if (!prompt) {
+    let body: ApiAiChatRequestBody;
+    try {
+      body = await request.json();
+    } catch {
       return NextResponse.json(
-        { error: 'Prompt pertanyaan tidak boleh kosong.' },
+        { error: 'Bad Request: Format JSON tidak valid.' },
         { status: 400 }
       );
     }
 
-    if (prompt.length > 4000) {
-      return NextResponse.json(
-        { error: 'Prompt melebihi batas maksimum 4000 karakter.' },
-        { status: 400 }
-      );
-    }
-
-    // Step 1: Classify RAG intent
-    const { category, requiresWorkload } = classifyRagIntent(prompt);
-
-    // Step 2: Check query cache for static/schema queries (bypass for real-time workload)
-    const queryHash = generateQueryHash(prompt, 'eng-manager');
-    if (!requiresWorkload) {
-      const cached = await getCachedAiResponse(queryHash);
-      if (cached) {
-        return NextResponse.json({
-          reply: cached.responseText,
-          isCached: true,
-          provider: 'cache',
-          model: 'postgres-ai-query-cache',
-          category,
-          cachedAt: cached.createdAt,
-        });
-      }
-    }
-
-    // Step 3: Determine user team ID if workload context needed
-    let targetTeamId = body.teamId;
-    if (!targetTeamId) {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('team_id')
-        .eq('id', user.id)
-        .single();
-      targetTeamId = profile?.team_id || undefined;
-    }
-
-    // Step 4: Retrieve Knowledge Base & Sanitized Workload
-    const ragKnowledgeHeader = buildRagPromptHeader(prompt);
-    let workloadBlock = '';
-
-    if (requiresWorkload || category === 'workload') {
-      const workloadSummary =
-        await getSanitizedTeamWorkloadContext(targetTeamId);
-      if (workloadSummary?.formattedContextString) {
-        workloadBlock = `\n\n${workloadSummary.formattedContextString}`;
-      }
-    }
-
-    const basePromptWithContext = buildSystemPromptWithContext(
-      DEFAULT_SYSTEM_PROMPT,
-      body.context
-    );
-
-    const compositeSystemPrompt = `${basePromptWithContext}${ragKnowledgeHeader}${workloadBlock}`;
-
-    // Step 5: Invoke LLM
-    const llmResult = await invokeLlm({
-      prompt,
-      systemPrompt: compositeSystemPrompt,
+    const result = await executeAiChatTurn({
+      supabase,
+      user,
+      prompt: body.prompt ?? '',
+      clientContext: body.context,
+      requestedTeamId: body.teamId,
       provider: body.provider,
     });
 
-    // Step 6: Persist in cache if static query
-    if (!requiresWorkload) {
-      await saveCachedAiResponse({
-        queryHash,
-        queryText: prompt,
-        responseText: llmResult.text,
+    if (result.isCached) {
+      return NextResponse.json({
+        reply: result.reply,
+        isCached: true,
+        provider: result.provider,
+        model: result.model,
+        category: result.category,
+        cachedAt: result.cachedAt,
       });
     }
 
     return NextResponse.json({
-      reply: llmResult.text,
+      reply: result.reply,
       isCached: false,
-      provider: llmResult.provider,
-      model: llmResult.model,
-      category,
+      provider: result.provider,
+      model: result.model,
+      category: result.category,
     });
   } catch (error) {
+    if (error instanceof AiServiceError) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.status }
+      );
+    }
+
     console.error('Error in POST /api/ai/chat:', error);
     const message =
       error instanceof Error
