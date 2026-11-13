@@ -142,7 +142,8 @@ erDiagram
 
 | Nama Trigger                        | Tabel Target              | Fungsi & Perilaku                                                                                                                                                                                                                                                                                                                                                                                 |
 | :---------------------------------- | :------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `on_auth_user_created`              | `auth.users`              | Menjalankan `public.handle_new_user()` untuk membuat baris `profiles` secara otomatis saat pengguna baru mendaftar, serta mencocokkan undangan pending di `team_invitations`.                                                                                                                                                                                                                     |
+| `on_auth_user_created`              | `auth.users`              | Menjalankan `public.handle_new_user()` untuk membuat baris `profiles` (`role = 'member'`, `team_id = NULL`) secara aman saat pengguna baru mendaftar. Klaim undangan hanya dijalankan jika email pengguna sudah terverifikasi (misalnya via OAuth).                                                                                                                                               |
+| `on_auth_user_email_confirmed`      | `auth.users`              | Menjalankan `public.handle_user_email_confirmed()` (`AFTER UPDATE OF email_confirmed_at`) untuk mengklaim undangan tim secara atomik via `public.claim_team_invitation()` segera setelah pengguna menyelesaikan verifikasi email.                                                                                                                                                                 |
 | `before_task_write_guards`          | `public.tasks`            | Menjalankan `public.enforce_task_write_guards()` (`BEFORE INSERT OR UPDATE`) untuk menegakkan konsistensi kolom Kanban dengan project, memvalidasi keanggotaan tim assignee/developer/tester, membatasi perubahan field sensitif berdasarkan peran (Leader, Developer, Tester QA), serta memblokir kelulusan QA (`passed` / kolom `Done`) jika masih ada item `task_subtasks` yang belum selesai. |
 | `trg_task_attachments_write_guards` | `public.task_attachments` | Menjalankan `public.before_task_attachment_write_guards()` (`BEFORE INSERT OR UPDATE OR DELETE`) untuk memvalidasi hak akses upload/delete lampiran, membatasi ukuran maksimal 5 MB, mencegah manipulasi path penyimpanan storage, dan menjaga sifat _immutable_ metadata berkas.                                                                                                                 |
 | `on_task_activity_updated`          | `public.tasks`            | Menjalankan `public.log_task_activity()` (`AFTER UPDATE`) untuk membandingkan nilai lama (`OLD`) dan nilai baru (`NEW`) pada 9 kolom utama task dan menyisipkan riwayat perubahan ke `public.activity_log`.                                                                                                                                                                                       |
@@ -221,4 +222,26 @@ Regresi Server Action dijalankan dengan `pnpm run test:task-attachments`, sedang
 
 ```powershell
 pnpm exec supabase db query --linked --file supabase/tests/task-attachments-authorization.test.sql
+```
+
+### Klaim undangan tim dan penegakan verifikasi email (Issue #148)
+
+- Fungsi keamanan atomik `public.claim_team_invitation(p_user_id uuid, p_email text)` berjalan sebagai `SECURITY DEFINER` dengan `search_path = public`:
+  - Memvalidasi kepemilikan sesi (`auth.uid() = p_user_id` bila pemanggil terautentikasi).
+  - Memverifikasi bahwa email pengguna telah terkonfirmasi (`email_confirmed_at IS NOT NULL` pada `auth.users`). Pengguna dengan email belum terverifikasi ditolak dan tidak dapat mengklaim undangan maupun memperoleh `team_id` / peran squad.
+  - Memastikan keselarasan email terdaftar dengan parameter target menggunakan normalisasi huruf kecil dan pembersihan spasi (`lower(trim(email))`).
+  - Mengunci baris `public.profiles` (`FOR UPDATE`) dan memastikan pengguna belum memiliki tim (`team_id IS NULL`).
+  - Mencari dan mengunci undangan aktif (`FOR UPDATE` pada `public.team_invitations`) berstatus `pending` dan belum kedaluwarsa (`expires_at > now()`).
+  - Memperbarui `profiles.team_id` dan `profiles.role` serta menandai undangan sebagai `accepted` dalam satu transaksi terisolasi tanpa celah _race condition_.
+- **Pembaruan Trigger**:
+  - `on_auth_user_created` (`auth.users`): Selalu menginisialisasi profil pengguna dengan `role = 'member'` dan `team_id = NULL`. Jika akun baru mendaftar dengan email yang sudah terverifikasi (misalnya penyedia OAuth seperti GitHub atau Google), trigger langsung memanggil `claim_team_invitation`.
+  - `on_auth_user_email_confirmed` (`auth.users`): Menjalankan `public.handle_user_email_confirmed()` saat kolom `email_confirmed_at` berubah dari `NULL` menjadi bertanda waktu verifikasi, sehingga undangan pending otomatis diklaim saat verifikasi email tuntas.
+- **Pemeriksaan Undangan Kedaluwarsa pada Aksi Tim**:
+  - `inviteTeamMember` pada `src/features/team/actions/team.actions.ts` mendeteksi undangan pending yang telah kedaluwarsa (`expires_at <= now()`), menandainya sebagai `expired`, dan mengizinkan pengiriman undangan baru tanpa memblokir email selamanya.
+  - Alur login (`src/features/auth/actions/auth.actions.ts`) memanggil RPC atomik `claim_team_invitation` secara kondisional hanya bila `email_confirmed_at` pengguna tidak bernilai null.
+
+Regresi Server Action dan offline suite dijalankan dengan `pnpm run test:atomic-invitation-claim`, sedangkan verifikasi langsung di database dilakukan melalui:
+
+```powershell
+pnpm exec supabase db query --linked --file supabase/tests/atomic-invitation-claim.test.sql
 ```
