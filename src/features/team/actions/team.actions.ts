@@ -5,6 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
 import { isManagementTeam, MANAGEMENT_TEAM_ID } from '../queries/team.queries';
+import { isInvitationExpired } from '../invitation-utils';
 import type { ActionState } from '@/types/global';
 import { z } from 'zod';
 
@@ -388,8 +389,7 @@ export async function inviteTeamMember(
   let hasActivePending = false;
   const now = new Date();
   for (const inv of records) {
-    const isExpired = inv.expires_at && new Date(inv.expires_at) <= now;
-    if (isExpired) {
+    if (isInvitationExpired(inv.expires_at, now)) {
       await admin
         .from('team_invitations')
         .update({ status: 'expired' })
@@ -478,12 +478,59 @@ export async function revokeInvitation(
   }
 
   const admin = createAdminClient();
+  const { data: invitation, error: lookupError } = await admin
+    .from('team_invitations')
+    .select('id, status, expires_at')
+    .eq('id', invitationId)
+    .eq('team_id', teamId)
+    .maybeSingle();
+
+  if (lookupError) {
+    return {
+      success: false,
+      error: { _form: [lookupError.message] },
+    };
+  }
+
+  if (!invitation) {
+    return {
+      success: false,
+      error: { _form: ['Undangan tidak ditemukan.'] },
+    };
+  }
+
+  const now = new Date();
+  if (
+    invitation.status === 'pending' &&
+    isInvitationExpired(invitation.expires_at, now)
+  ) {
+    await admin
+      .from('team_invitations')
+      .update({ status: 'expired' })
+      .eq('id', invitation.id)
+      .eq('status', 'pending');
+
+    revalidatePath('/team');
+    return {
+      success: false,
+      error: { _form: ['Undangan sudah kedaluwarsa.'] },
+    };
+  }
+
+  if (invitation.status !== 'pending') {
+    return {
+      success: false,
+      error: { _form: ['Undangan sudah tidak aktif.'] },
+    };
+  }
+
   const { error } = await admin
     .from('team_invitations')
     .update({ status: 'revoked' })
     .eq('id', invitationId)
     .eq('team_id', teamId)
-    .eq('status', 'pending');
+    .eq('status', 'pending')
+    .gt('expires_at', now.toISOString());
 
   if (error) {
     return {
