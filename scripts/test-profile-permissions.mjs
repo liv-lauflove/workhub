@@ -34,6 +34,8 @@ function loadSource(relative, dependencies) {
 }
 
 const { MANAGEMENT_TEAM_ID } = loadSource('src/features/team/constants.ts', {});
+const invitationUtils = loadSource('src/features/team/invitation-utils.ts', {});
+const teamScope = loadSource('src/features/team/team-scope.ts', {});
 const teamA = 'b1450000-0000-4000-8000-000000000001';
 const teamB = 'b1450000-0000-4000-8000-000000000002';
 const userId = 'a1450000-0000-4000-8000-000000000001';
@@ -55,6 +57,7 @@ function fixture(actor, response) {
     'server-only': {},
     '@/lib/supabase/server': server,
     '../constants': { MANAGEMENT_TEAM_ID },
+    '../invitation-utils': invitationUtils,
   });
   const actions = loadSource('src/features/team/actions/team.actions.ts', {
     '@/lib/supabase/server': server,
@@ -67,6 +70,7 @@ function fixture(actor, response) {
       getUserProfile: async () => actor,
     },
     '../queries/team.queries': queries,
+    '../invitation-utils': invitationUtils,
     'next/cache': { revalidatePath: (route) => revalidated.push(route) },
   });
   return { actions, queries, calls, revalidated };
@@ -213,5 +217,52 @@ for (const other of [teamA, teamB, null, undefined, 'Management']) {
   assert.equal(await management.isManagementTeam(other), false);
   checks++;
 }
+
+const sampleTeams = [
+  { id: teamA, name: 'Aegis' },
+  { id: teamB, name: 'Sentinel' },
+  { id: MANAGEMENT_TEAM_ID, name: 'Management' },
+];
+
+for (const requestedTeam of [undefined, 'all', 'sentinel', teamB, 'management']) {
+  const scope = teamScope.resolveTeamPageScope({
+    isManagement: false,
+    userTeamId: teamA,
+    requestedTeam,
+    teams: sampleTeams,
+  });
+  assert.equal(scope.isOverview, false);
+  assert.equal(scope.targetTeam?.id, teamA);
+  checks++;
+}
+
+const orphanedScope = teamScope.resolveTeamPageScope({
+  isManagement: false,
+  userTeamId: 'missing-team-id',
+  requestedTeam: 'all',
+  teams: sampleTeams,
+});
+assert.equal(orphanedScope.isOverview, false);
+assert.equal(orphanedScope.targetTeam, undefined);
+checks++;
+
+const mgmtOverview = teamScope.resolveTeamPageScope({
+  isManagement: true,
+  userTeamId: MANAGEMENT_TEAM_ID,
+  requestedTeam: undefined,
+  teams: sampleTeams,
+});
+assert.equal(mgmtOverview.isOverview, true);
+assert.equal(mgmtOverview.targetTeam, undefined);
+
+const mgmtDrilldown = teamScope.resolveTeamPageScope({
+  isManagement: true,
+  userTeamId: MANAGEMENT_TEAM_ID,
+  requestedTeam: 'sentinel',
+  teams: sampleTeams,
+});
+assert.equal(mgmtDrilldown.isOverview, false);
+assert.equal(mgmtDrilldown.targetTeam?.id, teamB);
+checks += 2;
 
 console.log(`Profile permission action regression checks passed: ${checks}`);
