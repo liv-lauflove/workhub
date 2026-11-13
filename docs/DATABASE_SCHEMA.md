@@ -132,7 +132,7 @@ erDiagram
 16. **`github_commits`**: Menyimpan riwayat commit GitHub yang disinkronkan melalui webhook push (`task_id`, `commit_sha`, `commit_message`, `author_username`, `committed_at`, `url`), dengan constraint unik `(task_id, commit_sha)` agar idempoten.
 17. **`notifications`**: Notifikasi dalam aplikasi (_in-app_) untuk kejadian `task_assigned`, `comment_mention`, `due_soon`, `overdue`, dan `ai_warning`.
 18. **`ai_query_cache`**, **`ai_warnings`**, & **`ai_suggestion_overrides`**:
-    - `ai_query_cache`: Menyimpan _hash_ pertanyaan dan respons AI untuk menghemat pemanggilan LLM berulang.
+    - `ai_query_cache`: Menyimpan cache prompt dan respons AI secara terisolasi per pemilik (`user_id`), scope tim (`team_id`), `provider`, `model`, `prompt_version`, serta _hash_ kanonik (`query_hash`) dengan TTL terbatas dan pembersihan kadaluwarsa.
     - `ai_warnings`: Peringatan risiko beban kerja dan kuartalan dari asisten AI.
     - `ai_suggestion_overrides`: Mencatat perbandingan saran prioritas/durasi dari AI dengan keputusan akhir yang dipilih oleh Leader.
 
@@ -244,4 +244,22 @@ Regresi Server Action dan offline suite dijalankan dengan `pnpm run test:atomic-
 
 ```powershell
 pnpm exec supabase db query --linked --file supabase/tests/atomic-invitation-claim.test.sql
+```
+
+### Isolasi cache AI privat dan makna kunci query (Issue #149)
+
+- **`public.ai_query_cache`**:
+  - Menyimpan kepemilikan eksplisit (`user_id` wajib merujuk ke `public.profiles(id)` dengan `ON DELETE CASCADE`, `team_id` merujuk ke `public.teams(id)`), `cache_scope`, `provider`, `model`, `prompt_version`, serta TTL wajib `expires_at` dengan batas retensi maksimum 7 hari (`chk_ai_query_cache_ttl_bounded`).
+  - Migrasi membersihkan seluruh baris cache lama tanpa pemilik agar riwayat prompt privat terdahulu tidak tetap terbaca lewat Data API.
+  - Hak akses tabel mencabut seluruh `INSERT / UPDATE / DELETE` dari `public`, `anon`, dan `authenticated` (hanya `SELECT` untuk `authenticated` dan tulis/bersih melalui `service_role`).
+  - Kebijakan RLS `ai_query_cache_select_own` membatasi pembacaan Data API hanya untuk pemilik baris (`user_id = (select auth.uid())`) dan entri yang belum kedaluwarsa (`expires_at > now()`).
+- **Normalisasi & Kunci Kanonik (`src/features/ai/queries/ai-cache.queries.ts` & `src/features/ai/lib/ai-chat-service.ts`)**:
+  - `normalizeQueryText` melakukan normalisasi Unicode NFKC, pemangkasan spasi ganda, dan konversi huruf kecil **tanpa** menghapus operator matematika (`+`, `-`, `*`, `/`, `=`, `<`, `>`), negasi, simbol pemrograman, atau tanda baca penting.
+  - `generateQueryHash` memakai serialisasi tuple JSON kanonik yang mengikat `userId`, `teamId`, `scope`, `provider`, `model`, `promptVersion`, `contextDigest`, dan prompt ter-normalisasi sehingga bebas tabrakan delimiter.
+  - Ketiga entry point chat AI (`/api/ai/chat`, `/api/ai-chat`, dan `sendAiChatMessageAction`) serta `predictTaskPriorityAction` menggunakan orkestrasi seragam: menurunkan `userName`, `userRole`, dan `teamName`/`teamId` dari database di server (mengabaikan spoofing konteks client), melewati cache untuk kueri beban kerja real-time, membatasi TTL maksimal 24 jam, dan membersihkan entri kedaluwarsa.
+
+Regresi unit dan handler dijalankan dengan `pnpm run test:ai-cache-isolation`, sedangkan verifikasi langsung di database dilakukan melalui:
+
+```powershell
+pnpm exec supabase db query --linked --file supabase/tests/ai-cache-isolation.test.sql
 ```
