@@ -49,6 +49,12 @@ Always format quantitative data clearly with markdown tables or bulleted metrics
  */
 export const DEFAULT_SYSTEM_PROMPT = SYSTEM_PROMPTS.engineeringManager;
 
+export const PROMPT_VERSIONS = {
+  engineeringManager: 'eng-manager-v2',
+  dataAnalyst: 'data-analyst-v2',
+  taskPriority: 'priority-pred-v2',
+} as const;
+
 /**
  * Standard polite out-of-scope decline message for Workhub AI (Issue #46).
  */
