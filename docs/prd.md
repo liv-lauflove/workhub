@@ -292,8 +292,7 @@ teams ─┬─< profiles (role: leader/member)
                                         │  └─< activity_log
                                         └── priority_levels (weight)
 profiles ─< github_integrations
-profiles/teams ─< capacity_settings, ai_warnings, notifications
-                   ai_query_cache (independen, keyed by query hash)
+profiles/teams ─< capacity_settings, ai_warnings, notifications, ai_query_cache (terisolasi per user_id, team_id, model, prompt_version & query_hash)
 ```
 
 > Tabel baru dari penambahan fitur (belum ada di `schema.sql` versi awal): `task_attachments`, `task_dependencies`, `activity_log`, `notifications`, plus kolom `archived_at` di `milestones` dan `projects`. Perlu update `schema.sql` menyusul.
