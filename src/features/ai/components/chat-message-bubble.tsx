@@ -28,6 +28,15 @@ export function ChatMessageBubble({
 }: ChatMessageBubbleProps) {
   const [copied, setCopied] = React.useState(false);
   const isUser = message.role === 'user';
+  const safeSources = React.useMemo(
+    () =>
+      message.sources?.filter(
+        (source) =>
+          typeof source.href === 'string' &&
+          source.href.startsWith('/knowledge/')
+      ) ?? [],
+    [message.sources]
+  );
 
   const handleCopy = React.useCallback(async () => {
     try {
@@ -100,9 +109,7 @@ export function ChatMessageBubble({
           <div className="prose prose-xs sm:prose-sm dark:prose-invert max-w-none break-words leading-relaxed">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
-              disallowedElements={
-                message.sources?.length ? ['a', 'img'] : undefined
-              }
+              disallowedElements={safeSources.length ? ['a', 'img'] : undefined}
               unwrapDisallowed
               components={{
                 p: ({ children }) => (
@@ -163,12 +170,12 @@ export function ChatMessageBubble({
           </div>
         )}
 
-        {message.sources?.length ? (
+        {safeSources.length ? (
           <ul
             aria-label="Rujukan panduan"
             className="mt-2 space-y-1 border-t pt-2"
           >
-            {message.sources.map((source) => (
+            {safeSources.map((source) => (
               <li key={source.href}>
                 <Link
                   className="break-words font-medium text-primary underline underline-offset-2"

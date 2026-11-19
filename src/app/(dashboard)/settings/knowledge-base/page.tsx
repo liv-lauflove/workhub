@@ -166,6 +166,14 @@ export default async function KnowledgeBasePage({
                   <KnowledgeStateForm id={draft.id} operation="publish" />
                 </div>
               </div>
+            ) : draft ? (
+              <p
+                role="alert"
+                className="border-t pt-4 text-sm text-destructive"
+              >
+                Draf tersimpan tidak valid. Unggah ulang file Markdown dengan
+                judul dan setidaknya satu bagian berisi teks.
+              </p>
             ) : null}
           </section>
         </>

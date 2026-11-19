@@ -37,6 +37,8 @@ import {
 } from '../queries/ai-cache.queries';
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export class AiServiceError extends Error {
   status: number;
@@ -105,6 +107,14 @@ export async function resolveServerAiIdentityContext(
       'Forbidden: Anda tidak memiliki akses ke cakupan tim tersebut.',
       403
     );
+  }
+
+  if (
+    requestedTeamId &&
+    requestedTeamId !== 'all' &&
+    !UUID_REGEX.test(requestedTeamId)
+  ) {
+    throw new AiServiceError('ID tim tidak valid.', 400);
   }
 
   const effectiveTeamId = requestedTeamId || userTeamId;

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound, redirect } from 'next/navigation';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { z } from 'zod';
 import { ROUTES } from '@/config/routes';
 import { getUserProfile } from '@/features/auth/queries/auth.queries';
@@ -64,9 +65,17 @@ export default async function KnowledgeDocumentPage({
           </h2>
           <div className="prose prose-sm max-w-none break-words dark:prose-invert">
             <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
               skipHtml
               disallowedElements={['a', 'img']}
               unwrapDisallowed
+              components={{
+                table: ({ children }) => (
+                  <div className="my-3 overflow-x-auto">
+                    <table>{children}</table>
+                  </div>
+                ),
+              }}
             >
               {body}
             </ReactMarkdown>

@@ -37,7 +37,11 @@ export async function uploadKnowledgeDraftAction(
   const teamId = uuid.safeParse(form.get('teamId'));
   const file = form.get('markdown');
   if (!teamId.success) return { error: 'Pilih tim yang valid.' };
-  if (!(file instanceof File) || !file.size || !/\.md$/i.test(file.name)) {
+  if (
+    !(file instanceof File) ||
+    !file.size ||
+    !/\.md$/i.test(file.name.trim())
+  ) {
     return { error: 'Pilih file Markdown dengan ekstensi .md.' };
   }
   if (file.size > MAX_KNOWLEDGE_BYTES) {
@@ -60,14 +64,18 @@ export async function uploadKnowledgeDraftAction(
     };
   }
 
-  const supabase = await createClient();
-  const { error } = await supabase.rpc('create_ai_knowledge_draft', {
-    p_team_id: teamId.data,
-    p_title: parsed.title,
-    p_markdown: markdown,
-  });
-  if (error)
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc('create_ai_knowledge_draft', {
+      p_team_id: teamId.data,
+      p_title: parsed.title,
+      p_markdown: markdown,
+    });
+    if (error)
+      return { error: 'Draf gagal disimpan. Periksa tim dan coba lagi.' };
+  } catch {
     return { error: 'Draf gagal disimpan. Periksa tim dan coba lagi.' };
+  }
 
   revalidatePath(ROUTES.knowledgeBase);
   return {
@@ -111,7 +119,7 @@ export async function previewKnowledgeDraftAction(
     });
     return {
       preview: {
-        answer: answer.text,
+        answer: answer.text.trim() || NO_KNOWLEDGE_ANSWER,
         sections: sections.map((section) => section.heading),
       },
     };
