@@ -23,6 +23,8 @@ export const ROUTES = {
   team: '/team',
   workload: '/workload',
   settings: '/settings',
+  knowledgeBase: '/settings/knowledge-base',
+  knowledgeDocument: (id: string) => `/knowledge/${id}` as const,
   notifications: '/notifications',
   archive: '/archive',
 } as const;

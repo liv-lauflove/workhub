@@ -199,6 +199,9 @@ Mengerjakan task yang di-assign, update status via drag-and-drop, menautkan bran
 - **US-16:** Sebagai leader, saya ingin AI menyarankan priority & estimasi durasi saat membuat Task baru, supaya keputusan lebih cepat.
 - **US-17:** Sebagai leader, saya ingin mendapat peringatan otomatis menjelang akhir kuartal jika ada penumpukan Task belum selesai.
 - **US-18:** Sistem meng-cache jawaban chatbot untuk query yang mirip, supaya biaya panggilan API LLM lebih hemat.
+- **US-30:** Sebagai Leader Management, saya ingin mengunggah SOP Markdown untuk tim yang dipilih, menguji jawabannya sebagai draf, lalu menerbitkannya.
+  - AC: Leader tim dapat bertanya berdasarkan panduan terbit timnya. Chat menampilkan judul, versi, dan bagian yang dirujuk.
+  - AC: Hanya Leader Management yang dapat mengunggah, menguji draf, menerbitkan, dan menarik panduan. Pertanyaan tanpa rujukan yang sesuai dijawab dengan pemberitahuan bahwa pedomannya belum tersedia.
 
 ### 9.9 Notifikasi & Activity Log
 

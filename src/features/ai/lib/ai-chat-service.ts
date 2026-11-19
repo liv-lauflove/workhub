@@ -19,6 +19,16 @@ import {
   type RagQueryCategory,
 } from '../rag/knowledge-extractor';
 import { getSanitizedTeamWorkloadContext } from '../rag/workload-aggregator';
+import { getPublishedKnowledge } from '../queries/team-knowledge.queries';
+import {
+  findKnowledgeSections,
+  isKnowledgeQuestion,
+  knowledgeSources,
+  knowledgeSystemPrompt,
+  NO_KNOWLEDGE_ANSWER,
+  parseKnowledgeMarkdown,
+  type KnowledgeSource,
+} from '../rag/team-knowledge';
 import {
   computeTextDigest,
   generateQueryHash,
@@ -27,6 +37,8 @@ import {
 } from '../queries/ai-cache.queries';
 
 type SupabaseServerClient = Awaited<ReturnType<typeof createClient>>;
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export class AiServiceError extends Error {
   status: number;
@@ -64,6 +76,7 @@ export interface ExecuteAiChatTurnResult {
   category: RagQueryCategory;
   queryHash: string;
   cachedAt?: string;
+  sources?: KnowledgeSource[];
   usage?: InvokeLlmResult['usage'];
 }
 
@@ -94,6 +107,14 @@ export async function resolveServerAiIdentityContext(
       'Forbidden: Anda tidak memiliki akses ke cakupan tim tersebut.',
       403
     );
+  }
+
+  if (
+    requestedTeamId &&
+    requestedTeamId !== 'all' &&
+    !UUID_REGEX.test(requestedTeamId)
+  ) {
+    throw new AiServiceError('ID tim tidak valid.', 400);
   }
 
   const effectiveTeamId = requestedTeamId || userTeamId;
@@ -160,12 +181,55 @@ export async function executeAiChatTurn(
   );
 
   // 2. Classify RAG intent and build knowledge & prompt context
-  const { category, requiresWorkload } = classifyRagIntent(trimmedPrompt);
-  const ragKnowledgeHeader = buildRagPromptHeader(trimmedPrompt);
+  const intent = classifyRagIntent(trimmedPrompt);
+  const usesKnowledge = isKnowledgeQuestion(
+    trimmedPrompt,
+    intent.category === 'workflow'
+  );
+  const category = usesKnowledge ? 'workflow' : intent.category;
+  const requiresWorkload = !usesKnowledge && intent.requiresWorkload;
+  const ragKnowledgeHeader =
+    !usesKnowledge && category === 'schema'
+      ? buildRagPromptHeader(trimmedPrompt)
+      : '';
   const basePromptWithContext = buildSystemPromptWithContext(
     DEFAULT_SYSTEM_PROMPT,
     serverIdentity.context
   );
+
+  let knowledgePrompt = '';
+  let knowledgeDocumentId: string | undefined;
+  let sources: KnowledgeSource[] | undefined;
+  if (usesKnowledge) {
+    const { effectiveTeamId, context } = serverIdentity;
+    if (context.userRole !== 'leader') {
+      throw new AiServiceError(
+        'Akses panduan AI dalam pilot ini tersedia untuk leader.',
+        403
+      );
+    }
+
+    if (!effectiveTeamId || effectiveTeamId === 'all') {
+      throw new AiServiceError(
+        'Pilih satu tim untuk mencari panduan kerja.',
+        400
+      );
+    }
+
+    const document = await getPublishedKnowledge(
+      params.supabase,
+      effectiveTeamId
+    );
+    const sections = findKnowledgeSections(
+      (document && parseKnowledgeMarkdown(document.markdown)?.sections) || [],
+      trimmedPrompt
+    );
+    if (document && sections.length) {
+      knowledgeDocumentId = document.id;
+      knowledgePrompt = knowledgeSystemPrompt(sections);
+      sources = knowledgeSources(document, sections);
+    }
+  }
 
   // 3. Resolve effective LLM target & build isolated query hash before cache lookup
   const llmTarget = resolveLlmTarget({
@@ -182,6 +246,8 @@ export async function executeAiChatTurn(
       category,
       basePromptWithContext,
       ragKnowledgeHeader,
+      knowledgePrompt,
+      sources,
     })
   );
 
@@ -194,6 +260,17 @@ export async function executeAiChatTurn(
     promptVersion,
     contextDigest,
   });
+
+  if (usesKnowledge && !sources) {
+    return {
+      reply: NO_KNOWLEDGE_ANSWER,
+      isCached: false,
+      provider: 'workhub',
+      model: 'knowledge-base',
+      category,
+      queryHash,
+    };
+  }
 
   // 4. Lookup owner-isolated cache only for non-real-time queries
   if (!requiresWorkload) {
@@ -211,6 +288,7 @@ export async function executeAiChatTurn(
         category,
         queryHash: cached.queryHash,
         cachedAt: cached.createdAt,
+        ...(sources && { sources }),
       };
     }
   }
@@ -226,7 +304,9 @@ export async function executeAiChatTurn(
     }
   }
 
-  const compositeSystemPrompt = `${basePromptWithContext}${ragKnowledgeHeader}${workloadBlock}`;
+  const compositeSystemPrompt =
+    knowledgePrompt ||
+    `${basePromptWithContext}${ragKnowledgeHeader}${workloadBlock}`;
 
   // 6. Invoke LLM
   const llmResult = await invokeLlm({
@@ -241,7 +321,9 @@ export async function executeAiChatTurn(
     await saveCachedAiResponse({
       userId: serverIdentity.userId,
       teamId: serverIdentity.effectiveTeamId,
-      cacheScope: `eng-manager:${scopeTeamKey}`,
+      cacheScope: knowledgeDocumentId
+        ? `knowledge:${knowledgeDocumentId}`
+        : `eng-manager:${scopeTeamKey}`,
       provider: llmResult.provider,
       model: llmResult.model,
       promptVersion,
@@ -259,5 +341,6 @@ export async function executeAiChatTurn(
     category,
     queryHash,
     usage: llmResult.usage,
+    ...(sources && { sources }),
   };
 }

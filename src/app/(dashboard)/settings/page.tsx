@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getSettingsData } from '@/features/profile/queries/profile.queries';
 import { ProfileInfoCard } from '@/features/profile/components/profile-info-card';
 import { GitHubLinkCard } from '@/features/profile/components/github-link-card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ROUTES } from '@/config/routes';
+import { canManageKnowledge } from '@/features/ai/rag/team-knowledge';
 
 export const metadata: Metadata = {
   title: 'Pengaturan Profil - Workhub',
@@ -49,6 +51,15 @@ export default async function SettingsPage() {
 
       {/* Profile & GitHub Integration Sections */}
       <div className="space-y-6">
+        {canManageKnowledge(profile) ? (
+          <Link
+            href={ROUTES.knowledgeBase}
+            prefetch={false}
+            className="inline-flex min-h-11 items-center rounded-lg border bg-card px-4 text-sm font-medium text-primary underline underline-offset-4"
+          >
+            Kelola Panduan AI Tim
+          </Link>
+        ) : null}
         {/* 1. Personal Profile Information */}
         <ProfileInfoCard profile={profile} userEmail={user.email} />
 

@@ -22,6 +22,13 @@ export interface RagContextResult {
   requiresWorkloadContext: boolean;
 }
 
+function matchesKeyword(text: string, keyword: string): boolean {
+  const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const prefix = /^\w/.test(keyword) ? '\\b' : '';
+  const suffix = /\w$/.test(keyword) ? '\\b' : '';
+  return new RegExp(`${prefix}${escaped}${suffix}`, 'i').test(text);
+}
+
 /**
  * Classifies query intent based on keywords to selectively retrieve relevant knowledge chunks.
  */
@@ -40,10 +47,12 @@ export function classifyRagIntent(query: string): {
     'kapasitas',
     'capacity',
     'overload',
+    'overloaded',
     'siapa yang bisa',
     'kasih task',
     'assign task',
     'alokasi',
+    'alokasikan',
     'member mana',
     'anggota mana',
     'siapa kosong',
@@ -88,9 +97,9 @@ export function classifyRagIntent(query: string): {
     'sop',
   ];
 
-  const hasWorkload = workloadKeywords.some((kw) => lower.includes(kw));
-  const hasSchema = schemaKeywords.some((kw) => lower.includes(kw));
-  const hasWorkflow = workflowKeywords.some((kw) => lower.includes(kw));
+  const hasWorkload = workloadKeywords.some((kw) => matchesKeyword(lower, kw));
+  const hasSchema = schemaKeywords.some((kw) => matchesKeyword(lower, kw));
+  const hasWorkflow = workflowKeywords.some((kw) => matchesKeyword(lower, kw));
 
   if (hasWorkload) {
     return { category: 'workload', requiresWorkload: true };

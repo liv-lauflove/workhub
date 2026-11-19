@@ -1,6 +1,6 @@
 # Skema Basis Data & Row Level Security (RLS)
 
-Basis data **Workhub** berjalan di atas **PostgreSQL (Supabase Cloud)** dan terdiri atas **18 tabel utama** yang dikelola melalui sistem migrasi berurutan di `supabase/migrations/`.
+Basis data **Workhub** berjalan di atas **PostgreSQL (Supabase Cloud)** dan terdiri atas **21 tabel utama** yang dikelola melalui sistem migrasi berurutan di `supabase/migrations/`.
 
 ---
 
@@ -13,6 +13,7 @@ erDiagram
     TEAMS ||--o{ TEAM_INVITATIONS : "mengundang ke"
     TEAMS ||--o| CAPACITY_SETTINGS : "memiliki baseline"
     TEAMS ||--o{ AI_WARNINGS : "menerima peringatan"
+    TEAMS ||--o{ AI_KNOWLEDGE_DOCUMENTS : "memiliki panduan AI"
 
     PROFILES ||--o{ MILESTONES : "membuat / PIC"
     PROFILES ||--o{ PROJECTS : "membuat / PIC"
@@ -24,6 +25,7 @@ erDiagram
     PROFILES ||--o{ ACTIVITY_LOG : "melakukan aksi"
     PROFILES ||--o{ NOTIFICATIONS : "menerima notifikasi"
     PROFILES ||--o{ TEAM_INVITATIONS : "mengirim undangan"
+    PROFILES ||--o{ AI_KNOWLEDGE_DOCUMENTS : "mengunggah draf"
 
     MILESTONES ||--o{ PROJECTS : "memuat proyek"
 
@@ -96,6 +98,18 @@ erDiagram
         int sort_order
         timestamptz created_at
     }
+
+    AI_KNOWLEDGE_DOCUMENTS {
+        uuid id PK
+        uuid team_id FK
+        int version "positif, unik per tim"
+        text title "1-160 karakter"
+        text markdown "UTF-8, maks 64 KB"
+        text status "draft | published | archived"
+        uuid uploaded_by FK
+        timestamptz created_at
+        timestamptz published_at
+    }
 ```
 
 ---
@@ -132,9 +146,12 @@ erDiagram
 16. **`github_commits`**: Menyimpan riwayat commit GitHub yang disinkronkan melalui webhook push (`task_id`, `commit_sha`, `commit_message`, `author_username`, `committed_at`, `url`), dengan constraint unik `(task_id, commit_sha)` agar idempoten.
 17. **`notifications`**: Notifikasi dalam aplikasi (_in-app_) untuk kejadian `task_assigned`, `comment_mention`, `due_soon`, `overdue`, dan `ai_warning`.
 18. **`ai_query_cache`**, **`ai_warnings`**, & **`ai_suggestion_overrides`**:
-    - `ai_query_cache`: Menyimpan cache prompt dan respons AI secara terisolasi per pemilik (`user_id`), scope tim (`team_id`), `provider`, `model`, `prompt_version`, serta _hash_ kanonik (`query_hash`) dengan TTL terbatas dan pembersihan kadaluwarsa.
+    - `ai_query_cache`: Menyimpan cache prompt dan respons AI secara terisolasi per pemilik (`user_id`), scope tim (`team_id`), `cache_scope`, `provider`, `model`, `prompt_version`, serta _hash_ kanonik (`query_hash`) dengan TTL terbatas dan pembersihan kadaluwarsa. Untuk entri SOP (`cache_scope LIKE 'knowledge:%'`), visibilitas baca terikat pada status `published` dokumen sumber di `ai_knowledge_documents`.
     - `ai_warnings`: Peringatan risiko beban kerja dan kuartalan dari asisten AI.
     - `ai_suggestion_overrides`: Mencatat perbandingan saran prioritas/durasi dari AI dengan keputusan akhir yang dipilih oleh Leader.
+19. **`ai_knowledge_documents`**: Menyimpan dokumen panduan SOP Markdown berversi per tim (`team_id`, `version`, `title`, `markdown`, `status`, `uploaded_by`, `created_at`, `published_at`) yang menjadi rujukan jawaban SOP asisten AI.
+    - Dilengkapi batasan `version > 0`, `UNIQUE (team_id, version)`, panjang judul `1` hingga `160` karakter setelah `btrim`, ukuran `markdown` maksimal `65536` byte (64 KB) dan tidak kosong, status dalam `('draft', 'published', 'archived')` dengan default `'draft'`, serta syarat `published_at IS NOT NULL` saat `status = 'published'`.
+    - Dua partial unique index menjaga konsistensi siklus hidup per tim: `ai_knowledge_one_published_per_team` (`(team_id) WHERE status = 'published'`) dan `ai_knowledge_one_draft_per_team` (`(team_id) WHERE status = 'draft'`).
 
 ---
 
@@ -252,7 +269,7 @@ pnpm exec supabase db query --linked --file supabase/tests/atomic-invitation-cla
   - Menyimpan kepemilikan eksplisit (`user_id` wajib merujuk ke `public.profiles(id)` dengan `ON DELETE CASCADE`, `team_id` merujuk ke `public.teams(id)`), `cache_scope`, `provider`, `model`, `prompt_version`, serta TTL wajib `expires_at` dengan batas retensi maksimum 7 hari (`chk_ai_query_cache_ttl_bounded`).
   - Migrasi membersihkan seluruh baris cache lama tanpa pemilik agar riwayat prompt privat terdahulu tidak tetap terbaca lewat Data API.
   - Hak akses tabel mencabut seluruh `INSERT / UPDATE / DELETE` dari `public`, `anon`, dan `authenticated` (hanya `SELECT` untuk `authenticated` dan tulis/bersih melalui `service_role`).
-  - Kebijakan RLS `ai_query_cache_select_own` membatasi pembacaan Data API hanya untuk pemilik baris (`user_id = (select auth.uid())`) dan entri yang belum kedaluwarsa (`expires_at > now()`).
+  - Kebijakan RLS `ai_query_cache_select_own` membatasi pembacaan Data API hanya untuk pemilik baris (`user_id = (select auth.uid())`) dan entri yang belum kedaluwarsa (`expires_at > now()`), serta diperluas pada Issue #171 agar entri `cache_scope LIKE 'knowledge:%'` hanya dapat dibaca selama dokumen panduan sumbernya masih berstatus `published`.
 - **Normalisasi & Kunci Kanonik (`src/features/ai/queries/ai-cache.queries.ts` & `src/features/ai/lib/ai-chat-service.ts`)**:
   - `normalizeQueryText` melakukan normalisasi Unicode NFKC, pemangkasan spasi ganda, dan konversi huruf kecil **tanpa** menghapus operator matematika (`+`, `-`, `*`, `/`, `=`, `<`, `>`), negasi, simbol pemrograman, atau tanda baca penting.
   - `generateQueryHash` memakai serialisasi tuple JSON kanonik yang mengikat `userId`, `teamId`, `scope`, `provider`, `model`, `promptVersion`, `contextDigest`, dan prompt ter-normalisasi sehingga bebas tabrakan delimiter.
@@ -262,4 +279,37 @@ Regresi unit dan handler dijalankan dengan `pnpm run test:ai-cache-isolation`, s
 
 ```powershell
 pnpm exec supabase db query --linked --file supabase/tests/ai-cache-isolation.test.sql
+```
+
+### Panduan pengetahuan AI per tim dan kopling visibilitas cache (Issue #171)
+
+- **`public.ai_knowledge_documents`**:
+  - Menyimpan revisi dokumen panduan SOP Markdown per tim (`team_id REFERENCES public.teams(id) ON DELETE CASCADE`, `uploaded_by REFERENCES public.profiles(id) ON DELETE SET NULL`).
+  - Batasan integritas: `version > 0`, `UNIQUE (team_id, version)`, `char_length(btrim(title)) BETWEEN 1 AND 160`, `octet_length(markdown) <= 65536 AND btrim(markdown) <> ''`, `status IN ('draft', 'published', 'archived')` dengan default `'draft'`, dan `CHECK (status <> 'published' OR published_at IS NOT NULL)`.
+  - Partial unique indexes:
+    - `ai_knowledge_one_published_per_team` pada `(team_id) WHERE status = 'published'` memastikan maksimal satu panduan aktif terbit untuk setiap tim.
+    - `ai_knowledge_one_draft_per_team` pada `(team_id) WHERE status = 'draft'` memastikan maksimal satu draf aktif untuk setiap tim.
+  - Hak akses tabel: RLS aktif (`ENABLE ROW LEVEL SECURITY`); seluruh hak dicabut dari `public`, `anon`, dan `authenticated`, lalu hanya `SELECT` diberikan kepada `authenticated`. Tidak ada hak `INSERT`, `UPDATE`, atau `DELETE` langsung dari client; seluruh penulisan wajib melewati RPC.
+- **Fungsi helper & Kebijakan RLS `ai_knowledge_read`**:
+  - `public.can_manage_ai_knowledge()` (`STABLE`, `SECURITY DEFINER`, `search_path = ''`, `EXECUTE` hanya untuk `authenticated`) memverifikasi bahwa sesi aktif memiliki `role = 'leader'` pada tim sistem Management (`team_id = 'e3333333-3333-3333-3333-333333333333'`).
+  - Kebijakan `ai_knowledge_read` (`FOR SELECT TO authenticated`) mengizinkan pembacaan apabila `(select public.can_manage_ai_knowledge())` bernilai benar (akses baca seluruh status `draft`, `published`, dan `archived` lintas tim bagi Leader Management), atau apabila `status = 'published'` dan pengguna adalah `role = 'leader'` pada `team_id` dokumen tersebut. Member (termasuk Member Management pada fase pilot) dan leader dari tim lain tidak memperoleh akses baca, dan leader tim non-Management tidak dapat membaca draf maupun versi `archived`.
+- **Kopling Kebijakan Cache (`ai_query_cache_select_own`)**:
+  - Kebijakan `ai_query_cache_select_own` pada `public.ai_query_cache` mewajibkan `user_id = (select auth.uid())` dan `expires_at > now()`, ditambah syarat bahwa entri dengan `cache_scope LIKE 'knowledge:%'` hanya dapat dibaca jika terdapat baris pada `public.ai_knowledge_documents d` dengan `'knowledge:' || d.id::text = ai_query_cache.cache_scope`, `d.team_id = ai_query_cache.team_id`, dan `d.status = 'published'`.
+  - Ketika panduan diganti versi baru atau ditarik (`archived`), jawaban SOP ter-cache yang berasal dari dokumen lama otomatis kehilangan visibilitas baca lewat Data API.
+- **RPC Manajemen Draf & Siklus Hidup (`SECURITY DEFINER`, `search_path = ''`)**:
+  - `public.create_ai_knowledge_draft(p_team_id uuid, p_title text, p_markdown text)` mengembalikan `uuid`:
+    - Memeriksa `public.can_manage_ai_knowledge()` dan menolak pemanggil tidak berwenang dengan SQLSTATE `42501`.
+    - Mengunci baris tim target pada `public.teams` (`FOR UPDATE`) untuk menserialisasi kenaikan nomor versi secara aman dari _race condition_; jika tim tidak ditemukan, menolak dengan SQLSTATE `P0002`.
+    - Mengarsipkan draf aktif sebelumnya untuk tim tersebut (`status = 'archived'`), lalu menyisipkan draf baru dengan `version = coalesce(max(version), 0) + 1`, `btrim(p_title)`, `p_markdown`, dan `uploaded_by = auth.uid()`.
+  - `public.set_ai_knowledge_document_state(p_id uuid, p_action text)` mengembalikan `void`:
+    - Memeriksa `public.can_manage_ai_knowledge()` (tolak `42501` jika tidak berwenang), mengunci baris tim pemilik dokumen (`FOR UPDATE`), dan memuat baris target secara ketat (`SELECT ... INTO STRICT`).
+    - Aksi `'publish'`: memastikan `status = 'draft'`, tidak ada versi lebih baru untuk tim yang sama yang sudah memiliki `published_at IS NOT NULL`, serta `markdown` memiliki minimal satu heading Markdown (`(?m)^ {0,3}#{1,6}[[:blank:]]+[^[:space:]]`) (tolak dengan SQLSTATE `22023` bila tidak terpenuhi). Mengarsipkan dokumen `published` sebelumnya pada tim tersebut lalu mengubah target menjadi `status = 'published'` dan `published_at = now()`.
+    - Aksi `'withdraw'`: memastikan `status = 'published'` (tolak dengan `22023` bila bukan), lalu mengubah `status = 'archived'`.
+    - Aksi lain ditolak dengan SQLSTATE `22023`.
+  - Hak `EXECUTE` pada `create_ai_knowledge_draft` dan `set_ai_knowledge_document_state` dicabut dari `public` dan `anon`, serta hanya diberikan kepada `authenticated`.
+
+Regresi unit dan alur pengetahuan AI dijalankan bersama `pnpm run test:ai-cache-isolation`, sedangkan verifikasi langsung di database dijalankan melalui:
+
+```powershell
+pnpm exec supabase db query --linked --file supabase/tests/team-ai-knowledge.test.sql
 ```

@@ -32,6 +32,7 @@ import {
   parsePredictionOutput,
   generateFallbackPrediction,
 } from '../lib/task-prioritizing';
+import type { KnowledgeSource } from '../rag/team-knowledge';
 
 export interface SendAiChatMessageInput {
   prompt: string;
@@ -46,6 +47,7 @@ export interface SendAiChatMessageOutput {
   provider: string;
   model: string;
   cachedAt?: string;
+  sources?: KnowledgeSource[];
 }
 
 /**
@@ -90,6 +92,7 @@ export async function sendAiChatMessageAction(
         provider: result.provider,
         model: result.model,
         ...(result.cachedAt ? { cachedAt: result.cachedAt } : {}),
+        ...(result.sources ? { sources: result.sources } : {}),
       },
     };
   } catch (error) {

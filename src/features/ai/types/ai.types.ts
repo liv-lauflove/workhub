@@ -1,3 +1,5 @@
+import type { KnowledgeSource } from '../rag/team-knowledge';
+
 /**
  * Type definitions and predefined configurations for Workhub AI Chatbot (Issue #44).
  */
@@ -10,6 +12,7 @@ export interface ChatMessage {
   isCached?: boolean;
   provider?: string;
   model?: string;
+  sources?: KnowledgeSource[];
 }
 
 export type ChatStatus = 'idle' | 'loading' | 'error';

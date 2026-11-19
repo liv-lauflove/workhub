@@ -86,6 +86,7 @@ export async function POST(request: NextRequest) {
         provider: result.provider,
         model: result.model,
         cachedAt: result.cachedAt,
+        sources: result.sources,
       });
     }
 
@@ -97,6 +98,7 @@ export async function POST(request: NextRequest) {
       provider: result.provider,
       model: result.model,
       usage: result.usage,
+      sources: result.sources,
     });
   } catch (err) {
     if (err instanceof AiServiceError) {
