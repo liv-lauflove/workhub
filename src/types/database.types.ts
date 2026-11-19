@@ -59,6 +59,49 @@ export type Database = {
           },
         ];
       };
+      ai_knowledge_documents: {
+        Row: {
+          id: string;
+          team_id: string;
+          version: number;
+          title: string;
+          markdown: string;
+          status: string;
+          uploaded_by: string | null;
+          created_at: string;
+          published_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          team_id: string;
+          version: number;
+          title: string;
+          markdown: string;
+          status?: string;
+          uploaded_by?: string | null;
+          created_at?: string;
+          published_at?: string | null;
+        };
+        Update: Partial<
+          Database['public']['Tables']['ai_knowledge_documents']['Insert']
+        >;
+        Relationships: [
+          {
+            foreignKeyName: 'ai_knowledge_documents_team_id_fkey';
+            columns: ['team_id'];
+            isOneToOne: false;
+            referencedRelation: 'teams';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'ai_knowledge_documents_uploaded_by_fkey';
+            columns: ['uploaded_by'];
+            isOneToOne: false;
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       ai_query_cache: {
         Row: {
           cache_scope: string;
@@ -965,6 +1008,10 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      can_manage_ai_knowledge: {
+        Args: Record<PropertyKey, never>;
+        Returns: boolean;
+      };
       can_access_task_checklist: {
         Args: {
           p_task_id: string;
@@ -1008,11 +1055,19 @@ export type Database = {
         };
         Returns: boolean;
       };
+      create_ai_knowledge_draft: {
+        Args: { p_team_id: string; p_title: string; p_markdown: string };
+        Returns: string;
+      };
       is_project_leader: {
         Args: {
           p_project_id: string;
         };
         Returns: boolean;
+      };
+      set_ai_knowledge_document_state: {
+        Args: { p_id: string; p_action: string };
+        Returns: undefined;
       };
       update_team_member: {
         Args: {
