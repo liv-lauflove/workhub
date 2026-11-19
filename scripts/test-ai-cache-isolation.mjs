@@ -158,7 +158,9 @@ function createSupabaseClient(state, currentUserId, options = {}) {
             if (!isAdmin) {
               return Promise.resolve({
                 data: null,
-                error: { message: 'permission denied for table ai_query_cache' },
+                error: {
+                  message: 'permission denied for table ai_query_cache',
+                },
               });
             }
             const existingIdx = state.ai_query_cache.findIndex(
@@ -184,7 +186,9 @@ function createSupabaseClient(state, currentUserId, options = {}) {
               return Promise.resolve({
                 data: null,
                 count: null,
-                error: { message: 'permission denied for table ai_query_cache' },
+                error: {
+                  message: 'permission denied for table ai_query_cache',
+                },
               });
             }
             const remaining = [];
@@ -301,9 +305,7 @@ function buildModuleDeps(state, actorRef, options = {}) {
 
   function resolveProviderInfo(requestedProvider) {
     const provider =
-      requestedProvider ||
-      process.env.AI_PROVIDER?.toLowerCase() ||
-      'gemini';
+      requestedProvider || process.env.AI_PROVIDER?.toLowerCase() || 'gemini';
     const model =
       provider === 'openai'
         ? process.env.OPENAI_MODEL || 'gpt-4o-mini'
@@ -330,7 +332,11 @@ function buildModuleDeps(state, actorRef, options = {}) {
         systemPrompt: opts.systemPrompt,
       });
 
-      if (opts.systemPrompt?.includes('Technical Lead and Engineering Prioritization')) {
+      if (
+        opts.systemPrompt?.includes(
+          'Technical Lead and Engineering Prioritization'
+        )
+      ) {
         return {
           text: JSON.stringify({
             suggestedPriority: 'high',
@@ -394,7 +400,9 @@ function buildModuleDeps(state, actorRef, options = {}) {
 }
 
 async function run() {
-  console.log('--- RUNNING AI CACHE ISOLATION & NORMALIZATION TESTS (ISSUE #149) ---');
+  console.log(
+    '--- RUNNING AI CACHE ISOLATION & NORMALIZATION TESTS (ISSUE #149) ---'
+  );
   let passed = 0;
   function ok(name) {
     passed += 1;
@@ -449,7 +457,9 @@ async function run() {
     cacheQueries.generateQueryHash('-5'),
     cacheQueries.generateQueryHash('5')
   );
-  ok('B06: Meaningful punctuation, operators, negations, and code symbols preserved');
+  ok(
+    'B06: Meaningful punctuation, operators, negations, and code symbols preserved'
+  );
 
   // Test 3: Benign whitespace & casing normalize consistently
   assert.equal(
@@ -475,7 +485,10 @@ async function run() {
   );
   assert.equal(resA1.status, 200);
   assert.equal(resA1.body.isCached, false);
-  assert.match(resA1.body.reply, /Reply for Alice Alpha \| role=member \| team=Alpha Squad/);
+  assert.match(
+    resA1.body.reply,
+    /Reply for Alice Alpha \| role=member \| team=Alpha Squad/
+  );
   assert.equal(state.llmCalls.length, 1);
 
   const resA2 = await routeRag.POST(
@@ -502,7 +515,10 @@ async function run() {
   );
   assert.equal(resB1.status, 200);
   assert.equal(resB1.body.isCached, false);
-  assert.match(resB1.body.reply, /Reply for Bob Beta \| role=member \| team=Beta Squad/);
+  assert.match(
+    resB1.body.reply,
+    /Reply for Bob Beta \| role=member \| team=Beta Squad/
+  );
   assert.equal(state.llmCalls.length, 2);
   ok('Bob (Beta Squad) never shares or sees Alice private cache');
 
@@ -517,7 +533,10 @@ async function run() {
   );
   assert.equal(resC1.status, 200);
   assert.equal(resC1.body.isCached, false);
-  assert.match(resC1.body.reply, /Reply for Charlie Alpha \| role=member \| team=Alpha Squad/);
+  assert.match(
+    resC1.body.reply,
+    /Reply for Charlie Alpha \| role=member \| team=Alpha Squad/
+  );
   assert.equal(state.llmCalls.length, 3);
   ok('Same-team user Charlie never receives Alice personal cached response');
 
@@ -539,7 +558,10 @@ async function run() {
     })
   );
   assert.equal(resSpoof1.status, 200);
-  assert.match(resSpoof1.body.reply, /Reply for Alice Alpha \| role=member \| team=Alpha Squad \| quarter=2026-Q4/);
+  assert.match(
+    resSpoof1.body.reply,
+    /Reply for Alice Alpha \| role=member \| team=Alpha Squad \| quarter=2026-Q4/
+  );
   assert.doesNotMatch(resSpoof1.body.reply, /Spoofed Superadmin|Management/);
 
   // Calling alias /api/ai-chat hits unified Alice cache & server-derived rules
@@ -558,7 +580,9 @@ async function run() {
   assert.equal(resSpoof3.success, true);
   assert.equal(resSpoof3.data.isCached, true);
   assert.equal(resSpoof3.data.reply, resSpoof1.body.reply);
-  ok('All three chat endpoints derive server identity and ignore spoofed client context');
+  ok(
+    'All three chat endpoints derive server identity and ignore spoofed client context'
+  );
 
   // Test 9: Non-Management cross-team teamId override is rejected with 403
   const crossTeamRes = await routeRag.POST(
@@ -578,7 +602,9 @@ async function run() {
   const workloadRes1 = await routeLegacy.POST(
     new Request('http://localhost/api/ai-chat', {
       method: 'POST',
-      body: JSON.stringify({ prompt: 'Siapa member yang available untuk assign task?' }),
+      body: JSON.stringify({
+        prompt: 'Siapa member yang available untuk assign task?',
+      }),
     })
   );
   assert.equal(workloadRes1.status, 200);
@@ -586,13 +612,17 @@ async function run() {
   const workloadRes2 = await routeLegacy.POST(
     new Request('http://localhost/api/ai-chat', {
       method: 'POST',
-      body: JSON.stringify({ prompt: 'Siapa member yang available untuk assign task?' }),
+      body: JSON.stringify({
+        prompt: 'Siapa member yang available untuk assign task?',
+      }),
     })
   );
   assert.equal(workloadRes2.status, 200);
   assert.equal(workloadRes2.body.isCached, false);
   assert.equal(state.llmCalls.length, callsBeforeWorkload + 2);
-  ok('/api/ai-chat bypasses cache for real-time workload queries like other entry points');
+  ok(
+    '/api/ai-chat bypasses cache for real-time workload queries like other entry points'
+  );
 
   // Test 11: Quarter change misses old context cache
   const quarterChanged = await routeRag.POST(
@@ -621,7 +651,10 @@ async function run() {
   );
   assert.equal(providerChanged.status, 200);
   assert.equal(providerChanged.body.isCached, false);
-  assert.match(providerChanged.body.reply, /provider=openai \| model=gpt-4o-mini/);
+  assert.match(
+    providerChanged.body.reply,
+    /provider=openai \| model=gpt-4o-mini/
+  );
   ok('Switching provider misses prior provider cache');
 
   // Test 13: Model env change misses old model cache
@@ -661,7 +694,10 @@ async function run() {
   const mgmtAlpha = await routeRag.POST(
     new Request('http://localhost/api/ai/chat', {
       method: 'POST',
-      body: JSON.stringify({ prompt: 'Jelaskan arsitektur RBAC', teamId: TEAM_ALPHA }),
+      body: JSON.stringify({
+        prompt: 'Jelaskan arsitektur RBAC',
+        teamId: TEAM_ALPHA,
+      }),
     })
   );
   assert.equal(mgmtAlpha.status, 200);
@@ -671,7 +707,10 @@ async function run() {
   const mgmtBeta = await routeRag.POST(
     new Request('http://localhost/api/ai/chat', {
       method: 'POST',
-      body: JSON.stringify({ prompt: 'Jelaskan arsitektur RBAC', teamId: TEAM_BETA }),
+      body: JSON.stringify({
+        prompt: 'Jelaskan arsitektur RBAC',
+        teamId: TEAM_BETA,
+      }),
     })
   );
   assert.equal(mgmtBeta.status, 200);
@@ -705,7 +744,9 @@ async function run() {
   ok('predictTaskPriorityAction isolates task priority cache per user');
 
   // Test 17: Defense-in-depth in getCachedAiResponse rejects missing userId, expired, and foreign rows even if RLS bypassed
-  const { deps: noRlsDeps } = buildModuleDeps(state, actor, { enforceRls: false });
+  const { deps: noRlsDeps } = buildModuleDeps(state, actor, {
+    enforceRls: false,
+  });
   const cacheNoRls = loadSource(
     'src/features/ai/queries/ai-cache.queries.ts',
     noRlsDeps,
@@ -733,12 +774,12 @@ async function run() {
     await cacheNoRls.getCachedAiResponse({ userId: '', queryHash: manualHash }),
     null
   );
+  assert.equal(await cacheNoRls.getCachedAiResponse(manualHash), null);
   assert.equal(
-    await cacheNoRls.getCachedAiResponse(manualHash),
-    null
-  );
-  assert.equal(
-    await cacheNoRls.getCachedAiResponse({ userId: USER_BOB, queryHash: manualHash }),
+    await cacheNoRls.getCachedAiResponse({
+      userId: USER_BOB,
+      queryHash: manualHash,
+    }),
     null
   );
 
@@ -764,7 +805,9 @@ async function run() {
     }),
     null
   );
-  ok('Defense-in-depth blocks foreign, unowned, bare-string, and expired cache reads');
+  ok(
+    'Defense-in-depth blocks foreign, unowned, bare-string, and expired cache reads'
+  );
 
   // Test 18: TTL clamping and opportunistic expired purge in saveCachedAiResponse
   await cacheQueries.saveCachedAiResponse({
@@ -793,7 +836,9 @@ async function run() {
     state.ai_query_cache.some((r) => r.query_hash === 'expired-bob-hash'),
     false
   );
-  ok('saveCachedAiResponse clamps excessive TTL <= 24h, sanitizes non-UUID team_id, and purges expired entries');
+  ok(
+    'saveCachedAiResponse clamps excessive TTL <= 24h, sanitizes non-UUID team_id, and purges expired entries'
+  );
 
   const knowledge = loadSource('src/features/ai/rag/team-knowledge.ts', deps);
   assert.equal(
@@ -915,6 +960,259 @@ async function run() {
   assert.equal(state.llmCalls.length, callsBeforeFallback);
   ok(
     'Publishing bypasses old cached answers; withdrawn or irrelevant SOPs skip the model'
+  );
+
+  // Test 22: Operational prompts (including workflow/policy words) are never hijacked as SOP
+  const extractor = loadSource(
+    'src/features/ai/rag/knowledge-extractor.ts',
+    deps
+  );
+  const operationalPrompts = [
+    'tampilkan task yang sudah selesai minggu ini',
+    'tampilkan task selesai minggu ini',
+    'task mana yang sedang testing',
+    'task mana yang lagi testing',
+    'list tiket in progress',
+    'cek task in progress',
+    'status branch fitur login',
+    'ada kendala testing di sprint ini?',
+    'cek progress dev tim',
+    'daftar tiket critical',
+    'siapa yang available',
+    'berapa task overload',
+    'siapa yang overload sekarang berdasarkan aturan kapasitas?',
+    'berapa task yang memenuhi kriteria done hari ini?',
+    'tampilkan daftar member yang melanggar aturan overload saat ini',
+    'daftar undangan tim yang sudah expired',
+    'bantu pecah subtask untuk integrasi payment',
+    'kenapa build di branch dev gagal?',
+    'jelaskan strategi produk di Indonesia',
+    'bantu review desain produk digital',
+    'cek performa device mobile',
+  ];
+  for (const prompt of operationalPrompts) {
+    const intent = extractor.classifyRagIntent(prompt);
+    assert.equal(
+      knowledge.isKnowledgeQuestion(prompt, intent.category === 'workflow'),
+      false,
+      `Operational prompt must not route to SOP: "${prompt}"`
+    );
+  }
+
+  // Word-boundary check in classifyRagIntent: substrings inside unrelated words stay 'general'
+  assert.equal(
+    extractor.classifyRagIntent('jelaskan strategi produk di Indonesia')
+      .category,
+    'general'
+  );
+  assert.equal(
+    extractor.classifyRagIntent('bantu review desain produk digital').category,
+    'general'
+  );
+  assert.equal(
+    extractor.classifyRagIntent('cek performa device mobile').category,
+    'general'
+  );
+
+  // End-to-end: member (USER_CHARLIE) can ask operational prompts with workflow terms without 403
+  for (const opPrompt of [
+    'tampilkan task yang sudah selesai minggu ini',
+    'task mana yang sedang testing',
+    'list tiket in progress',
+    'status branch fitur login',
+    'siapa yang overload sekarang berdasarkan aturan kapasitas?',
+    'berapa task yang memenuhi kriteria done hari ini?',
+  ]) {
+    const res = await askSop(USER_CHARLIE, opPrompt);
+    assert.equal(
+      res.status,
+      200,
+      `Member must get 200 (not 403) for operational prompt: "${opPrompt}"`
+    );
+    assert.equal(res.body.sources, undefined);
+  }
+  // Mixed operational workload prompt still bypasses cache & fetches live workload
+  const workloadMixedCallsBefore = state.llmCalls.length;
+  const mixedWl1 = await askSop(
+    USER_CHARLIE,
+    'siapa yang overload sekarang berdasarkan aturan kapasitas?'
+  );
+  const mixedWl2 = await askSop(
+    USER_CHARLIE,
+    'siapa yang overload sekarang berdasarkan aturan kapasitas?'
+  );
+  assert.equal(mixedWl1.status, 200);
+  assert.equal(mixedWl1.body.isCached, false);
+  assert.equal(mixedWl2.body.isCached, false);
+  assert.equal(state.llmCalls.length, workloadMixedCallsBefore + 2);
+  assert.match(
+    state.llmCalls.at(-1).systemPrompt,
+    /\[LIVE WORKLOAD FOR Alpha Squad\]/
+  );
+  ok(
+    'Operational queries with workflow/policy words stay on operational/workload path and never return 403 for members'
+  );
+
+  // Test 23: Explicit SOP & procedural questions route to team knowledge; Management scope=all & bad teamId return 400
+  const sopPrompts = [
+    'aturan overload tim',
+    'SOP eskalasi',
+    'pedoman kerja tim',
+    'panduan dev ke qa',
+    'prosedur serah terima',
+    'kriteria done',
+    'definisi done',
+    'kapan task boleh masuk done',
+    'bagaimana cara eskalasi tiket critical',
+    'bagaimana serah terima dev ke qa',
+    'serah terima dev ke QA',
+    'syarat lolos QA / pull request / PR',
+    'cara catat keluhan CS / customer support',
+    'kapan eskalasi tiket urgent/critical',
+    'aturan overload / kapasitas poin',
+    'batas waktu undangan tim / expired',
+    'berapa hari undangan tim expired?',
+    'bagaimana aturan cuti tahunan?',
+    'bagaimana alur transisi task dari dev ke testing?',
+    'bolehkah developer pindah task ke done tanpa QA?',
+    'siapa PIC eskalasi critical?',
+    'When should a task move to Done?',
+    'How do we escalate critical tickets?',
+    'tampilkan SOP syarat done',
+  ];
+  for (const prompt of sopPrompts) {
+    const intent = extractor.classifyRagIntent(prompt);
+    assert.equal(
+      knowledge.isKnowledgeQuestion(prompt, intent.category === 'workflow'),
+      true,
+      `SOP prompt must route to team knowledge: "${prompt}"`
+    );
+  }
+
+  // Management on scope=all gets 400 for SOP, 200 for operational workload; malformed teamId gets 400
+  const mgmtAllSop = await askSop(
+    USER_MGMT,
+    'Apa SOP syarat task boleh masuk Done?',
+    { teamId: 'all' }
+  );
+  assert.equal(mgmtAllSop.status, 400);
+  const mgmtAllWorkload = await askSop(
+    USER_MGMT,
+    'Siapa yang overload sekarang?',
+    { teamId: 'all' }
+  );
+  assert.equal(mgmtAllWorkload.status, 200);
+  const mgmtBadTeam = await askSop(
+    USER_MGMT,
+    'Apa SOP syarat task boleh masuk Done?',
+    { teamId: 'not-a-valid-uuid' }
+  );
+  assert.equal(mgmtBadTeam.status, 400);
+  assert.equal(
+    (await askSop(USER_CHARLIE, 'kapan task boleh masuk done?')).status,
+    403
+  );
+  ok(
+    'Explicit SOP/procedural prompts enforce leader-only 403, Management scope=all 400, and invalid teamId 400'
+  );
+
+  // Test 24: findKnowledgeSections handles Indonesian/English paraphrases without false positives
+  const richGuide = knowledge.parseKnowledgeMarkdown(
+    [
+      '# Panduan Kerja Tim Aegis',
+      '',
+      'Panduan operasional squad Aegis di Workhub.',
+      '',
+      '## Kapan task boleh masuk Done?',
+      '',
+      'Pindahkan task ke Done setelah developer selesai, QA menyatakan lulus pengujian, dan semua checklist subtask sudah tuntas.',
+      '',
+      '## Serah Terima Developer ke QA dan Pull Request',
+      '',
+      'Setelah dev_done, buka Pull Request untuk code review dan lampirkan bukti testing untuk QA.',
+      '',
+      '## Pencatatan Komplain Customer Support',
+      '',
+      'Tandai origin task sebagai `cs_complaint` dan tuliskan nomor tiket asal komplain pelanggan.',
+      '',
+      '## Mengeskalasi Task Critical',
+      '',
+      'Segera hubungi Engineering Lead jika tiket critical berdampak ke produksi dengan target respons 15 menit.',
+      '',
+      '## Kapasitas Poin dan Batas Overload',
+      '',
+      'Bobot dasar 20 poin per task. Status Available di bawah 50%, Optimal 50-80%, dan Overload di atas 80% kapasitas.',
+      '',
+      '## Undangan Tim dan Kedaluwarsa',
+      '',
+      'Undangan tim berlaku 7 hari sejak dikirim dan hanya bisa diklaim setelah verifikasi email.',
+    ].join('\n')
+  );
+  assert.ok(richGuide);
+
+  const expectedMatches = [
+    ['Kapan tiket dianggap tuntas?', 'Kapan task boleh masuk Done?'],
+    ['serah terima dev ke QA', 'Serah Terima Developer ke QA dan Pull Request'],
+    ['syarat lolos QA dan PR', 'Serah Terima Developer ke QA dan Pull Request'],
+    ['cara catat keluhan CS', 'Pencatatan Komplain Customer Support'],
+    ['kapan eskalasi tiket urgent?', 'Mengeskalasi Task Critical'],
+    ['kapan harus eskalasi?', 'Mengeskalasi Task Critical'],
+    ['aturan overload dan kapasitas poin', 'Kapasitas Poin dan Batas Overload'],
+    ['batas waktu undangan tim expired', 'Undangan Tim dan Kedaluwarsa'],
+    ['berapa hari invite tim hangus?', 'Undangan Tim dan Kedaluwarsa'],
+  ];
+  for (const [question, expectedHeading] of expectedMatches) {
+    const hits = knowledge.findKnowledgeSections(richGuide.sections, question);
+    assert.ok(
+      hits.length > 0,
+      `Expected a matching section for paraphrase: "${question}"`
+    );
+    assert.equal(
+      hits[0].heading,
+      expectedHeading,
+      `Expected top section "${expectedHeading}" for "${question}", got "${hits[0].heading}"`
+    );
+  }
+
+  const unrelatedQuestions = [
+    'bagaimana aturan cuti tahunan?',
+    'Bagaimana aturan cuti tahunan jika sakit atau perlu izin ke HRD?',
+    'Berapa hari cuti tahunan untuk member?',
+    'Apa aturan jam kerja kantor?',
+    'Apa SOP reimburse perjalanan dinas untuk leader?',
+    'Apa panduan kerja tim?',
+  ];
+  for (const unrelated of unrelatedQuestions) {
+    assert.deepEqual(
+      knowledge.findKnowledgeSections(richGuide.sections, unrelated),
+      [],
+      `Unrelated question must return no sections: "${unrelated}"`
+    );
+  }
+  ok(
+    'findKnowledgeSections matches Indonesian/English domain paraphrases and returns [] for unrelated questions'
+  );
+
+  // Test 25: parseKnowledgeMarkdown CommonMark & defense-in-depth edge cases
+  const inlineCodeDoc = knowledge.parseKnowledgeMarkdown(
+    '# Panduan\n\n## Aturan C#\n\n```cs_complaint``` adalah origin komplain CS.\n\n## Syarat Done ##\n\nQA lulus.'
+  );
+  assert.ok(inlineCodeDoc);
+  assert.equal(inlineCodeDoc.sections.length, 2);
+  assert.equal(inlineCodeDoc.sections[0].heading, 'Aturan C#');
+  assert.equal(inlineCodeDoc.sections[1].heading, 'Syarat Done');
+  assert.equal(
+    knowledge.parseKnowledgeMarkdown('# Panduan\n\n## Done\n\nTeks\0berbahaya'),
+    null
+  );
+  assert.equal(
+    knowledge.parseKnowledgeMarkdown(
+      `# Panduan\n\n## Done\n\n${'a'.repeat(knowledge.MAX_KNOWLEDGE_BYTES)}`
+    ),
+    null
+  );
+  ok(
+    'parseKnowledgeMarkdown preserves inline triple backticks & C# headings and rejects null bytes or >64KB files'
   );
 
   console.log(`\n--- ALL ${passed} AI CACHE ISOLATION TESTS PASSED! ---`);
