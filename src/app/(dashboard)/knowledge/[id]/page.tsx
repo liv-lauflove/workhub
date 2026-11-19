@@ -12,6 +12,10 @@ import {
   parseKnowledgeMarkdown,
 } from '@/features/ai/rag/team-knowledge';
 
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const uuid = z.string().trim().regex(UUID_REGEX).toLowerCase();
+
 export const metadata: Metadata = { title: 'Rujukan Panduan Tim | Workhub' };
 
 export default async function KnowledgeDocumentPage({
@@ -23,7 +27,7 @@ export default async function KnowledgeDocumentPage({
   if (!profile) redirect(ROUTES.login);
   if (profile.role !== 'leader') notFound();
 
-  const id = z.uuid().safeParse((await params).id);
+  const id = uuid.safeParse((await params).id);
   if (!id.success) notFound();
 
   const document = await getKnowledgeDocument(

@@ -22,7 +22,9 @@ interface KnowledgeActionState {
   preview?: { answer: string; sections: string[] };
 }
 
-const uuid = z.uuid();
+const UUID_REGEX =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const uuid = z.string().trim().regex(UUID_REGEX).toLowerCase();
 const forbidden = {
   error: 'Hanya Leader Management yang bisa mengelola panduan.',
 };
