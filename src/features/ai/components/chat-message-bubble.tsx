@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Bot, User, Copy, Check, Zap } from 'lucide-react';
@@ -99,6 +100,10 @@ export function ChatMessageBubble({
           <div className="prose prose-xs sm:prose-sm dark:prose-invert max-w-none break-words leading-relaxed">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
+              disallowedElements={
+                message.sources?.length ? ['a', 'img'] : undefined
+              }
+              unwrapDisallowed
               components={{
                 p: ({ children }) => (
                   <p className="mb-2 last:mb-0">{children}</p>
@@ -157,6 +162,25 @@ export function ChatMessageBubble({
             </ReactMarkdown>
           </div>
         )}
+
+        {message.sources?.length ? (
+          <ul
+            aria-label="Rujukan panduan"
+            className="mt-2 space-y-1 border-t pt-2"
+          >
+            {message.sources.map((source) => (
+              <li key={source.href}>
+                <Link
+                  className="break-words font-medium text-primary underline underline-offset-2"
+                  href={source.href}
+                  prefetch={false}
+                >
+                  {source.title} v{source.version} · {source.section}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
 
         {/* Footer Meta (Timestamp, Cache Badge, Copy Button) */}
         <div

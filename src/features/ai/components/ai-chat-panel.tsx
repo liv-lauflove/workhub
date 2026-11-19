@@ -129,6 +129,7 @@ export function AiChatPanel({
           isCached: result.data?.isCached,
           provider: result.data?.provider,
           model: result.data?.model,
+          sources: result.data?.sources,
         };
 
         setMessages((prev) => [...prev, assistantMessage]);

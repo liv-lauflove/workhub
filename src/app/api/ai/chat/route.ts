@@ -62,6 +62,7 @@ export async function POST(request: Request) {
         model: result.model,
         category: result.category,
         cachedAt: result.cachedAt,
+        sources: result.sources,
       });
     }
 
@@ -71,6 +72,7 @@ export async function POST(request: Request) {
       provider: result.provider,
       model: result.model,
       category: result.category,
+      sources: result.sources,
     });
   } catch (error) {
     if (error instanceof AiServiceError) {

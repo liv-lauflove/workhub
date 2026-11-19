@@ -104,6 +104,7 @@ function createMockDbState() {
       },
     ],
     ai_query_cache: [],
+    ai_knowledge_documents: [],
     llmCalls: [],
   };
 }
@@ -793,6 +794,128 @@ async function run() {
     false
   );
   ok('saveCachedAiResponse clamps excessive TTL <= 24h, sanitizes non-UUID team_id, and purges expired entries');
+
+  const knowledge = loadSource('src/features/ai/rag/team-knowledge.ts', deps);
+  assert.equal(
+    knowledge.canManageKnowledge({ role: 'leader', team_id: TEAM_MGMT }),
+    true
+  );
+  assert.equal(
+    knowledge.canManageKnowledge({ role: 'member', team_id: TEAM_MGMT }),
+    false
+  );
+  assert.equal(
+    knowledge.canManageKnowledge({ role: 'leader', team_id: TEAM_ALPHA }),
+    false
+  );
+  const parsed = knowledge.parseKnowledgeMarkdown(
+    '# Panduan\n\n## Syarat Done\n\nQA lulus.\n\n```md\n# Contoh\n```'
+  );
+  assert.equal(parsed.sections.length, 1);
+  assert.equal(
+    knowledge.findKnowledgeSections(
+      parsed.sections,
+      'Kapan tiket dianggap tuntas?'
+    )[0].heading,
+    'Syarat Done'
+  );
+  assert.equal(
+    knowledge.parseKnowledgeMarkdown('# Panduan\n## Isi\n```md\nTeks'),
+    null
+  );
+  ok(
+    'Knowledge management requires a Management leader and Markdown headings preserve fenced content'
+  );
+
+  const alphaDoc = {
+    id: 'b1710000-0000-4000-8000-000000000011',
+    team_id: TEAM_ALPHA,
+    title: 'Panduan Alpha',
+    version: 1,
+    status: 'published',
+    markdown:
+      '# Panduan Alpha\n\n## Syarat Done\n\nGunakan proses ALPHA-VALID dan pastikan QA lulus.',
+  };
+  const betaDoc = {
+    ...alphaDoc,
+    id: 'b1710000-0000-4000-8000-000000000012',
+    team_id: TEAM_BETA,
+    title: 'Panduan Beta',
+    markdown: alphaDoc.markdown
+      .replaceAll('Alpha', 'Beta')
+      .replace('ALPHA-VALID', 'BETA-VALID'),
+  };
+  const draftDoc = {
+    ...alphaDoc,
+    id: 'b1710000-0000-4000-8000-000000000013',
+    status: 'draft',
+    version: 2,
+    markdown: alphaDoc.markdown.replace('ALPHA-VALID', 'ALPHA-DRAFT'),
+  };
+  state.ai_knowledge_documents.push(alphaDoc, betaDoc, draftDoc);
+  const askSop = async (
+    actorId,
+    prompt = 'Apa SOP syarat task boleh masuk Done?',
+    extras = {}
+  ) => {
+    actor.id = actorId;
+    return routeRag.POST(
+      new Request('http://localhost/api/ai/chat', {
+        method: 'POST',
+        body: JSON.stringify({ prompt, ...extras }),
+      })
+    );
+  };
+  const alice = state.profiles.find((p) => p.id === USER_ALICE);
+  const bob = state.profiles.find((p) => p.id === USER_BOB);
+  alice.role = 'leader';
+  bob.role = 'leader';
+  const fromAlpha = await askSop(USER_ALICE);
+  assert.equal(fromAlpha.status, 200);
+  assert.match(state.llmCalls.at(-1).systemPrompt, /ALPHA-VALID/);
+  assert.doesNotMatch(
+    state.llmCalls.at(-1).systemPrompt,
+    /BETA-VALID|ALPHA-DRAFT|\+15 poin/
+  );
+  assert.deepEqual(fromAlpha.body.sources, [
+    {
+      title: 'Panduan Alpha',
+      version: 1,
+      section: 'Syarat Done',
+      href: `/knowledge/${alphaDoc.id}#section-1`,
+    },
+  ]);
+  const fromBeta = await askSop(USER_BOB);
+  assert.equal(fromBeta.body.sources[0].title, 'Panduan Beta');
+  assert.match(state.llmCalls.at(-1).systemPrompt, /BETA-VALID/);
+  assert.equal((await askSop(USER_CHARLIE)).status, 403);
+  assert.equal(
+    (await askSop(USER_ALICE, undefined, { teamId: TEAM_BETA })).status,
+    403
+  );
+  ok(
+    'Only an authorized team leader receives published SOP sections plus validated source metadata'
+  );
+
+  const cachedSop = await askSop(USER_ALICE);
+  assert.equal(cachedSop.body.isCached, true);
+  assert.deepEqual(cachedSop.body.sources, fromAlpha.body.sources);
+  alphaDoc.status = 'archived';
+  draftDoc.status = 'published';
+  const replacement = await askSop(USER_ALICE);
+  assert.equal(replacement.body.isCached, false);
+  assert.equal(replacement.body.sources[0].version, 2);
+  assert.match(state.llmCalls.at(-1).systemPrompt, /ALPHA-DRAFT/);
+  draftDoc.status = 'archived';
+  const callsBeforeFallback = state.llmCalls.length;
+  const withdrawn = await askSop(USER_ALICE);
+  assert.equal(withdrawn.body.reply, knowledge.NO_KNOWLEDGE_ANSWER);
+  const noMatch = await askSop(USER_BOB, 'Apa SOP pembelian furnitur?');
+  assert.equal(noMatch.body.reply, knowledge.NO_KNOWLEDGE_ANSWER);
+  assert.equal(state.llmCalls.length, callsBeforeFallback);
+  ok(
+    'Publishing bypasses old cached answers; withdrawn or irrelevant SOPs skip the model'
+  );
 
   console.log(`\n--- ALL ${passed} AI CACHE ISOLATION TESTS PASSED! ---`);
 }
