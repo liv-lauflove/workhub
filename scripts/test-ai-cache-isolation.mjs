@@ -1215,6 +1215,79 @@ async function run() {
     'parseKnowledgeMarkdown preserves inline triple backticks & C# headings and rejects null bytes or >64KB files'
   );
 
+  // Test 26: uploadKnowledgeDraftAction accepts Workhub seeded PostgreSQL UUIDs (non-RFC4122) and rejects invalid IDs
+  const rpcCalls = [];
+  const revalidatedPaths = [];
+  const knowledgeActions = loadSource(
+    'src/features/ai/actions/team-knowledge.actions.ts',
+    {
+      ...deps,
+      'next/cache': {
+        revalidatePath: (target) => revalidatedPaths.push(target),
+      },
+      '@/features/auth/queries/auth.queries': {
+        getUserProfile: async () => ({
+          id: USER_MGMT,
+          role: 'leader',
+          team_id: TEAM_MGMT,
+        }),
+      },
+      '@/lib/supabase/server': {
+        createClient: async () => ({
+          rpc: async (name, args) => {
+            rpcCalls.push({ name, args });
+            return { data: '00000000-0000-4000-8000-000000000999', error: null };
+          },
+        }),
+      },
+    }
+  );
+
+  for (const seededTeamId of [
+    'e1111111-1111-1111-1111-111111111111',
+    'e2222222-2222-2222-2222-222222222222',
+    'e3333333-3333-3333-3333-333333333333',
+  ]) {
+    const uploadForm = new FormData();
+    uploadForm.set('teamId', seededTeamId);
+    uploadForm.set(
+      'markdown',
+      new File(
+        ['# Panduan Tim\n\n## Kriteria Done\n\nDev selesai dan QA lulus.\n'],
+        'panduan.md',
+        { type: 'text/markdown' }
+      )
+    );
+    const res = await knowledgeActions.uploadKnowledgeDraftAction(
+      {},
+      uploadForm
+    );
+    assert.equal(res.error, undefined, `Seeded UUID ${seededTeamId} must pass`);
+    assert.ok(res.message);
+  }
+  assert.equal(rpcCalls.length, 3);
+  assert.equal(rpcCalls[1].name, 'create_ai_knowledge_draft');
+  assert.equal(rpcCalls[1].args.p_team_id, 'e2222222-2222-2222-2222-222222222222');
+  assert.equal(revalidatedPaths.length, 3);
+
+  const invalidForm = new FormData();
+  invalidForm.set('teamId', 'not-a-uuid');
+  invalidForm.set(
+    'markdown',
+    new File(['# Panduan\n\n## Done\n\nLulus QA.\n'], 'panduan.md', {
+      type: 'text/markdown',
+    })
+  );
+  const invalidRes = await knowledgeActions.uploadKnowledgeDraftAction(
+    {},
+    invalidForm
+  );
+  assert.equal(invalidRes.error, 'Pilih tim yang valid.');
+  assert.equal(rpcCalls.length, 3);
+  ok(
+    'uploadKnowledgeDraftAction accepts seeded PostgreSQL team UUIDs and rejects malformed team IDs'
+  );
+
   console.log(`\n--- ALL ${passed} AI CACHE ISOLATION TESTS PASSED! ---`);
 }
 
