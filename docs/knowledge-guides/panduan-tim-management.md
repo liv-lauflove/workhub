@@ -1,3 +1,5 @@
+> Draf untuk ditinjau. Konfirmasi aturan lintas tim dengan Leader Management sebelum menerbitkan panduan.
+
 # Panduan Tata Kelola Tim Management (Head of Tech)
 
 Dokumen ini menjadi pedoman tata kelola lintas tim bagi `Head of Tech` dan pimpinan di Tim `Management` pada Workhub. Tim `Management` merupakan tim sistem bawaan (`MANAGEMENT_TEAM_ID`) yang dilindungi agar namanya tidak dapat diubah atau dihapus. Melalui Executive Squad Switcher pada `/`, `/workload`, dan `/team`, Tim Management memantau agregat `Semua Tim` maupun beralih ke squad spesifik seperti `Aegis`, `Sentinel`, dan tim dinamis baru lainnya.
@@ -30,7 +32,7 @@ Acuan standar `capacity_points` organisasi Workhub:
 - `Principal / Lead` (`Tech Principal`, `Tech Lead`, `Tech-Ops Principal`): 250 poin.
 - `Manager / Head` (`Tech-Ops Manager`, `Head of Tech`): 300 poin.
 
-Kalkulasi beban kerja pada `/workload` mengacu pada `base_points` task default 20 poin serta mesin dinamis yang mengalikan bobot dasar dengan pengali urgensi (`critical`/`urgent` 2.0x, `high` 1.5x, `medium` 1.0x, `low` 0.5x) dan pengali sisa deadline (terlewat/overdue 2.0x, `Critical Watchlist <= 72 jam` 1.5x, normal 4 sampai 7 hari 1.0x, jangka panjang `> 7 hari` 0.7x, tanpa deadline 1.0x). Ambang status kapasitas:
+Mesin workload di `/workload` memakai 2 poin dasar per task, dikalikan pengali urgensi (`critical`/`urgent` 2.0x, `high` 1.5x, `medium` 1.0x, `low` 0.5x) dan pengali sisa deadline (terlewat/overdue 2.0x, `Critical Watchlist <= 72 jam` 1.5x, normal 4 sampai 7 hari 1.0x, jangka panjang `> 7 hari` 0.7x, tanpa deadline 1.0x). Nilai 20 poin adalah cadangan kapasitas tim saat belum ada pengaturan kapasitas, terpisah dari bobot per task.
 
 - `Available` (`< 50%` kapasitas terpakai dan task aktif `<= 2`).
 - `Optimal` (`50%` sampai `80%`, peringatan `Mendekati Batas` mulai `70%` sampai `80%`).

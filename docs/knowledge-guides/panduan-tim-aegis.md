@@ -1,6 +1,8 @@
+> Draf untuk ditinjau. Konfirmasi prosedur khusus dengan Lead Aegis sebelum Leader Management menerbitkan panduan.
+
 # Panduan Kerja Tim Aegis (Squad Software Engineering)
 
-Dokumen ini menjadi pedoman operasional resmi Tim Aegis (Squad Software Engineering) di Workhub. Struktur peran Aegis terdiri atas `Tech Principal` dan `Tech Lead` sebagai Leader Aegis, serta `Tech Specialist` dan `Software Engineer` sebagai Member Aegis. Seluruh pekerjaan mengikuti hierarki `Milestone` -> `Project` (terikat ke Tim Aegis) -> `Task`. Member Aegis dapat membuat task baru di project milik Aegis, sedangkan pengelolaan kolom Kanban, task dependency, arsip, serta metadata prioritas dan jadwal menjadi wewenang Leader Aegis atau Tim Management.
+Panduan ini merangkum alur kerja Tim Aegis (Squad Software Engineering) di Workhub. Struktur peran Aegis terdiri atas `Tech Principal` dan `Tech Lead` sebagai Leader Aegis, serta `Tech Specialist` dan `Software Engineer` sebagai Member Aegis. Seluruh pekerjaan mengikuti hierarki `Milestone` -> `Project` (terikat ke Tim Aegis) -> `Task`. Member Aegis dapat membuat task baru di project milik Aegis, sedangkan pengelolaan kolom Kanban, task dependency, arsip, serta metadata prioritas dan jadwal menjadi wewenang Leader Aegis atau Tim Management.
 
 ## Alur Development, Git Branch Multi-Repo, dan Serah Terima Developer ke QA (Open PR)
 
@@ -50,7 +52,7 @@ Setiap langkah eskalasi wajib ditulis pada thread komentar detail task agar tere
 
 ## Beban Kerja (Workload), Kapasitas Poin Aegis, dan Aturan Overload
 
-Perhitungan beban kerja aktif di Workhub mengacu pada bobot dasar `base_points` (default 20 poin pada task) dan mesin skor dinamis yang mengalikan bobot dasar dengan pengali urgensi serta pengali sisa waktu deadline:
+Mesin workload Workhub menghitung beban dari 2 poin dasar per task, dikalikan pengali urgensi dan sisa waktu deadline. Nilai 20 poin adalah cadangan kapasitas tim saat belum ada pengaturan kapasitas, terpisah dari bobot per task.
 
 - Pengali prioritas/urgensi: `critical` atau `urgent` 2.0x, `high` 1.5x, `medium` 1.0x, dan `low` 0.5x.
 - Pengali sisa deadline: terlewat/overdue (`< 0 jam`) 2.0x, `Critical Watchlist` (`<= 72 jam` atau `<= 3 hari`) 1.5x, normal (4 sampai 7 hari) 1.0x, jangka panjang (`> 7 hari`) 0.7x, dan tanpa deadline 1.0x.

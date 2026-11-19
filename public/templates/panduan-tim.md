@@ -43,7 +43,7 @@ Catat kronologi eskalasi pada komentar detail task agar terekam di `activity_log
 
 ## Beban Kerja (Workload), Kapasitas Poin, dan Aturan Overload
 
-Workhub menghitung beban kerja aktif memakai referensi bobot dasar `base_points` (default 20 poin pada task) serta rumus dinamis berdasarkan pengali prioritas (`critical`/`urgent` 2.0x, `high` 1.5x, `medium` 1.0x, `low` 0.5x) dan pengali sisa deadline (terlewat/overdue 2.0x, `Critical Watchlist <= 72 jam` 1.5x, normal 4 sampai 7 hari 1.0x, jangka panjang `> 7 hari` 0.7x, tanpa deadline 1.0x).
+Mesin workload Workhub memakai 2 poin dasar per task, dikalikan pengali prioritas (`critical`/`urgent` 2.0x, `high` 1.5x, `medium` 1.0x, `low` 0.5x) dan pengali sisa deadline (terlewat/overdue 2.0x, `Critical Watchlist <= 72 jam` 1.5x, normal 4 sampai 7 hari 1.0x, jangka panjang `> 7 hari` 0.7x, tanpa deadline 1.0x). Nilai 20 poin adalah cadangan kapasitas tim saat belum ada pengaturan kapasitas, terpisah dari bobot per task.
 
 Acuan `capacity_points` individu di `/team` (rentang valid 10 sampai 1000 poin): member standar 100 poin, specialist 150 poin, leader atau principal 250 poin, dan manager atau head 300 poin. Status pada `/workload`:
 

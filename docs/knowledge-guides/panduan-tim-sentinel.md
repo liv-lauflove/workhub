@@ -1,6 +1,8 @@
+> Draf untuk ditinjau. Konfirmasi prosedur khusus dengan Lead Sentinel sebelum Leader Management menerbitkan panduan.
+
 # Panduan Kerja Tim Sentinel (Squad Tech Ops & QA)
 
-Dokumen ini menjadi pedoman operasional resmi Tim Sentinel (Squad Tech Ops & QA) di Workhub. Struktur peran Sentinel terdiri atas `Tech-Ops Manager` dan `Tech-Ops Principal` sebagai Leader Sentinel, serta `Tech Ops` sebagai Member Sentinel yang bertindak sebagai Tester QA dan operator triase operasional. Sesuai prinsip Dual-Assignee Workhub, Tim Sentinel menjaga gerbang verifikasi kualitas (`tester_id`, `test_status`, dan checklist `task_subtasks`) serta memimpin penerimaan dan triase komplain Customer Support.
+Panduan ini merangkum alur kerja Tim Sentinel (Squad Tech Ops & QA) di Workhub. Struktur peran Sentinel terdiri atas `Tech-Ops Manager` dan `Tech-Ops Principal` sebagai Leader Sentinel, serta `Tech Ops` sebagai Member Sentinel yang bertindak sebagai Tester QA dan operator triase operasional. Sesuai prinsip Dual-Assignee Workhub, Tim Sentinel menjaga gerbang verifikasi kualitas (`tester_id`, `test_status`, dan checklist `task_subtasks`) serta memimpin penerimaan dan triase komplain Customer Support.
 
 ## Alur Pengujian QA, Review Pull Request (PR), dan Pengembalian ke Developer
 
@@ -60,7 +62,7 @@ Catat kronologi dan keputusan eskalasi pada komentar detail task agar terekam di
 
 ## Beban Kerja (Workload), Kapasitas Poin Ops/QA Sentinel, dan Aturan Overload
 
-Beban kerja aktif pada Tester QA Sentinel tercatat sejak PR dibuka (`dev_status = 'dev_done'` dan `test_status = 'testing'`) sampai pengujian tuntas. Referensi bobot dasar task adalah `base_points` (default 20 poin), dengan perhitungan dinamis berdasarkan pengali urgensi dan pengali sisa waktu deadline:
+Beban kerja aktif pada Tester QA Sentinel tercatat sejak PR dibuka (`dev_status = 'dev_done'` dan `test_status = 'testing'`) sampai pengujian tuntas. Mesin workload menghitung beban dari 2 poin dasar per task, dikalikan pengali urgensi dan sisa waktu deadline. Nilai 20 poin adalah cadangan kapasitas tim saat belum ada pengaturan kapasitas, terpisah dari bobot per task.
 
 - Pengali prioritas/urgensi: `critical` atau `urgent` 2.0x, `high` 1.5x, `medium` 1.0x, dan `low` 0.5x.
 - Pengali sisa deadline: terlewat/overdue (`< 0 jam`) 2.0x, `Critical Watchlist` (`<= 72 jam` atau `<= 3 hari`) 1.5x, normal (4 sampai 7 hari) 1.0x, jangka panjang (`> 7 hari`) 0.7x, dan tanpa deadline 1.0x.
