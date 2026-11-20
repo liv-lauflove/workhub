@@ -94,7 +94,7 @@ console.log('✔ Test 3 Passed: Lockfile resolves patched dependencies determini
 // 4. Production Security Audit Verification & Reachability
 console.log('\n[Phase 4] Running Production Dependency Audit Check...');
 try {
-  const auditOutput = execSync('pnpm audit --prod', {
+  execSync('pnpm audit --prod', {
     encoding: 'utf8',
     stdio: ['pipe', 'pipe', 'pipe'],
   });
