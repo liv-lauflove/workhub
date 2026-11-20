@@ -2,9 +2,9 @@
 FROM node:20-alpine AS base
 WORKDIR /app
 
-# Install dependencies
-COPY package.json package-lock.json* pnpm-lock.yaml* ./
-RUN npm ci || npm install -g pnpm && pnpm i
+# Install pnpm and dependencies using frozen lockfile
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm@12.3.4 && pnpm install --frozen-lockfile
 
 # 2. Development stage for docker-compose local dev
 FROM node:20-alpine AS dev
@@ -15,7 +15,7 @@ COPY --from=base /app/node_modules ./node_modules
 COPY . .
 
 EXPOSE 3000
-CMD ["npm", "run", "dev"]
+CMD ["pnpm", "run", "dev"]
 
 # 3. Builder stage for production builds
 FROM node:20-alpine AS builder
@@ -27,7 +27,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-RUN npm run build
+RUN pnpm run build
 
 # 4. Production runner stage
 FROM node:20-alpine AS runner
