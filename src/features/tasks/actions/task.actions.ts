@@ -1114,6 +1114,23 @@ export async function updateTaskTestStatusAction({
           },
         };
       }
+
+      const { data: incompleteSubtasks } = await supabase
+        .from('task_subtasks')
+        .select('id')
+        .eq('task_id', taskId)
+        .eq('is_completed', false);
+
+      if (incompleteSubtasks && incompleteSubtasks.length > 0) {
+        return {
+          success: false,
+          error: {
+            _form: [
+              'Seluruh checklist subtask pengujian wajib diselesaikan sebelum task dinyatakan Passed QA.',
+            ],
+          },
+        };
+      }
     }
 
     const updates: {
@@ -1129,19 +1146,28 @@ export async function updateTaskTestStatusAction({
       updates.test_notes = testNotes ? testNotes.trim() : null;
     }
 
-    const { data: updatedTask, error: updateError } = await supabase
-      .from('tasks')
-      .update(updates)
-      .eq('id', taskId)
+    let updateQuery = supabase.from('tasks').update(updates).eq('id', taskId);
+
+    if (testStatus === 'passed') {
+      updateQuery = updateQuery
+        .eq('dev_status', 'dev_done')
+        .eq('test_status', 'testing');
+    }
+
+    const { data: updatedTask, error: updateError } = await updateQuery
       .select('id, test_status, test_notes')
       .single();
 
     if (updateError || !updatedTask) {
+      const rawError = updateError as { message?: string } | null;
       return {
         success: false,
         error: {
           _form: [
-            updateError?.message || 'Gagal memperbarui status pengujian task.',
+            rawError?.message?.includes('PGRST116') || !updatedTask
+              ? 'Gagal memperbarui status pengujian task. Transisi tidak valid atau task telah diperbarui oleh pengguna lain.'
+              : rawError?.message ||
+                'Gagal memperbarui status pengujian task. Transisi tidak valid atau task telah diperbarui oleh pengguna lain.',
           ],
         },
       };
@@ -2640,6 +2666,24 @@ export async function mergePullRequestAction({
       };
     }
 
+    // Verify all subtasks checklist are completed
+    const { data: incompleteSubtasks } = await supabase
+      .from('task_subtasks')
+      .select('id')
+      .eq('task_id', taskId)
+      .eq('is_completed', false);
+
+    if (incompleteSubtasks && incompleteSubtasks.length > 0) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Seluruh checklist subtask pengujian wajib diselesaikan sebelum pull request dapat di-merge.',
+          ],
+        },
+      };
+    }
+
     const updates: {
       dev_status: 'dev_done';
       test_status: 'passed';
@@ -2686,15 +2730,21 @@ export async function mergePullRequestAction({
       .from('tasks')
       .update(updates)
       .eq('id', taskId)
+      .eq('dev_status', 'dev_done')
+      .eq('test_status', 'testing')
       .select('id, dev_status, test_status, column_id')
       .single();
 
     if (updateError || !updatedTask) {
+      const rawError = updateError as { message?: string } | null;
       return {
         success: false,
         error: {
           _form: [
-            updateError?.message || 'Gagal melakukan Merge Pull Request.',
+            rawError?.message?.includes('PGRST116') || !updatedTask
+              ? 'Gagal melakukan Merge Pull Request. Status task telah berubah atau tidak memenuhi prasyarat pengujian.'
+              : rawError?.message ||
+                'Gagal melakukan Merge Pull Request. Status task telah berubah atau tidak memenuhi prasyarat pengujian.',
           ],
         },
       };
