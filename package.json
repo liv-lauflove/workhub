@@ -11,6 +11,7 @@
     "test:deps-security": "node scripts/test-dependency-security.mjs",
     "test:profile-permissions": "node scripts/test-profile-permissions.mjs",
     "test:task-kanban-checklist": "node scripts/test-task-kanban-checklist.mjs",
+    "test:workflow-actors": "node scripts/test-workflow-actor-validation.mjs",
     "test:task-attachments": "node scripts/test-task-attachments-authorization.mjs",
     "test:atomic-invitation-claim": "node scripts/test-atomic-invitation-claim.mjs",
     "test:ai-cache-isolation": "node scripts/test-ai-cache-isolation.mjs",
