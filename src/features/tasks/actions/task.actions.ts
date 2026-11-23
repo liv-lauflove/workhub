@@ -27,13 +27,26 @@ async function verifyProjectLeaderForTask(
   userId: string,
   taskId: string
 ): Promise<
-  | { authorized: true; projectId: string }
+  | {
+      authorized: true;
+      projectId: string;
+      projectTeamId: string;
+      taskRow: {
+        id: string;
+        project_id: string;
+        assignee_id: string | null;
+        developer_id: string | null;
+        tester_id: string | null;
+      };
+    }
   | { authorized: false; message: string }
 > {
   const [{ data: taskRow }, { data: userProfile }] = await Promise.all([
     supabase
       .from('tasks')
-      .select('id, project_id, project:projects!tasks_project_id_fkey(team_id)')
+      .select(
+        'id, project_id, assignee_id, developer_id, tester_id, project:projects!tasks_project_id_fkey(team_id)'
+      )
       .eq('id', taskId)
       .maybeSingle(),
     supabase
@@ -71,7 +84,103 @@ async function verifyProjectLeaderForTask(
     };
   }
 
-  return { authorized: true, projectId: taskRow.project_id };
+  return {
+    authorized: true,
+    projectId: taskRow.project_id,
+    projectTeamId,
+    taskRow: {
+      id: taskRow.id,
+      project_id: taskRow.project_id,
+      assignee_id: taskRow.assignee_id ?? null,
+      developer_id: taskRow.developer_id ?? null,
+      tester_id: taskRow.tester_id ?? null,
+    },
+  };
+}
+
+interface WorkflowTaskData {
+  id: string;
+  project_id: string;
+  assignee_id: string | null;
+  developer_id: string | null;
+  tester_id: string | null;
+  dev_status: 'todo' | 'in_progress' | 'dev_done';
+  test_status: 'pending' | 'testing' | 'passed' | 'failed';
+  column_id?: string;
+  projectTeamId?: string;
+}
+
+async function verifyTaskActorForWorkflow(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  taskId: string
+): Promise<
+  | {
+      authorized: true;
+      task: WorkflowTaskData;
+      isDeveloper: boolean;
+      isTester: boolean;
+      isProjectLeader: boolean;
+      isManagement: boolean;
+    }
+  | { authorized: false; message: string }
+> {
+  const [{ data: taskRow, error: taskError }, { data: userProfile }] =
+    await Promise.all([
+      supabase
+        .from('tasks')
+        .select(
+          'id, project_id, assignee_id, developer_id, tester_id, dev_status, test_status, column_id, project:projects!tasks_project_id_fkey(team_id)'
+        )
+        .eq('id', taskId)
+        .maybeSingle(),
+      supabase
+        .from('profiles')
+        .select('id, role, team_id')
+        .eq('id', userId)
+        .maybeSingle(),
+    ]);
+
+  if (taskError || !taskRow || !taskRow.project_id) {
+    return {
+      authorized: false,
+      message: 'Task tidak ditemukan atau Anda tidak memiliki akses.',
+    };
+  }
+
+  const projectTeamId = (
+    taskRow.project as unknown as { team_id?: string | null } | null
+  )?.team_id;
+
+  const isManagement = await isManagementTeam(userProfile?.team_id);
+  const isProjectLeader = Boolean(
+    userProfile?.role === 'leader' &&
+    (isManagement || (projectTeamId && userProfile?.team_id === projectTeamId))
+  );
+
+  const isDeveloper = Boolean(
+    userId === taskRow.developer_id || userId === taskRow.assignee_id
+  );
+  const isTester = Boolean(taskRow.tester_id && userId === taskRow.tester_id);
+
+  return {
+    authorized: true,
+    task: {
+      id: taskRow.id,
+      project_id: taskRow.project_id,
+      assignee_id: taskRow.assignee_id ?? null,
+      developer_id: taskRow.developer_id ?? null,
+      tester_id: taskRow.tester_id ?? null,
+      dev_status: taskRow.dev_status ?? 'todo',
+      test_status: taskRow.test_status ?? 'pending',
+      column_id: taskRow.column_id,
+      projectTeamId: projectTeamId ?? undefined,
+    },
+    isDeveloper,
+    isTester,
+    isProjectLeader,
+    isManagement,
+  };
 }
 
 /**
@@ -661,6 +770,36 @@ export async function updateTaskRoleAssigneeAction({
       };
     }
 
+    if (
+      role === 'tester' &&
+      userId &&
+      userId === permission.taskRow.developer_id
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Developer tidak dapat ditugaskan sebagai tester pada task yang sama (anti-self-approval).',
+          ],
+        },
+      };
+    }
+
+    if (
+      role === 'developer' &&
+      userId &&
+      userId === permission.taskRow.tester_id
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Tester QA tidak dapat ditugaskan sebagai developer pada task yang sama.',
+          ],
+        },
+      };
+    }
+
     const selectQuery =
       role === 'developer'
         ? 'id, developer_id, developer:profiles!tasks_developer_id_fkey(id, full_name, avatar_url)'
@@ -780,6 +919,33 @@ export async function updateTaskDevStatusAction({
       };
     }
 
+    const actorCheck = await verifyTaskActorForWorkflow(
+      supabase,
+      user.id,
+      taskId
+    );
+    if (!actorCheck.authorized) {
+      return {
+        success: false,
+        error: { _form: [actorCheck.message] },
+      };
+    }
+
+    if (
+      !actorCheck.isDeveloper &&
+      !actorCheck.isProjectLeader &&
+      !actorCheck.isManagement
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Hanya developer yang ditugaskan, leader proyek, atau tim Management yang dapat memperbarui status development.',
+          ],
+        },
+      };
+    }
+
     const updates: {
       dev_status: 'todo' | 'in_progress' | 'dev_done';
       test_status?: 'pending' | 'testing' | 'passed' | 'failed';
@@ -788,6 +954,12 @@ export async function updateTaskDevStatusAction({
       dev_status: devStatus,
       updated_at: new Date().toISOString(),
     };
+
+    if (devStatus === 'dev_done') {
+      updates.test_status = 'testing';
+    } else if (actorCheck.task.test_status === 'passed') {
+      updates.test_status = 'pending';
+    }
 
     const { data: updatedTask, error: updateError } = await supabase
       .from('tasks')
@@ -876,6 +1048,74 @@ export async function updateTaskTestStatusAction({
       };
     }
 
+    const actorCheck = await verifyTaskActorForWorkflow(
+      supabase,
+      user.id,
+      taskId
+    );
+    if (!actorCheck.authorized) {
+      return {
+        success: false,
+        error: { _form: [actorCheck.message] },
+      };
+    }
+
+    // Anti-self-approval: developer cannot mark task as passed
+    if (
+      testStatus === 'passed' &&
+      (user.id === actorCheck.task.developer_id ||
+        user.id === actorCheck.task.assignee_id)
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Developer tidak dapat menandai pengujian passed pada task miliknya sendiri (anti-self-approval).',
+          ],
+        },
+      };
+    }
+
+    // Only assigned tester, project leader, or Management can update test status
+    if (
+      !actorCheck.isTester &&
+      !actorCheck.isProjectLeader &&
+      !actorCheck.isManagement
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Hanya reviewer/tester yang ditugaskan, leader proyek, atau tim Management yang dapat memperbarui status pengujian QA.',
+          ],
+        },
+      };
+    }
+
+    if (testStatus === 'passed') {
+      if (actorCheck.task.dev_status !== 'dev_done') {
+        return {
+          success: false,
+          error: {
+            _form: [
+              'Status development harus selesai (dev_done) sebelum pengujian dapat dinyatakan lulus (passed).',
+            ],
+          },
+        };
+      }
+
+      if (actorCheck.task.test_status !== 'testing') {
+        return {
+          success: false,
+          error: {
+            _form: [
+              'Task harus berada dalam status pengujian (testing) sebelum dapat disetujui (passed).',
+            ],
+          },
+        };
+      }
+    }
+
     const updates: {
       test_status: 'pending' | 'testing' | 'passed' | 'failed';
       test_notes?: string | null;
@@ -896,12 +1136,12 @@ export async function updateTaskTestStatusAction({
       .select('id, test_status, test_notes')
       .single();
 
-    if (updateError) {
+    if (updateError || !updatedTask) {
       return {
         success: false,
         error: {
           _form: [
-            updateError.message || 'Gagal memperbarui status pengujian task.',
+            updateError?.message || 'Gagal memperbarui status pengujian task.',
           ],
         },
       };
@@ -1943,6 +2183,71 @@ export async function openPullRequestAction({
       };
     }
 
+    const actorCheck = await verifyTaskActorForWorkflow(
+      supabase,
+      user.id,
+      taskId
+    );
+    if (!actorCheck.authorized) {
+      return {
+        success: false,
+        error: { _form: [actorCheck.message] },
+      };
+    }
+
+    if (
+      !actorCheck.isDeveloper &&
+      !actorCheck.isProjectLeader &&
+      !actorCheck.isManagement
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Hanya developer yang ditugaskan, leader proyek, atau tim Management yang dapat mengajukan Pull Request / QA.',
+          ],
+        },
+      };
+    }
+
+    if (
+      reviewerId &&
+      (reviewerId === user.id ||
+        reviewerId === actorCheck.task.developer_id ||
+        reviewerId === actorCheck.task.assignee_id)
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Developer tidak dapat menugaskan diri sendiri sebagai reviewer/tester (anti-self-approval).',
+          ],
+        },
+      };
+    }
+
+    if (!reviewerId && actorCheck.task.tester_id === user.id) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Developer tidak dapat menjadi reviewer untuk task miliknya sendiri.',
+          ],
+        },
+      };
+    }
+
+    if (actorCheck.task.test_status === 'passed') {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Task telah disetujui (Passed QA) dan tidak dapat diajukan ulang tanpa revisi.',
+          ],
+        },
+      };
+    }
+
     const updates: {
       dev_status: 'dev_done';
       test_status: 'testing';
@@ -1972,11 +2277,12 @@ export async function openPullRequestAction({
     }
 
     // Auto-transition column to Review if column exists in the project
-    if (projectId) {
+    const effectiveProjectId = projectId || actorCheck.task.project_id;
+    if (effectiveProjectId) {
       const { data: cols } = await supabase
         .from('board_columns')
         .select('id, name')
-        .eq('project_id', projectId);
+        .eq('project_id', effectiveProjectId);
 
       if (cols && cols.length > 0) {
         const reviewCol = cols.find((c) => {
@@ -2093,6 +2399,63 @@ export async function requestChangesAction({
       };
     }
 
+    const actorCheck = await verifyTaskActorForWorkflow(
+      supabase,
+      user.id,
+      taskId
+    );
+    if (!actorCheck.authorized) {
+      return {
+        success: false,
+        error: { _form: [actorCheck.message] },
+      };
+    }
+
+    // Anti-self-approval: developer cannot request changes on their own task
+    if (
+      user.id === actorCheck.task.developer_id ||
+      user.id === actorCheck.task.assignee_id
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Developer tidak dapat melakukan request changes pada task miliknya sendiri.',
+          ],
+        },
+      };
+    }
+
+    // Only assigned tester, project leader, or Management can request changes
+    if (
+      !actorCheck.isTester &&
+      !actorCheck.isProjectLeader &&
+      !actorCheck.isManagement
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Hanya reviewer/tester yang ditugaskan, leader proyek, atau tim Management yang dapat meminta revisi (Request Changes).',
+          ],
+        },
+      };
+    }
+
+    if (
+      actorCheck.task.dev_status !== 'dev_done' ||
+      actorCheck.task.test_status === 'passed'
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Request Changes hanya dapat diajukan pada task yang sedang dalam tahap pengujian / review.',
+          ],
+        },
+      };
+    }
+
     const updates: {
       dev_status: 'in_progress';
       test_status: 'failed';
@@ -2107,11 +2470,12 @@ export async function requestChangesAction({
     };
 
     // Auto-transition column back to In Progress if column exists in the project
-    if (projectId) {
+    const effectiveProjectId = projectId || actorCheck.task.project_id;
+    if (effectiveProjectId) {
       const { data: cols } = await supabase
         .from('board_columns')
         .select('id, name')
-        .eq('project_id', projectId);
+        .eq('project_id', effectiveProjectId);
 
       if (cols && cols.length > 0) {
         const inProgressCol = cols.find((c) => {
@@ -2218,6 +2582,64 @@ export async function mergePullRequestAction({
       };
     }
 
+    const actorCheck = await verifyTaskActorForWorkflow(
+      supabase,
+      user.id,
+      taskId
+    );
+    if (!actorCheck.authorized) {
+      return {
+        success: false,
+        error: { _form: [actorCheck.message] },
+      };
+    }
+
+    // Anti-self-approval: developer cannot merge their own PR
+    if (
+      user.id === actorCheck.task.developer_id ||
+      user.id === actorCheck.task.assignee_id
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Developer tidak dapat menyetujui atau melakukan merge pull request pada task miliknya sendiri (anti-self-approval).',
+          ],
+        },
+      };
+    }
+
+    // Only assigned tester, project leader, or Management can merge PR
+    if (
+      !actorCheck.isTester &&
+      !actorCheck.isProjectLeader &&
+      !actorCheck.isManagement
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Hanya reviewer/tester yang ditugaskan, leader proyek, atau tim Management yang dapat melakukan merge Pull Request.',
+          ],
+        },
+      };
+    }
+
+    // Task must be in review: dev_done and testing
+    if (
+      actorCheck.task.dev_status !== 'dev_done' ||
+      actorCheck.task.test_status !== 'testing'
+    ) {
+      return {
+        success: false,
+        error: {
+          _form: [
+            'Task harus berada dalam status pengujian (testing) dan selesai dikerjakan (dev_done) sebelum di-merge.',
+          ],
+        },
+      };
+    }
+
     const updates: {
       dev_status: 'dev_done';
       test_status: 'passed';
@@ -2235,11 +2657,12 @@ export async function mergePullRequestAction({
     }
 
     // Auto-transition column to Done / Selesai in the project
-    if (projectId) {
+    const effectiveProjectId = projectId || actorCheck.task.project_id;
+    if (effectiveProjectId) {
       const { data: cols } = await supabase
         .from('board_columns')
         .select('id, name, position')
-        .eq('project_id', projectId)
+        .eq('project_id', effectiveProjectId)
         .order('position', { ascending: false });
 
       if (cols && cols.length > 0) {
@@ -2266,11 +2689,13 @@ export async function mergePullRequestAction({
       .select('id, dev_status, test_status, column_id')
       .single();
 
-    if (updateError) {
+    if (updateError || !updatedTask) {
       return {
         success: false,
         error: {
-          _form: [updateError.message || 'Gagal melakukan Merge Pull Request.'],
+          _form: [
+            updateError?.message || 'Gagal melakukan Merge Pull Request.',
+          ],
         },
       };
     }
