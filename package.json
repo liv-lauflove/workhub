@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:github-oauth": "node scripts/test-github-oauth.mjs",
     "test": "echo \"No tests specified yet\" && exit 0",
     "test:deps-security": "node scripts/test-dependency-security.mjs",
     "test:profile-permissions": "node scripts/test-profile-permissions.mjs",

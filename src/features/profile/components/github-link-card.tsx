@@ -44,11 +44,13 @@ interface GitHubLinkCardProps {
   initialGitHubUsername?: string | null;
   initialConnectedAt?: string | null;
   userEmail?: string;
+  incomplete: boolean;
 }
 
 export function GitHubLinkCard({
   initialGitHubUsername,
   initialConnectedAt,
+  incomplete,
 }: GitHubLinkCardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -64,14 +66,23 @@ export function GitHubLinkCard({
 
   // Check URL query parameters for OAuth redirect feedback
   useEffect(() => {
-    if (searchParams.get('github_linked') === 'true') {
+    if (
+      searchParams.get('github_linked') === 'true' &&
+      initialGitHubUsername &&
+      !incomplete
+    ) {
       toast.success('Akun GitHub berhasil terhubung ke profil Anda!');
+      router.replace('/settings');
+    } else if (searchParams.get('error') === 'github_sync_failed') {
+      toast.error(
+        'Identitas sudah diproses. Penyimpanan integrasi GitHub belum berhasil.'
+      );
       router.replace('/settings');
     } else if (searchParams.get('error') === 'oauth_failed') {
       toast.error('Gagal menghubungkan akun GitHub. Silakan coba lagi.');
       router.replace('/settings');
     }
-  }, [searchParams, router]);
+  }, [searchParams, router, initialGitHubUsername, incomplete]);
 
   const isConnected = Boolean(githubUsername);
 
@@ -109,6 +120,8 @@ export function GitHubLinkCard({
         router.refresh();
       } else {
         toast.error(res.error || 'Gagal memutuskan tautan akun GitHub.');
+        setShowUnlinkDialog(false);
+        router.refresh();
       }
     });
   };
@@ -166,7 +179,11 @@ export function GitHubLinkCard({
 
             {/* Status Badge */}
             <div>
-              {isConnected ? (
+              {incomplete ? (
+                <span className="text-sm text-muted-foreground">
+                  Tautan belum lengkap
+                </span>
+              ) : isConnected ? (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                   <CheckCircle2 className="h-3.5 w-3.5" />
                   Terhubung
@@ -181,7 +198,22 @@ export function GitHubLinkCard({
         </CardHeader>
 
         <CardContent className="space-y-4 pt-0">
-          {isConnected ? (
+          {incomplete ? (
+            <div className="space-y-3">
+              <p className="text-sm">
+                Data profil dan identitas GitHub belum sesuai. Untuk
+                menyinkronkan akun, masuk kembali melalui GitHub. Untuk
+                menghapus tautan, pilih Putuskan Tautan.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => setShowUnlinkDialog(true)}
+                disabled={isPending}
+              >
+                Putuskan Tautan
+              </Button>
+            </div>
+          ) : isConnected ? (
             /* ================= STATE: CONNECTED ================= */
             <div className="rounded-xl border border-border/70 bg-card/60 p-4">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -357,8 +389,8 @@ export function GitHubLinkCard({
 
         <CardFooter className="border-t border-border/50 bg-muted/10 px-6 py-3">
           <p className="text-[11px] text-muted-foreground">
-            WorkHub hanya meminta izin baca profil dan commit publik/organisasi
-            yang relevan. Kredensial Anda aman.
+            Workhub meminta akses ke profil dan email GitHub saat Anda menautkan
+            akun.
           </p>
         </CardFooter>
       </Card>
@@ -370,7 +402,9 @@ export function GitHubLinkCard({
             <DialogTitle>Putuskan Tautan Akun GitHub?</DialogTitle>
             <DialogDescription className="text-xs">
               Akun GitHub{' '}
-              <strong className="text-foreground">@{githubUsername}</strong>{' '}
+              <strong className="text-foreground">
+                {githubUsername ? `@${githubUsername}` : 'Anda'}
+              </strong>{' '}
               tidak akan lagi terhubung ke profil WorkHub Anda. Commit baru yang
               Anda buat mungkin tidak teratribusi secara otomatis ke tugas-tugas
               aktif.

@@ -27,3 +27,4 @@ jobs:
     - run: pnpm run test:task-attachments
     - run: pnpm run test:atomic-invitation-claim
     - run: pnpm run test:ai-cache-isolation
+    - run: pnpm run test:github-oauth

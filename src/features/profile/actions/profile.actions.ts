@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { revalidatePath } from 'next/cache';
 import {
   linkGitHubManualSchema,
@@ -42,7 +43,7 @@ export async function getGitHubOAuthLinkUrlAction(
       provider: 'github',
       options: {
         redirectTo: `${baseOrigin}/auth/callback?next=/settings`,
-        scopes: 'read:user user:email repo',
+        scopes: 'read:user user:email',
       },
     });
 
@@ -86,47 +87,41 @@ export async function unlinkGitHubAction(): Promise<ProfileActionResult> {
       };
     }
 
-    // 1. Unlink identity from Supabase Auth if linked
-    const githubIdentity = user.identities?.find(
-      (i) => i.provider === 'github'
-    );
-    if (githubIdentity) {
-      try {
-        await supabase.auth.unlinkIdentity(githubIdentity);
-      } catch (unlinkErr) {
-        // Log warning but continue to clear profile record
-        console.warn('Supabase auth unlinkIdentity warning:', unlinkErr);
+    const identity = user.identities?.find((i) => i.provider === 'github');
+    if (identity) {
+      const { error } = await supabase.auth.unlinkIdentity(identity);
+      if (error) {
+        return {
+          success: false,
+          error:
+            error.code === 'single_identity_not_deletable'
+              ? 'GitHub adalah satu-satunya metode masuk. Tautkan metode masuk lain terlebih dahulu.'
+              : 'Pelepasan identitas GitHub belum berhasil. Coba lagi.',
+        };
       }
     }
 
-    // 2. Clear github_username on profiles
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .update({ github_username: null })
-      .eq('id', user.id);
-
-    if (profileError) {
+    const { error } = await createAdminClient().rpc('clear_github_connection', {
+      p_user_id: user.id,
+    });
+    if (error) {
+      revalidatePath('/settings');
       return {
         success: false,
-        error: `Gagal memperbarui profil: ${profileError.message}`,
+        error:
+          'Penghapusan tautan Workhub belum selesai. Coba putuskan tautan lagi.',
       };
     }
-
-    // 3. Delete github_integrations record
-    await supabase.from('github_integrations').delete().eq('user_id', user.id);
 
     revalidatePath('/settings');
     revalidatePath('/team');
     revalidatePath('/tasks');
 
     return { success: true };
-  } catch (err) {
+  } catch {
     return {
       success: false,
-      error:
-        err instanceof Error
-          ? err.message
-          : 'Terjadi kesalahan saat memutuskan tautan GitHub',
+      error: 'Status pelepasan GitHub belum dapat dikonfirmasi. Coba lagi.',
     };
   }
 }
@@ -164,30 +159,16 @@ export async function linkGitHubManualAction(
       };
     }
 
-    // 1. Update profiles table
-    const { error: profileError } = await supabase
-      .from('profiles')
-      .update({ github_username: cleanUsername })
-      .eq('id', user.id);
-
-    if (profileError) {
+    const { error } = await createAdminClient().rpc('save_github_connection', {
+      p_user_id: user.id,
+      p_username: cleanUsername,
+    });
+    if (error)
       return {
         success: false,
-        error: `Gagal menyimpan username GitHub: ${profileError.message}`,
+        error:
+          'Username belum tersimpan. Jika GitHub sudah terhubung, putuskan tautannya dahulu.',
       };
-    }
-
-    // 2. Upsert into github_integrations table
-    await supabase.from('github_integrations').upsert(
-      {
-        user_id: user.id,
-        github_user_id: cleanUsername,
-        access_token: 'manual_sync',
-        scope: 'read:user',
-        connected_at: new Date().toISOString(),
-      },
-      { onConflict: 'user_id' }
-    );
 
     revalidatePath('/settings');
     revalidatePath('/team');
