@@ -364,7 +364,7 @@ export type Database = {
       };
       github_integrations: {
         Row: {
-          access_token: string;
+          link_method: 'manual' | 'oauth';
           connected_at: string;
           github_user_id: string;
           id: string;
@@ -372,7 +372,7 @@ export type Database = {
           user_id: string;
         };
         Insert: {
-          access_token: string;
+          link_method?: 'manual' | 'oauth';
           connected_at?: string;
           github_user_id: string;
           id?: string;
@@ -380,7 +380,7 @@ export type Database = {
           user_id: string;
         };
         Update: {
-          access_token?: string;
+          link_method?: 'manual' | 'oauth';
           connected_at?: string;
           github_user_id?: string;
           id?: string;
@@ -1008,6 +1008,20 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
+      clear_github_connection: {
+        Args: { p_user_id: string };
+        Returns: undefined;
+      };
+      save_github_connection: {
+        Args: {
+          p_user_id: string;
+          p_username: string;
+          p_github_id?: string;
+          p_token?: string;
+          p_scope?: string;
+        };
+        Returns: undefined;
+      };
       can_manage_ai_knowledge: {
         Args: Record<PropertyKey, never>;
         Returns: boolean;
