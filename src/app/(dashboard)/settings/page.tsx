@@ -34,8 +34,19 @@ export default async function SettingsPage() {
     redirect(ROUTES.login);
   }
 
-  const { profile, user, githubIntegration } = settingsData;
+  const { profile, user, githubIdentity, githubIntegration } = settingsData;
 
+  const username = profile.github_username ?? githubIdentity?.username;
+  const complete = Boolean(
+    profile.github_username &&
+    githubIntegration &&
+    (githubIntegration.link_method === 'oauth'
+      ? githubIdentity?.id === githubIntegration.github_user_id
+      : !githubIdentity &&
+        githubIntegration.github_user_id === profile.github_username)
+  );
+  const incomplete =
+    Boolean(githubIdentity || githubIntegration || username) && !complete;
   return (
     <div className="mx-auto max-w-5xl space-y-6 pb-12">
       {/* Page Header */}
@@ -66,8 +77,13 @@ export default async function SettingsPage() {
         {/* 2. GitHub Account Linking Card (Issue #39) */}
         <Suspense fallback={<GitHubLinkCardFallback />}>
           <GitHubLinkCard
-            key={profile.github_username || 'unlinked'}
-            initialGitHubUsername={profile.github_username}
+            key={JSON.stringify([
+              username,
+              incomplete,
+              githubIntegration?.connected_at,
+            ])}
+            initialGitHubUsername={username}
+            incomplete={incomplete}
             initialConnectedAt={githubIntegration?.connected_at}
             userEmail={user.email}
           />

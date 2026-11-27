@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { oauthExchangeFetch } from '@/features/profile/github-oauth';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { createClient } from '@/lib/supabase/server';
 
 /**
@@ -12,71 +14,64 @@ export async function GET(request: NextRequest) {
   const next = requestUrl.searchParams.get('next') ?? '/';
 
   if (code) {
-    const supabase = await createClient();
-    const { data: sessionData, error } =
-      await supabase.auth.exchangeCodeForSession(code);
+    let providerToken = '';
+    const supabase = await createClient(
+      oauthExchangeFetch((token) => {
+        providerToken = token;
+      })
+    );
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      // Sync GitHub profile data if OAuth exchange includes GitHub identity
-      try {
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-
-        if (user) {
-          const githubIdentity = user.identities?.find(
-            (i) => i.provider === 'github'
-          );
-          const identityData = githubIdentity?.identity_data as
-            | {
-                user_name?: string;
-                preferred_username?: string;
-                avatar_url?: string;
-                sub?: string;
-              }
-            | undefined;
-
-          const githubUsername =
-            identityData?.user_name ||
-            identityData?.preferred_username ||
-            (user.user_metadata?.user_name as string | undefined) ||
-            (user.user_metadata?.preferred_username as string | undefined) ||
-            null;
-
-          const githubUserId =
-            identityData?.sub ||
-            githubIdentity?.id ||
-            (user.user_metadata?.sub as string | undefined) ||
-            null;
-
-          if (githubUsername) {
-            await supabase
-              .from('profiles')
-              .update({
-                github_username: githubUsername,
-              })
-              .eq('id', user.id);
-          }
-
-          if (githubUserId) {
-            await supabase.from('github_integrations').upsert(
-              {
-                user_id: user.id,
-                github_user_id: String(githubUserId),
-                access_token:
-                  sessionData?.session?.provider_token || 'oauth_linked',
-                scope: 'read:user,user:email,repo',
-                connected_at: new Date().toISOString(),
-              },
-              { onConflict: 'user_id' }
-            );
-          }
-        }
-      } catch (syncErr) {
-        console.warn('OAuth callback GitHub profile sync warning:', syncErr);
-      }
-
       const redirectUrl = new URL(next, requestUrl.origin);
-      if (next.startsWith('/settings')) {
+      const identity = data.user?.identities?.find(
+        (i) => i.provider === 'github'
+      );
+      let saved = false;
+      // Other providers can be linked to the same account. Only send GitHub OAuth
+      // credentials to GitHub, and match the token owner before writing any metadata.
+      if (data.user && identity && providerToken.startsWith('gho_')) {
+        try {
+          const res = await fetch('https://api.github.com/user', {
+            headers: {
+              Authorization: `Bearer ${providerToken}`,
+              Accept: 'application/vnd.github+json',
+            },
+            cache: 'no-store',
+            redirect: 'error',
+            signal: AbortSignal.timeout(8000),
+          });
+          if (res.ok) {
+            const account = await res.json();
+            if (
+              typeof account.login === 'string' &&
+              account.id != null &&
+              String(account.id) === identity.id
+            ) {
+              const { error: storageError } = await createAdminClient().rpc(
+                'save_github_connection',
+                {
+                  p_user_id: data.user.id,
+                  p_username: account.login,
+                  p_github_id: identity.id,
+                  p_token: providerToken,
+                  p_scope: res.headers.get('x-oauth-scopes') ?? '',
+                }
+              );
+              saved = !storageError;
+            }
+          }
+        } catch {
+          // The login session is valid even if syncing the GitHub integration fails.
+        }
+      }
+      if (
+        next.startsWith('/settings') ||
+        (identity && providerToken.startsWith('gho_') && !saved)
+      ) {
+        if (!saved)
+          return NextResponse.redirect(
+            new URL('/settings?error=github_sync_failed', requestUrl.origin)
+          );
         redirectUrl.searchParams.set('github_linked', 'true');
       }
       return NextResponse.redirect(redirectUrl);

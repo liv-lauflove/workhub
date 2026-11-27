@@ -20,7 +20,9 @@ export interface UserSettingsData {
     createdAt?: string;
   };
   profile: ProfileWithTeam;
+  githubIdentity: { id: string; username: string | null } | null;
   githubIntegration: {
+    link_method: 'manual' | 'oauth';
     id: string;
     github_user_id: string;
     scope: string | null;

@@ -142,7 +142,7 @@ erDiagram
 
 ### C. Integrasi GitHub, Notifikasi, & Kecerdasan Buatan (AI)
 
-15. **`github_integrations`**: Menyimpan token akses OAuth GitHub pengguna untuk integrasi API.
+15. **`github_integrations`**: Menyimpan metadata tautan manual atau OAuth. Token OAuth berada di Supabase Vault dengan nama `workhub.github.<id integrasi>`. Server memverifikasi pemilik token sebelum menyimpan. Penghapusan integrasi juga menghapus rahasia Vault.
 16. **`github_commits`**: Menyimpan riwayat commit GitHub yang disinkronkan melalui webhook push (`task_id`, `commit_sha`, `commit_message`, `author_username`, `committed_at`, `url`), dengan constraint unik `(task_id, commit_sha)` agar idempoten.
 17. **`notifications`**: Notifikasi dalam aplikasi (_in-app_) untuk kejadian `task_assigned`, `comment_mention`, `due_soon`, `overdue`, dan `ai_warning`.
 18. **`ai_query_cache`**, **`ai_warnings`**, & **`ai_suggestion_overrides`**:
